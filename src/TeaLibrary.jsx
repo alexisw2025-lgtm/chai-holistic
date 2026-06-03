@@ -228,16 +228,19 @@ function BlendCard({ blend, onClick }) {
 }
 
 function EmailCapture({ blendName, signupType, onDone }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
   const submit = async () => {
-    const trimmed = email.trim();
-    if (!trimmed || !/\S+@\S+\.\S+/.test(trimmed)) { setError("Please enter a valid email."); return; }
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    if (!trimmedName) { setError("Please enter your name."); return; }
+    if (!trimmedEmail || !/\S+@\S+\.\S+/.test(trimmedEmail)) { setError("Please enter a valid email."); return; }
     setSubmitting(true);
     setError(null);
-    const { error: dbErr } = await supabase.from("waitlist_signups").insert({ email: trimmed, blend_name: blendName, signup_type: signupType });
+    const { error: dbErr } = await supabase.from("waitlist_signups").insert({ name: trimmedName, email: trimmedEmail, blend_name: blendName, signup_type: signupType });
     setSubmitting(false);
     if (dbErr) { setError("Something went wrong. Please try again."); return; }
     onDone();
@@ -245,6 +248,14 @@ function EmailCapture({ blendName, signupType, onDone }) {
 
   return (
     <div style={{ display:"flex", flexDirection:"column", gap:7, width:"100%", marginTop:4 }}>
+      <input
+        type="text"
+        value={name}
+        onChange={e => { setName(e.target.value); setError(null); }}
+        onKeyDown={e => e.key === "Enter" && submit()}
+        placeholder="Your name"
+        style={{ width:"100%", boxSizing:"border-box", background:"rgba(255,255,255,.08)", border:`1px solid rgba(82,184,130,.35)`, borderRadius:20, padding:"7px 13px", fontFamily:"'DM Sans',sans-serif", fontSize:12, color:"#fff", outline:"none", marginBottom:2 }}
+      />
       <div style={{ display:"flex", gap:6 }}>
         <input
           type="email"
@@ -252,7 +263,7 @@ function EmailCapture({ blendName, signupType, onDone }) {
           onChange={e => { setEmail(e.target.value); setError(null); }}
           onKeyDown={e => e.key === "Enter" && submit()}
           placeholder="your@email.com"
-          style={{ flex:1, minWidth:0, background:"rgba(255,255,255,.08)", border:`1px solid ${error?"#e05050":"rgba(82,184,130,.35)"}`, borderRadius:20, padding:"7px 13px", fontFamily:"'DM Sans',sans-serif", fontSize:12, color:"#fff", outline:"none" }}
+          style={{ flex:1, minWidth:0, background:"rgba(255,255,255,.08)", border:`1px solid rgba(82,184,130,.35)`, borderRadius:20, padding:"7px 13px", fontFamily:"'DM Sans',sans-serif", fontSize:12, color:"#fff", outline:"none" }}
         />
         <button
           onClick={submit}
