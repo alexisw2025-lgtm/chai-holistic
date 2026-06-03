@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chai Holistic — Touch & Receive</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ── DEMO WRAPPER ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  background: #080f0a;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* ═══════════════════════════════════════════════════
+   THE COMPONENT — copy from here into Bolt
+═══════════════════════════════════════════════════ */
+
+.ritual-section {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 70px 24px 80px;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* ── AMBIENT BACKGROUND ── */
+.ritual-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 40%, rgba(82,184,130,.07) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 50% 80%, rgba(192,136,48,.05) 0%, transparent 60%);
+  pointer-events: none;
+  animation: ambientShift 8s ease-in-out infinite alternate;
+}
+
+@keyframes ambientShift {
+  from { opacity: .7; transform: scale(1); }
+  to   { opacity: 1;  transform: scale(1.06); }
+}
+
+/* ── PARTICLES ── */
+.ritual-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 3;
+}
+.rp {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  top: 50%; left: 50%;
+}
+.phase-hands.rp    { animation: pFly var(--d,.9s) ease-out var(--dl,0s) both; }
+.phase-ring.rp     { animation: pFly var(--d,.9s) ease-out var(--dl,0s) both; }
+
+@keyframes pFly {
+  0%   { opacity: .9; transform: translate(var(--sx,0),var(--sy,0)) scale(1.3); }
+  100% { opacity: 0;  transform: translate(var(--ex,0),var(--ey,0)) scale(0); }
+}
+
+/* ── SOUND WAVE ── */
+.wave-wrap {
+  position: absolute;
+  top: 22px; right: 22px;
+  display: flex; align-items: center; gap: 3px;
+  opacity: 0; z-index: 5;
+  transition: opacity .5s ease;
+}
+.wave-wrap.visible { opacity: 1; }
+.wbar {
+  width: 3px; border-radius: 2px;
+  background: rgba(192,136,48,.55);
+}
+.wbar:nth-child(1) { height: 7px;  animation: wv .75s .00s ease-in-out infinite alternate; }
+.wbar:nth-child(2) { height: 13px; animation: wv .75s .12s ease-in-out infinite alternate; }
+.wbar:nth-child(3) { height: 19px; animation: wv .75s .24s ease-in-out infinite alternate; }
+.wbar:nth-child(4) { height: 13px; animation: wv .75s .36s ease-in-out infinite alternate; }
+.wbar:nth-child(5) { height: 7px;  animation: wv .75s .48s ease-in-out infinite alternate; }
+@keyframes wv {
+  from { transform: scaleY(.3); opacity: .3; }
+  to   { transform: scaleY(1);  opacity: .9; }
+}
+
+/* ══════════════════════════════════════
+   PHASE 0 — IDLE (before any tap)
+══════════════════════════════════════ */
+
+.phase-idle { position: relative; z-index: 1; width: 100%; }
+
+/* Eyebrow */
+.idle-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 9.5px; letter-spacing: .45em;
+  color: rgba(192,136,48,.4); text-transform: uppercase;
+  margin-bottom: 38px;
+  animation: fadeDown .9s ease both;
+}
+
+/* Orbit rings */
+.orbit-stage {
+  position: relative;
+  width: 270px; height: 270px;
+  margin: 0 auto 36px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.orbit-ring {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.or1 { width: 148px; height: 148px; border: 1px solid rgba(82,184,130,.2);  animation: orb 4.2s ease-in-out 0s   infinite; }
+.or2 { width: 196px; height: 196px; border: 1px solid rgba(192,136,48,.13); animation: orb 4.2s ease-in-out .75s infinite; }
+.or3 { width: 244px; height: 244px; border: 1px solid rgba(82,184,130,.07); animation: orb 4.2s ease-in-out 1.5s infinite; }
+@keyframes orb {
+  0%   { transform: translate(-50%,-50%) scale(.9);  opacity: 0; }
+  28%  { opacity: 1; }
+  100% { transform: translate(-50%,-50%) scale(1.08); opacity: 0; }
+}
+
+/* Gold dot */
+.gold-dot {
+  position: absolute;
+  top: 26px; left: 50%; transform: translateX(-50%);
+  width: 10px; height: 10px; border-radius: 50%;
+  background: radial-gradient(circle, #f5d080, #c08830);
+  box-shadow: 0 0 14px 5px rgba(192,136,48,.45);
+  animation: dotPulse 3.2s ease-in-out infinite;
+  pointer-events: none; z-index: 2;
+}
+@keyframes dotPulse {
+  0%,100% { box-shadow: 0 0 10px 4px rgba(192,136,48,.35); opacity: .7; }
+  50%      { box-shadow: 0 0 22px 9px rgba(192,136,48,.6);  opacity: 1; }
+}
+
+/* Hands emoji */
+.hands-emoji {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 100px; line-height: 1;
+  display: block; user-select: none;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,.45))
+          drop-shadow(0 0 22px rgba(192,136,48,.2));
+  animation: handsFloat 5s ease-in-out infinite;
+  transition: filter .3s ease;
+  z-index: 1;
+}
+@keyframes handsFloat {
+  0%,100% { transform: translate(-50%,-50%) translateY(0); }
+  50%      { transform: translate(-50%,-50%) translateY(-9px); }
+}
+.orbit-stage:hover .hands-emoji {
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,.5))
+          drop-shadow(0 0 36px rgba(192,136,48,.45));
+  animation-play-state: paused;
+}
+
+/* Invite text */
+.idle-invite {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15.5px; font-style: italic;
+  color: rgba(255,255,255,.3); letter-spacing: .06em; line-height: 1.65;
+  animation: fadeUp 1s ease .5s both;
+}
+
+/* ══════════════════════════════════════
+   PHASE 1 — HANDS TAPPED
+   intention fades in, then ring prompt appears
+══════════════════════════════════════ */
+
+/* Burst rings */
+.burst-ring {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  border-radius: 50%; pointer-events: none; opacity: 0;
+  width: 110px; height: 110px;
+}
+.br1 { border: 2px solid rgba(192,136,48,.7); }
+.br2 { border: 2px solid rgba(82,184,130,.55); }
+.br3 { border: 1.5px solid rgba(192,136,48,.4); width: 150px; height: 150px; }
+.br4 { border: 1px solid rgba(255,255,255,.18); width: 200px; height: 200px; }
+
+.firing .br1 { animation: bRing .85s ease-out .00s both; }
+.firing .br2 { animation: bRing .85s ease-out .13s both; }
+.firing .br3 { animation: bRing .85s ease-out .26s both; }
+.firing .br4 { animation: bRing .85s ease-out .40s both; }
+@keyframes bRing {
+  0%   { opacity: .9; transform: translate(-50%,-50%) scale(.45); }
+  100% { opacity: 0;  transform: translate(-50%,-50%) scale(2.6); }
+}
+
+.firing .hands-emoji {
+  animation: handsPop .55s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes handsPop {
+  0%   { transform: translate(-50%,-50%) scale(1);    filter: drop-shadow(0 3px 10px rgba(0,0,0,.45)) drop-shadow(0 0 22px rgba(192,136,48,.2)); }
+  38%  { transform: translate(-50%,-50%) scale(.87); }
+  68%  { transform: translate(-50%,-50%) scale(1.12); filter: drop-shadow(0 5px 18px rgba(0,0,0,.5)) drop-shadow(0 0 50px rgba(192,136,48,.75)); }
+  100% { transform: translate(-50%,-50%) scale(1);    filter: drop-shadow(0 3px 10px rgba(0,0,0,.45)) drop-shadow(0 0 30px rgba(192,136,48,.38)); }
+}
+
+/* ── INTENTION CARD ── */
+.intention-card {
+  position: absolute;
+  bottom: -20px; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 540px;
+  padding: 0 20px;
+  display: flex; flex-direction: column; align-items: center;
+  pointer-events: none; z-index: 2;
+  opacity: 0; transition: opacity .5s ease .4s;
+}
+.intention-card.show { opacity: 1; }
+
+.ic-rule {
+  width: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, #c08830, transparent);
+  margin-bottom: 16px;
+  transition: width 1s ease .5s;
+}
+.intention-card.show .ic-rule { width: 100px; }
+
+.ic-line {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-style: italic; font-weight: 300;
+  color: transparent; line-height: 1.75; display: block;
+  transition: color .7s ease;
+}
+.intention-card.show .ic-line-1 { color: rgba(255,255,255,.85); transition-delay: .7s; }
+.intention-card.show .ic-line-2 { color: rgba(255,255,255,.68); transition-delay: .95s; }
+.intention-card.show .ic-line-3 { color: rgba(255,255,255,.55); transition-delay: 1.2s; }
+
+.ic-rule-2 {
+  width: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+  margin-top: 16px;
+  transition: width .8s ease 1.6s;
+}
+.intention-card.show .ic-rule-2 { width: 55px; }
+
+/* ══════════════════════════════════════
+   PHASE 2 — RING MOMENT
+   slides up from below after intention
+══════════════════════════════════════ */
+
+.ring-moment {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 0 24px 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  z-index: 4;
+  opacity: 0; transform: translateY(30px);
+  pointer-events: none;
+  transition: opacity .8s ease, transform .8s cubic-bezier(.34,1.2,.64,1);
+}
+.ring-moment.show {
+  opacity: 1; transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Ring icon */
+.ring-icon-wrap {
+  position: relative;
+  width: 80px; height: 80px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.ring-outer-glow {
+  position: absolute; inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(192,136,48,.15), transparent 70%);
+  animation: ringGlow 2.5s ease-in-out infinite;
+}
+@keyframes ringGlow {
+  0%,100% { transform: scale(1);    opacity: .6; }
+  50%      { transform: scale(1.15); opacity: 1; }
+}
+
+.ring-svg {
+  width: 80px; height: 80px;
+  animation: ringFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.4))
+          drop-shadow(0 0 18px rgba(192,136,48,.35));
+  transition: filter .3s ease;
+}
+@keyframes ringFloat {
+  0%,100% { transform: translateY(0) rotate(-6deg); }
+  50%      { transform: translateY(-5px) rotate(6deg); }
+}
+.ring-icon-wrap:hover .ring-svg {
+  filter: drop-shadow(0 3px 12px rgba(0,0,0,.5))
+          drop-shadow(0 0 28px rgba(192,136,48,.6));
+  animation-play-state: paused;
+}
+
+/* Ring burst (on ring tap) */
+.ring-burst {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  border-radius: 50%; pointer-events: none; opacity: 0;
+  width: 70px; height: 70px;
+}
+.rb1 { border: 2px solid rgba(192,136,48,.8); }
+.rb2 { border: 1.5px solid rgba(192,136,48,.5); width: 100px; height: 100px; }
+.rb3 { border: 1px solid rgba(192,136,48,.3); width: 140px; height: 140px; }
+
+.ring-moment.fired .rb1 { animation: bRing .7s ease-out .00s both; }
+.ring-moment.fired .rb2 { animation: bRing .7s ease-out .12s both; }
+.ring-moment.fired .rb3 { animation: bRing .7s ease-out .24s both; }
+
+/* Ring text */
+.ring-cue {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: .38em; text-transform: uppercase;
+  color: rgba(192,136,48,.55); margin-bottom: 10px;
+}
+.ring-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 300; font-style: italic;
+  color: rgba(255,255,255,.78); line-height: 1.55; margin-bottom: 6px;
+}
+.ring-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px; font-style: italic;
+  color: rgba(255,255,255,.32); line-height: 1.6;
+}
+
+/* ── VOICE LINE (appears after ring tap) ── */
+.voice-line {
+  margin-top: 20px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; font-style: italic; font-weight: 300;
+  color: transparent; line-height: 1.7; text-align: center;
+  max-width: 440px;
+  transition: color .8s ease;
+}
+.voice-line.show { color: rgba(255,255,255,.72); }
+.voice-line em {
+  font-weight: 600; font-style: italic; color: rgba(255,255,255,.9);
+}
+
+/* ── RESET ── */
+.ritual-reset {
+  font-family: 'Cinzel', serif;
+  font-size: 8.5px; letter-spacing: .28em; text-transform: uppercase;
+  color: rgba(255,255,255,.15); background: none; border: none;
+  cursor: pointer; padding: 10px 20px; margin-top: 14px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .4s ease, color .2s ease;
+}
+.ritual-reset.show { opacity: 1; pointer-events: all; }
+.ritual-reset:hover { color: rgba(255,255,255,.42); }
+
+/* ── PHASE TRANSITIONS ── */
+.phase-idle {
+  transition: opacity .5s ease, transform .5s ease;
+}
+.phase-idle.hide {
+  opacity: 0; transform: translateY(-16px); pointer-events: none;
+}
+
+/* ── DAILY BLEND CARD ── */
+.daily-blend-card {
+  margin-top: 24px;
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(192,136,48,.2);
+  border-radius: 16px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition:
+    opacity .8s ease,
+    transform .8s cubic-bezier(.34,1.2,.64,1);
+}
+.daily-blend-card.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Top accent strip */
+.dbc-accent {
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, #c08830, transparent);
+}
+
+.dbc-inner {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.dbc-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: .38em;
+  text-transform: uppercase;
+  color: rgba(192,136,48,.5);
+  margin-bottom: 12px;
+}
+
+.dbc-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.dbc-emoji {
+  font-size: 36px;
+  line-height: 1;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.3));
+}
+
+.dbc-text { flex: 1; text-align: left; }
+
+.dbc-part {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: .2em;
+  color: rgba(255,255,255,.3);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.dbc-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: rgba(255,255,255,.88);
+  line-height: 1.25;
+}
+
+.dbc-rule {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,.07);
+  margin: 10px 0;
+}
+
+.dbc-benefit {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13.5px;
+  font-style: italic;
+  color: rgba(255,255,255,.42);
+  line-height: 1.6;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.dbc-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #deb96a;
+  background: rgba(192,136,48,.12);
+  border: 1px solid rgba(192,136,48,.28);
+  border-radius: 20px;
+  padding: 9px 22px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all .2s ease;
+}
+.dbc-btn:hover {
+  background: rgba(192,136,48,.22);
+  border-color: rgba(192,136,48,.5);
+  transform: translateY(-1px);
+}
+
+/* ── CLOSING BOWL TONE indicator ── */
+.closing-tone {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(192,136,48,.5);
+  margin: 8px auto 0;
+  opacity: 0;
+  box-shadow: 0 0 8px 3px rgba(192,136,48,.3);
+  transition: opacity .4s ease;
+  animation: tonePulse 2s ease-in-out infinite;
+}
+.closing-tone.show { opacity: 1; }
+@keyframes tonePulse {
+  0%,100% { transform: scale(1);   opacity: .5; }
+  50%      { transform: scale(1.4); opacity: .9; }
+}
+
+
+/* ── TAP HINT LABEL ── */
+.tap-hint {
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: .14em;
+  color: rgba(192,136,48,.7);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+  z-index: 5;
+}
+/* Show on hover — desktop */
+.orbit-stage:hover .tap-hint { opacity: 1; }
+/* Hide once activated */
+.ritual-section.activated-hands .tap-hint { opacity: 0 !important; display: none; }
+
+/* Subtle pointer cursor glow on hover */
+.orbit-stage {
+  cursor: pointer;
+}
+.orbit-stage:hover .hands-emoji {
+  filter: drop-shadow(0 4px 14px rgba(0,0,0,.5))
+          drop-shadow(0 0 32px rgba(192,136,48,.4));
+  animation-play-state: paused;
+}
+
+
+/* Mobile — show tap hint briefly on load as a one-time nudge */
+@media (hover: none) {
+  .tap-hint {
+    animation: hintNudge 3s ease 1.5s both;
+  }
+  @keyframes hintNudge {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  /* After nudge, only show on touch */
+  .orbit-stage:active .tap-hint { opacity: 1; }
+}
+/* ── SHARED ── */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     CHAI HOLISTIC — TOUCH & RECEIVE COMPONENT
+     Paste this entire section into Bolt
+═══════════════════════════════════════════════ -->
+
+<section class="ritual-section" id="ritualSection">
+
+  <!-- Ambient bg (inline in section::before) -->
+
+  <!-- Particles -->
+  <div class="ritual-particles" id="ritualParticles"></div>
+
+  <!-- Sound wave -->
+  <div class="wave-wrap" id="waveWrap">
+    <div class="wbar"></div><div class="wbar"></div><div class="wbar"></div>
+    <div class="wbar"></div><div class="wbar"></div>
+  </div>
+
+  <!-- ── PHASE 0: IDLE ── -->
+  <div class="phase-idle" id="phaseIdle">
+
+    <div class="idle-eyebrow">A moment before you begin</div>
+
+    <!-- Orbit + Hands -->
+    <div class="orbit-stage" id="handsBtn"
+         role="button" tabindex="0"
+         aria-label="Tap to receive your intention">
+
+      <!-- Idle rings -->
+      <div class="orbit-ring or1"></div>
+      <div class="orbit-ring or2"></div>
+      <div class="orbit-ring or3"></div>
+
+      <!-- Burst rings -->
+      <div class="burst-ring br1"></div>
+      <div class="burst-ring br2"></div>
+      <div class="burst-ring br3"></div>
+      <div class="burst-ring br4"></div>
+
+      <!-- Gold dot -->
+      <div class="gold-dot"></div>
+
+      <!-- Hands -->
+      <span class="hands-emoji">🙏</span>
+
+      <!-- Tap hint -->
+      <span class="tap-hint">✦ tap to receive</span>
+
+    </div>
+
+    <div class="idle-invite">
+      Touch your hands together.<br>
+      Breathe. Receive your intention.
+    </div>
+
+  </div><!-- /phase-idle -->
+
+  <!-- ── INTENTION (appears after hands tap, stays visible) ── -->
+  <div class="intention-card" id="intentionCard">
+    <div class="ic-rule"></div>
+    <span class="ic-line ic-line-1" id="icLine1"></span>
+    <span class="ic-line ic-line-2" id="icLine2"></span>
+    <span class="ic-line ic-line-3" id="icLine3"></span>
+    <div class="ic-rule-2"></div>
+  </div>
+
+  <!-- ── PHASE 2: RING MOMENT ── -->
+  <div class="ring-moment" id="ringMoment">
+
+    <div class="ring-cue">✦ &nbsp; Now carry it with you &nbsp; ✦</div>
+
+    <div class="ring-headline">
+      Touch your Vibe Shift ring.<br>
+      <span style="font-size:17px;color:rgba(255,255,255,.5)">Hear your intention spoken aloud.</span>
+    </div>
+
+    <!-- Ring icon — tap to activate voice -->
+    <div class="ring-icon-wrap" id="ringBtn"
+         role="button" tabindex="0"
+         aria-label="Tap your Vibe Shift ring to hear your intention">
+
+      <div class="ring-outer-glow"></div>
+
+      <!-- Burst rings for ring tap -->
+      <div class="ring-burst rb1"></div>
+      <div class="ring-burst rb2"></div>
+      <div class="ring-burst rb3"></div>
+
+      <!-- Ring SVG — clean, elegant -->
+      <svg class="ring-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%"   stop-color="#f5d080"/>
+            <stop offset="35%"  stop-color="#c08830"/>
+            <stop offset="65%"  stop-color="#deb96a"/>
+            <stop offset="100%" stop-color="#a07020"/>
+          </linearGradient>
+          <linearGradient id="ringShine" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="rgba(255,240,180,.6)"/>
+            <stop offset="100%" stop-color="rgba(255,240,180,0)"/>
+          </linearGradient>
+          <filter id="ringGlow">
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+
+        <!-- Outer ring band -->
+        <ellipse cx="40" cy="40" rx="28" ry="10"
+                 stroke="url(#ringGrad)" stroke-width="5.5"
+                 fill="none"
+                 filter="url(#ringGlow)"/>
+
+        <!-- Inner shadow ring -->
+        <ellipse cx="40" cy="40" rx="28" ry="10"
+                 stroke="rgba(0,0,0,.25)" stroke-width="2"
+                 fill="none" stroke-dasharray="3,3" opacity=".4"/>
+
+        <!-- Top shine -->
+        <ellipse cx="32" cy="36" rx="10" ry="3.5"
+                 fill="url(#ringShine)" opacity=".7"
+                 transform="rotate(-12, 32, 36)"/>
+
+        <!-- Meridian frequency engrave lines -->
+        <ellipse cx="40" cy="40" rx="28" ry="10"
+                 stroke="rgba(255,220,100,.18)" stroke-width="1"
+                 fill="none" stroke-dasharray="1,5"/>
+
+        <!-- Gemstone / focal point -->
+        <ellipse cx="40" cy="30.5" rx="5" ry="3.5"
+                 fill="url(#ringGrad)" opacity=".9"/>
+        <ellipse cx="39" cy="29.5" rx="2" ry="1.5"
+                 fill="rgba(255,250,220,.7)"/>
+
+        <!-- Side depth curves -->
+        <path d="M12 40 Q12 54 40 58 Q68 54 68 40"
+              stroke="url(#ringGrad)" stroke-width="4"
+              fill="none" opacity=".5"
+              filter="url(#ringGlow)"/>
+
+        <!-- Bottom shadow -->
+        <ellipse cx="40" cy="57" rx="22" ry="5"
+                 fill="rgba(0,0,0,.3)" opacity=".6"/>
+
+        <!-- Pulse dot -->
+        <circle cx="40" cy="40" r="2.5"
+                fill="rgba(192,136,48,.0)" id="ringCoreDot">
+          <animate attributeName="r" values="2.5;5;2.5" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.6;0;0.6" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="fill" values="rgba(192,136,48,.6);rgba(192,136,48,0);rgba(192,136,48,.6)" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+
+      </svg>
+    </div>
+
+    <div class="ring-sub">
+      Your intention, spoken and sealed.<br>
+      Carry it through your day.
+    </div>
+
+    <!-- Voice line — appears after ring tap -->
+    <div class="voice-line" id="voiceLine"></div>
+
+    <!-- Daily Blend Card — appears after voice -->
+    <div class="daily-blend-card" id="dailyBlendCard">
+      <div class="dbc-accent"></div>
+      <div class="dbc-inner">
+        <div class="dbc-eyebrow">✦ &nbsp; Today's blend for you &nbsp; ✦</div>
+        <div class="dbc-top-row">
+          <span class="dbc-emoji" id="dbcEmoji"></span>
+          <div class="dbc-text">
+            <div class="dbc-part" id="dbcPart"></div>
+            <div class="dbc-name" id="dbcName"></div>
+          </div>
+        </div>
+        <div class="dbc-rule"></div>
+        <div class="dbc-benefit" id="dbcBenefit"></div>
+        <a class="dbc-btn" id="dbcLink" href="/tea-library" target="_self">
+          See Full Recipe &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Closing tone dot -->
+    <div class="closing-tone" id="closingTone"></div>
+
+    <!-- Reset -->
+    <button class="ritual-reset" id="resetBtn" onclick="resetRitual()">
+      Begin again &rarr;
+    </button>
+
+  </div><!-- /ring-moment -->
+
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     END COMPONENT
+═══════════════════════════════════════════════ -->
+
+<script>
+// ════════════════════════════════════════════════
+// CHAI HOLISTIC — TOUCH & RECEIVE SCRIPT
+// ════════════════════════════════════════════════
+
+const section     = document.getElementById('ritualSection');
+const phaseIdle   = document.getElementById('phaseIdle');
+const handsBtn    = document.getElementById('handsBtn');
+const ringMoment  = document.getElementById('ringMoment');
+const ringBtn     = document.getElementById('ringBtn');
+const intentCard  = document.getElementById('intentionCard');
+const waveWrap    = document.getElementById('waveWrap');
+const particles   = document.getElementById('ritualParticles');
+const voiceLine   = document.getElementById('voiceLine');
+const resetBtn    = document.getElementById('resetBtn');
+
+let phase    = 0;   // 0=idle, 1=intention shown, 2=ring moment
+let audioCtx = null;
+let synth    = window.speechSynthesis;
+let currentIntention = '';
+
+// ── DAILY BLENDS — all 40, cycles by day of year
+const DAILY_BLENDS = [
+  {n:1,  emoji:"🌙", name:"Deep Sleep & Calm Blend",              part:"Part I",   benefit:"Calms the nervous system and guides the body into deep, restorative sleep."},
+  {n:2,  emoji:"❤️", name:"Heart & Circulation Tonic",            part:"Part I",   benefit:"Strengthens the heart, improves circulation, and lowers blood pressure naturally."},
+  {n:3,  emoji:"🧠", name:"Focus & Mental Clarity Blend",         part:"Part I",   benefit:"Sharpens concentration and memory without caffeine jitters."},
+  {n:4,  emoji:"🛡️", name:"Immune Defense Blend",                 part:"Part I",   benefit:"Builds immune resilience and fights inflammation from the inside out."},
+  {n:5,  emoji:"🔥", name:"Metabolism & Digestive Fire",          part:"Part I",   benefit:"Stimulates digestion, reduces bloating, and supports liver detoxification."},
+  {n:6,  emoji:"💪", name:"Anti-Inflammation & Joint Relief",     part:"Part I",   benefit:"Targets chronic inflammation and joint pain with clinically studied herbs."},
+  {n:7,  emoji:"🌸", name:"Hormone Balance & Women's Wellness",   part:"Part I",   benefit:"Eases PMS, regulates cycles, and supports hormonal harmony."},
+  {n:8,  emoji:"🌬️", name:"Lung & Respiratory Clarity",          part:"Part I",   benefit:"Opens airways, clears mucus, and soothes irritated lung tissue."},
+  {n:9,  emoji:"⚡", name:"Adaptogen Energy & Vitality Blend",    part:"Part I",   benefit:"Combats fatigue and builds stress resilience without stimulants."},
+  {n:10, emoji:"🌿", name:"Gut Healing & Microbiome Blend",       part:"Part I",   benefit:"Repairs and soothes the gut lining — ideal for leaky gut and IBS."},
+  {n:11, emoji:"🌊", name:"Ocean Mist Detox Blend",               part:"Part II",  benefit:"Pulls heavy metals and toxins while providing rich iodine for thyroid support."},
+  {n:12, emoji:"🔮", name:"Third Eye Clarity Blend",              part:"Part II",  benefit:"Enhances dream clarity, intuition, and inner vision."},
+  {n:13, emoji:"🦋", name:"Metamorphosis Mood Lift Blend",        part:"Part II",  benefit:"A gentle natural antidepressant formula studied for lifting mild depression."},
+  {n:14, emoji:"🐉", name:"Dragon Fire Longevity Blend",          part:"Part II",  benefit:"Inspired by ancient Chinese longevity traditions — nourishes the blood and kidneys."},
+  {n:15, emoji:"🌺", name:"Venus Beauty Blend",                   part:"Part II",  benefit:"Collagen-boosting nutrients for skin, hair, and nails — from the inside out."},
+  {n:16, emoji:"🧬", name:"DNA Repair & Cell Renewal Blend",      part:"Part II",  benefit:"Activates telomerase for cellular longevity and deep cellular repair."},
+  {n:17, emoji:"🌑", name:"Shadow Work & Nervous System Reset",   part:"Part II",  benefit:"Deeply relaxes the nervous system for trauma release and chronic stress."},
+  {n:18, emoji:"🏔️", name:"Alpine Warrior Endurance Blend",       part:"Part II",  benefit:"Increases oxygen uptake, delays fatigue, and boosts physical stamina."},
+  {n:19, emoji:"🌍", name:"Ancestral Grounding Blend",            part:"Part II",  benefit:"Rooted in African botanical wisdom — mineral-rich and caffeine-free."},
+  {n:20, emoji:"✨", name:"Stardust Pineal Activation Blend",     part:"Part II",  benefit:"Nourishes neural pathways and gently activates dopamine and serotonin."},
+  {n:21, emoji:"🌻", name:"Solar Plexus Power Blend",             part:"Part III", benefit:"Activates confidence and vitality aligned with the solar plexus chakra."},
+  {n:22, emoji:"🌊", name:"Mermaid Mineral Blend",                part:"Part III", benefit:"Delivers 92 of the 102 minerals the human body needs in one cup."},
+  {n:23, emoji:"🕊️", name:"Inner Peace Trauma Release Blend",    part:"Part III", benefit:"A heart-centred healing blend for emotional wounds and stored tension."},
+  {n:24, emoji:"🌠", name:"Cosmic Collagen & Skin Glow Blend",    part:"Part III", benefit:"Tremella mushroom holds 500x its weight in water — nature's best skin hydrator."},
+  {n:25, emoji:"🦅", name:"Eagle Vision Eye Health Blend",        part:"Part III", benefit:"Strengthens retinal capillaries and protects the macula from blue light damage."},
+  {n:26, emoji:"🌋", name:"Volcanic Vitality Men's Blend",        part:"Part III", benefit:"Supports testosterone balance, prostate health, and sexual vitality."},
+  {n:27, emoji:"🍃", name:"Forest Bathing Breathwork Blend",      part:"Part III", benefit:"Floods the lungs with healing phytoncides inspired by Shinrin-yoku."},
+  {n:28, emoji:"💎", name:"Crystal Clear Kidney & Bladder Blend", part:"Part III", benefit:"A targeted formula to cleanse the urinary tract and dissolve kidney deposits."},
+  {n:29, emoji:"🌈", name:"Rainbow Children's Calm & Immunity",  part:"Part III", benefit:"A gentle, safe blend formulated specifically for children's sleep and immunity."},
+  {n:30, emoji:"🔱", name:"Triquetra Sacred Trinity Blend",       part:"Part III", benefit:"The most sacred blend — drawing from Egyptian, Ayurvedic, and biblical traditions."},
+  {n:31, emoji:"🫁", name:"Liver Awakening Morning Cleanse",      part:"Part IV",  benefit:"Activates bile flow and liver detoxification — best on an empty stomach."},
+  {n:32, emoji:"🌿", name:"Milk Thistle Deep Liver Repair",       part:"Part IV",  benefit:"The gold standard liver repair formula with silymarin for cellular regeneration."},
+  {n:33, emoji:"💛", name:"Golden Liver Flush Blend",             part:"Part IV",  benefit:"A warming golden flush for sluggish livers — stimulates digestive enzymes."},
+  {n:34, emoji:"🍋", name:"Citrus Liver & Gallbladder Cleanse",   part:"Part IV",  benefit:"Targets gallbladder sludge and bile stagnation with bright citrus herbs."},
+  {n:35, emoji:"🌱", name:"Schisandra Liver Tonic & Protector",   part:"Part IV",  benefit:"Supports all five liver detoxification pathways simultaneously."},
+  {n:36, emoji:"💧", name:"Chanca Piedra Stone Breaker Kidney",   part:"Part IV",  benefit:"Named stone breaker — used for centuries to dissolve kidney and gallstones."},
+  {n:37, emoji:"🫧", name:"Crystal Kidney Flush & Repair",        part:"Part IV",  benefit:"Increases urine output, flushes mineral deposits, and reduces kidney inflammation."},
+  {n:38, emoji:"🌊", name:"Alkaline Kidney Restore Blend",        part:"Part IV",  benefit:"Alkalises urine and restores kidney pH balance to prevent stone formation."},
+  {n:39, emoji:"🔴", name:"Red Clover Liver Blood Purifier",      part:"Part IV",  benefit:"A traditional blood purification formula — best as a 30-day spring cleanse."},
+  {n:40, emoji:"⚗️", name:"Ultimate Liver & Kidney Master Cleanse", part:"Part IV", benefit:"The complete liver AND kidney dual cleanse — most comprehensive in the collection."},
+];
+
+// Returns today's blend based on day of year — rotates through all 40
+function getDailyBlend() {
+  const now  = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff  = now - start;
+  const day   = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const idx   = day % DAILY_BLENDS.length;
+  return DAILY_BLENDS[idx];
+}
+
+// ── INTENTIONS
+// Customise these in Bolt — these are the words spoken aloud
+const INTENTIONS = [
+  {
+    lines: ['You are here at the right moment.', 'Something in you already knows.', 'Begin.'],
+    voice: 'You are here at the right moment. Something in you already knows. Begin.'
+  },
+  {
+    lines: ['Take one breath before this cup.', 'You are nourishing yourself today.', 'That is enough.'],
+    voice: 'Take one breath before this cup. You are nourishing yourself today. That is enough.'
+  },
+  {
+    lines: ['Stillness is not empty.', 'It is full of everything you need.', 'Receive it now.'],
+    voice: 'Stillness is not empty. It is full of everything you need. Receive it now.'
+  },
+  {
+    lines: ['What your body is asking for,', 'this blend already knows.', 'Trust the ritual.'],
+    voice: 'What your body is asking for, this blend already knows. Trust the ritual.'
+  },
+  {
+    lines: ['This moment belongs to you.', 'No one else. Just you.', 'Breathe in.'],
+    voice: 'This moment belongs to you. No one else. Just you. Breathe in.'
+  },
+  {
+    lines: ['The healing has already begun.', 'You chose to show up.', 'That is the practice.'],
+    voice: 'The healing has already begun. You chose to show up. That is the practice.'
+  },
+  {
+    lines: ['You came to the right place.', 'Everything you need is here.', 'Let it in.'],
+    voice: 'You came to the right place. Everything you need is here. Let it in.'
+  },
+];
+
+let chosen = null;
+
+// ── SINGING BOWL SOUND
+function playBowl(soft = false) {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = audioCtx;
+    const now = ctx.currentTime;
+
+    const tone = (freq, amp, dur, start = 0) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      const f = ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = 3200;
+      o.type = 'sine';
+      o.frequency.setValueAtTime(freq, now + start);
+      g.gain.setValueAtTime(0, now + start);
+      g.gain.linearRampToValueAtTime(amp * (soft ? .55 : 1), now + start + .05);
+      g.gain.exponentialRampToValueAtTime(.0001, now + start + dur);
+      o.connect(f); f.connect(g); g.connect(ctx.destination);
+      o.start(now + start); o.stop(now + start + dur + .1);
+    };
+
+    tone(432,  .26, 5.5);
+    tone(864,  .09, 4.5, .03);
+    tone(1296, .045, 3.5, .06);
+    tone(648,  .08, 4.8, .09);
+    tone(528,  .04, 3.0, .3);
+
+    if (!soft) {
+      tone(432, .11, 4.0, 2.4);
+      tone(864, .045, 3.2, 2.5);
+    }
+  } catch(e) { /* silent fail */ }
+}
+
+// ── VOICE SYNTHESIS
+function speakIntention(text) {
+  if (!synth) return;
+  synth.cancel();
+
+  setTimeout(() => {
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.rate   = 0.78;
+    utt.pitch  = 0.92;
+    utt.volume = 0.88;
+
+    // Try to use a warm female voice if available
+    const voices = synth.getVoices();
+    const preferred = ['Samantha', 'Karen', 'Moira', 'Fiona', 'Victoria',
+                       'Google UK English Female', 'Microsoft Zira'];
+    for (const name of preferred) {
+      const v = voices.find(v => v.name.includes(name));
+      if (v) { utt.voice = v; break; }
+    }
+
+    synth.speak(utt);
+  }, 400);
+}
+
+// ── PARTICLES
+function spawnParticles(colors, cx = '50%', cy = '50%', count = 22, spread = 90) {
+  for (let i = 0; i < count; i++) {
+    const el  = document.createElement('div');
+    el.className = 'rp';
+    const ang = Math.random() * Math.PI * 2;
+    const r   = (spread * .5) + Math.random() * spread;
+    const ex  = Math.cos(ang) * r;
+    const ey  = Math.sin(ang) * r - (Math.random() * 30);
+    const sz  = 2 + Math.random() * 3.5;
+    const dl  = Math.random() * .35;
+    const d   = .7 + Math.random() * .7;
+    const col = colors[Math.floor(Math.random() * colors.length)];
+    el.style.cssText = `
+      width:${sz}px; height:${sz}px;
+      background:${col};
+      box-shadow:0 0 ${sz*2}px ${col};
+      left:${cx}; top:${cy};
+      --sx:0px; --sy:0px;
+      --ex:${ex}px; --ey:${ey}px;
+      --d:${d}s; --dl:${dl}s;
+    `;
+    particles.appendChild(el);
+    setTimeout(() => el.remove(), (dl + d + .1) * 1000 + 200);
+  }
+}
+
+// ── PHASE 1: HANDS TAPPED
+function onHandsTap() {
+  if (phase !== 0) return;
+  phase = 1;
+
+  // Pick intention
+  chosen = INTENTIONS[Math.floor(Math.random() * INTENTIONS.length)];
+  currentIntention = chosen.voice;
+
+  // Set text
+  document.getElementById('icLine1').textContent = chosen.lines[0];
+  document.getElementById('icLine2').textContent = chosen.lines[1];
+  document.getElementById('icLine3').textContent = chosen.lines[2];
+
+  // Fire hands animation
+  handsBtn.classList.add('firing');
+  section.classList.add('activated-hands'); // hides tap hint permanently
+
+  // Particles
+  spawnParticles(['#c08830','#deb96a','#52b882','#a8e0c0','#fff8e8'], '50%', '38%', 24, 95);
+
+  // Sound
+  playBowl(false);
+
+  // Show wave
+  waveWrap.classList.add('visible');
+
+  // Show intention card
+  setTimeout(() => intentCard.classList.add('show'), 80);
+
+  // Fade out idle phase
+  setTimeout(() => phaseIdle.classList.add('hide'), 200);
+
+  // Show ring moment after intention has been read
+  setTimeout(() => {
+    ringMoment.classList.add('show');
+  }, 2600);
+
+  handsBtn.setAttribute('aria-pressed', 'true');
+}
+
+// ── PHASE 2: RING TAPPED
+function onRingTap() {
+  if (phase !== 1) return;
+  phase = 2;
+
+  // Burst
+  ringMoment.classList.add('fired');
+
+  // Particles — gold
+  spawnParticles(['#f5d080','#c08830','#deb96a','#fff8e0'], '50%', '62%', 18, 70);
+
+  // Soft bowl + then voice
+  playBowl(true);
+
+  // Show voice line text
+  setTimeout(() => {
+    voiceLine.textContent = `"${currentIntention}"`;
+    voiceLine.classList.add('show');
+  }, 600);
+
+  // Speak it
+  setTimeout(() => {
+    speakIntention(currentIntention);
+  }, 900);
+
+  // Get and populate today's blend
+  const todayBlend = getDailyBlend();
+  document.getElementById('dbcEmoji').textContent   = todayBlend.emoji;
+  document.getElementById('dbcName').textContent    = todayBlend.name;
+  document.getElementById('dbcPart').textContent    = todayBlend.part;
+  document.getElementById('dbcBenefit').textContent = todayBlend.benefit;
+  document.getElementById('dbcLink').href           = `/tea-library?blend=${todayBlend.n}`;
+
+  // Show blend card after voice finishes settling
+  setTimeout(() => {
+    document.getElementById('dailyBlendCard').classList.add('show');
+  }, 2200);
+
+  // Closing bowl tone — soft, final
+  setTimeout(() => {
+    playBowl(true);
+    document.getElementById('closingTone').classList.add('show');
+  }, 2000);
+
+  // Show reset
+  setTimeout(() => resetBtn.classList.add('show'), 4200);
+
+  ringBtn.setAttribute('aria-pressed', 'true');
+}
+
+// ── RESET
+function resetRitual() {
+  phase = 0;
+  chosen = null;
+
+  // Remove all state classes
+  phaseIdle.classList.remove('hide');
+  intentCard.classList.remove('show');
+  ringMoment.classList.remove('show', 'fired');
+  handsBtn.classList.remove('firing');
+  section.classList.remove('activated-hands');
+  waveWrap.classList.remove('visible');
+  voiceLine.classList.remove('show');
+  voiceLine.textContent = '';
+  resetBtn.classList.remove('show');
+  document.getElementById('dailyBlendCard').classList.remove('show');
+  document.getElementById('closingTone').classList.remove('show');
+
+  // Force reflow
+  void section.offsetWidth;
+
+  // Stop voice
+  if (synth) synth.cancel();
+
+  handsBtn.setAttribute('aria-pressed', 'false');
+  ringBtn.setAttribute('aria-pressed', 'false');
+}
+
+// ── LISTENERS — Hands
+handsBtn.addEventListener('click', onHandsTap);
+handsBtn.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onHandsTap(); }
+});
+handsBtn.addEventListener('touchstart', e => {
+  e.currentTarget.querySelector('.hands-emoji').style.transform = 'translate(-50%,-50%) scale(.93)';
+}, { passive: true });
+handsBtn.addEventListener('touchend', e => {
+  e.currentTarget.querySelector('.hands-emoji').style.transform = '';
+  onHandsTap();
+}, { passive: true });
+
+// ── LISTENERS — Ring
+ringBtn.addEventListener('click', onRingTap);
+ringBtn.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRingTap(); }
+});
+ringBtn.addEventListener('touchstart', e => {
+  e.currentTarget.querySelector('.ring-svg').style.transform = 'scale(.92)';
+}, { passive: true });
+ringBtn.addEventListener('touchend', e => {
+  e.currentTarget.querySelector('.ring-svg').style.transform = '';
+  onRingTap();
+}, { passive: true });
+
+// Load voices async (Chrome needs this)
+if (synth) {
+  synth.getVoices();
+  if (synth.onvoiceschanged !== undefined) {
+    synth.onvoiceschanged = () => synth.getVoices();
+  }
+}
+</script>
+
+</body>
+</html>
