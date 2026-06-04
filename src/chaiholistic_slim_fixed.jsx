@@ -657,6 +657,7 @@ export default function ChaiHolistic() {
     .h-card.c1{width:210px;height:290px;top:20px;left:20px;transform:rotate(-4deg);}
     .h-card.c2{width:200px;height:270px;top:55px;left:175px;transform:rotate(3deg);}
     .h-card.c3{width:180px;height:235px;top:195px;left:75px;transform:rotate(-1.5deg);}
+    .h-card.c4{width:160px;height:210px;top:240px;left:220px;transform:rotate(2deg);}
     .h-card-inner{width:100%;height:65%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
     .h-card-body{padding:11px 13px;}
     .h-card-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);}
@@ -2147,10 +2148,10 @@ export default function ChaiHolistic() {
             {/* Jelly Kit highlight card */}
             <div
               className="h-card c4"
-              style={{cursor:"pointer",position:"relative",overflow:"hidden"}}
+              style={{cursor:"pointer",overflow:"hidden"}}
               onClick={()=>nav("jelly")}
               onMouseEnter={e=>e.currentTarget.style.transform="translateY(-4px) scale(1.03)"}
-              onMouseLeave={e=>e.currentTarget.style.transform=""}>
+              onMouseLeave={e=>e.currentTarget.style.transform="rotate(2deg)"}>
               <div className="h-card-inner" style={{background:"linear-gradient(135deg,#1a3a2a,#2a1a0a)"}}>🌊</div>
               <div className="h-card-body">
                 <div className="h-card-name">Jelly Kits</div>
