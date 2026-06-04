@@ -205,6 +205,30 @@ const RINGS = [
   { id:"r6", photo:imgSre7,    name:"The Flux",      tagline:"Flow through the noise",      desc:"Slim profile, variable-depth dot cutouts. Built for the minimalist who still needs a tactile outlet -- understated but unmistakably intentional.", price:46.00, material:"Electric Blue · Meridian Infused", symbol:"⬡", color:"Electric Blue" },
 ];
 
+
+const MEN_BLENDS = [
+  { id:"men1",  name:"Iron Will Morning",        tagline:"Rise with purpose and power",               price:19.99, color:"#2A1A0A", benefit:"Energy · Drive · Focus",         ingredients:["Ashwagandha Root","Rhodiola Rosea","Ginger Root","Black Pepper","Cinnamon"],           steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"A commanding morning blend built on ashwagandha and rhodiola — two of the most studied adaptogens for male energy, resilience, and mental sharpness.", affirmation:"I rise with intention. Today I build.", warning:"Contains Rhodiola. Avoid if on SSRIs or MAOIs." },
+  { id:"men2",  name:"Deep Recharge Sleep",      tagline:"Testosterone-restoring deep sleep",          price:18.99, color:"#1A1A3A", benefit:"Deep Sleep · Recovery · Hormones",ingredients:["Valerian Root","Passionflower","Ashwagandha Root","Chamomile","Lemon Balm"],           steepMin:10, steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Quality sleep is where testosterone is produced. This blend targets the deep, restorative stages of sleep that most men are chronically missing.", affirmation:"Rest is not weakness. Rest is where I rebuild.", warning:"Contains Valerian Root. Do not drive after use. Not for use during pregnancy." },
+  { id:"men3",  name:"Alpha Brain Focus",        tagline:"Clarity without caffeine or crash",          price:20.99, color:"#1A3A2A", benefit:"Cognition · Memory · Clarity",    ingredients:["Lions Mane Mushroom","Ginkgo Biloba","Peppermint Leaf","Rosemary","Gotu Kola"],        steepMin:7,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Lion's mane and ginkgo biloba are among the most researched herbs for brain function, memory, and cognitive endurance. Zero caffeine. No crash.", affirmation:"My mind is sharp. I think clearly and act decisively.", warning:"Ginkgo Biloba may interact with blood thinners. Consult your doctor if on anticoagulants." },
+  { id:"men4",  name:"Heart of a King",          tagline:"Cardiovascular protection",                  price:18.99, color:"#3A0A0A", benefit:"Heart · Circulation · Blood Pressure", ingredients:["Hibiscus Flower","Hawthorn Berry","Motherwort","Lemon Balm","Rose Petals"],          steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Heart disease is the number one killer of men. This blend combines hibiscus (clinically shown to lower blood pressure) with hawthorn for cardiovascular strength.", affirmation:"I protect my heart — the source of my strength.", warning:"May lower blood pressure. If you take antihypertensives, monitor closely and consult your doctor." },
+  { id:"men5",  name:"Testosterone Harmony",     tagline:"Hormonal balance and cortisol control",      price:21.99, color:"#2A1A3A", benefit:"Hormones · Cortisol · Balance",  ingredients:["Ashwagandha Root","Nettle Root","Tongkat Ali","Tribulus Terrestris","Licorice Root"], steepMin:10, steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Modern life chronically elevates cortisol — which directly suppresses testosterone. This blend targets the cortisol-testosterone axis from both directions.", affirmation:"My body is in balance. My hormones serve my purpose.", warning:"Contains Licorice Root — not for use if you have high blood pressure or heart conditions. Not for long-term use without breaks." },
+  { id:"men6",  name:"Primal Fire Libido",       tagline:"Vitality and desire restoration",            price:22.99, color:"#3A1A0A", benefit:"Libido · Vitality · Drive",      ingredients:["Maca Root","Damiana Leaf","Tribulus Terrestris","Ginger Root","Cinnamon"],            steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Low libido is rarely about one thing — it's stress, hormones, circulation, and energy together. Maca and damiana are among the most respected herbs for male vitality.", affirmation:"My vitality is natural. My desire is healthy and whole.", warning:"Damiana may interact with diabetes medications. Avoid if pregnant (for female partners)." },
+  { id:"men7",  name:"Prostate Shield",          tagline:"Prevention and long-term prostate health",   price:20.99, color:"#1A3A1A", benefit:"Prostate · Urinary · Prevention", ingredients:["Saw Palmetto","Nettle Root","Green Tea Leaf","Pumpkin Seed","Turmeric Root"],          steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Saw palmetto and nettle root are the most studied herbs for prostate support. This is a long-term maintenance blend — best started early, not after symptoms appear.", affirmation:"I take care of my body before it asks for help.", warning:"Saw Palmetto may affect PSA test results. Inform your doctor before testing." },
+  { id:"men8",  name:"Stress Armour",            tagline:"The physiological reality of male stress",   price:19.99, color:"#3A2A1A", benefit:"Cortisol · Nervous System · Calm", ingredients:["Ashwagandha Root","Rhodiola Rosea","Holy Basil","Lemon Balm","Skullcap"],             steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Chronic stress physically degrades the male body — from testosterone to cardiovascular health. This adaptogenic blend builds real physiological stress resistance.", affirmation:"I am not my stress. I am the stillness underneath it.", warning:"Rhodiola should be avoided by those on antidepressants. Skullcap may enhance sedative effects." },
+  { id:"men9",  name:"Muscle and Recovery",      tagline:"Post-training repair and inflammation",      price:19.99, color:"#2A3A1A", benefit:"Recovery · Inflammation · Repair", ingredients:["Turmeric Root","Ginger Root","Tart Cherry","Black Pepper","Boswellia"],               steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Turmeric and tart cherry are evidence-backed for reducing exercise-induced inflammation. This blend supports recovery — so your next session starts stronger.", affirmation:"I give my body what it earned. Rest and recovery are part of the work." },
+  { id:"men10", name:"Blood Pressure Balance",   tagline:"The silent killer addressed directly",       price:18.99, color:"#3A0A1A", benefit:"Blood Pressure · Heart · Minerals", ingredients:["Hibiscus Flower","Hawthorn Berry","Celery Seed","Linden Flower","Olive Leaf"],       steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"High blood pressure has no symptoms until it causes a stroke or heart attack. Hibiscus is one of the few herbs with clinical trial data on blood pressure reduction.", affirmation:"I check in with my body. Awareness is the first form of strength.", warning:"May lower blood pressure. Monitor if on antihypertensive medications." },
+  { id:"men11", name:"Meditation and Stillness", tagline:"Permission to go inward",                    price:17.99, color:"#1A2A3A", benefit:"Calm · Presence · Clarity",      ingredients:["Reishi Mushroom","Chamomile","Tulsi Holy Basil","Lemon Balm","Lavender"],              steepMin:10, steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Reishi mushroom has been called the mushroom of spiritual potency for centuries. This blend quiets the nervous system and creates the internal space needed for stillness.", affirmation:"Stillness is not passive. It is where I access my greatest power." },
+  { id:"men12", name:"Bone and Joint Fortress",  tagline:"Structural health for the long game",        price:18.99, color:"#2A2A2A", benefit:"Joints · Bones · Mobility",      ingredients:["Nettle Leaf","Horsetail","Turmeric Root","Boswellia","Ginger Root"],                  steepMin:10, steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Silica from horsetail and nettle, combined with anti-inflammatory turmeric and boswellia. Built for men who want to be physically capable at 60, 70, and beyond.", affirmation:"I invest in my body today for the man I am becoming." },
+  { id:"men13", name:"Metabolic Reset",          tagline:"Visceral fat and insulin sensitivity",       price:19.99, color:"#3A2A0A", benefit:"Metabolism · Fat · Insulin",     ingredients:["Green Tea Leaf","Cinnamon","Fenugreek","Bitter Melon","Ginger Root"],                  steepMin:7,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Visceral fat — the fat around organs — is a uniquely male health risk. Cinnamon and fenugreek are among the most studied herbs for blood sugar and insulin sensitivity.", affirmation:"My metabolism works for me. Every choice I make supports it." },
+  { id:"men14", name:"Father's Calm Evening",    tagline:"Intentional decompression",                  price:17.99, color:"#1A2A1A", benefit:"Decompression · Presence · Peace", ingredients:["Chamomile","Lemon Balm","Passionflower","Oat Straw","Lavender"],                      steepMin:8,  steepTemp:"Gentle Heat — steam rising, not boiling", desc:"The transition from work mode to presence is one of the hardest things a father does every day. This blend is designed for that specific 20-minute window.", affirmation:"When I walk in the door, I bring peace. That is my greatest gift." },
+  { id:"men15", name:"Pre-Game Performance",     tagline:"Peak output when it matters most",           price:21.99, color:"#0A1A3A", benefit:"Performance · Focus · Endurance", ingredients:["Rhodiola Rosea","Eleuthero Root","Ginseng Root","Peppermint Leaf","Licorice Root"],    steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Rhodiola and eleuthero are used by elite military and athletes for endurance, stress resistance, and peak output under pressure. No synthetic stimulants.", affirmation:"I am prepared. I am capable. I perform at my best.", warning:"Contains Ginseng — avoid if you have high blood pressure. Rhodiola: avoid on SSRIs. Not for evening use." },
+  { id:"men16", name:"Gut and Digestion Restore",tagline:"The gut-brain axis for men",                 price:18.99, color:"#2A1A2A", benefit:"Gut · Digestion · Microbiome",   ingredients:["Slippery Elm","Marshmallow Root","Fennel Seed","Licorice Root","Chamomile"],           steepMin:10, steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Men's gut health is chronically neglected. The gut-brain axis means gut inflammation directly affects mood, focus, and hormonal balance. This blend repairs the lining.", affirmation:"My gut is the foundation of everything. I take care of it." },
+  { id:"men17", name:"Liver Detox Recovery",     tagline:"Repair without shame",                       price:19.99, color:"#1A3A0A", benefit:"Liver · Detox · Regeneration",  ingredients:["Milk Thistle","Dandelion Root","Artichoke Leaf","Turmeric Root","Burdock Root"],        steepMin:10, steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Silymarin in milk thistle is one of the most researched hepatoprotective compounds on earth. This blend supports liver regeneration — without judgment about how it got there.", affirmation:"I give my liver what it needs to heal. I am not my past habits." },
+  { id:"men18", name:"Vision and Eye Protection",tagline:"Screen damage addressed directly",           price:18.99, color:"#0A2A3A", benefit:"Eyes · Antioxidants · Protection", ingredients:["Bilberry Leaf","Eyebright","Green Tea Leaf","Ginkgo Biloba","Rosehip"],                 steepMin:7,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Bilberry anthocyanins and eyebright have been used for centuries for eye health. Combined with ginkgo for circulation to the optic nerve — built for the screen-heavy modern man.", affirmation:"I protect what allows me to see the people I love.", warning:"Ginkgo may interact with blood thinners. Consult your doctor if on anticoagulants." },
+  { id:"men19", name:"Brotherhood Connection",   tagline:"For the men carrying it alone",              price:17.99, color:"#2A0A3A", benefit:"Mood · Connection · Openness",   ingredients:["St Johns Wort","Lemon Balm","Passionflower","Rose Petals","Oat Straw"],                steepMin:8,  steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Loneliness and emotional isolation are among the biggest unaddressed health crises in men's lives. St. John's Wort and lemon balm support mood and openness.", affirmation:"I do not have to carry this alone. Asking for help is strength.", warning:"St. John's Wort interacts with MANY medications including antidepressants, birth control, and blood thinners. Consult your doctor before use." },
+  { id:"men20", name:"The Elder's Wisdom",       tagline:"Longevity, depth, and ageing with power",    price:22.99, color:"#3A2A1A", benefit:"Longevity · Antioxidants · Clarity", ingredients:["Reishi Mushroom","Ashwagandha Root","Gotu Kola","Turmeric Root","Ginkgo Biloba"],    steepMin:12, steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Reishi, ashwagandha, and gotu kola are among the world's most revered longevity herbs. This blend is for the man who is building something that lasts — in his body and his legacy.", affirmation:"I age with power. Each year adds depth, not just years.", warning:"Ginkgo may interact with blood thinners. Consult your doctor if on anticoagulants or medications." },
+];
+
 const SEASONAL_PICKS = {
   0:["Winter Warmth","Sleepy Spice"], 1:["Winter Warmth","Adaptogen Blend"], 2:["Spring Cleanse","Tulsi Awakening"],
   3:["Spring Cleanse","Morning Rise"], 4:["Spring Cleanse","Ginger Lemon Sunrise"], 5:["Summer Hibiscus","Brain Boost"],
@@ -279,6 +303,179 @@ function LinkUrlInput({ onCommit }) {
           style={{width:"100%",background:"rgba(196,137,58,.2)",border:"1px solid rgba(196,137,58,.5)",color:"rgba(196,137,58,.9)",padding:"10px",borderRadius:10,fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".08em",cursor:"pointer",marginBottom:10}}>
           🔗 Test My Link — Opens in a New Tab
         </button>
+      )}
+    </div>
+  );
+}
+
+
+function MensWellness({ onNav }) {
+  const [filter, setFilter] = useState("all");
+  const [selected, setSelected] = useState(null);
+
+  const CATEGORIES = [
+    { key:"all",      label:"All 20 Blends",       emoji:"⚡" },
+    { key:"energy",   label:"Energy & Performance", emoji:"💪" },
+    { key:"mind",     label:"Mind & Focus",         emoji:"🧠" },
+    { key:"heart",    label:"Heart & Hormones",     emoji:"❤️" },
+    { key:"recovery", label:"Recovery & Rest",      emoji:"🌙" },
+    { key:"gut",      label:"Gut & Detox",          emoji:"🌿" },
+  ];
+
+  const CAT_MAP = {
+    energy:   ["men1","men6","men15"],
+    mind:     ["men3","men8","men11","men18","men19"],
+    heart:    ["men4","men5","men10"],
+    recovery: ["men2","men9","men12","men14"],
+    gut:      ["men7","men13","men16","men17","men20"],
+  };
+
+  const visible = filter === "all" ? MEN_BLENDS : MEN_BLENDS.filter(b => (CAT_MAP[filter]||[]).includes(b.id));
+
+  return (
+    <div id="sec-men-top" style={{minHeight:"100vh", background:"linear-gradient(180deg,#0D0D1A 0%,#1A1A2A 40%,#0D1A0D 100%)", paddingBottom:80}}>
+
+      {/* HERO */}
+      <div style={{textAlign:"center", padding:"64px 24px 40px", position:"relative", overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at center top, rgba(196,137,58,.15) 0%, transparent 70%)",pointerEvents:"none"}} />
+        <div style={{fontSize:".65rem",letterSpacing:".28em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:12}}>Chai Holistic · For Men</div>
+        <h1 style={{fontFamily:"Playfair Display,serif",fontSize:"clamp(2rem,6vw,3.2rem)",fontWeight:700,color:"#F7F2EA",margin:"0 0 12px",lineHeight:1.15}}>
+          Sip &amp; Heal
+        </h1>
+        <h2 style={{fontFamily:"Playfair Display,serif",fontSize:"clamp(1.1rem,3vw,1.6rem)",fontWeight:400,fontStyle:"italic",color:"rgba(196,137,58,.9)",margin:"0 0 20px"}}>
+          The Men's Collection
+        </h2>
+        <p style={{fontFamily:"Jost,sans-serif",fontSize:"clamp(.82rem,2vw,.95rem)",color:"rgba(247,242,234,.65)",maxWidth:560,margin:"0 auto 32px",lineHeight:1.7}}>
+          20 blends built specifically for the male body — addressing what men actually face: testosterone, heart health, stress, prostate, recovery, and more. No fluff. Real herbs. Real results.
+        </p>
+        <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
+          {[["20 Blends","🍵"],["Evidence-Based","⚗️"],["Caffeine-Free","✓"],["FDA Compliant","🛡"]].map(([l,e])=>(
+            <div key={l} style={{background:"rgba(196,137,58,.12)",border:"1px solid rgba(196,137,58,.25)",borderRadius:40,padding:"7px 16px",fontSize:".68rem",letterSpacing:".12em",color:"rgba(196,137,58,.9)",textTransform:"uppercase",fontFamily:"Jost,sans-serif"}}>
+              {e} {l}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CATEGORY FILTER */}
+      <div id="sec-men-blends" style={{padding:"0 16px 32px"}}>
+        <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:4,WebkitOverflowScrolling:"touch",scrollbarWidth:"none",maxWidth:900,margin:"0 auto"}}>
+          {CATEGORIES.map(c=>(
+            <button key={c.key} onClick={()=>setFilter(c.key)} style={{
+              flexShrink:0, background: filter===c.key ? "rgba(196,137,58,.9)" : "rgba(255,255,255,.05)",
+              border:"1px solid " + (filter===c.key ? "rgba(196,137,58,.9)" : "rgba(255,255,255,.15)"),
+              color: filter===c.key ? "#0D0D1A" : "rgba(247,242,234,.75)",
+              borderRadius:40, padding:"8px 16px", fontSize:".7rem", letterSpacing:".1em",
+              textTransform:"uppercase", cursor:"pointer", fontFamily:"Jost,sans-serif",
+              fontWeight: filter===c.key ? 700 : 400, transition:"all .2s",
+              whiteSpace:"nowrap"
+            }}>
+              {c.emoji} {c.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* BLEND GRID */}
+      <div style={{maxWidth:1100,margin:"0 auto",padding:"0 16px",display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(300px,100%),1fr))",gap:20}}>
+        {visible.map(blend=>(
+          <div key={blend.id} onClick={()=>setSelected(blend)} style={{
+            background:"rgba(255,255,255,.04)", border:"1px solid rgba(255,255,255,.1)",
+            borderRadius:16, overflow:"hidden", cursor:"pointer",
+            transition:"transform .2s, box-shadow .2s",
+          }}
+          onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(0,0,0,.4)";}}
+          onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow="";}}
+          >
+            {/* Color band */}
+            <div style={{height:6, background:`linear-gradient(90deg, ${blend.color}, rgba(196,137,58,.6))`}} />
+            <div style={{padding:"20px 20px 16px"}}>
+              <div style={{fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6,fontFamily:"Jost,sans-serif"}}>{blend.benefit}</div>
+              <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.1rem",fontWeight:600,color:"#F7F2EA",marginBottom:4}}>{blend.name}</div>
+              <div style={{fontSize:".8rem",fontStyle:"italic",color:"rgba(247,242,234,.55)",marginBottom:12,fontFamily:"Jost,sans-serif"}}>{blend.tagline}</div>
+              <p style={{fontSize:".78rem",color:"rgba(247,242,234,.7)",lineHeight:1.65,marginBottom:14,fontFamily:"Jost,sans-serif"}}>{blend.desc}</p>
+              <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:14}}>
+                {blend.ingredients.map(herb=>(
+                  <span key={herb} style={{background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",borderRadius:20,padding:"3px 10px",fontSize:".63rem",color:"rgba(247,242,234,.65)",fontFamily:"Jost,sans-serif"}}>{herb}</span>
+                ))}
+              </div>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.1rem",color:"rgba(196,137,58,.9)",fontWeight:600}}>${blend.price.toFixed(2)}</div>
+                <button style={{background:"rgba(196,137,58,.15)",border:"1px solid rgba(196,137,58,.4)",color:"rgba(196,137,58,.9)",borderRadius:40,padding:"7px 18px",fontSize:".68rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",transition:"all .2s"}}
+                  onMouseEnter={e=>{e.currentTarget.style.background="rgba(196,137,58,.9)";e.currentTarget.style.color="#0D0D1A";}}
+                  onMouseLeave={e=>{e.currentTarget.style.background="rgba(196,137,58,.15)";e.currentTarget.style.color="rgba(196,137,58,.9)";}}>
+                  View Blend →
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* FDA DISCLAIMER */}
+      <div style={{maxWidth:900,margin:"40px auto 0",padding:"0 16px"}}>
+        <p style={{fontSize:".65rem",color:"rgba(247,242,234,.35)",textAlign:"center",lineHeight:1.7,fontFamily:"Jost,sans-serif"}}>
+          These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure, or prevent any disease. Consult your healthcare provider before beginning any herbal regimen, especially if you take prescription medications.
+        </p>
+      </div>
+
+      {/* BLEND DETAIL MODAL */}
+      {selected && (
+        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:800,display:"flex",alignItems:"center",justifyContent:"center",padding:16}} onClick={()=>setSelected(null)}>
+          <div style={{background:"#1A1A2A",border:"1px solid rgba(196,137,58,.3)",borderRadius:20,maxWidth:520,width:"100%",maxHeight:"90vh",overflowY:"auto",padding:"0 0 24px"}} onClick={e=>e.stopPropagation()}>
+            <div style={{height:8,background:`linear-gradient(90deg,${selected.color},rgba(196,137,58,.7))`,borderRadius:"20px 20px 0 0"}} />
+            <div style={{padding:"24px 24px 0"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:16}}>
+                <div>
+                  <div style={{fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6,fontFamily:"Jost,sans-serif"}}>{selected.benefit}</div>
+                  <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.35rem",fontWeight:700,color:"#F7F2EA"}}>{selected.name}</div>
+                  <div style={{fontSize:".82rem",fontStyle:"italic",color:"rgba(247,242,234,.55)",marginTop:4,fontFamily:"Jost,sans-serif"}}>{selected.tagline}</div>
+                </div>
+                <button onClick={()=>setSelected(null)} style={{background:"rgba(255,255,255,.08)",border:"none",color:"rgba(247,242,234,.6)",borderRadius:"50%",width:34,height:34,fontSize:"1.1rem",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginLeft:12}}>✕</button>
+              </div>
+              <p style={{fontSize:".85rem",color:"rgba(247,242,234,.8)",lineHeight:1.75,marginBottom:20,fontFamily:"Jost,sans-serif"}}>{selected.desc}</p>
+
+              <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:12,padding:"16px",marginBottom:16}}>
+                <div style={{fontSize:".62rem",letterSpacing:".16em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:10,fontFamily:"Jost,sans-serif"}}>Ingredients</div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                  {selected.ingredients.map(h=>(
+                    <span key={h} style={{background:"rgba(196,137,58,.1)",border:"1px solid rgba(196,137,58,.2)",borderRadius:20,padding:"4px 12px",fontSize:".72rem",color:"rgba(247,242,234,.8)",fontFamily:"Jost,sans-serif"}}>{h}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+                <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:10,padding:"12px 14px"}}>
+                  <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.6)",marginBottom:4,fontFamily:"Jost,sans-serif"}}>Steep Time</div>
+                  <div style={{fontSize:".88rem",color:"#F7F2EA",fontFamily:"Jost,sans-serif"}}>{selected.steepMin} minutes</div>
+                </div>
+                <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:10,padding:"12px 14px"}}>
+                  <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.6)",marginBottom:4,fontFamily:"Jost,sans-serif"}}>Water Temp</div>
+                  <div style={{fontSize:".82rem",color:"#F7F2EA",fontFamily:"Jost,sans-serif",lineHeight:1.3}}>{selected.steepTemp}</div>
+                </div>
+              </div>
+
+              <div style={{background:"rgba(196,137,58,.08)",border:"1px solid rgba(196,137,58,.2)",borderRadius:12,padding:"16px",marginBottom: selected.warning ? 12 : 20}}>
+                <div style={{fontSize:".62rem",letterSpacing:".16em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6,fontFamily:"Jost,sans-serif"}}>Daily Affirmation</div>
+                <p style={{fontSize:".82rem",fontStyle:"italic",color:"rgba(247,242,234,.85)",lineHeight:1.7,margin:0,fontFamily:"Playfair Display,serif"}}>"{selected.affirmation}"</p>
+              </div>
+
+              {selected.warning && (
+                <div style={{background:"rgba(255,180,0,.06)",border:"1px solid rgba(255,180,0,.2)",borderRadius:10,padding:"12px 14px",marginBottom:20}}>
+                  <div style={{fontSize:".62rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,180,0,.7)",marginBottom:4,fontFamily:"Jost,sans-serif"}}>⚠ Safety Note</div>
+                  <p style={{fontSize:".75rem",color:"rgba(255,242,200,.75)",lineHeight:1.65,margin:0,fontFamily:"Jost,sans-serif"}}>{selected.warning}</p>
+                </div>
+              )}
+
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:4}}>
+                <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.4rem",color:"rgba(196,137,58,.9)",fontWeight:700}}>${selected.price.toFixed(2)}</div>
+                <button style={{background:"linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,110,40,.9))",border:"none",color:"#0D0D1A",borderRadius:40,padding:"10px 28px",fontSize:".72rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700}}>
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -414,6 +611,7 @@ export default function ChaiHolistic() {
     recipes: [["↩ Home","home-page"],["↑ Top","sec-rec-top"],["Wellness","sec-rec-wellness"],["Cleansing","sec-rec-cleanse"]],
     rings:   [["↩ Rings","home-page-rings"],["↑ Top","sec-rings-top"],["Collection","sec-rings-grid"],["How It Works","sec-rings-how"],["Frequency","sec-rings-meridian"]],
     faq:         [["↩ Home","home-page"],["↑ Top","sec-faq-top"],["FAQ","sec-faq-content"]],
+    men:         [["↩ Home","home-page"],["↑ Top","sec-men-top"],["Blends","sec-men-blends"]],
     mocktails: [["↩ Home","home-page"],["↑ Top","sec-mkt-top"],["Wellness","sec-mkt-wellness"],["Social","sec-mkt-social"]],
   };
 
@@ -1767,7 +1965,7 @@ export default function ChaiHolistic() {
     <div className="timer-overlay">
       <div className="timer-overlay-name">{timerBlendName}</div>
 
-      {/* STEAMING CUP -- only shows while actively steeping */}
+      {/* STEAMING CUP   only shows while actively steeping */}
       {timerOn && (
         <div className="tea-cup-wrap">
           <div className="steam">
@@ -2095,10 +2293,10 @@ export default function ChaiHolistic() {
               <button className="btn-main" style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",border:"1px solid rgba(196,137,58,.5)",color:"var(--gold)"}} onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}>🌿 Sip &amp; Seek</button>
             </div>
 
-            {/* FEATURE BUTTONS -- clearly separated */}
+            {/* FEATURE BUTTONS   clearly separated */}
             <div style={{display:"flex",alignItems:"center",gap:28,flexWrap:"wrap",marginTop:4}}>
               <div style={{display:"flex",flexDirection:"column",gap:10,maxWidth:420,flex:1}}>
-              {/* Sip & Seek -- the star feature */}
+              {/* Sip & Seek   the star feature */}
               <button
                 onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}
                 style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"white",border:"1.5px solid rgba(196,137,58,.4)",padding:"14px 24px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".78rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"all .3s",width:"100%",justifyContent:"center"}}
@@ -2117,7 +2315,7 @@ export default function ChaiHolistic() {
                   style={{flex:"0 0 100%",background:"linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))",color:"var(--gold)",border:"1.5px solid rgba(196,137,58,.45)",padding:"11px 20px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",transition:"all .25s",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}
                   onMouseEnter={e=>{e.currentTarget.style.background="rgba(192,136,48,.22)";e.currentTarget.style.borderColor="var(--gold)";e.currentTarget.style.boxShadow="0 4px 18px rgba(196,137,58,.25)";}}
                   onMouseLeave={e=>{e.currentTarget.style.background="linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))";e.currentTarget.style.borderColor="rgba(196,137,58,.45)";e.currentTarget.style.boxShadow="none";}}>
-                  🌿 <strong>Get My Free Sip & Heal Report</strong> &nbsp;— personalized to your wellness profile
+                  🌿 <strong>Get My Free Sip &amp; Heal Report</strong> &nbsp;— personalized to your wellness profile
                 </button>
               </div>
             </div>
@@ -2281,7 +2479,7 @@ export default function ChaiHolistic() {
       </section>
 
 
-      {/* FEATURED BOOK + RINGS BAND -- prominent, high up on home page */}
+      {/* FEATURED BOOK + RINGS BAND   prominent, high up on home page */}
       <div id="sec-vibe-rings" className="featured-band" style={{scrollMarginTop:"120px"}}>
         <div className="feat-book">
           <div className="feat-eye">📖 BOOK FOR PURCHASE · $24.99</div>
@@ -3728,7 +3926,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
               ))}
             </div>
 
-            {/* STEP 1 -- Design */}
+            {/* STEP 1   Design */}
             {step === 1 && (
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",marginBottom:4}}>Design Style</div>
@@ -3787,7 +3985,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
               </div>
             )}
 
-            {/* STEP 2 -- Colors */}
+            {/* STEP 2   Colors */}
             {step === 2 && (
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",marginBottom:4}}>Choose your ring colors</div>
@@ -3936,7 +4134,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
               </div>
             )}
 
-            {/* STEP 3 -- Companion Link */}
+            {/* STEP 3   Companion Link */}
             {step === 3 && (
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",marginBottom:4}}>Your Ring's Companion Link</div>
@@ -4065,7 +4263,7 @@ Thank you!`);
               </div>
             )}
 
-            {/* STEP 4 -- Frequency Selection */}
+            {/* STEP 4   Frequency Selection */}
             {step === 4 && (
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",marginBottom:4}}>Choose your Meridian Frequency</div>
@@ -4122,7 +4320,7 @@ Thank you!`);
               </div>
             )}
 
-            {/* STEP 5 -- Size */}
+            {/* STEP 5   Size */}
             {step === 5 && (
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",marginBottom:6}}>Choose your ring size</div>
@@ -4154,7 +4352,7 @@ Thank you!`);
               </div>
             )}
 
-            {/* STEP 6 -- Confirm */}
+            {/* STEP 6   Confirm */}
             {step === 6 && (
               <div>
                 {/* Confirm: real product photo + honest color swatches */}
@@ -5020,7 +5218,7 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {[["home","🏠 Home"],["shop","Shop"],["recipes","Recipes"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+          {[["home","🏠 Home"],["shop","Shop"],["recipes","Recipes"],["men","⚡ Men's"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>{l}</span>
           ))}
           <span className="nav-lnk" onClick={()=>setProfileOpen(true)}
@@ -5047,7 +5245,7 @@ Thank you!`);
 
       {/* ── Mobile slide-down menu ── */}
       <div className={`mob-menu${mobMenuOpen?" open":""}`}>
-        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","📖 Recipes"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","📖 Recipes"],["men","⚡ Men's Wellness"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
           <div key={p} className="mob-lnk" onClick={()=>{nav(p);setMobMenuOpen(false);}}>
             {l} <span style={{color:"var(--dust)"}}>›</span>
           </div>
@@ -5065,7 +5263,7 @@ Thank you!`);
 
       {/* SITEWIDE FDA BAR — removed, now in footer */}
 
-      {/* PAGES -- always stay mounted so scroll position is never lost */}
+      {/* PAGES   always stay mounted so scroll position is never lost */}
       <div style={{display: twoAM ? "none" : "block"}}>
         {page==="home"&&<Home/>}
         {page==="shop"&&<Shop/>}
@@ -5075,13 +5273,14 @@ Thank you!`);
         {page==="seamoss"&&<SeaMossPage/>}
         {page==="rings"&&<Rings/>}
         {page==="faq"&&<FAQPage/>}
+        {page==="men"&&<MensWellness onNav={nav}/>}
         {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)}/>}
       </div>
 
-      {/* 2AM OVERLAY -- floats on top; page underneath stays mounted */}
+      {/* 2AM OVERLAY   floats on top; page underneath stays mounted */}
       {twoAM && <TwoAMOverlay/>}
 
-      {/* TIMER OVERLAYS -- mutually exclusive, clean state, show over everything */}
+      {/* TIMER OVERLAYS   mutually exclusive, clean state, show over everything */}
       {timerDone && <TeaReadyScreen/>}
       {!timerDone && (timerOn || timerSec !== null) && <LargeTimerOverlay/>}
 
@@ -5089,7 +5288,7 @@ Thank you!`);
       {/* RING CONFIGURATOR */}
       {ringConfig && <RingConfigurator/>}
 
-      {/* WELCOME -- shows on first visit after 1.8 seconds */}
+      {/* WELCOME   shows on first visit after 1.8 seconds */}
       {showWelcome && <WelcomeModal/>}
 
       {intentionOpen && <IntentionEngine/>}
@@ -5102,7 +5301,7 @@ Thank you!`);
 
       <CartDrawer/>
 
-      {/* 2AM BUTTON -- hidden while overlay is open */}
+      {/* 2AM BUTTON   hidden while overlay is open */}
       {!twoAM && (
         <button className="twoam-btn" onClick={open2AM}>
           {isNight?"✨ Can't sleep?":"🌙 2AM Mode"}
@@ -5114,17 +5313,17 @@ Thank you!`);
         <button
           onClick={()=>setProfileOpen(true)}
           style={{position:"fixed",bottom:136,left:28,zIndex:398,background:"linear-gradient(135deg,rgba(192,136,48,.9),rgba(180,120,30,.95))",color:"white",border:"1px solid rgba(255,255,255,.25)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(192,136,48,.4)",whiteSpace:"nowrap"}}
-          title="Get your free Sip & Heal Report">
+          title="Get your free Sip &amp; Heal Report">
           🌿 Free Sip & Heal Report
         </button>
       )}
 
-      {/* FLOATING SIP & SEEK -- always accessible while browsing */}
+      {/* FLOATING SIP & SEEK   always accessible while browsing */}
       {!twoAM && !showWelcome && !intentionOpen && welcomeSeen && (
         <button
           onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}
           style={{position:"fixed",bottom:90,left:28,zIndex:398,background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"rgba(255,255,255,.85)",border:"1px solid rgba(196,137,58,.4)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(45,74,45,.35)",animation:"sipSeekPulse 4s ease-in-out infinite",whiteSpace:"nowrap"}}
-          title="Open Sip & Seek">
+          title="Open Sip &amp; Seek">
           🌿 Sip &amp; Seek
         </button>
       )}
