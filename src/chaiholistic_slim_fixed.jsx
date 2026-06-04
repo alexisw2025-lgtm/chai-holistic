@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import TeaLibrary from "./TeaLibrary";
 import PrayerSection from "./PrayerSection";
 import WellnessProfileModal from "./WellnessProfileModal";
+import MocktailsPage from "./MocktailsPage";
 import imgSre1 from "./rings/scre1.jpg";
 import imgScre2 from "./rings/scre2.jpg";
 import imgScre3 from "./rings/scre3.jpg";
@@ -409,7 +410,7 @@ export default function ChaiHolistic() {
     recipes: [["↩ Home","home-page"],["↑ Top","sec-rec-top"],["Wellness","sec-rec-wellness"],["Cleansing","sec-rec-cleanse"]],
     rings:   [["↩ Rings","home-page-rings"],["↑ Top","sec-rings-top"],["Collection","sec-rings-grid"],["How It Works","sec-rings-how"],["Frequency","sec-rings-meridian"]],
     faq:         [["↩ Home","home-page"],["↑ Top","sec-faq-top"],["FAQ","sec-faq-content"]],
-    "tea-library":[["↩ Home","home-page"],["↑ Top","sec-tl-top"],["Search","sec-tl-search"],["Blends","sec-tl-grid"]],
+    mocktails: [["↩ Home","home-page"],["↑ Top","sec-mkt-top"],["Wellness","sec-mkt-wellness"],["Social","sec-mkt-social"]],
   };
 
   useEffect(() => {
@@ -1985,7 +1986,7 @@ export default function ChaiHolistic() {
                   style={{flex:"0 0 100%",background:"linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))",color:"var(--gold)",border:"1.5px solid rgba(196,137,58,.45)",padding:"11px 20px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",transition:"all .25s",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}
                   onMouseEnter={e=>{e.currentTarget.style.background="rgba(192,136,48,.22)";e.currentTarget.style.borderColor="var(--gold)";e.currentTarget.style.boxShadow="0 4px 18px rgba(196,137,58,.25)";}}
                   onMouseLeave={e=>{e.currentTarget.style.background="linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))";e.currentTarget.style.borderColor="rgba(196,137,58,.45)";e.currentTarget.style.boxShadow="none";}}>
-                  🌿 <strong>Get My Free Tea Prescription</strong> &nbsp;— personalized to your wellness profile
+                  🌿 <strong>Get My Free Sip & Heal Report</strong> &nbsp;— personalized to your wellness profile
                 </button>
               </div>
             </div>
@@ -2109,7 +2110,7 @@ export default function ChaiHolistic() {
             {[
               {icon:"🌿",title:"Sip & Seek",sub:"Personal tea + 7-day ritual",action:()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);},btn:"Begin"},
               {icon:"✦",title:"Tea Finder",sub:"3 questions → your perfect blend",action:()=>setFinderOpen(true),btn:"Find"},
-              {icon:"📋",title:"Tea Prescription",sub:"Free personalized PDF sent to you",action:()=>setProfileOpen(true),btn:"Get"},
+              {icon:"📋",title:"Sip Report",sub:"Free personalized PDF sent to you",action:()=>setProfileOpen(true),btn:"Get"},
               {icon:"☀",title:"Ritual Builder",sub:"Morning & evening in one click",action:()=>setRitualOpen(true),btn:"Build"},
               {icon:"🌿",title:"Cleanse Tracker",sub:"7, 14 or 28-day progress tracker",action:()=>setTrackerOpen(true),btn:"Track"},
               {icon:"🌱",title:"Herb Pairing",sub:"Build your own blends at home",action:()=>nav("shop"),btn:"Explore"},
@@ -4786,7 +4787,7 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {[["home","🏠 Home"],["shop","Shop"],["recipes","Recipes"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+          {[["home","🏠 Home"],["shop","Shop"],["recipes","Recipes"],["mocktails","🍹 Mocktails"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>{l}</span>
           ))}
           <span
@@ -4799,7 +4800,7 @@ Thank you!`);
             className="nav-lnk"
             onClick={()=>setProfileOpen(true)}
             style={{background:"linear-gradient(135deg,rgba(192,136,48,.18),rgba(192,136,48,.08))",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500}}>
-            📋 Tea Rx
+            📋 Sip & Heal Report
           </span>
           <span
             className="nav-lnk"
@@ -4822,6 +4823,7 @@ Thank you!`);
         {page==="home"&&<Home/>}
         {page==="shop"&&<Shop/>}
         {page==="recipes"&&<Recipes/>}
+        {page==="mocktails"&&<MocktailsPage/>}
         {page==="rings"&&<Rings/>}
         {page==="faq"&&<FAQPage/>}
         {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)}/>}
@@ -4858,13 +4860,13 @@ Thank you!`);
         </button>
       )}
 
-      {/* FLOATING TEA PRESCRIPTION CTA */}
+      {/* FLOATING SIP & HEAL REPORT CTA */}
       {!twoAM && !showWelcome && !profileOpen && welcomeSeen && (
         <button
           onClick={()=>setProfileOpen(true)}
           style={{position:"fixed",bottom:136,left:28,zIndex:398,background:"linear-gradient(135deg,rgba(192,136,48,.9),rgba(180,120,30,.95))",color:"white",border:"1px solid rgba(255,255,255,.25)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(192,136,48,.4)",whiteSpace:"nowrap"}}
-          title="Get your free Tea Prescription">
-          📋 Free Tea Rx
+          title="Get your free Sip Report">
+          📋 Free Sip & Heal Report
         </button>
       )}
 
@@ -4939,8 +4941,9 @@ Thank you!`);
             </div>
             <div>
               <div className="ft-col-h">Features</div>
-              <span className="ft-lnk" onClick={()=>setProfileOpen(true)}>📋 Tea Prescription</span>
+              <span className="ft-lnk" onClick={()=>setProfileOpen(true)}>📋 Sip & Heal Report</span>
               <span className="ft-lnk" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}>🌿 Sip &amp; Seek</span>
+              <span className="ft-lnk" onClick={()=>nav("mocktails")}>🍹 Mocktail Recipes</span>
               <span className="ft-lnk" onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
               <span className="ft-lnk" onClick={()=>setRitualOpen(true)}>☀ Build My Ritual</span>
               <span className="ft-lnk" onClick={()=>setTrackerOpen(true)}>🌿 Cleanse Tracker</span>
