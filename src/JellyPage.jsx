@@ -8,7 +8,17 @@
  *   3. Add {page==="jelly"&&<JellyPage/>} to pages render block
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+function useIsMobile() {
+  const [mobile, setMobile] = useState(() => typeof window !== "undefined" && window.innerWidth < 640);
+  useEffect(() => {
+    const fn = () => setMobile(window.innerWidth < 640);
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
+  return mobile;
+}
 
 const C = {
   forest:  "#0d1a11",
@@ -384,6 +394,7 @@ function JellyModal({ j, onClose }) {
       <style>{`@keyframes jmIn{from{opacity:0;transform:scale(.96) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
       <div
         onClick={onClose}
+        className="jelly-modal-overlay"
         style={{
           position: "fixed", inset: 0, zIndex: 9200,
           background: "rgba(13,26,17,.92)",
@@ -394,6 +405,7 @@ function JellyModal({ j, onClose }) {
       >
         <div
           onClick={e => e.stopPropagation()}
+          className="jelly-modal-inner"
           style={{
             background: "#111f16",
             border: "1px solid rgba(192,136,48,.3)",
@@ -405,7 +417,7 @@ function JellyModal({ j, onClose }) {
           }}
         >
           {/* Header */}
-          <div style={{
+          <div className="jelly-modal-header" style={{
             background: `linear-gradient(135deg, ${j.color}dd, ${j.color}88)`,
             padding: "28px 26px 22px",
             borderRadius: "24px 24px 0 0",
@@ -435,7 +447,7 @@ function JellyModal({ j, onClose }) {
             }}>{j.tagline}</p>
           </div>
 
-          <div style={{ padding: "22px 26px" }}>
+          <div className="jelly-modal-body" style={{ padding: "22px 26px" }}>
             {/* Meta */}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
               <Pill label={`⏱ ${j.time}`} />
@@ -578,6 +590,7 @@ export default function JellyPage() {
   const [category, setCategory] = useState("All");
   const [search, setSearch]     = useState("");
   const [active, setActive]     = useState(null);
+  const isMobile                = useIsMobile();
 
   const filtered = JELLIES.filter(j => {
     const catOk  = category === "All" || j.category === category;
@@ -589,21 +602,29 @@ export default function JellyPage() {
     return catOk && srchOk;
   });
 
-  <style>{`
-    @media(max-width:600px){
-      section{padding-left:1.2rem !important;padding-right:1.2rem !important;padding-top:44px !important;}
-      [style*="gridTemplateColumns"]{grid-template-columns:1fr !important;}
-      [style*="maxWidth: 1280"]{padding-left:1.2rem !important;padding-right:1.2rem !important;}
-      [style*="padding: 14px 2.5rem"]{padding:10px 1rem !important;}
-      [style*="gap: 18"]{gap:12px !important;}
-      [style*="borderRadius: 24"]{border-radius:16px !important;}
-    }
-  `}</style>
   return (
     <div style={{ background: C.forest, minHeight: "100vh" }}>
+      <style>{`
+        @keyframes jmIn{from{opacity:0;transform:scale(.96) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+        @media(max-width:639px){
+          .jelly-hero{padding:44px 1.2rem 40px !important;}
+          .jelly-filters{padding:10px 1rem !important;}
+          .jelly-filter-row{flex-direction:column !important;align-items:stretch !important;}
+          .jelly-filter-row input{min-width:0 !important;width:100% !important;}
+          .jelly-filter-buttons{flex-wrap:wrap !important;}
+          .jelly-grid{padding:24px 1.2rem 60px !important;}
+          .jelly-cards{grid-template-columns:1fr !important;gap:12px !important;}
+          .jelly-stats{gap:16px !important;}
+          .jelly-badges{gap:8px !important;}
+          .jelly-modal-inner{max-height:96vh !important;border-radius:18px !important;}
+          .jelly-modal-header{padding:20px 18px 18px !important;}
+          .jelly-modal-body{padding:18px 18px !important;}
+          .jelly-modal-overlay{padding:8px !important;align-items:flex-end !important;}
+        }
+      `}</style>
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <section style={{
+      <section className="jelly-hero" style={{
         background: `linear-gradient(140deg, #0d1a11 0%, #1a3522 60%, #0d2018 100%)`,
         padding: "64px 2.5rem 56px",
         borderBottom: `3px solid ${C.gold}`,
@@ -642,7 +663,7 @@ export default function JellyPage() {
           </p>
 
           {/* Feature badges */}
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 32 }}>
+          <div className="jelly-badges" style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 32 }}>
             {["13 Recipes", "Plant-based & vegan", "Ready-to-go kit", "All natural ingredients", "~15 min to make"].map(f => (
               <div key={f} style={{
                 display: "flex", alignItems: "center", gap: 6,
@@ -658,7 +679,7 @@ export default function JellyPage() {
           </div>
 
           {/* Stats row */}
-          <div style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
+          <div className="jelly-stats" style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
             {[["13","Recipes"],["100%","Plant-based"],["~15","Min to make"],["7","Day shelf life"]].map(([n, l]) => (
               <div key={l}>
                 <div style={{
@@ -676,13 +697,13 @@ export default function JellyPage() {
       </section>
 
       {/* ── Filters ───────────────────────────────────────────────────────── */}
-      <div style={{
+      <div className="jelly-filters" style={{
         background: "#0d1a11",
         borderBottom: "1px solid rgba(192,136,48,.15)",
         padding: "14px 2.5rem",
         position: "sticky", top: 74, zIndex: 100,
       }}>
-        <div style={{
+        <div className="jelly-filter-row" style={{
           maxWidth: 1280, margin: "0 auto",
           display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap",
         }}>
@@ -701,7 +722,7 @@ export default function JellyPage() {
             onFocus={e => e.target.style.borderColor = C.gold}
             onBlur={e => e.target.style.borderColor = "rgba(192,136,48,.25)"}
           />
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <div className="jelly-filter-buttons" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {CATEGORIES_J.map(c => (
               <button key={c} onClick={() => setCategory(c)} style={{
                 background: category === c ? C.sage : "transparent",
@@ -722,7 +743,7 @@ export default function JellyPage() {
       </div>
 
       {/* ── Grid ──────────────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
+      <div className="jelly-grid" style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,.4)" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>🌊</div>
@@ -732,7 +753,7 @@ export default function JellyPage() {
             <div style={{ fontSize: ".85rem" }}>Try clearing your filters.</div>
           </div>
         ) : (
-          <div style={{
+          <div className="jelly-cards" style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
             gap: 18,

@@ -9,7 +9,17 @@
  *   4. Add nav link and footer link
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+function useIsMobile() {
+  const [mobile, setMobile] = useState(() => typeof window !== "undefined" && window.innerWidth < 640);
+  useEffect(() => {
+    const fn = () => setMobile(window.innerWidth < 640);
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
+  return mobile;
+}
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const C = {
@@ -677,9 +687,9 @@ function RecipeModal({ r, onClose }) {
   if (!r) return null;
   return (
     <>
-      <style>{`@keyframes smIn{from{opacity:0;transform:scale(.95) translateY(14px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
       <div
         onClick={onClose}
+        className="sm-modal-overlay"
         style={{
           position: "fixed", inset: 0, zIndex: 9300,
           background: "rgba(4,15,9,.94)",
@@ -690,6 +700,7 @@ function RecipeModal({ r, onClose }) {
       >
         <div
           onClick={e => e.stopPropagation()}
+          className="sm-modal-inner"
           style={{
             background: "#0a1a0f",
             border: "1px solid rgba(26,138,106,.35)",
@@ -701,7 +712,7 @@ function RecipeModal({ r, onClose }) {
           }}
         >
           {/* Header */}
-          <div style={{
+          <div className="sm-modal-header" style={{
             background: `linear-gradient(135deg, ${r.color}ee, ${r.color}99)`,
             padding: "30px 28px 24px",
             borderRadius: "24px 24px 0 0",
@@ -740,7 +751,7 @@ function RecipeModal({ r, onClose }) {
             </div>
           </div>
 
-          <div style={{ padding: "24px 28px" }}>
+          <div className="sm-modal-body" style={{ padding: "24px 28px" }}>
             {/* Meta */}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 18 }}>
               <Pill label={`⏱ ${r.time}`} color="rgba(26,138,106,.15)" textColor="#2aaa85" />
@@ -870,6 +881,7 @@ export default function SeaMossPage() {
   const [search, setSearch]     = useState("");
   const [active, setActive]     = useState(null);
   const [whyOpen, setWhyOpen]   = useState(false);
+  const isMobile                = useIsMobile();
 
   const filtered = RECIPES.filter(r => {
     const catOk  = category === "All" || r.category === category;
@@ -881,18 +893,6 @@ export default function SeaMossPage() {
     return catOk && srchOk;
   });
 
-  <style>{`
-    @media(max-width:600px){
-      section{padding-left:1.2rem !important;padding-right:1.2rem !important;}
-      [style*="maxWidth: 1200"]{padding-left:1.2rem !important;padding-right:1.2rem !important;}
-      [style*="maxWidth: 960"]{padding-left:1.2rem !important;padding-right:1.2rem !important;}
-      [style*="flex: 1 1 480px"]{flex:1 1 100% !important;}
-      [style*="flex: 0 1 280px"]{flex:1 1 100% !important;}
-      [style*="gap: 60"]{gap:32px !important;}
-      [style*="fontSize: clamp(2.4rem"]{font-size:clamp(1.8rem,7vw,2.8rem) !important;}
-      [style*="maxWidth: 1280"]{padding-left:1.2rem !important;padding-right:1.2rem !important;}
-    }
-  `}</style>
   return (
     <div style={{ background: C.deep, minHeight: "100vh" }}>
       <style>{`
@@ -902,12 +902,33 @@ export default function SeaMossPage() {
         @keyframes glowPulse {
           0%,100%{opacity:.4} 50%{opacity:.8}
         }
+        @keyframes smIn{from{opacity:0;transform:scale(.95) translateY(14px)}to{opacity:1;transform:scale(1) translateY(0)}}
+        @media(max-width:639px){
+          .sm-hero{padding:44px 1.2rem 40px !important;}
+          .sm-hero-inner{flex-direction:column !important;gap:28px !important;}
+          .sm-hero-left{flex:1 1 100% !important;min-width:0 !important;}
+          .sm-hero-right{flex:1 1 100% !important;min-width:0 !important;width:100% !important;}
+          .sm-why-section{padding:32px 1.2rem !important;}
+          .sm-why-grid{grid-template-columns:1fr !important;gap:12px !important;}
+          .sm-filters{padding:10px 1rem !important;}
+          .sm-filter-row{flex-direction:column !important;align-items:stretch !important;}
+          .sm-filter-row input{min-width:0 !important;width:100% !important;}
+          .sm-filter-buttons{flex-wrap:wrap !important;}
+          .sm-grid-wrap{padding:24px 1.2rem 60px !important;}
+          .sm-cards{grid-template-columns:1fr !important;gap:12px !important;}
+          .sm-howto-grid{grid-template-columns:1fr 1fr !important;gap:10px !important;}
+          .sm-modal-overlay{padding:8px !important;align-items:flex-end !important;}
+          .sm-modal-inner{max-height:96vh !important;border-radius:18px !important;}
+          .sm-modal-header{padding:20px 18px 18px !important;}
+          .sm-modal-body{padding:18px 16px !important;}
+          .sm-science-grid{grid-template-columns:1fr !important;}
+        }
       `}</style>
 
       {/* ══════════════════════════════════════════════════════════════
           HERO — THE ORIGIN STORY
       ══════════════════════════════════════════════════════════════ */}
-      <section style={{
+      <section className="sm-hero" style={{
         background: `linear-gradient(160deg, #040f09 0%, #0a2418 40%, #051209 100%)`,
         padding: "72px 2.5rem 64px",
         borderBottom: `3px solid ${C.aqua}`,
@@ -938,10 +959,10 @@ export default function SeaMossPage() {
             }}>Chai Holistic · Sea Moss Gel Kits</span>
           </div>
 
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 60, alignItems: "flex-start" }}>
+          <div className="sm-hero-inner" style={{ display: "flex", flexWrap: "wrap", gap: 60, alignItems: "flex-start" }}>
 
             {/* Left — headline + story */}
-            <div style={{ flex: "1 1 480px" }}>
+            <div className="sm-hero-left" style={{ flex: "1 1 480px" }}>
               <h1 style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: "clamp(2.4rem, 6vw, 4.2rem)",
@@ -1029,7 +1050,7 @@ export default function SeaMossPage() {
             </div>
 
             {/* Right — mineral stats */}
-            <div style={{ flex: "0 1 280px" }}>
+            <div className="sm-hero-right" style={{ flex: "0 1 280px" }}>
               <div style={{
                 background: "rgba(26,138,106,.08)",
                 border: "1px solid rgba(26,138,106,.2)",
@@ -1095,7 +1116,7 @@ export default function SeaMossPage() {
           WHY SEA MOSS — THE SCIENCE (expandable)
       ══════════════════════════════════════════════════════════════ */}
       {whyOpen && (
-        <section style={{
+        <section className="sm-why-section" style={{
           background: `linear-gradient(135deg, #051209, #0a2418)`,
           borderBottom: `1px solid rgba(26,138,106,.2)`,
           padding: "48px 2.5rem",
@@ -1119,7 +1140,7 @@ export default function SeaMossPage() {
               Into <em style={{ color: C.aquaL }}>Extraordinary Health.</em>
             </h2>
 
-            <div style={{
+            <div className="sm-science-grid" style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
               gap: 20, marginBottom: 32,
@@ -1215,13 +1236,13 @@ export default function SeaMossPage() {
       {/* ══════════════════════════════════════════════════════════════
           FILTERS
       ══════════════════════════════════════════════════════════════ */}
-      <div style={{
+      <div className="sm-filters" style={{
         background: C.forest,
         borderBottom: "1px solid rgba(26,138,106,.15)",
         padding: "14px 2.5rem",
         position: "sticky", top: 74, zIndex: 100,
       }}>
-        <div style={{
+        <div className="sm-filter-row" style={{
           maxWidth: 1280, margin: "0 auto",
           display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap",
         }}>
@@ -1240,7 +1261,7 @@ export default function SeaMossPage() {
             onFocus={e => e.target.style.borderColor = C.aqua}
             onBlur={e => e.target.style.borderColor = "rgba(26,138,106,.25)"}
           />
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <div className="sm-filter-buttons" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {CATEGORIES_SM.map(c => (
               <button key={c} onClick={() => setCategory(c)} style={{
                 background: category === c ? C.aqua : "transparent",
@@ -1263,7 +1284,7 @@ export default function SeaMossPage() {
       {/* ══════════════════════════════════════════════════════════════
           RECIPE GRID
       ══════════════════════════════════════════════════════════════ */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
+      <div className="sm-grid-wrap" style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,.4)" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>🌊</div>
@@ -1274,7 +1295,7 @@ export default function SeaMossPage() {
             <div style={{ fontSize: ".85rem" }}>Try clearing your search or filters.</div>
           </div>
         ) : (
-          <div style={{
+          <div className="sm-cards" style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
             gap: 18,
@@ -1303,7 +1324,7 @@ export default function SeaMossPage() {
               fontSize: "1.3rem", color: "white",
               fontWeight: 400, marginBottom: 20,
             }}>How to Use Sea Moss Gel Daily</h3>
-            <div style={{
+            <div className="sm-howto-grid" style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
               gap: 14,

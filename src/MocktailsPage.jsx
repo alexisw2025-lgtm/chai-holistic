@@ -9,7 +9,17 @@
  *   4. Add "mocktails" to PAGE_SECTIONS if desired
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+function useIsMobile() {
+  const [mobile, setMobile] = useState(() => typeof window !== "undefined" && window.innerWidth < 640);
+  useEffect(() => {
+    const fn = () => setMobile(window.innerWidth < 640);
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
+  return mobile;
+}
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const C = {
@@ -860,14 +870,9 @@ function MocktailModal({ m, onClose }) {
   if (!m) return null;
   return (
     <>
-      <style>{`
-        @keyframes mktModalIn {
-          from { opacity:0; transform:scale(.96) translateY(12px); }
-          to   { opacity:1; transform:scale(1) translateY(0); }
-        }
-      `}</style>
       <div
         onClick={onClose}
+        className="mkt-modal-overlay"
         style={{
           position: "fixed", inset: 0, zIndex: 9000,
           background: "rgba(28,26,23,.75)",
@@ -878,18 +883,19 @@ function MocktailModal({ m, onClose }) {
       >
         <div
           onClick={e => e.stopPropagation()}
+          className="mkt-modal-inner"
           style={{
             background: C.parch,
             borderRadius: 24,
             width: "100%", maxWidth: 580,
             maxHeight: "90vh", overflowY: "auto",
-            animation: "mktModalIn .35s cubic-bezier(.4,0,.2,1)",
+            animation: "mktIn .35s cubic-bezier(.4,0,.2,1)",
             boxShadow: "0 32px 80px rgba(0,0,0,.35)",
             border: `1px solid ${C.dust}`,
           }}
         >
           {/* Header */}
-          <div style={{
+          <div className="mkt-modal-header" style={{
             background: `linear-gradient(135deg, ${m.color}dd, ${m.color}99)`,
             padding: "32px 28px 24px",
             borderRadius: "24px 24px 0 0",
@@ -920,7 +926,7 @@ function MocktailModal({ m, onClose }) {
           </div>
 
           {/* Content */}
-          <div style={{ padding: "24px 28px" }}>
+          <div className="mkt-modal-body" style={{ padding: "24px 28px" }}>
             {/* Meta pills */}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
               <Pill label={`⏱ ${m.time}`} />
@@ -1079,19 +1085,33 @@ export default function MocktailsPage() {
   });
 
 
-  <style>{`
-    @media(max-width:600px){
-      .mkt-hero{padding:40px 1.2rem 36px !important;}
-      .mkt-grid{grid-template-columns:1fr !important;}
-      .mkt-filter{flex-wrap:wrap !important;gap:8px !important;}
-      .mkt-modal{border-radius:20px 20px 0 0 !important;position:fixed !important;bottom:0 !important;left:0 !important;right:0 !important;max-width:100% !important;max-height:92vh !important;}
-    }
-  `}</style>
+  const isMobile = useIsMobile();
+
   return (
     <div style={{ background: C.parch, minHeight: "100vh" }}>
+      <style>{`
+        @keyframes mktIn{from{opacity:0;transform:scale(.96) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+        @media(max-width:639px){
+          .mkt-hero{padding:40px 1.2rem 36px !important;}
+          .mkt-filters{padding:10px 1rem !important;}
+          .mkt-filter-row{flex-direction:column !important;align-items:stretch !important;gap:8px !important;}
+          .mkt-filter-row input{min-width:0 !important;width:100% !important;}
+          .mkt-filter-buttons{flex-wrap:wrap !important;}
+          .mkt-grid-wrap{padding:24px 1.2rem 60px !important;}
+          .mkt-cards{grid-template-columns:1fr !important;gap:12px !important;}
+          .mkt-modal-overlay{padding:0 !important;align-items:flex-end !important;}
+          .mkt-modal-inner{border-radius:20px 20px 0 0 !important;max-height:92vh !important;max-width:100% !important;}
+          .mkt-modal-header{padding:20px 18px 16px !important;}
+          .mkt-modal-body{padding:18px 16px !important;}
+          .mkt-jelly-section{padding:44px 1.2rem 40px !important;}
+          .mkt-jelly-inner{flex-direction:column !important;gap:24px !important;}
+          .mkt-jelly-left{flex:1 1 100% !important;}
+          .mkt-jelly-right{flex:1 1 100% !important;}
+        }
+      `}</style>
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <section style={{
+      <section className="mkt-hero" style={{
         background: `linear-gradient(140deg, #e8f2eb 0%, #deeae1 50%, #d4e4d8 100%)`,
         padding: "60px 2.5rem 52px",
         borderBottom: `1px solid ${C.dust}`,
@@ -1157,13 +1177,13 @@ export default function MocktailsPage() {
       </section>
 
       {/* ── Filters ───────────────────────────────────────────────────────── */}
-      <div style={{
+      <div className="mkt-filters" style={{
         background: "white",
         borderBottom: `1px solid ${C.dust}`,
         padding: "16px 2.5rem",
         position: "sticky", top: 74, zIndex: 100,
       }}>
-        <div style={{
+        <div className="mkt-filter-row" style={{
           maxWidth: 1280, margin: "0 auto",
           display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap",
         }}>
@@ -1185,7 +1205,7 @@ export default function MocktailsPage() {
           />
 
           {/* Category */}
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <div className="mkt-filter-buttons" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {CATEGORIES.map(c => (
               <button key={c} onClick={() => setCategory(c)} style={{
                 background: category === c ? C.sageD : "transparent",
@@ -1200,7 +1220,7 @@ export default function MocktailsPage() {
           </div>
 
           {/* Occasion */}
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <div className="mkt-filter-buttons" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {OCCASIONS.map(o => (
               <button key={o} onClick={() => setOccasion(o)} style={{
                 background: occasion === o ? C.gold : "transparent",
@@ -1223,7 +1243,7 @@ export default function MocktailsPage() {
       </div>
 
       {/* ── Grid ──────────────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
+      <div className="mkt-grid-wrap" style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px 0", color: "#8A7A6A" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>🍵</div>
@@ -1235,7 +1255,7 @@ export default function MocktailsPage() {
             </div>
           </div>
         ) : (
-          <div style={{
+          <div className="mkt-cards" style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
             gap: 20,
@@ -1284,7 +1304,7 @@ function SeaweedJellySection() {
   return (
     <>
       {/* Hero banner */}
-      <section style={{
+      <section className="mkt-jelly-section" style={{
         background: `linear-gradient(140deg, #0d1a11 0%, #1a3522 60%, #0d2018 100%)`,
         padding: "70px 2.5rem 60px",
         borderTop: `4px solid #c08830`,
@@ -1307,8 +1327,8 @@ function SeaweedJellySection() {
             }}>Chai Holistic · Coming Soon</span>
           </div>
 
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 40, alignItems: "flex-start" }}>
-            <div style={{ flex: "1 1 400px" }}>
+          <div className="mkt-jelly-inner" style={{ display: "flex", flexWrap: "wrap", gap: 40, alignItems: "flex-start" }}>
+            <div className="mkt-jelly-left" style={{ flex: "1 1 400px" }}>
               <h2 style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: "clamp(2rem, 5vw, 3.4rem)",
@@ -1366,7 +1386,7 @@ function SeaweedJellySection() {
             </div>
 
             {/* Stats */}
-            <div style={{
+            <div className="mkt-jelly-right" style={{
               flex: "0 1 260px",
               display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16,
               alignSelf: "center",
