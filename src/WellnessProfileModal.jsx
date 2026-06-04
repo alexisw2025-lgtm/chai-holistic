@@ -7,7 +7,7 @@
  *   2. Add state: const [profileOpen, setProfileOpen] = useState(false);
  *   3. Render: <WellnessProfileModal open={profileOpen} onClose={() => setProfileOpen(false)} />
  *   4. Trigger it from anywhere (nav CTA, hero button, footer link, etc.):
- *      <button onClick={() => setProfileOpen(true)}>✦ Get My Tea Prescription</button>
+ *      <button onClick={() => setProfileOpen(true)}>✦ Get My Sip & Heal Report</button>
  *
  * SUPABASE TABLE — run this SQL in your Supabase project:
  *   create table wellness_profiles (
@@ -53,7 +53,7 @@ const C = {
   ink:       "#1c1c1a",
 };
 
-// ─── Tea prescription logic ───────────────────────────────────────────────────
+// ─── Sip & Heal Report logic ───────────────────────────────────────────────────
 const BLEND_MAP = {
   // goal-based
   sleep:      ["Chamomile & Calm", "Valerian Rest", "Lavender Moon", "Sleepy Spice"],
@@ -71,7 +71,7 @@ const BLEND_MAP = {
 };
 
 const RITUAL_MAP = {
-  morning: "Start every morning before caffeine with 1 cup steeped for your prescribed blend. Hold the cup with both hands, breathe in the steam for 30 seconds, and set one intention for the day.",
+  morning: "Start every morning before caffeine with 1 cup steeped for your curated blend. Hold the cup with both hands, breathe in the steam for 30 seconds, and set one intention for the day.",
   evening: "Close your day with a slow evening cup 30–60 min before bed. Dim the lights, add raw honey if desired, and let each sip be a signal to your nervous system that it's time to unwind.",
   anytime: "Drink 2 cups daily — one mid-morning, one mid-afternoon. Keep a travel tin at your desk and treat each steep as a 5-minute pause. You deserve those 5 minutes.",
   both:    "Build a morning and evening ritual. Morning cup: energizing or focusing blend. Evening cup: your calming or sleep blend. Bookend your day with intention and watch your baseline shift.",
@@ -116,7 +116,7 @@ const STEPS = [
   { id: "focus",    title: "How's your mental focus & clarity?" },
   { id: "time",     title: "When do you drink tea?" },
   { id: "concerns", title: "Any other areas of focus?" },
-  { id: "email",    title: "Where should we send your Tea Prescription?" },
+  { id: "email",    title: "Where should we send your Sip & Heal Report?" },
   { id: "result",   title: null },
 ];
 
@@ -352,7 +352,7 @@ function NavButton({ label, onClick, disabled, variant = "primary" }) {
 }
 
 // ─── Result card ──────────────────────────────────────────────────────────────
-function PrescriptionCard({ name, rxBlends, ritual, goal, onClose }) {
+function SipReportCard({ name, rxBlends, ritual, goal, onClose }) {
   const goalObj = GOAL_OPTIONS.find(g => g.value === goal) || {};
   return (
     <div style={{ animation: "fadeSlideUp .5s ease" }}>
@@ -368,7 +368,7 @@ function PrescriptionCard({ name, rxBlends, ritual, goal, onClose }) {
         <div style={{
           fontSize: ".6rem", letterSpacing: ".2em", textTransform: "uppercase",
           color: `rgba(192,136,48,.7)`, marginBottom: 8
-        }}>Your Personal Tea Prescription</div>
+        }}>Your Personal Sip Report</div>
         <h2 style={{
           fontFamily: "'Playfair Display', serif",
           fontSize: "clamp(1.4rem, 3vw, 1.9rem)",
@@ -393,7 +393,7 @@ function PrescriptionCard({ name, rxBlends, ritual, goal, onClose }) {
         <div style={{
           fontSize: ".6rem", letterSpacing: ".14em", textTransform: "uppercase",
           color: "rgba(255,255,255,.4)", marginBottom: 12
-        }}>Prescribed Blends</div>
+        }}>Your Blends</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {rxBlends.map((blend, i) => (
             <div key={blend} style={{
@@ -451,10 +451,10 @@ function PrescriptionCard({ name, rxBlends, ritual, goal, onClose }) {
           <div style={{
             fontSize: ".75rem", fontWeight: 600,
             color: C.goldLt, fontFamily: "'Jost', sans-serif"
-          }}>Your PDF prescription is on its way to your inbox</div>
+          }}>Your Sip & Heal Report PDF is on its way to your inbox</div>
           <div style={{
             fontSize: ".66rem", color: "rgba(255,255,255,.4)", marginTop: 2
-          }}>Check your email for your personalized Tea Prescription PDF — free gift from Chai Holistic</div>
+          }}>Check your email for your personalized Sip & Heal Report PDF — free gift from Chai Holistic</div>
         </div>
       </div>
 
@@ -621,7 +621,7 @@ export default function WellnessProfileModal({ open, onClose }) {
           color: "white", fontWeight: 400, lineHeight: 1.2, margin: "0 0 16px"
         }}>
           Get Your Free<br />
-          <em style={{ color: C.goldLt, fontStyle: "italic" }}>Tea Prescription</em>
+          <em style={{ color: C.goldLt, fontStyle: "italic" }}>Sip Report</em>
         </h2>
         <p style={{
           fontSize: ".9rem", color: "rgba(255,255,255,.6)",
@@ -660,7 +660,7 @@ export default function WellnessProfileModal({ open, onClose }) {
     );
 
     if (s === "result") return (
-      <PrescriptionCard
+      <SipReportCard
         name={answers.name}
         rxBlends={result?.rxBlends || []}
         ritual={result?.ritual || ""}
@@ -679,7 +679,7 @@ export default function WellnessProfileModal({ open, onClose }) {
           autoFocus
         />
         <p style={{ fontSize: ".78rem", color: "rgba(255,255,255,.35)", margin: 0, lineHeight: 1.6 }}>
-          We'll personalize your prescription with your name.
+          We'll personalize your Sip & Heal Report with your name.
         </p>
       </div>
     );
@@ -766,7 +766,7 @@ export default function WellnessProfileModal({ open, onClose }) {
         }}>
           <span style={{ fontSize: "1rem", flexShrink: 0 }}>🎁</span>
           <p style={{ fontSize: ".72rem", color: "rgba(255,255,255,.5)", margin: 0, lineHeight: 1.7 }}>
-            We'll email you a personalized <strong style={{ color: C.goldLt }}>Tea Prescription PDF</strong> — your custom blend guide, brewing ritual, and wellness intentions. Free, always.
+            We'll email you a personalized <strong style={{ color: C.goldLt }}>Sip & Heal Report PDF</strong> — your custom blend guide, brewing ritual, and wellness intentions. Free, always.
           </p>
         </div>
         {error && (
@@ -869,7 +869,7 @@ export default function WellnessProfileModal({ open, onClose }) {
               <NavButton
                 label={
                   saving ? "Saving…"
-                  : currentStep.id === "email" ? "Get My Prescription ✦"
+                  : currentStep.id === "email" ? "Get My Sip & Heal Report ✦"
                   : "Continue →"
                 }
                 onClick={handleNext}

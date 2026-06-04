@@ -2110,7 +2110,7 @@ export default function ChaiHolistic() {
             {[
               {icon:"🌿",title:"Sip & Seek",sub:"Personal tea + 7-day ritual",action:()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);},btn:"Begin"},
               {icon:"✦",title:"Tea Finder",sub:"3 questions → your perfect blend",action:()=>setFinderOpen(true),btn:"Find"},
-              {icon:"📋",title:"Sip Report",sub:"Free personalized PDF sent to you",action:()=>setProfileOpen(true),btn:"Get"},
+              {icon:"🌿",title:"Sip & Heal Report",sub:"Free personalized PDF sent to you",action:()=>setProfileOpen(true),btn:"Get"},
               {icon:"☀",title:"Ritual Builder",sub:"Morning & evening in one click",action:()=>setRitualOpen(true),btn:"Build"},
               {icon:"🌿",title:"Cleanse Tracker",sub:"7, 14 or 28-day progress tracker",action:()=>setTrackerOpen(true),btn:"Track"},
               {icon:"🌱",title:"Herb Pairing",sub:"Build your own blends at home",action:()=>nav("shop"),btn:"Explore"},
@@ -4800,7 +4800,7 @@ Thank you!`);
             className="nav-lnk"
             onClick={()=>setProfileOpen(true)}
             style={{background:"linear-gradient(135deg,rgba(192,136,48,.18),rgba(192,136,48,.08))",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500}}>
-            📋 Sip & Heal Report
+            🌿 Sip & Heal Report
           </span>
           <span
             className="nav-lnk"
@@ -4865,8 +4865,8 @@ Thank you!`);
         <button
           onClick={()=>setProfileOpen(true)}
           style={{position:"fixed",bottom:136,left:28,zIndex:398,background:"linear-gradient(135deg,rgba(192,136,48,.9),rgba(180,120,30,.95))",color:"white",border:"1px solid rgba(255,255,255,.25)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(192,136,48,.4)",whiteSpace:"nowrap"}}
-          title="Get your free Sip Report">
-          📋 Free Sip & Heal Report
+          title="Get your free Sip & Heal Report">
+          🌿 Free Sip & Heal Report
         </button>
       )}
 
@@ -4941,7 +4941,7 @@ Thank you!`);
             </div>
             <div>
               <div className="ft-col-h">Features</div>
-              <span className="ft-lnk" onClick={()=>setProfileOpen(true)}>📋 Sip & Heal Report</span>
+              <span className="ft-lnk" onClick={()=>setProfileOpen(true)}>🌿 Sip & Heal Report</span>
               <span className="ft-lnk" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}>🌿 Sip &amp; Seek</span>
               <span className="ft-lnk" onClick={()=>nav("mocktails")}>🍹 Mocktail Recipes</span>
               <span className="ft-lnk" onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
