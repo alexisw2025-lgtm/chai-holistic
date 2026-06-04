@@ -3,6 +3,8 @@ import TeaLibrary from "./TeaLibrary";
 import PrayerSection from "./PrayerSection";
 import WellnessProfileModal from "./WellnessProfileModal";
 import MocktailsPage from "./MocktailsPage";
+import JellyPage from "./JellyPage";
+import SeaMossPage from "./SeaMossPage";
 import imgSre1 from "./rings/scre1.jpg";
 import imgScre2 from "./rings/scre2.jpg";
 import imgScre3 from "./rings/scre3.jpg";
@@ -345,6 +347,8 @@ export default function ChaiHolistic() {
   const [activeSecIdx, setActiveSecIdx] = useState(0);
   const [bookPreview, setBookPreview] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [jellyOpen, setJellyOpen] = useState(false);
+  const [mobMenuOpen, setMobMenuOpen] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
   const [timerBlendName, setTimerBlendName] = useState("");
 
@@ -847,18 +851,21 @@ export default function ChaiHolistic() {
     .philo-sig{font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:var(--gold);}
 
     /* RECIPES */
-    .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;}
-    .rcard{border:1px solid var(--dust);background:white;overflow:hidden;cursor:pointer;transition:all .3s;border-radius:18px;}
-    .rcard:hover{box-shadow:0 8px 28px rgba(28,26,23,.08);}
-    .rcard.open{border-color:var(--sage-d);box-shadow:0 12px 38px rgba(74,114,80,.12);}
-    .rcard-head{padding:18px;}
-    .rcard-name{font-family:'Playfair Display',serif;font-size:1.08rem;color:var(--bark);margin-bottom:5px;}
-    .rcard-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
-    .rtag{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:50px;}
-    .rtag.occ{background:var(--sage-p);color:var(--sage-d);}
-    .rtag.time{background:var(--gold-p);color:var(--gold);}
-    .rtag.mood{background:var(--linen);color:#6A5F50;}
-    .rcard-expand{max-height:0;overflow:hidden;transition:max-height .4s ease;background:var(--linen);border-radius:0 0 18px 18px;}
+    .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;}
+    .rcard{border:1px solid var(--dust);background:white;overflow:hidden;cursor:pointer;transition:all .25s;border-radius:16px;position:relative;}
+    .rcard:hover{box-shadow:0 6px 22px rgba(28,26,23,.1);border-color:var(--sage);transform:translateY(-2px);}
+    .rcard.open{border-color:var(--sage-d);box-shadow:0 10px 32px rgba(74,114,80,.14);transform:none;}
+    .rcard-head{padding:14px 14px 10px;display:flex;gap:10px;align-items:flex-start;}
+    .rcard-icon{width:36px;height:36px;border-radius:10px;background:var(--sage-p);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+    .rcard-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);line-height:1.25;}
+    .rcard-tag-sm{font-size:.58rem;color:var(--sage);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+    .rcard-meta{display:flex;gap:5px;flex-wrap:wrap;padding:0 14px 10px;}
+    .rcard-hover-desc{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#1C1A17;color:rgba(255,255,255,.85);font-size:.72rem;line-height:1.6;padding:10px 14px;border-radius:12px;pointer-events:none;z-index:200;font-family:'Jost',sans-serif;border:1px solid rgba(196,137,58,.3);font-weight:300;box-shadow:0 8px 28px rgba(0,0,0,.4);}
+    .rcard-hover-desc::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1C1A17;}
+    .rcard:hover .rcard-hover-desc{display:block;}
+    .rcard-expand-arrow{position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:50%;background:var(--sage-p);display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--sage-d);transition:transform .25s;}
+    .rcard.open .rcard-expand-arrow{transform:rotate(180deg);background:var(--sage-d);color:white;}
+    .rcard-expand{max-height:0;overflow:hidden;transition:max-height .4s ease;background:var(--linen);border-radius:0 0 16px 16px;}
     .rcard.open .rcard-expand{max-height:1100px;}
     .rsteps{padding:16px 18px;}
     .timer-row{display:flex;align-items:center;gap:11px;padding:11px 14px;background:white;border-top:1px solid var(--dust);border-radius:0 0 14px 14px;}
@@ -1149,8 +1156,131 @@ export default function ChaiHolistic() {
     .btn-feat-ghost:hover{border-color:var(--gold);color:var(--gold);}
 
     .page{padding-top:0;}
-    @media(max-width:960px){.hero-inner,.philo,.featured-band{grid-template-columns:1fr;}.hero-visual{display:none;}.b-showcase{grid-template-columns:repeat(2,1fr);}.ft-grid{grid-template-columns:1fr 1fr;}.nav-links{display:none;}}
-    @media(max-width:600px){.b-showcase{grid-template-columns:1fr;}.ft-grid{grid-template-columns:1fr;}}
+
+    /* ── HAMBURGER MENU ── */
+    .ham-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:600;}
+    .ham-btn span{display:block;width:22px;height:2px;background:var(--bark);border-radius:2px;transition:all .3s;}
+    .mob-menu{display:none;position:fixed;inset:0;top:74px;background:rgba(247,242,234,.98);backdrop-filter:blur(20px);z-index:490;padding:24px 2rem;overflow-y:auto;flex-direction:column;gap:0;}
+    .mob-menu.open{display:flex;}
+    .mob-lnk{font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bark);padding:16px 0;border-bottom:1px solid var(--dust);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:'Jost',sans-serif;}
+    .mob-lnk:hover{color:var(--gold);}
+    .mob-lnk-special{color:var(--gold);font-weight:500;}
+
+    /* ── TABLET (≤960px) ── */
+    @media(max-width:960px){
+      nav{padding:0 1.2rem;border-radius:0;}
+      .nav-links{display:none;}
+      .ham-btn{display:flex;}
+      .hero-inner{grid-template-columns:1fr;gap:2rem;padding:32px 1.5rem 40px;}
+      .hero-visual{display:none;}
+      .hero-h{font-size:clamp(2.2rem,7vw,3.5rem);}
+      .hero-p{font-size:.88rem;max-width:100%;}
+      .philo{grid-template-columns:1fr;}
+      .philo-vis{min-height:220px;padding:40px;}
+      .featured-band{grid-template-columns:1fr;}
+      .feat-book,.feat-rings{padding:36px 28px;}
+      .b-showcase{grid-template-columns:repeat(2,1fr);}
+      .ft-grid{grid-template-columns:1fr 1fr;gap:2rem;}
+      .sec{padding:50px 1.5rem;}
+      .pgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+      .cgrid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
+      .rgrid{grid-template-columns:1fr;}
+      .ringsgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+      .chai-spin{width:120px;height:120px;}
+      .chai-spin-center{width:74px;height:74px;}
+      .chai-spin-char{transform-origin:0 60px;}
+    }
+
+    /* ── MOBILE (≤600px) ── */
+    @media(max-width:600px){
+      nav{height:64px;padding:0 1rem;}
+      .nav-logo-img{width:38px;height:38px;}
+      .nav-logo-text span:first-child{font-size:1.1rem;}
+      .nav-logo-text span:last-child{display:none;}
+      .cart-btn{padding:7px 12px;font-size:.6rem;}
+      .mob-menu{top:64px;}
+
+      /* Hero */
+      .hero{min-height:auto;}
+      .hero-inner{padding:28px 1.2rem 36px;gap:1.5rem;}
+      .hero-h{font-size:clamp(1.9rem,8vw,2.8rem);margin-bottom:1rem;}
+      .hero-p{font-size:.84rem;margin-bottom:1.4rem;}
+      .hero-btns{gap:8px;}
+      .btn-main,.btn-ghost,.btn-finder{padding:11px 20px;font-size:.68rem;}
+      .hero-eye{margin-bottom:1rem;}
+      .chai-spin{display:none;}
+
+      /* Sections */
+      .sec{padding:40px 1.2rem;border-radius:14px;margin:4px 0;}
+      .sh-h{font-size:clamp(1.5rem,6vw,2.2rem);}
+      .sh{margin-bottom:1.8rem;}
+
+      /* Grids → single column */
+      .b-showcase{grid-template-columns:1fr;}
+      .pgrid{grid-template-columns:1fr;}
+      .cgrid{grid-template-columns:1fr;}
+      .rgrid{grid-template-columns:1fr;}
+      .ringsgrid{grid-template-columns:1fr;}
+      .hgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+      .ft-grid{grid-template-columns:1fr;gap:1.5rem;}
+      footer{padding:40px 1.2rem 24px;border-radius:0;}
+
+      /* Pills/filters */
+      .pills{gap:6px;}
+      .pill{padding:6px 14px;font-size:.62rem;}
+
+      /* Cards */
+      .pcard-name{font-size:1rem;}
+      .ccard-name{font-size:.95rem;}
+      .rcard-name{font-size:.95rem;}
+
+      /* Cart drawer */
+      .drawer{width:100vw;border-radius:20px 20px 0 0;top:auto;bottom:0;height:88vh;}
+
+      /* Modals */
+      .modal{max-height:95vh;border-radius:20px 20px 0 0;position:fixed;bottom:0;left:0;right:0;width:100%;max-width:100%;}
+      .modal-ov{align-items:flex-end;padding:0;}
+      .modal-head{border-radius:20px 20px 0 0;}
+
+      /* Featured band */
+      .featured-band{grid-template-columns:1fr;}
+      .feat-book,.feat-rings{padding:28px 22px;}
+      .feat-title{font-size:clamp(1.2rem,5vw,1.7rem);}
+
+      /* Philosophy */
+      .philo{grid-template-columns:1fr;}
+      .philo-vis{min-height:180px;padding:32px 24px;}
+      .philo-txt{padding:32px 24px;}
+      .philo-quote{font-size:clamp(1.1rem,4vw,1.5rem);}
+
+      /* Marquee */
+      .mq{border-radius:10px;margin:4px 0;}
+
+      /* Rings page */
+      .rng{padding:24px 20px;}
+      .rng-name{font-size:1.2rem;}
+
+      /* Floating buttons */
+      .twoam-btn{bottom:20px;right:16px;padding:9px 14px;font-size:.64rem;}
+      .back-top{bottom:72px;right:16px;width:38px;height:38px;font-size:1rem;}
+      .sec-nav{right:10px;}
+
+      /* Hero cards hidden on mobile — replace with simpler layout */
+      .hero-visual{display:none;}
+
+      /* Season banner */
+      .season-banner{padding:8px 1rem;gap:8px;flex-direction:column;text-align:center;}
+
+      /* Intention / Sip & Seek buttons */
+      .hero-btns button{width:100%;justify-content:center;}
+    }
+
+    /* ── SMALL MOBILE (≤380px) ── */
+    @media(max-width:380px){
+      .hero-h{font-size:1.75rem;}
+      .btn-main,.btn-ghost,.btn-finder{padding:10px 16px;font-size:.65rem;}
+      .sec{padding:32px 1rem;}
+    }
   `;
 
   // --- 2AM OVERLAY ---------------------------------------------------------
@@ -2014,6 +2144,21 @@ export default function ChaiHolistic() {
                 <div className="h-card-body"><div className="h-card-name">{c.name}</div><div className="h-card-tag">{c.occ}</div></div>
               </div>
             ))}
+            {/* Jelly Kit highlight card */}
+            <div
+              className="h-card c4"
+              style={{cursor:"pointer",position:"relative",overflow:"hidden"}}
+              onClick={()=>nav("jelly")}
+              onMouseEnter={e=>e.currentTarget.style.transform="translateY(-4px) scale(1.03)"}
+              onMouseLeave={e=>e.currentTarget.style.transform=""}>
+              <div className="h-card-inner" style={{background:"linear-gradient(135deg,#1a3a2a,#2a1a0a)"}}>🌊</div>
+              <div className="h-card-body">
+                <div className="h-card-name">Jelly Kits</div>
+                <div className="h-card-tag" style={{color:"#c08830"}}>New · Coming Soon</div>
+              </div>
+              {/* gold pulse dot */}
+              <div style={{position:"absolute",top:10,right:10,width:8,height:8,borderRadius:"50%",background:"#c08830",boxShadow:"0 0 0 3px rgba(192,136,48,.3)",animation:"pulse 2s infinite"}}/>
+            </div>
             <div className="h-badge" style={{cursor:"pointer"}} onClick={()=>nav("recipes")}>Sip &amp; Heal<small>40 Recipes from the book</small></div>
           </div>
         </div>
@@ -2804,10 +2949,16 @@ export default function ChaiHolistic() {
                 const idx=`w${i}`;const isOpen=activeRecipe===idx;
                 return(
                   <div key={r.id} data-recipe={idx} className={`rcard ${isOpen?"open":""}`} onClick={()=>setActiveRecipe(isOpen?null:idx)}>
+                    <div className="rcard-hover-desc">{r.desc}</div>
+                    <div className="rcard-expand-arrow">▾</div>
                     <div className="rcard-head">
-                      <div className="rcard-name">{r.name}</div>
-                      <div className="rcard-meta"><span className="rtag occ">{r.occasion}</span><span className="rtag time">⏱ {r.steepMin} min</span><span className="rtag mood">{r.mood}</span></div>
+                      <div className="rcard-icon">{BLEND_EMOJIS[r.id]||"🍵"}</div>
+                      <div>
+                        <div className="rcard-name">{r.name}</div>
+                        <div className="rcard-tag-sm">{r.occasion} · {r.steepMin} min</div>
+                      </div>
                     </div>
+                    <div className="rcard-meta"><span className="rtag occ">{r.mood}</span><span className="rtag time">${r.price}</span></div>
                     <div className="rcard-expand" onClick={e=>e.stopPropagation()}>
                       <div className="rsteps">
                         <CupValue item={r}/>
@@ -2843,10 +2994,16 @@ export default function ChaiHolistic() {
                 const idx=`c${i}`;const isOpen=activeRecipe===idx;
                 return(
                   <div key={r.id} data-recipe={idx} className={`rcard ${isOpen?"open":""}`} onClick={()=>setActiveRecipe(isOpen?null:idx)} style={isOpen?{borderColor:"#8B3A2A"}:{}}>
+                    <div className="rcard-hover-desc">{r.desc}</div>
+                    <div className="rcard-expand-arrow" style={{background:isOpen?"#8B3A2A":"#F5E0DC",color:isOpen?"white":"#8B3A2A"}}>▾</div>
                     <div className="rcard-head">
-                      <div className="rcard-name" style={{color:"#8B3A2A"}}>{r.name}</div>
-                      <div className="rcard-meta"><span className="rtag" style={{background:"#F5E0DC",color:"#8B3A2A"}}>{r.organ}</span><span className="rtag time">⏱ {r.steepMin} min</span><span className="rtag mood">{r.mood}</span></div>
+                      <div className="rcard-icon" style={{background:"#F5E0DC"}}>🌿</div>
+                      <div>
+                        <div className="rcard-name" style={{color:"#8B3A2A"}}>{r.name}</div>
+                        <div className="rcard-tag-sm" style={{color:"#8B3A2A"}}>{r.organ} · {r.steepMin} min</div>
+                      </div>
                     </div>
+                    <div className="rcard-meta"><span className="rtag" style={{background:"#F5E0DC",color:"#8B3A2A"}}>{r.mood}</span><span className="rtag time">${r.price}</span></div>
                     <div className="rcard-expand" onClick={e=>e.stopPropagation()}>
                       <div className="rsteps">
                         <CupValue item={r}/>
@@ -3366,7 +3523,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
 
   // --- RING CONFIGURATOR ----------------------------------------------------
   // Designs updated to match actual Vibe Shift Ring collection
-  const SOLFEGGIO = [
+  const FREQUENCIES = [
     { hz:174, name:"The Foundation",       badge:"174 Hz", desc:"Security · Grounding · Pain Relief",
       detail:"The lowest of the sacred tones. Creates a deep sense of safety, reduces pain, and builds a foundation beneath everything you carry. For those who need to feel held." },
     { hz:285, name:"Quantum Field",        badge:"285 Hz", desc:"Healing · Energy Field · Restoration",
@@ -3907,15 +4064,15 @@ Thank you!`);
               </div>
             )}
 
-            {/* STEP 4 -- Solfeggio Frequency */}
+            {/* STEP 4 -- Frequency Selection */}
             {step === 4 && (
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",marginBottom:4}}>Choose your Meridian Frequency</div>
                 <div style={{fontSize:".74rem",color:"rgba(255,255,255,.45)",marginBottom:"1.2rem",fontWeight:300,lineHeight:1.6}}>
-                  Each ring is infused with one of the nine Solfeggio Frequencies during our proprietary Meridian Infusion process. Choose the frequency that speaks to what you need most.
+                  Each ring is infused with one of nine sacred frequencies during our proprietary Meridian Infusion process — chosen by Hz, aligned to intention. Choose the frequency that speaks to what you need most.
                 </div>
                 <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:"1.2rem"}}>
-                  {SOLFEGGIO.map(f=>(
+                  {FREQUENCIES.map(f=>(
                                         <div key={f.hz} className="freq-wrap">
                       <div className="freq-rA"/>
                       <div className="freq-rB"/>
@@ -4447,6 +4604,81 @@ Thank you!`);
                 </div>
               </div>
             </div>
+            {/* ── MERIDIAN INFUSION HIGHLIGHT CARD ── */}
+            <div style={{
+              background:"linear-gradient(135deg,#0A1A0A 0%,#0E1A1A 100%)",
+              border:"1px solid rgba(196,137,58,.4)",
+              borderRadius:24, padding:"32px 36px", marginBottom:"2.5rem",
+              position:"relative", overflow:"hidden",
+              boxShadow:"0 12px 48px rgba(0,0,0,.5), 0 0 0 1px rgba(196,137,58,.1)",
+            }}>
+              {/* Ambient glow */}
+              <div style={{position:"absolute",top:-60,right:-60,width:300,height:300,borderRadius:"50%",
+                background:"radial-gradient(circle,rgba(196,137,58,.08),transparent 70%)",pointerEvents:"none"}}/>
+              <div style={{position:"absolute",bottom:-40,left:-40,width:200,height:200,borderRadius:"50%",
+                background:"radial-gradient(circle,rgba(39,92,62,.12),transparent 70%)",pointerEvents:"none"}}/>
+
+              <div style={{position:"relative",zIndex:1}}>
+                {/* Eyebrow */}
+                <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
+                  <div style={{width:28,height:1,background:"var(--gold)"}}/>
+                  <span style={{fontSize:".6rem",letterSpacing:".22em",textTransform:"uppercase",color:"rgba(196,137,58,.7)"}}>
+                    Before You See the Rings
+                  </span>
+                </div>
+
+                {/* Headline */}
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(1.4rem,3vw,2rem)",color:"white",lineHeight:1.2,marginBottom:16}}>
+                  The Meridian Infusion <em style={{color:"var(--gold)",fontStyle:"italic"}}>Process.</em>
+                </div>
+
+                <p style={{fontSize:".88rem",color:"rgba(255,255,255,.6)",fontWeight:300,lineHeight:1.85,marginBottom:20,maxWidth:600}}>
+                  We know what you might be thinking. <em style={{color:"rgba(255,255,255,.75)"}}>"A plastic ring infused with frequency — really?"</em> We'd ask the same question. Which is exactly why we answer it directly, before we show you anything else.
+                </p>
+
+                {/* 3 fast science points */}
+                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:12,marginBottom:22}}>
+                  {[
+                    {icon:"🔬", hz:"Infrared Spectroscopy", fact:"Forensic scientists identify every type of plastic by its unique molecular vibration frequency. The frequency-plastic relationship is already industrial fact."},
+                    {icon:"🔊", hz:"Ultrasonic Welding", fact:"Engineers bond plastic at 20,000–40,000 Hz using ultrasonic sound. Plastic responds to frequency — this is not theory, it is manufacturing."},
+                    {icon:"🌊", hz:"Cymatics", fact:"Frequency moves physical matter. Cymatics shows how different Hz create measurable, repeatable geometric patterns in sand and water. Sound shapes the physical world."},
+                  ].map(p=>(
+                    <div key={p.hz} style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.07)",borderRadius:14,padding:"16px"}}>
+                      <div style={{fontSize:"1.4rem",marginBottom:8}}>{p.icon}</div>
+                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"rgba(196,137,58,.9)",marginBottom:6}}>{p.hz}</div>
+                      <div style={{fontSize:".74rem",color:"rgba(255,255,255,.45)",lineHeight:1.65,fontWeight:300}}>{p.fact}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* The punchline */}
+                <div style={{background:"rgba(196,137,58,.08)",border:"1px solid rgba(196,137,58,.25)",borderLeft:"4px solid var(--gold)",borderRadius:"0 14px 14px 0",padding:"16px 20px",marginBottom:20}}>
+                  <p style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(.9rem,1.6vw,1.1rem)",fontStyle:"italic",color:"rgba(255,255,255,.78)",lineHeight:1.75,margin:0}}>
+                    "Everything vibrates. Rocks. Wood. Water. Plastic. Nothing is inert. The Meridian Infusion doesn't require the ring to be organic — it requires it to have a vibrational field. And all matter already does. Those who feel it, know."
+                  </p>
+                  <div style={{fontSize:".58rem",letterSpacing:".16em",textTransform:"uppercase",color:"rgba(196,137,58,.55)",marginTop:10}}>— The Meridian Infusion · Vibe Shift Rings</div>
+                </div>
+
+                {/* Read more anchor */}
+                <div style={{display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
+                  <div style={{fontSize:".75rem",color:"rgba(255,255,255,.4)",fontWeight:300}}>
+                    Full science breakdown below ↓
+                  </div>
+                  <div style={{
+                    display:"inline-flex",alignItems:"center",gap:6,
+                    background:"rgba(39,92,62,.3)",border:"1px solid rgba(39,92,62,.5)",
+                    borderRadius:50,padding:"6px 16px",cursor:"pointer",transition:"all .2s",
+                  }}
+                    onClick={()=>{const el=document.getElementById("sec-rings-meridian");if(el)el.scrollIntoView({behavior:"smooth"});}}
+                    onMouseEnter={e=>{e.currentTarget.style.background="rgba(39,92,62,.5)";}}
+                    onMouseLeave={e=>{e.currentTarget.style.background="rgba(39,92,62,.3)";}}>
+                    <span style={{fontSize:".7rem",color:"#8ab89a",letterSpacing:".08em"}}>Read the full Meridian Infusion explanation</span>
+                    <span style={{color:"var(--gold)",fontSize:".75rem"}}>→</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Text + ring photo side by side */}
             <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:40,flexWrap:"wrap",marginBottom:"2.5rem"}}>
               {/* OPENING WORDS */}
@@ -4684,7 +4916,7 @@ Thank you!`);
                 <span id="sec-rings-meridian"/>The Meridian Infusion <em style={{color:"var(--gold)"}}>Process</em>
               </div>
               <p style={{fontSize:".88rem",color:"rgba(255,255,255,.6)",fontWeight:300,lineHeight:1.85,marginBottom:"1.8rem",maxWidth:600}}>
-                Every Vibe Shift Ring is finished with our proprietary Meridian Infusion process — an intentional alignment of the ring's vibrational field with one of the nine Solfeggio Frequencies before it reaches you.
+                Every Vibe Shift Ring is finished with our proprietary Meridian Infusion process — an intentional alignment of the ring's vibrational field with one of nine sacred frequencies before it reaches you. Each frequency is chosen by Hz and aligned to a specific intention.
               </p>
 
               {/* The plastic question — addressed directly */}
@@ -4779,7 +5011,7 @@ Thank you!`);
       <div ref={topRef} style={{position:"absolute",top:0,left:0}}/>
 
       <nav>
-        <div className="nav-logo" onClick={()=>{ nav("home"); window.scrollTo({top:0,behavior:"smooth"}); }} title="Home">
+        <div className="nav-logo" onClick={()=>{ nav("home"); window.scrollTo({top:0,behavior:"smooth"}); setMobMenuOpen(false); }} title="Home">
           <img src="/chai_holistic.jpg" alt="Chai Holistic" className="nav-logo-img"/>
           <div className="nav-logo-text">
             <span>Chai Holistic</span>
@@ -4787,23 +5019,14 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {[["home","🏠 Home"],["shop","Shop"],["recipes","Recipes"],["mocktails","🍹 Mocktails"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+          {[["home","🏠 Home"],["shop","Shop"],["recipes","Recipes"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>{l}</span>
           ))}
-          <span
-            className="nav-lnk"
-            onClick={()=>{nav("shop");setTimeout(()=>{const el=document.getElementById("sec-shop-tools");if(el)el.scrollIntoView({behavior:"smooth"});},120);}}
-            style={{color:"var(--bark)",opacity:.85}}>
-            🫖 Brew Tools
-          </span>
-          <span
-            className="nav-lnk"
-            onClick={()=>setProfileOpen(true)}
+          <span className="nav-lnk" onClick={()=>setProfileOpen(true)}
             style={{background:"linear-gradient(135deg,rgba(192,136,48,.18),rgba(192,136,48,.08))",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500}}>
-            🌿 Sip & Heal Report
+            📋 Sip &amp; Heal Report
           </span>
-          <span
-            className="nav-lnk"
+          <span className="nav-lnk"
             onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}
             style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500}}>
             🌿 Sip &amp; Seek
@@ -4813,8 +5036,31 @@ Thank you!`);
           <button className="cart-btn" onClick={()=>setCartOpen(true)}>
             Cart {cartCount>0&&<span className="cart-badge">{cartCount}</span>}
           </button>
+          <button className="ham-btn" onClick={()=>setMobMenuOpen(o=>!o)} aria-label="Menu">
+            <span style={{transform:mobMenuOpen?"rotate(45deg) translate(5px,5px)":"none"}}/>
+            <span style={{opacity:mobMenuOpen?0:1}}/>
+            <span style={{transform:mobMenuOpen?"rotate(-45deg) translate(5px,-5px)":"none"}}/>
+          </button>
         </div>
       </nav>
+
+      {/* ── Mobile slide-down menu ── */}
+      <div className={`mob-menu${mobMenuOpen?" open":""}`}>
+        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","📖 Recipes"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+          <div key={p} className="mob-lnk" onClick={()=>{nav(p);setMobMenuOpen(false);}}>
+            {l} <span style={{color:"var(--dust)"}}>›</span>
+          </div>
+        ))}
+        <div className="mob-lnk mob-lnk-special" onClick={()=>{setProfileOpen(true);setMobMenuOpen(false);}}>
+          📋 Get My Sip &amp; Heal Report <span style={{color:"var(--gold)"}}>›</span>
+        </div>
+        <div className="mob-lnk mob-lnk-special" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);setMobMenuOpen(false);}}>
+          🌿 Sip &amp; Seek <span style={{color:"var(--gold)"}}>›</span>
+        </div>
+        <div className="mob-lnk" onClick={()=>{setCartOpen(true);setMobMenuOpen(false);}}>
+          🛒 Cart {cartCount>0&&`(${cartCount})`} <span style={{color:"var(--dust)"}}>›</span>
+        </div>
+      </div>
 
       {/* SITEWIDE FDA BAR — removed, now in footer */}
 
@@ -4824,6 +5070,8 @@ Thank you!`);
         {page==="shop"&&<Shop/>}
         {page==="recipes"&&<Recipes/>}
         {page==="mocktails"&&<MocktailsPage/>}
+        {page==="jelly"&&<JellyPage/>}
+        {page==="seamoss"&&<SeaMossPage/>}
         {page==="rings"&&<Rings/>}
         {page==="faq"&&<FAQPage/>}
         {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)}/>}
@@ -4944,6 +5192,8 @@ Thank you!`);
               <span className="ft-lnk" onClick={()=>setProfileOpen(true)}>🌿 Sip & Heal Report</span>
               <span className="ft-lnk" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}>🌿 Sip &amp; Seek</span>
               <span className="ft-lnk" onClick={()=>nav("mocktails")}>🍹 Mocktail Recipes</span>
+              <span className="ft-lnk" onClick={()=>nav("jelly")}>🌊 Jelly Kits</span>
+              <span className="ft-lnk" onClick={()=>nav("seamoss")}>🌿 Sea Moss Gel</span>
               <span className="ft-lnk" onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
               <span className="ft-lnk" onClick={()=>setRitualOpen(true)}>☀ Build My Ritual</span>
               <span className="ft-lnk" onClick={()=>setTrackerOpen(true)}>🌿 Cleanse Tracker</span>

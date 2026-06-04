@@ -1078,6 +1078,15 @@ export default function MocktailsPage() {
     return catOk && occOk && srchOk;
   });
 
+
+  <style>{`
+    @media(max-width:600px){
+      .mkt-hero{padding:40px 1.2rem 36px !important;}
+      .mkt-grid{grid-template-columns:1fr !important;}
+      .mkt-filter{flex-wrap:wrap !important;gap:8px !important;}
+      .mkt-modal{border-radius:20px 20px 0 0 !important;position:fixed !important;bottom:0 !important;left:0 !important;right:0 !important;max-width:100% !important;max-height:92vh !important;}
+    }
+  `}</style>
   return (
     <div style={{ background: C.parch, minHeight: "100vh" }}>
 
