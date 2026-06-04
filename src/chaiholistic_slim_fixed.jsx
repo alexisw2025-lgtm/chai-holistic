@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import TeaLibrary from "./TeaLibrary";
 import PrayerSection from "./PrayerSection";
+import WellnessProfileModal from "./WellnessProfileModal";
 import imgSre1 from "./rings/scre1.jpg";
 import imgScre2 from "./rings/scre2.jpg";
 import imgScre3 from "./rings/scre3.jpg";
@@ -342,6 +343,7 @@ export default function ChaiHolistic() {
   const [showBackTop, setShowBackTop] = useState(false);
   const [activeSecIdx, setActiveSecIdx] = useState(0);
   const [bookPreview, setBookPreview] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
   const [timerBlendName, setTimerBlendName] = useState("");
 
@@ -426,10 +428,10 @@ export default function ChaiHolistic() {
 
   // Lock body scroll when any modal is open
   useEffect(() => {
-    const anyOpen = finderOpen || ritualOpen || trackerOpen || cartOpen || bookPreview || intentionOpen || showWelcome || !!ringConfig;
+    const anyOpen = finderOpen || ritualOpen || trackerOpen || cartOpen || bookPreview || intentionOpen || showWelcome || !!ringConfig || profileOpen;
     document.body.style.overflow = anyOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [finderOpen, ritualOpen, trackerOpen, cartOpen, bookPreview, intentionOpen]);
+  }, [finderOpen, ritualOpen, trackerOpen, cartOpen, bookPreview, intentionOpen, profileOpen]);
 
   const now = new Date();
   const currentMonth = now.getMonth();
@@ -1978,6 +1980,13 @@ export default function ChaiHolistic() {
               <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
                 <button className="btn-finder" style={{flex:1}} onClick={()=>setFinderOpen(true)}>✦ Find My Tea</button>
                 <button className="btn-ghost" style={{flex:1}} onClick={()=>setRitualOpen(true)}>Build My Ritual</button>
+                <button
+                  onClick={()=>setProfileOpen(true)}
+                  style={{flex:"0 0 100%",background:"linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))",color:"var(--gold)",border:"1.5px solid rgba(196,137,58,.45)",padding:"11px 20px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",transition:"all .25s",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}
+                  onMouseEnter={e=>{e.currentTarget.style.background="rgba(192,136,48,.22)";e.currentTarget.style.borderColor="var(--gold)";e.currentTarget.style.boxShadow="0 4px 18px rgba(196,137,58,.25)";}}
+                  onMouseLeave={e=>{e.currentTarget.style.background="linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))";e.currentTarget.style.borderColor="rgba(196,137,58,.45)";e.currentTarget.style.boxShadow="none";}}>
+                  🌿 <strong>Get My Free Tea Prescription</strong> &nbsp;— personalized to your wellness profile
+                </button>
               </div>
             </div>
               {/* SPINNING CHAI HOLISTIC BADGE — right of Sip & Seek */}
@@ -2100,6 +2109,7 @@ export default function ChaiHolistic() {
             {[
               {icon:"🌿",title:"Sip & Seek",sub:"Personal tea + 7-day ritual",action:()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);},btn:"Begin"},
               {icon:"✦",title:"Tea Finder",sub:"3 questions → your perfect blend",action:()=>setFinderOpen(true),btn:"Find"},
+              {icon:"📋",title:"Tea Prescription",sub:"Free personalized PDF sent to you",action:()=>setProfileOpen(true),btn:"Get"},
               {icon:"☀",title:"Ritual Builder",sub:"Morning & evening in one click",action:()=>setRitualOpen(true),btn:"Build"},
               {icon:"🌿",title:"Cleanse Tracker",sub:"7, 14 or 28-day progress tracker",action:()=>setTrackerOpen(true),btn:"Track"},
               {icon:"🌱",title:"Herb Pairing",sub:"Build your own blends at home",action:()=>nav("shop"),btn:"Explore"},
@@ -4787,6 +4797,12 @@ Thank you!`);
           </span>
           <span
             className="nav-lnk"
+            onClick={()=>setProfileOpen(true)}
+            style={{background:"linear-gradient(135deg,rgba(192,136,48,.18),rgba(192,136,48,.08))",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500}}>
+            📋 Tea Rx
+          </span>
+          <span
+            className="nav-lnk"
             onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}
             style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500}}>
             🌿 Sip &amp; Seek
@@ -4831,12 +4847,24 @@ Thank you!`);
       {trackerOpen && <CleanseTrackerModal/>}
       {bookPreview && <BookPreviewModal/>}
 
+      <WellnessProfileModal open={profileOpen} onClose={()=>setProfileOpen(false)}/>
+
       <CartDrawer/>
 
       {/* 2AM BUTTON -- hidden while overlay is open */}
       {!twoAM && (
         <button className="twoam-btn" onClick={open2AM}>
           {isNight?"✨ Can't sleep?":"🌙 2AM Mode"}
+        </button>
+      )}
+
+      {/* FLOATING TEA PRESCRIPTION CTA */}
+      {!twoAM && !showWelcome && !profileOpen && welcomeSeen && (
+        <button
+          onClick={()=>setProfileOpen(true)}
+          style={{position:"fixed",bottom:136,left:28,zIndex:398,background:"linear-gradient(135deg,rgba(192,136,48,.9),rgba(180,120,30,.95))",color:"white",border:"1px solid rgba(255,255,255,.25)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(192,136,48,.4)",whiteSpace:"nowrap"}}
+          title="Get your free Tea Prescription">
+          📋 Free Tea Rx
         </button>
       )}
 
@@ -4911,6 +4939,7 @@ Thank you!`);
             </div>
             <div>
               <div className="ft-col-h">Features</div>
+              <span className="ft-lnk" onClick={()=>setProfileOpen(true)}>📋 Tea Prescription</span>
               <span className="ft-lnk" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}>🌿 Sip &amp; Seek</span>
               <span className="ft-lnk" onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
               <span className="ft-lnk" onClick={()=>setRitualOpen(true)}>☀ Build My Ritual</span>
