@@ -1,11 +1,26 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-// @ts-expect-error jsx module without types
-import ChaiHolistic from './chaiholistic_slim_fixed'
+import React from "react";
+import { createRoot } from "react-dom/client";
+import ChaiHolistic from "./chaiholistic417";
+import ComingSoon from "./ComingSoon";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ChaiHolistic />
-  </StrictMode>,
-)
+const PREVIEW_KEY = "chai_preview_2026";
+
+const isPreview = (() => {
+  try {
+    if (window.location.search.includes("preview=sipheal")) {
+      localStorage.setItem(PREVIEW_KEY, "true");
+      return true;
+    }
+    if (localStorage.getItem(PREVIEW_KEY) === "true") return true;
+    return false;
+  } catch {
+    return false;
+  }
+})();
+
+const root = createRoot(document.getElementById("root")!);
+root.render(
+  <React.StrictMode>
+    {isPreview ? <ChaiHolistic /> : <ComingSoon />}
+  </React.StrictMode>
+);
