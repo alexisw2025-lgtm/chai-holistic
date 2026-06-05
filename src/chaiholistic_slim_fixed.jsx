@@ -1688,7 +1688,7 @@ export default function ChaiHolistic() {
   // --- TEA FINDER MODAL -----------------------------------------------------
   const TeaFinderModal = () => {
     return (
-    <div className="modal-ov" onClick={() = style={{display:"flex",alignItems:"center",justifyContent:"center"}}> setFinderOpen(false)}>
+    <div className="modal-ov" onClick={() => setFinderOpen(false)} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
       <div id="tea-finder-modal" className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-head">
           <span className="modal-title">✦ Find Your Tea</span>
@@ -1782,7 +1782,7 @@ export default function ChaiHolistic() {
     };
 
     return (
-      <div className="modal-ov" onClick={() = style={{display:"flex",alignItems:"center",justifyContent:"center"}}> setRitualOpen(false)}>
+      <div className="modal-ov" onClick={() => setRitualOpen(false)} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
         {/* Modal uses flex-column so header + footer stay fixed, body scrolls */}
         <div className="modal" style={{display:"flex",flexDirection:"column",overflow:"hidden",maxHeight:"90vh"}} onClick={e => e.stopPropagation()}>
 
@@ -1917,7 +1917,7 @@ export default function ChaiHolistic() {
     const pct = tracker ? Math.round(checkedCount/tracker.days*100) : 0;
     const alreadyInCart = !!(tracker && cart.find(i=>i.id===tracker.id));
     return (
-      <div className="modal-ov" onClick={() = style={{display:"flex",alignItems:"center",justifyContent:"center"}}> setTrackerOpen(false)}>
+      <div className="modal-ov" onClick={() => setTrackerOpen(false)} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
         <div className="modal" onClick={e=>e.stopPropagation()}>
           <div className="modal-head">
             <span className="modal-title">🌿 Cleanse Tracker</span>
@@ -2024,7 +2024,7 @@ export default function ChaiHolistic() {
     const [previewPage, setPreviewPage] = useState(0);
     const sample = samples[previewPage];
     return (
-      <div className="modal-ov" onClick={()= style={{display:"flex",alignItems:"center",justifyContent:"center"}}>setBookPreview(false)}>
+      <div className="modal-ov" onClick={()=>setBookPreview(false)} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
         <div className="modal" style={{maxWidth:700,background:"#FAF7F0"}} onClick={e=>e.stopPropagation()}>
           <div className="modal-head" style={{background:"#2D4A2D",borderRadius:"24px 24px 0 0"}}>
             <div>
@@ -3564,7 +3564,7 @@ export default function ChaiHolistic() {
     if (intentionStep === 99 && intentionResult) {
       const { name, intention, blend, affirmation, ritual } = intentionResult;
       return (
-        <div className="modal-ov" onClick={()= style={{display:"flex",alignItems:"center",justifyContent:"center"}}>{}}>
+        <div className="modal-ov" onClick={()=>{}} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
           <div className="modal" style={{maxWidth:680,background:"#FAF7F0"}} onClick={e=>e.stopPropagation()}>
             <div className="modal-head" style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",borderRadius:"24px 24px 0 0"}}>
               <div>
@@ -3839,7 +3839,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
 
     // Quiz steps
     return (
-      <div className="modal-ov" onClick={()= style={{display:"flex",alignItems:"center",justifyContent:"center"}}>{}}>
+      <div className="modal-ov" onClick={()=>{}} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
         <div className="modal" style={{maxWidth:580}} onClick={e=>e.stopPropagation()}>
           <div className="modal-head" style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",borderRadius:"24px 24px 0 0"}}>
             <div>
@@ -3942,7 +3942,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
     // RING MODEL CHOOSER — shows when no ring is pre-selected
     if (!ring) {
       return (
-        <div className="modal-ov" onClick={()= style={{display:"flex",alignItems:"center",justifyContent:"center"}}>setRingConfig(null)}>
+        <div className="modal-ov" onClick={()=>setRingConfig(null)} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
           <div id="ring-config-modal" className="modal" style={{maxWidth:620,background:"#0E0E0E",border:"1px solid rgba(255,255,255,.08)"}} onClick={e=>e.stopPropagation()}>
             <div className="modal-head" style={{background:"#0E0E0E",borderBottom:"1px solid rgba(255,255,255,.08)",borderRadius:"24px 24px 0 0"}}>
               <div>
@@ -4045,7 +4045,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
     };
 
     return (
-      <div className="modal-ov" onClick={() = style={{display:"flex",alignItems:"center",justifyContent:"center"}}> setRingConfig(null)}>
+      <div className="modal-ov" onClick={() => setRingConfig(null)} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
         <div id="ring-config-modal" className="modal" style={{maxWidth:560,background:"#0E0E0E",border:"1px solid rgba(255,255,255,.08)"}} onClick={e=>e.stopPropagation()}>
 
           {/* Header */}
