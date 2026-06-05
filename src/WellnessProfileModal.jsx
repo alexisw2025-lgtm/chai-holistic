@@ -451,10 +451,10 @@ function SipReportCard({ name, rxBlends, ritual, goal, onClose }) {
           <div style={{
             fontSize: ".75rem", fontWeight: 600,
             color: C.goldLt, fontFamily: "'Jost', sans-serif"
-          }}>Your Sip &amp; Heal Report PDF is on its way to your inbox</div>
+          }}>Your Sip &amp; Heal Report is on its way to your inbox</div>
           <div style={{
             fontSize: ".66rem", color: "rgba(255,255,255,.4)", marginTop: 2
-          }}>Check your email for your personalized Sip &amp; Heal Report PDF — free gift from Chai Holistic</div>
+          }}>Check your email for your personalized Sip &amp; Heal Report — a free gift from Chai Holistic</div>
         </div>
       </div>
 
@@ -660,7 +660,7 @@ export default function WellnessProfileModal({ open, onClose }) {
           display: "flex", justifyContent: "center", gap: 20,
           flexWrap: "wrap", marginBottom: 28
         }}>
-          {["Takes 2 minutes", "100% free", "Personalized PDF"].map(f => (
+          {["Takes 2 minutes", "100% free", "Personalized Report"].map(f => (
             <div key={f} style={{
               display: "flex", alignItems: "center", gap: 6,
               fontSize: ".7rem", color: "rgba(255,255,255,.45)"
@@ -792,7 +792,7 @@ export default function WellnessProfileModal({ open, onClose }) {
         }}>
           <span style={{ fontSize: "1rem", flexShrink: 0 }}>🎁</span>
           <p style={{ fontSize: ".72rem", color: "rgba(255,255,255,.5)", margin: 0, lineHeight: 1.7 }}>
-            We'll email you a personalized <strong style={{ color: C.goldLt }}>Sip &amp; Heal Report PDF</strong> — your custom blend guide, brewing ritual, and wellness intentions. Free, always.
+            We'll email you a personalized <strong style={{ color: C.goldLt }}>Sip &amp; Heal Report</strong> — your custom blend guide, daily intention, and wellness ritual. Free, always.
           </p>
         </div>
         {error && (
