@@ -372,7 +372,7 @@ function JellyCard({ j, onOpen }) {
           fontFamily: "'Jost', sans-serif", textAlign: "right",
         }}>View Kit →</div>
         <div style={{ marginTop: 8, background: "rgba(39,92,62,.2)", borderRadius: 8, padding: "6px 10px", fontSize: ".61rem", color: "#8ab89a", lineHeight: 1.5 }}>
-          🧴 6 packs · 🥤 Shaker bottle · 🍯 Honey · <strong style={{color:"#deb96a"}}>${JELLY_KIT_PRICE}</strong>
+          🧴 6 packs · 🥤 Shaker bottle included · 🍯 Honey · <strong style={{color:"#deb96a"}}>${JELLY_KIT_PRICE}</strong>
         </div>
       </div>
     </div>
@@ -579,7 +579,7 @@ function JellyModal({ j, onClose, onAddToCart }) {
                 </div>
               ))}
               <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid rgba(255,255,255,.08)" }}>
-                <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.35)", marginBottom: 6 }}>Also included: shaker bottle · instruction card · raw honey packet</div>
+                <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.35)", marginBottom: 6 }}>Included in every kit: shaker bottle · raw honey packet · instruction card</div>
               </div>
             </div>
 
@@ -600,7 +600,7 @@ function JellyModal({ j, onClose, onAddToCart }) {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                   <div>
                     <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.1rem", color: "white" }}>{j.name} Kit</div>
-                    <div style={{ fontSize: ".68rem", color: "rgba(255,255,255,.5)", marginTop: 2 }}>6 packs · shaker bottle · honey packet · instruction card</div>
+                    <div style={{ fontSize: ".68rem", color: "rgba(255,255,255,.5)", marginTop: 2 }}>6 packs · shaker bottle · raw honey packet · instruction card · everything included</div>
                   </div>
                   <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.4rem", color: "#deb96a", fontWeight: 600 }}>${JELLY_KIT_PRICE}</div>
                 </div>
@@ -743,7 +743,7 @@ export default function JellyPage({ onAddToCart }) {
               <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(192,136,48,.15)", border: "1px solid rgba(192,136,48,.35)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.6rem" }}>🥤</div>
               <div>
                 <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1rem", color: "white", marginBottom: 2 }}>Includes a Shaker Bottle</div>
-                <div style={{ fontSize: ".65rem", color: "rgba(192,136,48,.7)", letterSpacing: ".08em" }}>No blender · No electricity · Works anywhere</div>
+                <div style={{ fontSize: ".65rem", color: "rgba(192,136,48,.7)", letterSpacing: ".08em" }}>Included in every kit — no blender, no electricity, works anywhere</div>
               </div>
             </div>
             {/* Features row */}
@@ -762,11 +762,12 @@ export default function JellyPage({ onAddToCart }) {
             </div>
             {/* Add extra shaker button */}
             <div style={{ flexShrink: 0, textAlign: "center" }}>
-              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.4)", marginBottom: 6 }}>Want a spare?</div>
+              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.4)", marginBottom: 4 }}>One shaker bottle comes with every kit.</div>
+              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.3)", marginBottom: 6 }}>Need an extra for the gym, desk, or a friend?</div>
               <button
                 onClick={() => onAddToCart && onAddToCart({ id: "shaker_extra", name: "Extra Shaker Bottle", price: 8, emoji: "🥤" })}
                 style={{ background: "rgba(192,136,48,.15)", border: "1px solid rgba(192,136,48,.4)", color: "#deb96a", padding: "8px 18px", borderRadius: 50, fontSize: ".68rem", letterSpacing: ".08em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif", cursor: "pointer", whiteSpace: "nowrap" }}>
-                + Add Extra Bottle — $8
+                + Add a Spare Shaker Bottle — $8
               </button>
             </div>
           </div>

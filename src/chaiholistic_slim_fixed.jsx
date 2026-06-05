@@ -851,18 +851,19 @@ export default function ChaiHolistic() {
     .btn-ghost:hover{border-color:var(--sage-d);color:var(--sage-d);}
     .btn-finder{background:var(--gold);color:white;border:none;padding:12px 30px;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;display:flex;align-items:center;gap:8px;}
     .btn-finder:hover{background:#D4943A;transform:translateY(-2px);}
-    .hero-visual{position:relative;height:500px;}
-    .h-card{position:absolute;background:white;overflow:hidden;box-shadow:0 18px 55px rgba(28,26,23,.13);transition:transform .4s;border-radius:20px;}
-    .h-card:hover{transform:rotate(0deg) scale(1.03) !important;}
-    .h-card.c1{width:210px;height:290px;top:20px;left:20px;transform:rotate(-4deg);}
-    .h-card.c2{width:200px;height:270px;top:55px;left:175px;transform:rotate(3deg);}
-    .h-card.c3{width:180px;height:235px;top:195px;left:75px;transform:rotate(-1.5deg);}
-    .h-card.c4{width:160px;height:210px;top:240px;left:220px;transform:rotate(2deg);}
-    .h-card-inner{width:100%;height:65%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
+    .hero-visual{position:relative;height:520px;}
+    .h-card{position:absolute;background:white;overflow:visible;box-shadow:0 18px 55px rgba(28,26,23,.13);transition:transform .4s, z-index 0s;border-radius:20px;}
+    .h-card .h-card-clip{border-radius:20px;overflow:hidden;width:100%;height:100%;}
+    .h-card:hover{transform:rotate(0deg) scale(1.05) !important;z-index:20 !important;}
+    .h-card.c1{width:210px;height:290px;top:20px;left:20px;transform:rotate(-4deg);z-index:4;}
+    .h-card.c2{width:200px;height:270px;top:55px;left:175px;transform:rotate(3deg);z-index:3;}
+    .h-card.c3{width:180px;height:235px;top:195px;left:75px;transform:rotate(-1.5deg);z-index:2;}
+    .h-card.c4{width:160px;height:210px;top:240px;left:220px;transform:rotate(2deg);z-index:1;}
+    .h-card-inner{width:100%;height:65%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-radius:20px 20px 0 0;}
     .h-card-body{padding:11px 13px;}
     .h-card-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);}
     .h-card-tag{font-size:.62rem;color:var(--sage);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
-    .h-badge{position:absolute;bottom:8px;right:0;background:var(--gold);color:white;padding:10px 14px;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:2;border-radius:14px;transition:all .2s;}
+    .h-badge{position:absolute;bottom:-48px;right:0;background:var(--gold);color:white;padding:10px 14px;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:2;border-radius:14px;transition:all .2s;}
     .h-badge:hover{background:var(--bark);box-shadow:0 8px 28px rgba(61,43,31,.4);transform:translateY(-2px);}
     .h-badge small{display:block;font-family:'Jost',sans-serif;font-size:.62rem;font-style:normal;letter-spacing:.1em;opacity:.85;margin-top:2px;}
 
@@ -2275,7 +2276,7 @@ export default function ChaiHolistic() {
                 <span style={{fontSize:"1.2rem",flexShrink:0}}>🥤</span>
                 <div style={{flex:1}}>
                   <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Extra Shaker Bottle — $8</div>
-                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>No-leak lid · stainless ball · 20 oz · dishwasher safe</div>
+                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>One included with your kit — add a spare for gym, desk, or a friend</div>
                 </div>
                 <button onClick={()=>addToCart({id:"shaker_extra",name:"Extra Shaker Bottle",price:8,emoji:"🥤"})}
                   style={{background:"var(--sage-d)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
@@ -2335,6 +2336,9 @@ function HeroCards({ onNav, onOpenRecipe }) {
   const positions = ["c1","c2","c3"];
   const newSection = HERO_NEW_SECTIONS[newIdx];
 
+  // Base z-index per slot — front card highest
+  const BASE_Z = [4, 3, 2];
+
   return (
     <>
       {positions.map((cls, slot) => {
@@ -2342,39 +2346,50 @@ function HeroCards({ onNav, onOpenRecipe }) {
         const isHov = hoveredCard === slot;
         return (
           <div key={cls} className={`h-card ${cls}`}
-            style={{cursor:"pointer", zIndex: isHov ? 10 : undefined}}
+            style={{
+              cursor:"pointer",
+              zIndex: isHov ? 20 : BASE_Z[slot],
+              overflow:"visible",
+            }}
             onClick={() => onOpenRecipe(`w${indices[slot]}`)}
             onMouseEnter={() => { setHoveredCard(slot); setPaused(p => { const n=[...p]; n[slot]=true; return n; }); }}
             onMouseLeave={() => { setHoveredCard(null); setPaused(p => { const n=[...p]; n[slot]=false; return n; }); }}>
-            <div className="h-card-inner" style={{background:`linear-gradient(135deg,${blend.color},#1C1A17)`, transition:"all .4s"}}>
-              {BLEND_EMOJIS_HERO[blend.occasion] || "🍵"}
+            {/* Inner clipping wrapper — clips the card visuals but not the tooltip */}
+            <div style={{width:"100%",height:"100%",borderRadius:20,overflow:"hidden",position:"relative"}}>
+              <div className="h-card-inner" style={{background:`linear-gradient(135deg,${blend.color},#1C1A17)`, transition:"all .4s"}}>
+                {BLEND_EMOJIS_HERO[blend.occasion] || "🍵"}
+              </div>
+              <div className="h-card-body">
+                <div className="h-card-name" style={{transition:"all .3s"}}>{blend.name}</div>
+                <div className="h-card-tag">{blend.occasion}</div>
+              </div>
             </div>
-            <div className="h-card-body">
-              <div className="h-card-name" style={{transition:"all .3s"}}>{blend.name}</div>
-              <div className="h-card-tag">{blend.occasion}</div>
-            </div>
-            {/* Hover preview tooltip */}
+            {/* Tooltip — outside the clipping wrapper so it's never hidden */}
             {isHov && (
               <div style={{
-                position:"absolute", bottom:"calc(100% + 10px)", left:"50%",
-                transform:"translateX(-50%)", width:220,
-                background:"#1C1A17", color:"rgba(255,255,255,.9)",
-                borderRadius:14, padding:"12px 14px",
-                border:"1px solid rgba(196,137,58,.35)",
-                boxShadow:"0 12px 36px rgba(0,0,0,.5)",
-                zIndex:50, pointerEvents:"none",
-                animation:"fadeSlideUp .18s ease",
+                position:"absolute",
+                bottom:"calc(100% + 12px)",
+                left:"50%",
+                transform:"translateX(-50%)",
+                width:230,
+                background:"#1C1A17",
+                borderRadius:14,
+                padding:"14px 16px",
+                border:"1px solid rgba(196,137,58,.4)",
+                boxShadow:"0 16px 48px rgba(0,0,0,.65)",
+                zIndex:100,
+                pointerEvents:"none",
+                whiteSpace:"normal",
               }}>
-                <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:4}}>{blend.occasion} · {blend.steepMin} min steep</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".92rem",color:"white",marginBottom:4}}>{blend.name}</div>
-                <div style={{fontSize:".72rem",color:"rgba(255,255,255,.55)",fontStyle:"italic",marginBottom:8,lineHeight:1.5}}>{blend.tagline}</div>
-                <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:8}}>
+                <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>{blend.occasion} · {blend.steepMin} min steep</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:5}}>{blend.name}</div>
+                <div style={{fontSize:".72rem",color:"rgba(255,255,255,.55)",fontStyle:"italic",marginBottom:10,lineHeight:1.55}}>{blend.tagline}</div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:10}}>
                   {blend.ingredients.slice(0,3).map(h=>(
-                    <span key={h} style={{background:"rgba(255,255,255,.08)",borderRadius:20,padding:"2px 8px",fontSize:".6rem",color:"rgba(255,255,255,.6)"}}>{h}</span>
+                    <span key={h} style={{background:"rgba(255,255,255,.08)",borderRadius:20,padding:"2px 9px",fontSize:".6rem",color:"rgba(255,255,255,.6)"}}>{h}</span>
                   ))}
                 </div>
-                <div style={{fontSize:".65rem",color:"rgba(196,137,58,.8)",letterSpacing:".06em"}}>Click to view recipe →</div>
-                {/* Arrow */}
+                <div style={{fontSize:".65rem",color:"rgba(196,137,58,.85)",letterSpacing:".06em",fontWeight:500}}>Click to view full recipe →</div>
                 <div style={{position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",borderLeft:"7px solid transparent",borderRight:"7px solid transparent",borderTop:"7px solid #1C1A17"}}/>
               </div>
             )}
