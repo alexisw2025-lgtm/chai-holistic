@@ -1261,7 +1261,7 @@ export default function ChaiHolistic() {
     .btn-book:hover{background:#D4943A;transform:translateY(-2px);}
 
     /* MODALS */
-    .modal-ov{position:fixed;inset:0;background:rgba(28,26,23,.6);z-index:800;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1rem;}
+    .modal-ov{display:flex;align-items:center;justify-content:center;position:fixed;inset:0;background:rgba(28,26,23,.6);z-index:800;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1rem;}
     .modal-open{overflow:hidden;}
     .modal{background:var(--parch);max-width:620px;width:100%;max-height:90vh;overflow-y:auto;border-radius:24px;box-shadow:0 24px 80px rgba(28,26,23,.3);}
     .modal-head{padding:26px 28px 18px;border-bottom:1px solid var(--dust);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--parch);border-radius:24px 24px 0 0;z-index:2;}
@@ -1601,7 +1601,7 @@ export default function ChaiHolistic() {
 
       /* Modals */
       .modal{max-height:95vh;border-radius:20px 20px 0 0;position:fixed;bottom:0;left:0;right:0;width:100%;max-width:100%;}
-      .modal-ov{align-items:flex-end;padding:0;}
+      .modal-ov{display:flex;align-items:flex-end;padding:0;}
       .modal-head{border-radius:20px 20px 0 0;}
 
       /* Featured band */
