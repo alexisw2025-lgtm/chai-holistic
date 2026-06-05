@@ -208,25 +208,25 @@ const RINGS = [
 
 const MEN_BLENDS = [
   { id:"men1",  name:"Iron Will Morning",        tagline:"Rise with purpose and power",               price:19.99, color:"#2A1A0A", benefit:"Energy · Drive · Focus",         ingredients:["Ashwagandha Root","Rhodiola Rosea","Ginger Root","Black Pepper","Cinnamon"],           steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"A commanding morning blend built on ashwagandha and rhodiola — two of the most studied adaptogens for male energy, resilience, and mental sharpness.", affirmation:"I rise with intention. Today I build.", warning:"Contains Rhodiola. Avoid if on SSRIs or MAOIs." },
-  { id:"men2",  name:"Deep Recharge Sleep",      tagline:"Testosterone-restoring deep sleep",          price:18.99, color:"#1A1A3A", benefit:"Deep Sleep · Recovery · Hormones",ingredients:["Valerian Root","Passionflower","Ashwagandha Root","Chamomile","Lemon Balm"],           steepMin:10, steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Quality sleep is where testosterone is produced. This blend targets the deep, restorative stages of sleep that most men are chronically missing.", affirmation:"Rest is not weakness. Rest is where I rebuild.", warning:"Contains Valerian Root. Do not drive after use. Not for use during pregnancy." },
+  { id:"men2",  name:"Deep Recharge Sleep",      tagline:"Testosterone-restoring deep sleep",          price:18.99, color:"#1A1A3A", benefit:"Deep Sleep · Recovery · Hormones",ingredients:["Valerian Root","Passionflower","Ashwagandha Root","Chamomile","Lemon Balm"],           steepMin:10, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Quality sleep is where testosterone is produced. This blend targets the deep, restorative stages of sleep that most men are chronically missing.", affirmation:"Rest is not weakness. Rest is where I rebuild.", warning:"Contains Valerian Root. Do not drive after use. Not for use during pregnancy." },
   { id:"men3",  name:"Alpha Brain Focus",        tagline:"Clarity without caffeine or crash",          price:20.99, color:"#1A3A2A", benefit:"Cognition · Memory · Clarity",    ingredients:["Lions Mane Mushroom","Ginkgo Biloba","Peppermint Leaf","Rosemary","Gotu Kola"],        steepMin:7,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Lion's mane and ginkgo biloba are among the most researched herbs for brain function, memory, and cognitive endurance. Zero caffeine. No crash.", affirmation:"My mind is sharp. I think clearly and act decisively.", warning:"Ginkgo Biloba may interact with blood thinners. Consult your doctor if on anticoagulants." },
   { id:"men4",  name:"Heart of a King",          tagline:"Cardiovascular protection",                  price:18.99, color:"#3A0A0A", benefit:"Heart · Circulation · Blood Pressure", ingredients:["Hibiscus Flower","Hawthorn Berry","Motherwort","Lemon Balm","Rose Petals"],          steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Heart disease is the number one killer of men. This blend combines hibiscus (clinically shown to lower blood pressure) with hawthorn for cardiovascular strength.", affirmation:"I protect my heart — the source of my strength.", warning:"May lower blood pressure. If you take antihypertensives, monitor closely and consult your doctor." },
-  { id:"men5",  name:"Testosterone Harmony",     tagline:"Hormonal balance and cortisol control",      price:21.99, color:"#2A1A3A", benefit:"Hormones · Cortisol · Balance",  ingredients:["Ashwagandha Root","Nettle Root","Tongkat Ali","Tribulus Terrestris","Licorice Root"], steepMin:10, steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Modern life chronically elevates cortisol — which directly suppresses testosterone. This blend targets the cortisol-testosterone axis from both directions.", affirmation:"My body is in balance. My hormones serve my purpose.", warning:"Contains Licorice Root — not for use if you have high blood pressure or heart conditions. Not for long-term use without breaks." },
+  { id:"men5",  name:"Testosterone Harmony",     tagline:"Hormonal balance and cortisol control",      price:21.99, color:"#2A1A3A", benefit:"Hormones · Cortisol · Balance",  ingredients:["Ashwagandha Root","Nettle Root","Tongkat Ali","Tribulus Terrestris","Licorice Root"], steepMin:10, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Modern life chronically elevates cortisol — which directly suppresses testosterone. This blend targets the cortisol-testosterone axis from both directions.", affirmation:"My body is in balance. My hormones serve my purpose.", warning:"Contains Licorice Root — not for use if you have high blood pressure or heart conditions. Not for long-term use without breaks." },
   { id:"men6",  name:"Primal Fire Libido",       tagline:"Vitality and desire restoration",            price:22.99, color:"#3A1A0A", benefit:"Libido · Vitality · Drive",      ingredients:["Maca Root","Damiana Leaf","Tribulus Terrestris","Ginger Root","Cinnamon"],            steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Low libido is rarely about one thing — it's stress, hormones, circulation, and energy together. Maca and damiana are among the most respected herbs for male vitality.", affirmation:"My vitality is natural. My desire is healthy and whole.", warning:"Damiana may interact with diabetes medications. Avoid if pregnant (for female partners)." },
   { id:"men7",  name:"Prostate Shield",          tagline:"Prevention and long-term prostate health",   price:20.99, color:"#1A3A1A", benefit:"Prostate · Urinary · Prevention", ingredients:["Saw Palmetto","Nettle Root","Green Tea Leaf","Pumpkin Seed","Turmeric Root"],          steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Saw palmetto and nettle root are the most studied herbs for prostate support. This is a long-term maintenance blend — best started early, not after symptoms appear.", affirmation:"I take care of my body before it asks for help.", warning:"Saw Palmetto may affect PSA test results. Inform your doctor before testing." },
   { id:"men8",  name:"Stress Armour",            tagline:"The physiological reality of male stress",   price:19.99, color:"#3A2A1A", benefit:"Cortisol · Nervous System · Calm", ingredients:["Ashwagandha Root","Rhodiola Rosea","Holy Basil","Lemon Balm","Skullcap"],             steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Chronic stress physically degrades the male body — from testosterone to cardiovascular health. This adaptogenic blend builds real physiological stress resistance.", affirmation:"I am not my stress. I am the stillness underneath it.", warning:"Rhodiola should be avoided by those on antidepressants. Skullcap may enhance sedative effects." },
   { id:"men9",  name:"Muscle and Recovery",      tagline:"Post-training repair and inflammation",      price:19.99, color:"#2A3A1A", benefit:"Recovery · Inflammation · Repair", ingredients:["Turmeric Root","Ginger Root","Tart Cherry","Black Pepper","Boswellia"],               steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Turmeric and tart cherry are evidence-backed for reducing exercise-induced inflammation. This blend supports recovery — so your next session starts stronger.", affirmation:"I give my body what it earned. Rest and recovery are part of the work." },
   { id:"men10", name:"Blood Pressure Balance",   tagline:"The silent killer addressed directly",       price:18.99, color:"#3A0A1A", benefit:"Blood Pressure · Heart · Minerals", ingredients:["Hibiscus Flower","Hawthorn Berry","Celery Seed","Linden Flower","Olive Leaf"],       steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"High blood pressure has no symptoms until it causes a stroke or heart attack. Hibiscus is one of the few herbs with clinical trial data on blood pressure reduction.", affirmation:"I check in with my body. Awareness is the first form of strength.", warning:"May lower blood pressure. Monitor if on antihypertensive medications." },
-  { id:"men11", name:"Meditation and Stillness", tagline:"Permission to go inward",                    price:17.99, color:"#1A2A3A", benefit:"Calm · Presence · Clarity",      ingredients:["Reishi Mushroom","Chamomile","Tulsi Holy Basil","Lemon Balm","Lavender"],              steepMin:10, steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Reishi mushroom has been called the mushroom of spiritual potency for centuries. This blend quiets the nervous system and creates the internal space needed for stillness.", affirmation:"Stillness is not passive. It is where I access my greatest power." },
-  { id:"men12", name:"Bone and Joint Fortress",  tagline:"Structural health for the long game",        price:18.99, color:"#2A2A2A", benefit:"Joints · Bones · Mobility",      ingredients:["Nettle Leaf","Horsetail","Turmeric Root","Boswellia","Ginger Root"],                  steepMin:10, steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Silica from horsetail and nettle, combined with anti-inflammatory turmeric and boswellia. Built for men who want to be physically capable at 60, 70, and beyond.", affirmation:"I invest in my body today for the man I am becoming." },
+  { id:"men11", name:"Meditation and Stillness", tagline:"Permission to go inward",                    price:17.99, color:"#1A2A3A", benefit:"Calm · Presence · Clarity",      ingredients:["Reishi Mushroom","Chamomile","Tulsi Holy Basil","Lemon Balm","Lavender"],              steepMin:10, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Reishi mushroom has been called the mushroom of spiritual potency for centuries. This blend quiets the nervous system and creates the internal space needed for stillness.", affirmation:"Stillness is not passive. It is where I access my greatest power." },
+  { id:"men12", name:"Bone and Joint Fortress",  tagline:"Structural health for the long game",        price:18.99, color:"#2A2A2A", benefit:"Joints · Bones · Mobility",      ingredients:["Nettle Leaf","Horsetail","Turmeric Root","Boswellia","Ginger Root"],                  steepMin:10, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Silica from horsetail and nettle, combined with anti-inflammatory turmeric and boswellia. Built for men who want to be physically capable at 60, 70, and beyond.", affirmation:"I invest in my body today for the man I am becoming." },
   { id:"men13", name:"Metabolic Reset",          tagline:"Visceral fat and insulin sensitivity",       price:19.99, color:"#3A2A0A", benefit:"Metabolism · Fat · Insulin",     ingredients:["Green Tea Leaf","Cinnamon","Fenugreek","Bitter Melon","Ginger Root"],                  steepMin:7,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Visceral fat — the fat around organs — is a uniquely male health risk. Cinnamon and fenugreek are among the most studied herbs for blood sugar and insulin sensitivity.", affirmation:"My metabolism works for me. Every choice I make supports it." },
   { id:"men14", name:"Father's Calm Evening",    tagline:"Intentional decompression",                  price:17.99, color:"#1A2A1A", benefit:"Decompression · Presence · Peace", ingredients:["Chamomile","Lemon Balm","Passionflower","Oat Straw","Lavender"],                      steepMin:8,  steepTemp:"Gentle Heat — steam rising, not boiling", desc:"The transition from work mode to presence is one of the hardest things a father does every day. This blend is designed for that specific 20-minute window.", affirmation:"When I walk in the door, I bring peace. That is my greatest gift." },
   { id:"men15", name:"Pre-Game Performance",     tagline:"Peak output when it matters most",           price:21.99, color:"#0A1A3A", benefit:"Performance · Focus · Endurance", ingredients:["Rhodiola Rosea","Eleuthero Root","Ginseng Root","Peppermint Leaf","Licorice Root"],    steepMin:8,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Rhodiola and eleuthero are used by elite military and athletes for endurance, stress resistance, and peak output under pressure. No synthetic stimulants.", affirmation:"I am prepared. I am capable. I perform at my best.", warning:"Contains Ginseng — avoid if you have high blood pressure. Rhodiola: avoid on SSRIs. Not for evening use." },
-  { id:"men16", name:"Gut and Digestion Restore",tagline:"The gut-brain axis for men",                 price:18.99, color:"#2A1A2A", benefit:"Gut · Digestion · Microbiome",   ingredients:["Slippery Elm","Marshmallow Root","Fennel Seed","Licorice Root","Chamomile"],           steepMin:10, steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Men's gut health is chronically neglected. The gut-brain axis means gut inflammation directly affects mood, focus, and hormonal balance. This blend repairs the lining.", affirmation:"My gut is the foundation of everything. I take care of it." },
-  { id:"men17", name:"Liver Detox Recovery",     tagline:"Repair without shame",                       price:19.99, color:"#1A3A0A", benefit:"Liver · Detox · Regeneration",  ingredients:["Milk Thistle","Dandelion Root","Artichoke Leaf","Turmeric Root","Burdock Root"],        steepMin:10, steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Silymarin in milk thistle is one of the most researched hepatoprotective compounds on earth. This blend supports liver regeneration — without judgment about how it got there.", affirmation:"I give my liver what it needs to heal. I am not my past habits." },
+  { id:"men16", name:"Gut and Digestion Restore",tagline:"The gut-brain axis for men",                 price:18.99, color:"#2A1A2A", benefit:"Gut · Digestion · Microbiome",   ingredients:["Slippery Elm","Marshmallow Root","Fennel Seed","Licorice Root","Chamomile"],           steepMin:10, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Men's gut health is chronically neglected. The gut-brain axis means gut inflammation directly affects mood, focus, and hormonal balance. This blend repairs the lining.", affirmation:"My gut is the foundation of everything. I take care of it." },
+  { id:"men17", name:"Liver Detox Recovery",     tagline:"Repair without shame",                       price:19.99, color:"#1A3A0A", benefit:"Liver · Detox · Regeneration",  ingredients:["Milk Thistle","Dandelion Root","Artichoke Leaf","Turmeric Root","Burdock Root"],        steepMin:10, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Silymarin in milk thistle is one of the most researched hepatoprotective compounds on earth. This blend supports liver regeneration — without judgment about how it got there.", affirmation:"I give my liver what it needs to heal. I am not my past habits." },
   { id:"men18", name:"Vision and Eye Protection",tagline:"Screen damage addressed directly",           price:18.99, color:"#0A2A3A", benefit:"Eyes · Antioxidants · Protection", ingredients:["Bilberry Leaf","Eyebright","Green Tea Leaf","Ginkgo Biloba","Rosehip"],                 steepMin:7,  steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Bilberry anthocyanins and eyebright have been used for centuries for eye health. Combined with ginkgo for circulation to the optic nerve — built for the screen-heavy modern man.", affirmation:"I protect what allows me to see the people I love.", warning:"Ginkgo may interact with blood thinners. Consult your doctor if on anticoagulants." },
   { id:"men19", name:"Brotherhood Connection",   tagline:"For the men carrying it alone",              price:17.99, color:"#2A0A3A", benefit:"Mood · Connection · Openness",   ingredients:["St Johns Wort","Lemon Balm","Passionflower","Rose Petals","Oat Straw"],                steepMin:8,  steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Loneliness and emotional isolation are among the biggest unaddressed health crises in men's lives. St. John's Wort and lemon balm support mood and openness.", affirmation:"I do not have to carry this alone. Asking for help is strength.", warning:"St. John's Wort interacts with MANY medications including antidepressants, birth control, and blood thinners. Consult your doctor before use." },
-  { id:"men20", name:"The Elder's Wisdom",       tagline:"Longevity, depth, and ageing with power",    price:22.99, color:"#3A2A1A", benefit:"Longevity · Antioxidants · Clarity", ingredients:["Reishi Mushroom","Ashwagandha Root","Gotu Kola","Turmeric Root","Ginkgo Biloba"],    steepMin:12, steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Reishi, ashwagandha, and gotu kola are among the world's most revered longevity herbs. This blend is for the man who is building something that lasts — in his body and his legacy.", affirmation:"I age with power. Each year adds depth, not just years.", warning:"Ginkgo may interact with blood thinners. Consult your doctor if on anticoagulants or medications." },
+  { id:"men20", name:"The Elder's Wisdom",       tagline:"Longevity, depth, and ageing with power",    price:22.99, color:"#3A2A1A", benefit:"Longevity · Antioxidants · Clarity", ingredients:["Reishi Mushroom","Ashwagandha Root","Gotu Kola","Turmeric Root","Ginkgo Biloba"],    steepMin:12, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"Reishi, ashwagandha, and gotu kola are among the world's most revered longevity herbs. This blend is for the man who is building something that lasts — in his body and his legacy.", affirmation:"I age with power. Each year adds depth, not just years.", warning:"Ginkgo may interact with blood thinners. Consult your doctor if on anticoagulants or medications." },
 ];
 
 const SEASONAL_PICKS = {
@@ -310,8 +310,8 @@ function LinkUrlInput({ onCommit }) {
 
 
 function MensWellness({ onNav }) {
-  const [filter, setFilter] = useState("all");
-  const [selected, setSelected] = useState(null);
+  const [filter, setFilter] = React.useState("all");
+  const [selected, setSelected] = React.useState(null);
 
   const CATEGORIES = [
     { key:"all",      label:"All 20 Blends",       emoji:"⚡" },
@@ -455,6 +455,17 @@ function MensWellness({ onNav }) {
                 </div>
               </div>
 
+              {/* Cup value info */}
+              {selected.oz && (
+                <div style={{background:"rgba(82,184,130,.06)",border:"1px solid rgba(82,184,130,.18)",borderRadius:10,padding:"12px 14px",marginBottom:16,fontFamily:"Jost,sans-serif",fontSize:".75rem"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+                    <span style={{color:"rgba(255,255,255,.6)"}}>📦 {selected.oz}oz bag · ~{selected.oz * selected.cupsPerOz} cups · {selected.servingSize}/cup</span>
+                    <span style={{background:"rgba(196,137,58,.2)",color:"rgba(196,137,58,.9)",padding:"2px 10px",borderRadius:50,fontWeight:500,fontSize:".7rem"}}>${(selected.price / (selected.oz * selected.cupsPerOz)).toFixed(2)}/cup</span>
+                  </div>
+                  <div style={{color:"rgba(255,255,255,.3)",marginTop:4,fontSize:".66rem"}}>vs. $5–$7 energy drink · Real support without synthetic stimulants</div>
+                </div>
+              )}
+
               <div style={{background:"rgba(196,137,58,.08)",border:"1px solid rgba(196,137,58,.2)",borderRadius:12,padding:"16px",marginBottom: selected.warning ? 12 : 20}}>
                 <div style={{fontSize:".62rem",letterSpacing:".16em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6,fontFamily:"Jost,sans-serif"}}>Daily Affirmation</div>
                 <p style={{fontSize:".82rem",fontStyle:"italic",color:"rgba(247,242,234,.85)",lineHeight:1.7,margin:0,fontFamily:"Playfair Display,serif"}}>"{selected.affirmation}"</p>
@@ -468,9 +479,13 @@ function MensWellness({ onNav }) {
               )}
 
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:4}}>
-                <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.4rem",color:"rgba(196,137,58,.9)",fontWeight:700}}>${selected.price.toFixed(2)}</div>
-                <button style={{background:"linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,110,40,.9))",border:"none",color:"#0D0D1A",borderRadius:40,padding:"10px 28px",fontSize:".72rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700}}>
-                  Add to Cart
+                <div>
+                  <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.4rem",color:"rgba(196,137,58,.9)",fontWeight:700}}>${selected.price.toFixed(2)}</div>
+                  {selected.oz && <div style={{fontSize:".65rem",color:"rgba(255,255,255,.4)",marginTop:2}}>~{selected.oz * selected.cupsPerOz} cups · {selected.servingSize}/cup</div>}
+                </div>
+                <button onClick={()=>{ window._chaiAddToCart && window._chaiAddToCart({...selected,emoji:"🍵"}); setSelected(null); }}
+                  style={{background:"linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,110,40,.9))",border:"none",color:"#0D0D1A",borderRadius:40,padding:"10px 28px",fontSize:".72rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700}}>
+                  🛒 Add to Cart — ${selected.price.toFixed(2)}
                 </button>
               </div>
             </div>
@@ -613,8 +628,7 @@ export default function ChaiHolistic() {
     faq:         [["↩ Home","home-page"],["↑ Top","sec-faq-top"],["FAQ","sec-faq-content"]],
     men:         [["↩ Home","home-page"],["↑ Top","sec-men-top"],["Blends","sec-men-blends"]],
     mocktails:   [["↩ Home","home-page"],["↑ Top","sec-mkt-top"],["Wellness","sec-mkt-wellness"],["Social","sec-mkt-social"]],
-    jelly:       [["↩ Home","home-page"],["↑ Top","sec-jelly-top"],["Kits","sec-jelly-grid"]],
-    seamoss:     [["↩ Home","home-page"],["↑ Top","sec-seamoss-top"],["Why Sea Moss","sec-seamoss-why"],["Recipes","sec-seamoss-grid"]],
+    "tea-library": [["↩ Home","home-page"],["↑ Top","sec-tl-top"],["Search","sec-tl-search"],["Collection","sec-tl-grid"]],
   };
 
   useEffect(() => {
@@ -687,6 +701,11 @@ export default function ChaiHolistic() {
     setCart(p => { const ex = p.find(i=>i.id===item.id); return ex ? p.map(i=>i.id===item.id?{...i,qty:i.qty+1}:i) : [...p,{...item,qty:1,type}]; });
     toast(`✦ ${item.name} added to cart`);
   };
+  // Expose for cross-component navigation and cart access
+  if (typeof window !== "undefined") {
+    window._chaiAddToCart = addToCart;
+    window._chaiNav = (p) => nav(p);
+  }
   const removeItem = id => setCart(p => p.filter(i => i.id !== id));
   const changeQty = (id,d) => setCart(p => p.map(i => i.id===id?{...i,qty:Math.max(1,i.qty+d)}:i));
   const cartTotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
@@ -851,19 +870,18 @@ export default function ChaiHolistic() {
     .btn-ghost:hover{border-color:var(--sage-d);color:var(--sage-d);}
     .btn-finder{background:var(--gold);color:white;border:none;padding:12px 30px;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;display:flex;align-items:center;gap:8px;}
     .btn-finder:hover{background:#D4943A;transform:translateY(-2px);}
-    .hero-visual{position:relative;height:520px;}
-    .h-card{position:absolute;background:white;overflow:visible;box-shadow:0 18px 55px rgba(28,26,23,.13);transition:transform .4s, z-index 0s;border-radius:20px;}
-    .h-card .h-card-clip{border-radius:20px;overflow:hidden;width:100%;height:100%;}
-    .h-card:hover{transform:rotate(0deg) scale(1.05) !important;z-index:20 !important;}
-    .h-card.c1{width:210px;height:290px;top:20px;left:20px;transform:rotate(-4deg);z-index:4;}
-    .h-card.c2{width:200px;height:270px;top:55px;left:175px;transform:rotate(3deg);z-index:3;}
-    .h-card.c3{width:180px;height:235px;top:195px;left:75px;transform:rotate(-1.5deg);z-index:2;}
-    .h-card.c4{width:160px;height:210px;top:240px;left:220px;transform:rotate(2deg);z-index:1;}
-    .h-card-inner{width:100%;height:65%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-radius:20px 20px 0 0;}
+    .hero-visual{position:relative;height:500px;}
+    .h-card{position:absolute;background:white;overflow:hidden;box-shadow:0 18px 55px rgba(28,26,23,.13);transition:transform .4s;border-radius:20px;}
+    .h-card:hover{transform:rotate(0deg) scale(1.03) !important;}
+    .h-card.c1{width:210px;height:290px;top:20px;left:20px;transform:rotate(-4deg);}
+    .h-card.c2{width:200px;height:270px;top:55px;left:175px;transform:rotate(3deg);}
+    .h-card.c3{width:180px;height:235px;top:195px;left:75px;transform:rotate(-1.5deg);}
+    .h-card.c4{width:160px;height:210px;top:240px;left:220px;transform:rotate(2deg);}
+    .h-card-inner{width:100%;height:65%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
     .h-card-body{padding:11px 13px;}
     .h-card-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);}
     .h-card-tag{font-size:.62rem;color:var(--sage);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
-    .h-badge{position:absolute;bottom:-48px;right:0;background:var(--gold);color:white;padding:10px 14px;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:2;border-radius:14px;transition:all .2s;}
+    .h-badge{position:absolute;bottom:28px;right:0;background:var(--gold);color:white;padding:14px 18px;font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:5;border-radius:16px;transition:all .2s;}
     .h-badge:hover{background:var(--bark);box-shadow:0 8px 28px rgba(61,43,31,.4);transform:translateY(-2px);}
     .h-badge small{display:block;font-family:'Jost',sans-serif;font-size:.62rem;font-style:normal;letter-spacing:.1em;opacity:.85;margin-top:2px;}
 
@@ -2256,34 +2274,6 @@ export default function ChaiHolistic() {
             </div>
           )}
           <div className="drw-foot">
-            {/* Honey add-on — shows when kit is in cart */}
-            {cart.some(i => i.id && i.id.includes('_kit')) && !cart.some(i => i.id === 'honey_jar') && (
-              <div style={{background:"rgba(192,136,48,.08)",border:"1px dashed rgba(192,136,48,.35)",borderRadius:12,padding:"10px 14px",marginBottom:8,display:"flex",alignItems:"center",gap:10}}>
-                <span style={{fontSize:"1.2rem",flexShrink:0}}>🍯</span>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Raw Honey Jar — $7</div>
-                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>Your kit recipe calls for raw honey</div>
-                </div>
-                <button onClick={()=>addToCart({id:"honey_jar",name:"Raw Honey Jar",price:7,emoji:"🍯"})}
-                  style={{background:"var(--gold)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
-                  + Add
-                </button>
-              </div>
-            )}
-            {/* Extra shaker bottle add-on */}
-            {cart.some(i => i.id && i.id.includes('_kit')) && !cart.some(i => i.id === 'shaker_extra') && (
-              <div style={{background:"rgba(74,114,80,.06)",border:"1px dashed rgba(74,114,80,.3)",borderRadius:12,padding:"10px 14px",marginBottom:10,display:"flex",alignItems:"center",gap:10}}>
-                <span style={{fontSize:"1.2rem",flexShrink:0}}>🥤</span>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Extra Shaker Bottle — $8</div>
-                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>One included with your kit — add a spare for gym, desk, or a friend</div>
-                </div>
-                <button onClick={()=>addToCart({id:"shaker_extra",name:"Extra Shaker Bottle",price:8,emoji:"🥤"})}
-                  style={{background:"var(--sage-d)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
-                  + Add
-                </button>
-              </div>
-            )}
             <div className="d-sub"><span className="d-sub-l">Subtotal</span><span className="d-sub-r">${cartTotal.toFixed(2)}</span></div>
             <button className="btn-chk" disabled={cart.length===0}>Continue to Checkout</button>
           </div>
@@ -2293,153 +2283,12 @@ export default function ChaiHolistic() {
   };
 
   // --- HOME -----------------------------------------------------------------
-// ── Auto-rotating hero cards ──────────────────────────────────────────────────
-const HERO_NEW_SECTIONS = [
-  {page:"jelly",   emoji:"🌊", name:"Jelly Kits",      tag:"New · Kit Ships to You",  color:"#1a3a2a", desc:"13 all-natural agar & herb jelly recipes. Kit includes 6 packs + shaker bottle."},
-  {page:"seamoss", emoji:"🌿", name:"Sea Moss Gel",     tag:"New · Grandmother's Recipe", color:"#0a3a2a", desc:"15 flavored sea moss gel kits. 92 of 102 minerals. Pure Caribbean tradition."},
-  {page:"men",     emoji:"⚡", name:"Men's Wellness",   tag:"New · 20 Blends",         color:"#1a1a3a", desc:"20 blends built for the male body. Testosterone, heart, stress, prostate & more."},
-];
-
-const BLEND_EMOJIS_HERO = {"Morning":"🌅","Evening":"🌙","Seasonal":"🌺","Wellness":"🌿"};
-
-function HeroCards({ onNav, onOpenRecipe }) {
-  const [indices, setIndices] = useState([0, 3, 7]);
-  const [newIdx, setNewIdx] = useState(0);
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [paused, setPaused] = useState([false,false,false]);
-
-  // Rotate tea cards — staggered so they don't all change at once
-  useEffect(() => {
-    const timers = [0,1,2].map(slot => {
-      return setInterval(() => {
-        if (!paused[slot]) {
-          setIndices(prev => {
-            const next = [...prev];
-            let n = (next[slot] + 1) % BLENDS.length;
-            // avoid duplicates
-            while (next.includes(n)) n = (n + 1) % BLENDS.length;
-            next[slot] = n;
-            return next;
-          });
-        }
-      }, 3500 + slot * 1200);
-    });
-    return () => timers.forEach(clearInterval);
-  }, [paused]);
-
-  // Rotate "What's New" card
-  useEffect(() => {
-    const t = setInterval(() => setNewIdx(i => (i+1) % HERO_NEW_SECTIONS.length), 3000);
-    return () => clearInterval(t);
-  }, []);
-
-  const positions = ["c1","c2","c3"];
-  const newSection = HERO_NEW_SECTIONS[newIdx];
-
-  // Base z-index per slot — front card highest
-  const BASE_Z = [4, 3, 2];
-
-  return (
-    <>
-      {positions.map((cls, slot) => {
-        const blend = BLENDS[indices[slot]];
-        const isHov = hoveredCard === slot;
-        return (
-          <div key={cls} className={`h-card ${cls}`}
-            style={{
-              cursor:"pointer",
-              zIndex: isHov ? 20 : BASE_Z[slot],
-              overflow:"visible",
-            }}
-            onClick={() => onOpenRecipe(`w${indices[slot]}`)}
-            onMouseEnter={() => { setHoveredCard(slot); setPaused(p => { const n=[...p]; n[slot]=true; return n; }); }}
-            onMouseLeave={() => { setHoveredCard(null); setPaused(p => { const n=[...p]; n[slot]=false; return n; }); }}>
-            {/* Inner clipping wrapper — clips the card visuals but not the tooltip */}
-            <div style={{width:"100%",height:"100%",borderRadius:20,overflow:"hidden",position:"relative"}}>
-              <div className="h-card-inner" style={{background:`linear-gradient(135deg,${blend.color},#1C1A17)`, transition:"all .4s"}}>
-                {BLEND_EMOJIS_HERO[blend.occasion] || "🍵"}
-              </div>
-              <div className="h-card-body">
-                <div className="h-card-name" style={{transition:"all .3s"}}>{blend.name}</div>
-                <div className="h-card-tag">{blend.occasion}</div>
-              </div>
-            </div>
-            {/* Tooltip — outside the clipping wrapper so it's never hidden */}
-            {isHov && (
-              <div style={{
-                position:"absolute",
-                bottom:"calc(100% + 12px)",
-                left:"50%",
-                transform:"translateX(-50%)",
-                width:230,
-                background:"#1C1A17",
-                borderRadius:14,
-                padding:"14px 16px",
-                border:"1px solid rgba(196,137,58,.4)",
-                boxShadow:"0 16px 48px rgba(0,0,0,.65)",
-                zIndex:100,
-                pointerEvents:"none",
-                whiteSpace:"normal",
-              }}>
-                <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>{blend.occasion} · {blend.steepMin} min steep</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:5}}>{blend.name}</div>
-                <div style={{fontSize:".72rem",color:"rgba(255,255,255,.55)",fontStyle:"italic",marginBottom:10,lineHeight:1.55}}>{blend.tagline}</div>
-                <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:10}}>
-                  {blend.ingredients.slice(0,3).map(h=>(
-                    <span key={h} style={{background:"rgba(255,255,255,.08)",borderRadius:20,padding:"2px 9px",fontSize:".6rem",color:"rgba(255,255,255,.6)"}}>{h}</span>
-                  ))}
-                </div>
-                <div style={{fontSize:".65rem",color:"rgba(196,137,58,.85)",letterSpacing:".06em",fontWeight:500}}>Click to view full recipe →</div>
-                <div style={{position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",borderLeft:"7px solid transparent",borderRight:"7px solid transparent",borderTop:"7px solid #1C1A17"}}/>
-              </div>
-            )}
-          </div>
-        );
-      })}
-
-      {/* What's New rotating spotlight card */}
-      <div className="h-card c4"
-        style={{cursor:"pointer", overflow:"visible", zIndex: hoveredCard === 3 ? 10 : undefined}}
-        onClick={() => onNav(newSection.page)}
-        onMouseEnter={() => setHoveredCard(3)}
-        onMouseLeave={() => setHoveredCard(null)}>
-        <div className="h-card-inner" style={{background:`linear-gradient(135deg,${newSection.color},#0a0a0a)`, transition:"all .6s"}}>
-          <span style={{fontSize:"1.8rem", transition:"all .4s"}}>{newSection.emoji}</span>
-        </div>
-        <div className="h-card-body">
-          <div className="h-card-name" style={{fontSize:".78rem", transition:"all .4s"}}>{newSection.name}</div>
-          <div className="h-card-tag" style={{color:"#c08830", fontSize:".58rem"}}>{newSection.tag}</div>
-        </div>
-        {/* Pulse dot */}
-        <div style={{position:"absolute",top:8,right:8,width:7,height:7,borderRadius:"50%",background:"#c08830",boxShadow:"0 0 0 3px rgba(192,136,48,.25)",animation:"pulse 2s infinite"}}/>
-        {/* Hover preview */}
-        {hoveredCard === 3 && (
-          <div style={{
-            position:"absolute", bottom:"calc(100% + 10px)", left:"50%",
-            transform:"translateX(-50%)", width:210,
-            background:"#1C1A17", borderRadius:14, padding:"12px 14px",
-            border:"1px solid rgba(196,137,58,.35)",
-            boxShadow:"0 12px 36px rgba(0,0,0,.5)",
-            zIndex:50, pointerEvents:"none",
-          }}>
-            <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6}}>✦ New Section</div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"white",marginBottom:6}}>{newSection.name}</div>
-            <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.6,marginBottom:8}}>{newSection.desc}</div>
-            <div style={{fontSize:".65rem",color:"rgba(196,137,58,.8)"}}>Click to explore →</div>
-            <div style={{position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",borderLeft:"7px solid transparent",borderRight:"7px solid transparent",borderTop:"7px solid #1C1A17"}}/>
-          </div>
-        )}
-      </div>
-    </>
-  );
-}
-
   const Home = () => {
     return (
     <div>
       {/* SEASONAL BANNER */}
       {seasonalBlends.length > 0 && (
-        <div className="season-banner" style={{marginTop:4}}>
+        <div className="season-banner" style={{marginTop:148}}>
           <span className="season-banner-txt">✦ {MONTH_NAMES[currentMonth]} pick:</span>
           {seasonalBlends.map(b=>(
             <span key={b.id}>
@@ -2506,7 +2355,30 @@ function HeroCards({ onNav, onOpenRecipe }) {
             </div>
           </div>
           <div className="hero-visual">
-            <HeroCards onNav={nav} onOpenRecipe={(id)=>{nav("recipes");setTimeout(()=>setActiveRecipe(id),150);}} />
+            {[{cls:"c1",name:"2AM Reset",occ:"Evening",e:"🍵",filter:"Evening"},{cls:"c2",name:"Morning Rise",occ:"Morning",e:"🌿",filter:"Morning"},{cls:"c3",name:"Rose & Hibiscus",occ:"Seasonal",e:"🌺",filter:"Seasonal"}].map(c=>(
+              <div key={c.cls} className={`h-card ${c.cls}`} style={{cursor:"pointer"}}
+                onClick={()=>{nav("shop");setBlendFilter(c.filter);}}
+                onMouseEnter={e=>e.currentTarget.style.transform="translateY(-4px) scale(1.03)"}
+                onMouseLeave={e=>e.currentTarget.style.transform=""}>
+                <div className="h-card-inner" style={{background:`linear-gradient(135deg,${c.cls==="c2"?"#3A6B3A":c.cls==="c3"?"#8B2A4A":"#4A3728"},#1C1A17)`}}>{c.e}</div>
+                <div className="h-card-body"><div className="h-card-name">{c.name}</div><div className="h-card-tag">{c.occ}</div></div>
+              </div>
+            ))}
+            {/* Jelly Kit highlight card */}
+            <div
+              className="h-card c4"
+              style={{cursor:"pointer",overflow:"hidden"}}
+              onClick={()=>nav("jelly")}
+              onMouseEnter={e=>e.currentTarget.style.transform="translateY(-4px) scale(1.03)"}
+              onMouseLeave={e=>e.currentTarget.style.transform="rotate(2deg)"}>
+              <div className="h-card-inner" style={{background:"linear-gradient(135deg,#1a3a2a,#2a1a0a)"}}>🌊</div>
+              <div className="h-card-body">
+                <div className="h-card-name">Jelly Kits</div>
+                <div className="h-card-tag" style={{color:"#c08830"}}>New · Coming Soon</div>
+              </div>
+              {/* gold pulse dot */}
+              <div style={{position:"absolute",top:10,right:10,width:8,height:8,borderRadius:"50%",background:"#c08830",boxShadow:"0 0 0 3px rgba(192,136,48,.3)",animation:"pulse 2s infinite"}}/>
+            </div>
             <div className="h-badge" style={{cursor:"pointer"}} onClick={()=>nav("recipes")}>Sip &amp; Heal<small>40 Recipes from the book</small></div>
           </div>
         </div>
@@ -2610,7 +2482,6 @@ function HeroCards({ onNav, onOpenRecipe }) {
               {icon:"💰",title:"Cost Per Cup",sub:"vs. a $5 coffee — always shown",action:()=>nav("shop"),btn:"Shop"},
               {icon:"✨",title:"Seasonal Picks",sub:"This month's best blends",action:()=>nav("shop"),btn:"See"},
               {icon:"🫖",title:"Brew Tools",sub:"Cups, teapots & ritual essentials",action:()=>{nav("shop");setTimeout(()=>{const el=document.getElementById("sec-shop-tools");if(el)el.scrollIntoView({behavior:"smooth"});},120);},btn:"Shop"},
-              {icon:"💊",title:"Supplements",sub:"Critical nutrients — coming soon",action:()=>{},btn:"Soon",disabled:true},
             ].map(f=>(
               <div key={f.title}
                 onClick={f.action}
@@ -5419,12 +5290,12 @@ Thank you!`);
         {page==="shop"&&<Shop/>}
         {page==="recipes"&&<Recipes/>}
         {page==="mocktails"&&<MocktailsPage/>}
-        {page==="jelly"&&<JellyPage onAddToCart={addToCart}/>}
-        {page==="seamoss"&&<SeaMossPage onAddToCart={addToCart}/>}
+        {page==="jelly"&&<JellyPage/>}
+        {page==="seamoss"&&<SeaMossPage/>}
         {page==="rings"&&<Rings/>}
         {page==="faq"&&<FAQPage/>}
         {page==="men"&&<MensWellness onNav={nav}/>}
-        {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)}/>}
+        {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart}/>}
       </div>
 
       {/* 2AM OVERLAY   floats on top; page underneath stays mounted */}
@@ -5544,7 +5415,6 @@ Thank you!`);
               <span className="ft-lnk" onClick={()=>nav("mocktails")}>🍹 Mocktail Recipes</span>
               <span className="ft-lnk" onClick={()=>nav("jelly")}>🌊 Jelly Kits</span>
               <span className="ft-lnk" onClick={()=>nav("seamoss")}>🌿 Sea Moss Gel</span>
-              <span className="ft-lnk" style={{opacity:.55,cursor:"default"}}>💊 Supplements <em style={{fontSize:".6rem",color:"var(--gold)"}}>· Coming Soon</em></span>
               <span className="ft-lnk" onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
               <span className="ft-lnk" onClick={()=>setRitualOpen(true)}>☀ Build My Ritual</span>
               <span className="ft-lnk" onClick={()=>setTrackerOpen(true)}>🌿 Cleanse Tracker</span>

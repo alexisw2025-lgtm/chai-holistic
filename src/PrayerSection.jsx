@@ -201,7 +201,7 @@ export default function PrayerSection({ onNavigate }) {
           position: relative;
           width: 100%;
           overflow: hidden;
-          background: #080f0a;
+          background: #0f2418;
           border: 1px solid rgba(255,255,255,.06);
           border-radius: 20px;
           margin: 6px 0;

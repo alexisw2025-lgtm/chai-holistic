@@ -908,7 +908,7 @@ function RecipeModal({ r, onClose, onAddToCart }) {
 const SEAMOSS_KIT_PRICE = 32;
 const SEAMOSS_BUNDLE_PRICE = 52;
 
-const SM_KITCHEN = ["spring water","water","ice","fresh ","lemon juice","lime juice","coconut milk","oat milk","almond milk","fresh fruit","fresh mango","fresh strawberries","fresh lychees","fresh mint","fresh ginger","whole lychees"];
+const SM_KITCHEN = ["spring water","water","ice","lemon juice","lime juice","coconut milk","oat milk","almond milk","fresh mango","fresh strawberries","fresh lychees","fresh mint","fresh ginger","whole lychees"];
 
 function isSmKitchen(ing) {
   const lower = ing.toLowerCase();
@@ -1269,7 +1269,7 @@ export default function SeaMossPage({ onAddToCart }) {
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "center" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
-              <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(26,138,106,.15)", border: "1px solid rgba(26,138,106,.35)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.6rem" }}>🥤</div>
+              <div style={{ width: 72, height: 72, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(26,138,106,.3)", flexShrink: 0 }}><img src="/shaker-bottle.jpg" alt="Chai Holistic Shaker Bottle" style={{ width: "100%", height: "100%", objectFit: "cover" }}/></div>
               <div>
                 <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1rem", color: "white", marginBottom: 2 }}>Includes a Shaker Bottle</div>
                 <div style={{ fontSize: ".65rem", color: "#2aaa85", letterSpacing: ".08em" }}>Included in every kit — no blender, no electricity, works anywhere</div>

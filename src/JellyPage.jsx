@@ -740,7 +740,7 @@ export default function JellyPage({ onAddToCart }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "center" }}>
             {/* Icon + headline */}
             <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
-              <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(192,136,48,.15)", border: "1px solid rgba(192,136,48,.35)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.6rem" }}>🥤</div>
+              <div style={{ width: 72, height: 72, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(192,136,48,.3)", flexShrink: 0 }}><img src="/shaker-bottle.jpg" alt="Chai Holistic Shaker Bottle" style={{ width: "100%", height: "100%", objectFit: "cover" }}/></div>
               <div>
                 <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1rem", color: "white", marginBottom: 2 }}>Includes a Shaker Bottle</div>
                 <div style={{ fontSize: ".65rem", color: "rgba(192,136,48,.7)", letterSpacing: ".08em" }}>Included in every kit — no blender, no electricity, works anywhere</div>

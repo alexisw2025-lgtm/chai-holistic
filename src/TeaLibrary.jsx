@@ -279,31 +279,33 @@ function EmailCapture({ blendName, signupType, onDone }) {
   );
 }
 
-function OrderSection({ blendName }) {
-  const [teaState,   setTeaState]   = useState("idle");   // idle | capturing | done
+function OrderSection({ blendName, onAddToCart }) {
+  const [teaState,   setTeaState]   = useState("idle");   // idle | added
   const [herbsState, setHerbsState] = useState("idle");
-  const [waitState,  setWaitState]  = useState("idle");
+  const [notifyState, setNotifyState] = useState("idle"); // idle | capturing | done
 
-  const CONFIRM = "You're on the list. We'll notify you the moment this blend is available.";
+  // Find the blend price from the blend name
+  const BLEND_PRICES = {
+    default: 18.99,
+  };
 
-  const card = (state, setState, signupType, icon, label) => (
-    <div style={{ flex:1, minWidth:0, background:"rgba(255,255,255,.05)", border:"1px solid rgba(82,184,130,.18)", borderRadius:14, padding:"18px 16px 16px", display:"flex", flexDirection:"column", alignItems:"center", gap:10, textAlign:"center" }}>
+  const card = (state, setState, icon, label, desc, price) => (
+    <div style={{ flex:1, minWidth:0, background:"rgba(255,255,255,.05)", border:`1px solid ${state==="added"?"rgba(82,184,130,.5)":"rgba(82,184,130,.18)"}`, borderRadius:14, padding:"18px 16px 16px", display:"flex", flexDirection:"column", alignItems:"center", gap:10, textAlign:"center", transition:"border-color .2s" }}>
       <span style={{ fontSize:28 }}>{icon}</span>
       <div style={{ fontFamily:"'Playfair Display',serif", fontSize:13, fontWeight:600, color:"#fff", lineHeight:1.25 }}>{label}</div>
-      <span style={{ fontFamily:"'Cinzel',serif", fontSize:8, fontWeight:600, letterSpacing:".22em", textTransform:"uppercase", color:"rgba(192,136,48,.8)", background:"rgba(192,136,48,.1)", border:"1px solid rgba(192,136,48,.25)", borderRadius:20, padding:"3px 10px" }}>
-        Coming Soon
-      </span>
-      {state === "done" ? (
-        <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11, color:"#52b882", lineHeight:1.5, textAlign:"center" }}>{CONFIRM}</div>
-      ) : state === "capturing" ? (
-        <EmailCapture blendName={blendName} signupType={signupType} onDone={() => setState("done")} />
+      <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11, color:"rgba(255,255,255,.45)", lineHeight:1.5, textAlign:"center" }}>{desc}</div>
+      <div style={{ fontFamily:"'Cinzel',serif", fontSize:11, fontWeight:600, color:"rgba(192,136,48,.9)" }}>${price.toFixed(2)}</div>
+      {state === "added" ? (
+        <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11, color:"#52b882", lineHeight:1.5, display:"flex", alignItems:"center", gap:6 }}>
+          <span>✓</span> Added to cart
+        </div>
       ) : (
         <button
-          onClick={() => setState("capturing")}
-          style={{ marginTop:2, fontFamily:"'Cinzel',serif", fontSize:8.5, fontWeight:500, letterSpacing:".15em", textTransform:"uppercase", color:"#c08830", background:"rgba(192,136,48,.1)", border:"1px solid rgba(192,136,48,.35)", borderRadius:20, padding:"7px 14px", cursor:"pointer", transition:"all .18s", whiteSpace:"nowrap" }}
-          onMouseEnter={e => { e.currentTarget.style.background="rgba(192,136,48,.2)"; e.currentTarget.style.borderColor="rgba(192,136,48,.6)"; }}
-          onMouseLeave={e => { e.currentTarget.style.background="rgba(192,136,48,.1)"; e.currentTarget.style.borderColor="rgba(192,136,48,.35)"; }}>
-          Notify Me When Available
+          onClick={() => { setState("added"); onAddToCart && onAddToCart({ id: `tl-${blendName}-${label}`, name: `${blendName} — ${label}`, price, emoji: icon }); }}
+          style={{ marginTop:2, fontFamily:"'Cinzel',serif", fontSize:8.5, fontWeight:500, letterSpacing:".15em", textTransform:"uppercase", color:"#0d1a11", background:"#52b882", border:"none", borderRadius:20, padding:"9px 16px", cursor:"pointer", transition:"all .18s", whiteSpace:"nowrap" }}
+          onMouseEnter={e => { e.currentTarget.style.background="#7dd9a8"; }}
+          onMouseLeave={e => { e.currentTarget.style.background="#52b882"; }}>
+          🛒 Add to Cart
         </button>
       )}
     </div>
@@ -321,32 +323,34 @@ function OrderSection({ blendName }) {
 
       {/* two option cards */}
       <div style={{ padding:"16px 16px 0", display:"flex", gap:12 }}>
-        {card(teaState,   setTeaState,   "tea",   "🍵", "Pre-Blended Tea")}
-        {card(herbsState, setHerbsState, "herbs", "🌿", "Individual Herbs")}
+        {card(teaState, setTeaState, "🍵", "Pre-Blended Tea", "Ready to steep. We blend it for you.", 18.99)}
+        {card(herbsState, setHerbsState, "🌿", "Individual Herbs", "Raw bulk herbs. Blend your own.", 14.99)}
       </div>
 
-      {/* waitlist strip */}
+      {/* personalization / notify strip */}
       <div style={{ margin:"14px 16px 16px", background:"rgba(82,184,130,.06)", border:"1px solid rgba(82,184,130,.18)", borderRadius:10, padding:"12px 16px" }}>
-        {waitState === "done" ? (
-          <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:12, color:"#52b882", lineHeight:1.55 }}>{CONFIRM}</div>
-        ) : waitState === "capturing" ? (
+        {notifyState === "done" ? (
+          <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:12, color:"#52b882", lineHeight:1.55 }}>
+            ✓ We have your details. Your custom blend profile is saved — we'll be in touch as we expand customization options.
+          </div>
+        ) : notifyState === "capturing" ? (
           <div>
             <div style={{ fontFamily:"'Cormorant Garamond',serif", fontStyle:"italic", fontSize:13, color:"rgba(255,255,255,.55)", lineHeight:1.45, marginBottom:10 }}>
-              Be first to know when blends are available at <span style={{ color:"#52b882" }}>chaiholistic.com</span>
+              Want a <strong style={{color:"#52b882"}}>personalized blend</strong> crafted specifically for you? Leave your details and we'll reach out.
             </div>
-            <EmailCapture blendName={blendName} signupType="waitlist" onDone={() => setWaitState("done")} />
+            <EmailCapture blendName={blendName} signupType="custom" onDone={() => setNotifyState("done")} />
           </div>
         ) : (
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:10 }}>
             <span style={{ fontFamily:"'Cormorant Garamond',serif", fontStyle:"italic", fontSize:13, color:"rgba(255,255,255,.55)", lineHeight:1.45 }}>
-              Be first to know when blends are available at <span style={{ color:"#52b882" }}>chaiholistic.com</span>
+              Want this blend <span style={{ color:"#52b882" }}>personalized just for you</span>? We can customize the blend to your specific wellness profile.
             </span>
             <button
-              onClick={() => setWaitState("capturing")}
-              style={{ flexShrink:0, fontFamily:"'Cinzel',serif", fontSize:9, fontWeight:500, letterSpacing:".18em", textTransform:"uppercase", color:"#0d1a11", background:"#52b882", border:"none", borderRadius:20, padding:"9px 18px", cursor:"pointer", transition:"all .18s", whiteSpace:"nowrap" }}
-              onMouseEnter={e => { e.currentTarget.style.background="#7dd9a8"; }}
-              onMouseLeave={e => { e.currentTarget.style.background="#52b882"; }}>
-              Join Waitlist →
+              onClick={() => setNotifyState("capturing")}
+              style={{ flexShrink:0, fontFamily:"'Cinzel',serif", fontSize:9, fontWeight:500, letterSpacing:".18em", textTransform:"uppercase", color:"rgba(192,136,48,.9)", background:"rgba(192,136,48,.1)", border:"1px solid rgba(192,136,48,.35)", borderRadius:20, padding:"9px 18px", cursor:"pointer", transition:"all .18s", whiteSpace:"nowrap" }}
+              onMouseEnter={e => { e.currentTarget.style.background="rgba(192,136,48,.2)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background="rgba(192,136,48,.1)"; }}>
+              ✦ Personalize My Blend →
             </button>
           </div>
         )}
@@ -471,7 +475,7 @@ function BlendModal({ blend, onClose, onPrev, onNext, current, total }) {
             </div>
           </div>
 
-          <OrderSection blendName={blend.name} />
+          <OrderSection blendName={blend.name} onAddToCart={onAddToCart} />
         </div>
 
         {/* nav bar */}
@@ -508,7 +512,7 @@ function NavBtn({ onClick, disabled, children }) {
 }
 
 // ─── Main TeaLibrary component ─────────────────────────────────────────────
-export default function TeaLibrary({ deepBlend, onDeepBlendConsumed }) {
+export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [modalIdx, setModalIdx] = useState(null);
