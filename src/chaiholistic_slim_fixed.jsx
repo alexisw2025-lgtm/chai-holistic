@@ -494,6 +494,149 @@ function MensWellness({ onNav }) {
   );
 }
 
+
+
+// ── Auto-rotating hero cards ──────────────────────────────────────────────────
+const HERO_NEW_SECTIONS = [
+{page:"jelly",   emoji:"🌊", name:"Jelly Kits",      tag:"New · Kit Ships to You",  color:"#1a3a2a", desc:"13 all-natural agar & herb jelly recipes. Kit includes 6 packs + shaker bottle."},
+{page:"seamoss", emoji:"🌿", name:"Sea Moss Gel",     tag:"New · Grandmother's Recipe", color:"#0a3a2a", desc:"15 flavored sea moss gel kits. 92 of 102 minerals. Pure Caribbean tradition."},
+{page:"men",     emoji:"⚡", name:"Men's Wellness",   tag:"New · 20 Blends",         color:"#1a1a3a", desc:"20 blends built for the male body. Testosterone, heart, stress, prostate & more."},
+];
+
+const BLEND_EMOJIS_HERO = {"Morning":"🌅","Evening":"🌙","Seasonal":"🌺","Wellness":"🌿"};
+
+function HeroCards({ onNav, onOpenRecipe }) {
+const [indices, setIndices] = useState([0, 3, 7]);
+const [newIdx, setNewIdx] = useState(0);
+const [hoveredCard, setHoveredCard] = useState(null);
+const [paused, setPaused] = useState([false,false,false]);
+
+// Rotate tea cards — staggered so they don't all change at once
+useEffect(() => {
+  const timers = [0,1,2].map(slot => {
+    return setInterval(() => {
+      if (!paused[slot]) {
+        setIndices(prev => {
+          const next = [...prev];
+          let n = (next[slot] + 1) % BLENDS.length;
+          // avoid duplicates
+          while (next.includes(n)) n = (n + 1) % BLENDS.length;
+          next[slot] = n;
+          return next;
+        });
+      }
+    }, 3500 + slot * 1200);
+  });
+  return () => timers.forEach(clearInterval);
+}, [paused]);
+
+// Rotate "What's New" card
+useEffect(() => {
+  const t = setInterval(() => setNewIdx(i => (i+1) % HERO_NEW_SECTIONS.length), 3000);
+  return () => clearInterval(t);
+}, []);
+
+const positions = ["c1","c2","c3"];
+const newSection = HERO_NEW_SECTIONS[newIdx];
+
+// Base z-index per slot — front card highest
+const BASE_Z = [4, 3, 2];
+
+return (
+  <>
+    {positions.map((cls, slot) => {
+      const blend = BLENDS[indices[slot]];
+      const isHov = hoveredCard === slot;
+      return (
+        <div key={cls} className={`h-card ${cls}`}
+          style={{
+            cursor:"pointer",
+            zIndex: isHov ? 20 : BASE_Z[slot],
+            overflow:"visible",
+          }}
+          onClick={() => onOpenRecipe(`w${indices[slot]}`)}
+          onMouseEnter={() => { setHoveredCard(slot); setPaused(p => { const n=[...p]; n[slot]=true; return n; }); }}
+          onMouseLeave={() => { setHoveredCard(null); setPaused(p => { const n=[...p]; n[slot]=false; return n; }); }}>
+          {/* Inner clipping wrapper — clips the card visuals but not the tooltip */}
+          <div style={{width:"100%",height:"100%",borderRadius:20,overflow:"hidden",position:"relative"}}>
+            <div className="h-card-inner" style={{background:`linear-gradient(135deg,${blend.color},#1C1A17)`, transition:"all .4s"}}>
+              {BLEND_EMOJIS_HERO[blend.occasion] || "🍵"}
+            </div>
+            <div className="h-card-body">
+              <div className="h-card-name" style={{transition:"all .3s"}}>{blend.name}</div>
+              <div className="h-card-tag">{blend.occasion}</div>
+            </div>
+          </div>
+          {/* Tooltip — outside the clipping wrapper so it's never hidden */}
+          {isHov && (
+            <div style={{
+              position:"absolute",
+              bottom:"calc(100% + 12px)",
+              left:"50%",
+              transform:"translateX(-50%)",
+              width:230,
+              background:"#1C1A17",
+              borderRadius:14,
+              padding:"14px 16px",
+              border:"1px solid rgba(196,137,58,.4)",
+              boxShadow:"0 16px 48px rgba(0,0,0,.65)",
+              zIndex:100,
+              pointerEvents:"none",
+              whiteSpace:"normal",
+            }}>
+              <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>{blend.occasion} · {blend.steepMin} min steep</div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:5}}>{blend.name}</div>
+              <div style={{fontSize:".72rem",color:"rgba(255,255,255,.55)",fontStyle:"italic",marginBottom:10,lineHeight:1.55}}>{blend.tagline}</div>
+              <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:10}}>
+                {blend.ingredients.slice(0,3).map(h=>(
+                  <span key={h} style={{background:"rgba(255,255,255,.08)",borderRadius:20,padding:"2px 9px",fontSize:".6rem",color:"rgba(255,255,255,.6)"}}>{h}</span>
+                ))}
+              </div>
+              <div style={{fontSize:".65rem",color:"rgba(196,137,58,.85)",letterSpacing:".06em",fontWeight:500}}>Click to view full recipe →</div>
+              <div style={{position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",borderLeft:"7px solid transparent",borderRight:"7px solid transparent",borderTop:"7px solid #1C1A17"}}/>
+            </div>
+          )}
+        </div>
+      );
+    })}
+
+    {/* What's New rotating spotlight card */}
+    <div className="h-card c4"
+      style={{cursor:"pointer", overflow:"visible", zIndex: hoveredCard === 3 ? 10 : undefined}}
+      onClick={() => onNav(newSection.page)}
+      onMouseEnter={() => setHoveredCard(3)}
+      onMouseLeave={() => setHoveredCard(null)}>
+      <div className="h-card-inner" style={{background:`linear-gradient(135deg,${newSection.color},#0a0a0a)`, transition:"all .6s"}}>
+        <span style={{fontSize:"1.8rem", transition:"all .4s"}}>{newSection.emoji}</span>
+      </div>
+      <div className="h-card-body">
+        <div className="h-card-name" style={{fontSize:".78rem", transition:"all .4s"}}>{newSection.name}</div>
+        <div className="h-card-tag" style={{color:"#c08830", fontSize:".58rem"}}>{newSection.tag}</div>
+      </div>
+      {/* Pulse dot */}
+      <div style={{position:"absolute",top:8,right:8,width:7,height:7,borderRadius:"50%",background:"#c08830",boxShadow:"0 0 0 3px rgba(192,136,48,.25)",animation:"pulse 2s infinite"}}/>
+      {/* Hover preview */}
+      {hoveredCard === 3 && (
+        <div style={{
+          position:"absolute", bottom:"calc(100% + 10px)", left:"50%",
+          transform:"translateX(-50%)", width:210,
+          background:"#1C1A17", borderRadius:14, padding:"12px 14px",
+          border:"1px solid rgba(196,137,58,.35)",
+          boxShadow:"0 12px 36px rgba(0,0,0,.5)",
+          zIndex:50, pointerEvents:"none",
+        }}>
+          <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6}}>✦ New Section</div>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"white",marginBottom:6}}>{newSection.name}</div>
+          <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.6,marginBottom:8}}>{newSection.desc}</div>
+          <div style={{fontSize:".65rem",color:"rgba(196,137,58,.8)"}}>Click to explore →</div>
+          <div style={{position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",borderLeft:"7px solid transparent",borderRight:"7px solid transparent",borderTop:"7px solid #1C1A17"}}/>
+        </div>
+      )}
+    </div>
+  </>
+);
+}
+
 export default function ChaiHolistic() {
   const [page, setPage] = useState("home");
   const [cart, setCart] = useState([]);
@@ -2297,146 +2440,6 @@ export default function ChaiHolistic() {
   };
 
   // --- HOME -----------------------------------------------------------------
-// ── Auto-rotating hero cards ──────────────────────────────────────────────────
-const HERO_NEW_SECTIONS = [
-  {page:"jelly",   emoji:"🌊", name:"Jelly Kits",      tag:"New · Kit Ships to You",  color:"#1a3a2a", desc:"13 all-natural agar & herb jelly recipes. Kit includes 6 packs + shaker bottle."},
-  {page:"seamoss", emoji:"🌿", name:"Sea Moss Gel",     tag:"New · Grandmother's Recipe", color:"#0a3a2a", desc:"15 flavored sea moss gel kits. 92 of 102 minerals. Pure Caribbean tradition."},
-  {page:"men",     emoji:"⚡", name:"Men's Wellness",   tag:"New · 20 Blends",         color:"#1a1a3a", desc:"20 blends built for the male body. Testosterone, heart, stress, prostate & more."},
-];
-
-const BLEND_EMOJIS_HERO = {"Morning":"🌅","Evening":"🌙","Seasonal":"🌺","Wellness":"🌿"};
-
-function HeroCards({ onNav, onOpenRecipe }) {
-  const [indices, setIndices] = useState([0, 3, 7]);
-  const [newIdx, setNewIdx] = useState(0);
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [paused, setPaused] = useState([false,false,false]);
-
-  // Rotate tea cards — staggered so they don't all change at once
-  useEffect(() => {
-    const timers = [0,1,2].map(slot => {
-      return setInterval(() => {
-        if (!paused[slot]) {
-          setIndices(prev => {
-            const next = [...prev];
-            let n = (next[slot] + 1) % BLENDS.length;
-            // avoid duplicates
-            while (next.includes(n)) n = (n + 1) % BLENDS.length;
-            next[slot] = n;
-            return next;
-          });
-        }
-      }, 3500 + slot * 1200);
-    });
-    return () => timers.forEach(clearInterval);
-  }, [paused]);
-
-  // Rotate "What's New" card
-  useEffect(() => {
-    const t = setInterval(() => setNewIdx(i => (i+1) % HERO_NEW_SECTIONS.length), 3000);
-    return () => clearInterval(t);
-  }, []);
-
-  const positions = ["c1","c2","c3"];
-  const newSection = HERO_NEW_SECTIONS[newIdx];
-
-  // Base z-index per slot — front card highest
-  const BASE_Z = [4, 3, 2];
-
-  return (
-    <>
-      {positions.map((cls, slot) => {
-        const blend = BLENDS[indices[slot]];
-        const isHov = hoveredCard === slot;
-        return (
-          <div key={cls} className={`h-card ${cls}`}
-            style={{
-              cursor:"pointer",
-              zIndex: isHov ? 20 : BASE_Z[slot],
-              overflow:"visible",
-            }}
-            onClick={() => onOpenRecipe(`w${indices[slot]}`)}
-            onMouseEnter={() => { setHoveredCard(slot); setPaused(p => { const n=[...p]; n[slot]=true; return n; }); }}
-            onMouseLeave={() => { setHoveredCard(null); setPaused(p => { const n=[...p]; n[slot]=false; return n; }); }}>
-            {/* Inner clipping wrapper — clips the card visuals but not the tooltip */}
-            <div style={{width:"100%",height:"100%",borderRadius:20,overflow:"hidden",position:"relative"}}>
-              <div className="h-card-inner" style={{background:`linear-gradient(135deg,${blend.color},#1C1A17)`, transition:"all .4s"}}>
-                {BLEND_EMOJIS_HERO[blend.occasion] || "🍵"}
-              </div>
-              <div className="h-card-body">
-                <div className="h-card-name" style={{transition:"all .3s"}}>{blend.name}</div>
-                <div className="h-card-tag">{blend.occasion}</div>
-              </div>
-            </div>
-            {/* Tooltip — outside the clipping wrapper so it's never hidden */}
-            {isHov && (
-              <div style={{
-                position:"absolute",
-                bottom:"calc(100% + 12px)",
-                left:"50%",
-                transform:"translateX(-50%)",
-                width:230,
-                background:"#1C1A17",
-                borderRadius:14,
-                padding:"14px 16px",
-                border:"1px solid rgba(196,137,58,.4)",
-                boxShadow:"0 16px 48px rgba(0,0,0,.65)",
-                zIndex:100,
-                pointerEvents:"none",
-                whiteSpace:"normal",
-              }}>
-                <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>{blend.occasion} · {blend.steepMin} min steep</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:5}}>{blend.name}</div>
-                <div style={{fontSize:".72rem",color:"rgba(255,255,255,.55)",fontStyle:"italic",marginBottom:10,lineHeight:1.55}}>{blend.tagline}</div>
-                <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:10}}>
-                  {blend.ingredients.slice(0,3).map(h=>(
-                    <span key={h} style={{background:"rgba(255,255,255,.08)",borderRadius:20,padding:"2px 9px",fontSize:".6rem",color:"rgba(255,255,255,.6)"}}>{h}</span>
-                  ))}
-                </div>
-                <div style={{fontSize:".65rem",color:"rgba(196,137,58,.85)",letterSpacing:".06em",fontWeight:500}}>Click to view full recipe →</div>
-                <div style={{position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",borderLeft:"7px solid transparent",borderRight:"7px solid transparent",borderTop:"7px solid #1C1A17"}}/>
-              </div>
-            )}
-          </div>
-        );
-      })}
-
-      {/* What's New rotating spotlight card */}
-      <div className="h-card c4"
-        style={{cursor:"pointer", overflow:"visible", zIndex: hoveredCard === 3 ? 10 : undefined}}
-        onClick={() => onNav(newSection.page)}
-        onMouseEnter={() => setHoveredCard(3)}
-        onMouseLeave={() => setHoveredCard(null)}>
-        <div className="h-card-inner" style={{background:`linear-gradient(135deg,${newSection.color},#0a0a0a)`, transition:"all .6s"}}>
-          <span style={{fontSize:"1.8rem", transition:"all .4s"}}>{newSection.emoji}</span>
-        </div>
-        <div className="h-card-body">
-          <div className="h-card-name" style={{fontSize:".78rem", transition:"all .4s"}}>{newSection.name}</div>
-          <div className="h-card-tag" style={{color:"#c08830", fontSize:".58rem"}}>{newSection.tag}</div>
-        </div>
-        {/* Pulse dot */}
-        <div style={{position:"absolute",top:8,right:8,width:7,height:7,borderRadius:"50%",background:"#c08830",boxShadow:"0 0 0 3px rgba(192,136,48,.25)",animation:"pulse 2s infinite"}}/>
-        {/* Hover preview */}
-        {hoveredCard === 3 && (
-          <div style={{
-            position:"absolute", bottom:"calc(100% + 10px)", left:"50%",
-            transform:"translateX(-50%)", width:210,
-            background:"#1C1A17", borderRadius:14, padding:"12px 14px",
-            border:"1px solid rgba(196,137,58,.35)",
-            boxShadow:"0 12px 36px rgba(0,0,0,.5)",
-            zIndex:50, pointerEvents:"none",
-          }}>
-            <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6}}>✦ New Section</div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"white",marginBottom:6}}>{newSection.name}</div>
-            <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.6,marginBottom:8}}>{newSection.desc}</div>
-            <div style={{fontSize:".65rem",color:"rgba(196,137,58,.8)"}}>Click to explore →</div>
-            <div style={{position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",borderLeft:"7px solid transparent",borderRight:"7px solid transparent",borderTop:"7px solid #1C1A17"}}/>
-          </div>
-        )}
-      </div>
-    </>
-  );
-}
 
   const Home = () => {
     return (
@@ -5543,7 +5546,7 @@ Thank you!`);
             </div>
             <div>
               <div className="ft-col-h">Features</div>
-              <span className="ft-lnk" onClick={()=>setProfileOpen(true)}>🌿 Sip & Heal Report</span>
+              <span className="ft-lnk" onClick={()=>setProfileOpen(true)}>🌿 Sip &amp; Heal Report</span>
               <span className="ft-lnk" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}>🌿 Sip &amp; Seek</span>
               <span className="ft-lnk" onClick={()=>nav("mocktails")}>🍹 Mocktail Recipes</span>
               <span className="ft-lnk" onClick={()=>nav("jelly")}>🌊 Jelly Kits</span>
