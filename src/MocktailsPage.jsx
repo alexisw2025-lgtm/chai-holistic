@@ -1268,7 +1268,7 @@ export default function MocktailsPage() {
           <div style={{
             fontSize: ".65rem", color: "#8A7A6A",
             letterSpacing: ".12em", textTransform: "uppercase",
-          }}>— Chai Holistic · Sip & Heal</div>
+          }}>— Chai Holistic · Sip &amp; Heal</div>
         </div>
       </div>
 
@@ -1321,7 +1321,7 @@ function SeaweedJellySection() {
                 color: "white", fontWeight: 400,
                 lineHeight: 1.15, marginBottom: 16,
               }}>
-                Seaweed & Herb Jelly<br/>
+                Seaweed &amp; Herb Jelly<br/>
                 <em style={{ color: "#deb96a", fontStyle: "italic" }}>Kits.</em>
               </h2>
               <p style={{
@@ -1447,7 +1447,7 @@ function SeaweedJellySection() {
             <div style={{
               fontSize: ".6rem", color: "rgba(192,136,48,.5)",
               letterSpacing: ".14em", textTransform: "uppercase",
-            }}>— Chai Holistic · Sip & Heal</div>
+            }}>— Chai Holistic · Sip &amp; Heal</div>
           </div>
         </div>
       </section>

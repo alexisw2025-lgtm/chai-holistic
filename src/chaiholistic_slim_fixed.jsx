@@ -2018,7 +2018,7 @@ export default function ChaiHolistic() {
     const samples = [
       BLENDS.find(b=>b.id==="m2"), // 2AM Reset
       BLENDS.find(b=>b.id==="e1"), // Chamomile & Calm
-      CLEANSING.find(c=>c.id==="c1"), // Liver & Love
+      CLEANSING.find(c=>c.id==="c1"), // Liver &amp; Love
       BLENDS.find(b=>b.id==="s1"), // Turmeric Tonic
     ].filter(Boolean);
     const [previewPage, setPreviewPage] = useState(0);
@@ -3809,7 +3809,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
         <div className="modal" style={{maxWidth:580}} onClick={e=>e.stopPropagation()}>
           <div className="modal-head" style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",borderRadius:"24px 24px 0 0"}}>
             <div>
-              <div style={{fontSize:".62rem",letterSpacing:".18em",textTransform:"uppercase",color:"rgba(255,255,255,.5)",marginBottom:4}}>The Sip & Seek</div>
+              <div style={{fontSize:".62rem",letterSpacing:".18em",textTransform:"uppercase",color:"rgba(255,255,255,.5)",marginBottom:4}}>The Sip &amp; Seek</div>
               <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white"}}>Find yourself through your cup</div>
             </div>
             <button className="modal-close" style={{borderColor:"rgba(255,255,255,.2)",color:"white"}} onClick={()=>{setIntentionOpen(false);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}>✕</button>
@@ -4718,7 +4718,7 @@ Thank you!`);
           style={{width:"100%",maxWidth:360,background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"white",border:"1.5px solid rgba(196,137,58,.5)",padding:"16px 32px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".85rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",marginBottom:12,transition:"all .3s",display:"block",margin:"0 auto 12px"}}
           onMouseEnter={e=>{e.currentTarget.style.borderColor="var(--gold)";e.currentTarget.style.boxShadow="0 8px 32px rgba(196,137,58,.3)";}}
           onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,.5)";e.currentTarget.style.boxShadow="none";}}>
-          🌿 Begin Sip & Seek -- It's Free
+          🌿 Begin Sip &amp; Seek -- It's Free
         </button>
 
         <button
@@ -5073,7 +5073,7 @@ Thank you!`);
               <p style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(1rem,1.8vw,1.25rem)",fontStyle:"italic",color:"rgba(255,255,255,.78)",lineHeight:1.7,margin:0}}>
                 "We want you genuinely excited about your health -- what a cup of tea can do for your body, your mind, and your spirit. How good it feels to steep something real, drink something that actually heals, and find natural remedies that have worked for thousands of years. We want you living a happier, longer, more intentional life. The tea is the ritual. The ring is the reminder. The prayer is the anchor. You deserve all three."
               </p>
-              <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.6)",marginTop:12}}>-- Chai Holistic · Sip & Heal</div>
+              <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.6)",marginTop:12}}>— Chai Holistic · Sip &amp; Heal</div>
             </div>
           </div>
 
@@ -5471,7 +5471,7 @@ Thank you!`);
           onClick={()=>setProfileOpen(true)}
           style={{position:"fixed",bottom:136,left:28,zIndex:398,background:"linear-gradient(135deg,rgba(192,136,48,.9),rgba(180,120,30,.95))",color:"white",border:"1px solid rgba(255,255,255,.25)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(192,136,48,.4)",whiteSpace:"nowrap"}}
           title="Get your free Sip &amp; Heal Report">
-          🌿 Free Sip & Heal Report
+          🌿 Free Sip &amp; Heal Report
         </button>
       )}
 

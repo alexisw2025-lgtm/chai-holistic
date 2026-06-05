@@ -7,7 +7,7 @@
  *   2. Add state: const [profileOpen, setProfileOpen] = useState(false);
  *   3. Render: <WellnessProfileModal open={profileOpen} onClose={() => setProfileOpen(false)} />
  *   4. Trigger it from anywhere (nav CTA, hero button, footer link, etc.):
- *      <button onClick={() => setProfileOpen(true)}>✦ Get My Sip & Heal Report</button>
+ *      <button onClick={() => setProfileOpen(true)}>✦ Get My Sip &amp; Heal Report</button>
  *
  * SUPABASE TABLE — run this SQL in your Supabase project:
  *   create table wellness_profiles (
@@ -451,10 +451,10 @@ function SipReportCard({ name, rxBlends, ritual, goal, onClose }) {
           <div style={{
             fontSize: ".75rem", fontWeight: 600,
             color: C.goldLt, fontFamily: "'Jost', sans-serif"
-          }}>Your Sip & Heal Report PDF is on its way to your inbox</div>
+          }}>Your Sip &amp; Heal Report PDF is on its way to your inbox</div>
           <div style={{
             fontSize: ".66rem", color: "rgba(255,255,255,.4)", marginTop: 2
-          }}>Check your email for your personalized Sip & Heal Report PDF — free gift from Chai Holistic</div>
+          }}>Check your email for your personalized Sip &amp; Heal Report PDF — free gift from Chai Holistic</div>
         </div>
       </div>
 
@@ -679,7 +679,7 @@ export default function WellnessProfileModal({ open, onClose }) {
           autoFocus
         />
         <p style={{ fontSize: ".78rem", color: "rgba(255,255,255,.35)", margin: 0, lineHeight: 1.6 }}>
-          We'll personalize your Sip & Heal Report with your name.
+          We'll personalize your Sip &amp; Heal Report with your name.
         </p>
       </div>
     );
@@ -766,7 +766,7 @@ export default function WellnessProfileModal({ open, onClose }) {
         }}>
           <span style={{ fontSize: "1rem", flexShrink: 0 }}>🎁</span>
           <p style={{ fontSize: ".72rem", color: "rgba(255,255,255,.5)", margin: 0, lineHeight: 1.7 }}>
-            We'll email you a personalized <strong style={{ color: C.goldLt }}>Sip & Heal Report PDF</strong> — your custom blend guide, brewing ritual, and wellness intentions. Free, always.
+            We'll email you a personalized <strong style={{ color: C.goldLt }}>Sip &amp; Heal Report PDF</strong> — your custom blend guide, brewing ritual, and wellness intentions. Free, always.
           </p>
         </div>
         {error && (

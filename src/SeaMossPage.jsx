@@ -1258,7 +1258,7 @@ export default function SeaMossPage({ onAddToCart }) {
               <div style={{
                 fontSize: ".65rem", color: C.aquaL,
                 letterSpacing: ".14em", textTransform: "uppercase",
-              }}>— Chai Holistic · Sip & Heal</div>
+              }}>— Chai Holistic · Sip &amp; Heal</div>
             </div>
           </div>
         </section>

@@ -688,7 +688,7 @@ export default function JellyPage({ onAddToCart }) {
             color: "white", fontWeight: 400,
             lineHeight: 1.15, marginBottom: 16,
           }}>
-            Seaweed & Herb<br/>
+            Seaweed &amp; Herb<br/>
             <em style={{ color: C.goldLt, fontStyle: "italic" }}>Jelly Kits.</em>
           </h1>
           <p style={{
@@ -858,7 +858,7 @@ export default function JellyPage({ onAddToCart }) {
           <div style={{
             fontSize: ".6rem", color: "rgba(192,136,48,.45)",
             letterSpacing: ".14em", textTransform: "uppercase",
-          }}>— Chai Holistic · Sip & Heal</div>
+          }}>— Chai Holistic · Sip &amp; Heal</div>
         </div>
       </div>
 
