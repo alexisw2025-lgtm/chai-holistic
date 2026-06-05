@@ -8,17 +8,7 @@
  *   3. Add {page==="jelly"&&<JellyPage/>} to pages render block
  */
 
-import { useState, useEffect } from "react";
-
-function useIsMobile() {
-  const [mobile, setMobile] = useState(() => typeof window !== "undefined" && window.innerWidth < 640);
-  useEffect(() => {
-    const fn = () => setMobile(window.innerWidth < 640);
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
-  }, []);
-  return mobile;
-}
+import { useState } from "react";
 
 const C = {
   forest:  "#0d1a11",
@@ -381,20 +371,22 @@ function JellyCard({ j, onOpen }) {
           letterSpacing: ".08em", textTransform: "uppercase",
           fontFamily: "'Jost', sans-serif", textAlign: "right",
         }}>View Kit →</div>
+        <div style={{ marginTop: 8, background: "rgba(39,92,62,.2)", borderRadius: 8, padding: "6px 10px", fontSize: ".61rem", color: "#8ab89a", lineHeight: 1.5 }}>
+          🧴 6 packs · 🥤 Shaker cup · 🍯 Honey · <strong style={{color:"#deb96a"}}>${JELLY_KIT_PRICE}</strong>
+        </div>
       </div>
     </div>
   );
 }
 
 // ─── Jelly Modal ─────────────────────────────────────────────────────────────
-function JellyModal({ j, onClose }) {
+function JellyModal({ j, onClose, onAddToCart }) {
   if (!j) return null;
   return (
     <>
       <style>{`@keyframes jmIn{from{opacity:0;transform:scale(.96) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
       <div
         onClick={onClose}
-        className="jelly-modal-overlay"
         style={{
           position: "fixed", inset: 0, zIndex: 9200,
           background: "rgba(13,26,17,.92)",
@@ -405,7 +397,6 @@ function JellyModal({ j, onClose }) {
       >
         <div
           onClick={e => e.stopPropagation()}
-          className="jelly-modal-inner"
           style={{
             background: "#111f16",
             border: "1px solid rgba(192,136,48,.3)",
@@ -417,7 +408,7 @@ function JellyModal({ j, onClose }) {
           }}
         >
           {/* Header */}
-          <div className="jelly-modal-header" style={{
+          <div style={{
             background: `linear-gradient(135deg, ${j.color}dd, ${j.color}88)`,
             padding: "28px 26px 22px",
             borderRadius: "24px 24px 0 0",
@@ -447,7 +438,7 @@ function JellyModal({ j, onClose }) {
             }}>{j.tagline}</p>
           </div>
 
-          <div className="jelly-modal-body" style={{ padding: "22px 26px" }}>
+          <div style={{ padding: "22px 26px" }}>
             {/* Meta */}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
               <Pill label={`⏱ ${j.time}`} />
@@ -575,9 +566,51 @@ function JellyModal({ j, onClose }) {
             </div>
 
             {/* Shelf life */}
-            <div style={{ fontSize: ".7rem", color: "rgba(255,255,255,.35)", textAlign: "center" }}>
+            <div style={{ fontSize: ".7rem", color: "rgba(255,255,255,.35)", textAlign: "center", marginBottom: 20 }}>
               🧊 {j.shelfLife}
             </div>
+
+            {/* Kit contents split */}
+            <div style={{ background: "rgba(39,92,62,.15)", border: "1px solid rgba(39,92,62,.4)", borderRadius: 14, padding: "14px 16px", marginBottom: 14 }}>
+              <div style={{ fontSize: ".6rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#8ab89a", marginBottom: 10 }}>✦ Included in Your Kit (6 packs)</div>
+              {j.ingredients.filter(ing => !isKitchenIngredient(ing)).map((ing, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", fontSize: ".75rem", color: "rgba(255,255,255,.7)" }}>
+                  <span style={{ color: "#8ab89a", fontSize: ".6rem" }}>✓</span>{ing}
+                </div>
+              ))}
+              <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid rgba(255,255,255,.08)" }}>
+                <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.35)", marginBottom: 6 }}>Also included: spring shaker cup · instruction card · raw honey packet</div>
+              </div>
+            </div>
+
+            {j.ingredients.filter(ing => isKitchenIngredient(ing)).length > 0 && (
+              <div style={{ background: "rgba(192,136,48,.07)", border: "1px solid rgba(192,136,48,.2)", borderRadius: 14, padding: "12px 16px", marginBottom: 20 }}>
+                <div style={{ fontSize: ".6rem", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(192,136,48,.7)", marginBottom: 8 }}>From Your Kitchen</div>
+                {j.ingredients.filter(ing => isKitchenIngredient(ing)).map((ing, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "3px 0", fontSize: ".74rem", color: "rgba(255,255,255,.5)" }}>
+                    <span style={{ color: "rgba(192,136,48,.6)", fontSize: ".6rem" }}>◇</span>{ing}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Add to Cart */}
+            {onAddToCart && (
+              <div style={{ background: "linear-gradient(135deg,rgba(39,92,62,.3),rgba(23,51,34,.5))", border: "1px solid rgba(192,136,48,.35)", borderRadius: 16, padding: "18px 20px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                  <div>
+                    <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.1rem", color: "white" }}>{j.name} Kit</div>
+                    <div style={{ fontSize: ".68rem", color: "rgba(255,255,255,.5)", marginTop: 2 }}>6 packs · spring shaker · honey packet · instruction card</div>
+                  </div>
+                  <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.4rem", color: "#deb96a", fontWeight: 600 }}>${JELLY_KIT_PRICE}</div>
+                </div>
+                <button
+                  onClick={() => { onAddToCart({ id: j.id + "_kit", name: j.name + " Jelly Kit", price: JELLY_KIT_PRICE, emoji: "🌊", qty: 1 }); onClose(); }}
+                  style={{ width: "100%", background: "linear-gradient(135deg,#275c3e,#1e4d34)", border: "1px solid #c08830", color: "white", padding: "13px 20px", borderRadius: 50, fontSize: ".78rem", letterSpacing: ".1em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif", fontWeight: 500, cursor: "pointer" }}>
+                  🛒 Add Kit to Cart — ${JELLY_KIT_PRICE}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -586,11 +619,24 @@ function JellyModal({ j, onClose }) {
 }
 
 // ─── Main page ────────────────────────────────────────────────────────────────
-export default function JellyPage() {
+const JELLY_KIT_PRICE = 28;
+const JELLY_BUNDLE_PRICE = 52;
+
+// Ingredients that come from the kitchen (not included in kit)
+const KITCHEN_INGREDIENTS = ["sparkling water","water","ice","fresh lemon","lemon juice","lime juice","fresh lime","fresh orange juice","fresh grapefruit juice","fresh apple juice","fresh watermelon","fresh strawberries","fresh mango","fresh lychees","fresh mint","fresh ginger","whole lychees","mango slices","lemon slices","orange slices","fresh fruit","edible rose petals"];
+
+function isKitchenIngredient(ing) {
+  const lower = ing.toLowerCase();
+  return KITCHEN_INGREDIENTS.some(k => lower.includes(k)) || 
+    lower.startsWith("fresh ") || lower.includes("to garnish") || 
+    lower.includes("for garnish") || lower.includes("optional garnish") ||
+    lower.startsWith("ice");
+}
+
+export default function JellyPage({ onAddToCart }) {
   const [category, setCategory] = useState("All");
   const [search, setSearch]     = useState("");
   const [active, setActive]     = useState(null);
-  const isMobile                = useIsMobile();
 
   const filtered = JELLIES.filter(j => {
     const catOk  = category === "All" || j.category === category;
@@ -602,29 +648,21 @@ export default function JellyPage() {
     return catOk && srchOk;
   });
 
+  <style>{`
+    @media(max-width:600px){
+      section{padding-left:1.2rem !important;padding-right:1.2rem !important;padding-top:44px !important;}
+      [style*="gridTemplateColumns"]{grid-template-columns:1fr !important;}
+      [style*="maxWidth: 1280"]{padding-left:1.2rem !important;padding-right:1.2rem !important;}
+      [style*="padding: 14px 2.5rem"]{padding:10px 1rem !important;}
+      [style*="gap: 18"]{gap:12px !important;}
+      [style*="borderRadius: 24"]{border-radius:16px !important;}
+    }
+  `}</style>
   return (
     <div style={{ background: C.forest, minHeight: "100vh" }}>
-      <style>{`
-        @keyframes jmIn{from{opacity:0;transform:scale(.96) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
-        @media(max-width:639px){
-          .jelly-hero{padding:44px 1.2rem 40px !important;}
-          .jelly-filters{padding:10px 1rem !important;}
-          .jelly-filter-row{flex-direction:column !important;align-items:stretch !important;}
-          .jelly-filter-row input{min-width:0 !important;width:100% !important;}
-          .jelly-filter-buttons{flex-wrap:wrap !important;}
-          .jelly-grid{padding:24px 1.2rem 60px !important;}
-          .jelly-cards{grid-template-columns:1fr !important;gap:12px !important;}
-          .jelly-stats{gap:16px !important;}
-          .jelly-badges{gap:8px !important;}
-          .jelly-modal-inner{max-height:96vh !important;border-radius:18px !important;}
-          .jelly-modal-header{padding:20px 18px 18px !important;}
-          .jelly-modal-body{padding:18px 18px !important;}
-          .jelly-modal-overlay{padding:8px !important;align-items:flex-end !important;}
-        }
-      `}</style>
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <section className="jelly-hero" style={{
+      <section style={{
         background: `linear-gradient(140deg, #0d1a11 0%, #1a3522 60%, #0d2018 100%)`,
         padding: "64px 2.5rem 56px",
         borderBottom: `3px solid ${C.gold}`,
@@ -663,7 +701,7 @@ export default function JellyPage() {
           </p>
 
           {/* Feature badges */}
-          <div className="jelly-badges" style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 32 }}>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 32 }}>
             {["13 Recipes", "Plant-based & vegan", "Ready-to-go kit", "All natural ingredients", "~15 min to make"].map(f => (
               <div key={f} style={{
                 display: "flex", alignItems: "center", gap: 6,
@@ -679,7 +717,7 @@ export default function JellyPage() {
           </div>
 
           {/* Stats row */}
-          <div className="jelly-stats" style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
             {[["13","Recipes"],["100%","Plant-based"],["~15","Min to make"],["7","Day shelf life"]].map(([n, l]) => (
               <div key={l}>
                 <div style={{
@@ -697,13 +735,13 @@ export default function JellyPage() {
       </section>
 
       {/* ── Filters ───────────────────────────────────────────────────────── */}
-      <div className="jelly-filters" style={{
+      <div style={{
         background: "#0d1a11",
         borderBottom: "1px solid rgba(192,136,48,.15)",
         padding: "14px 2.5rem",
         position: "sticky", top: 74, zIndex: 100,
       }}>
-        <div className="jelly-filter-row" style={{
+        <div style={{
           maxWidth: 1280, margin: "0 auto",
           display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap",
         }}>
@@ -722,7 +760,7 @@ export default function JellyPage() {
             onFocus={e => e.target.style.borderColor = C.gold}
             onBlur={e => e.target.style.borderColor = "rgba(192,136,48,.25)"}
           />
-          <div className="jelly-filter-buttons" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {CATEGORIES_J.map(c => (
               <button key={c} onClick={() => setCategory(c)} style={{
                 background: category === c ? C.sage : "transparent",
@@ -743,7 +781,7 @@ export default function JellyPage() {
       </div>
 
       {/* ── Grid ──────────────────────────────────────────────────────────── */}
-      <div className="jelly-grid" style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,.4)" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>🌊</div>
@@ -753,7 +791,7 @@ export default function JellyPage() {
             <div style={{ fontSize: ".85rem" }}>Try clearing your filters.</div>
           </div>
         ) : (
-          <div className="jelly-cards" style={{
+          <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
             gap: 18,
@@ -784,7 +822,7 @@ export default function JellyPage() {
         </div>
       </div>
 
-      {active && <JellyModal j={active} onClose={() => setActive(null)} />}
+      {active && <JellyModal j={active} onClose={() => setActive(null)} onAddToCart={onAddToCart} />}
     </div>
   );
 }

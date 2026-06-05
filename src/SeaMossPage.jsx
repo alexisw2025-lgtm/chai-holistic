@@ -9,17 +9,7 @@
  *   4. Add nav link and footer link
  */
 
-import { useState, useEffect } from "react";
-
-function useIsMobile() {
-  const [mobile, setMobile] = useState(() => typeof window !== "undefined" && window.innerWidth < 640);
-  useEffect(() => {
-    const fn = () => setMobile(window.innerWidth < 640);
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
-  }, []);
-  return mobile;
-}
+import { useState } from "react";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const C = {
@@ -677,19 +667,20 @@ function RecipeCard({ r, onOpen }) {
           letterSpacing: ".08em", textTransform: "uppercase",
           fontFamily: "'Jost', sans-serif", textAlign: "right",
         }}>View Recipe →</div>
+        <div style={{ marginTop: 8, background: "rgba(26,138,106,.15)", borderRadius: 8, padding: "6px 10px", fontSize: ".61rem", color: "#2aaa85", lineHeight: 1.5 }}>🧴 6 packs · 🥤 Shaker cup · 🍯 Honey · <strong style={{color:'#deb96a'}}>${SEAMOSS_KIT_PRICE}</strong></div>
       </div>
     </div>
   );
 }
 
 // ─── Recipe Modal ─────────────────────────────────────────────────────────────
-function RecipeModal({ r, onClose }) {
+function RecipeModal({ r, onClose, onAddToCart }) {
   if (!r) return null;
   return (
     <>
+      <style>{`@keyframes smIn{from{opacity:0;transform:scale(.95) translateY(14px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
       <div
         onClick={onClose}
-        className="sm-modal-overlay"
         style={{
           position: "fixed", inset: 0, zIndex: 9300,
           background: "rgba(4,15,9,.94)",
@@ -700,7 +691,6 @@ function RecipeModal({ r, onClose }) {
       >
         <div
           onClick={e => e.stopPropagation()}
-          className="sm-modal-inner"
           style={{
             background: "#0a1a0f",
             border: "1px solid rgba(26,138,106,.35)",
@@ -712,7 +702,7 @@ function RecipeModal({ r, onClose }) {
           }}
         >
           {/* Header */}
-          <div className="sm-modal-header" style={{
+          <div style={{
             background: `linear-gradient(135deg, ${r.color}ee, ${r.color}99)`,
             padding: "30px 28px 24px",
             borderRadius: "24px 24px 0 0",
@@ -751,7 +741,7 @@ function RecipeModal({ r, onClose }) {
             </div>
           </div>
 
-          <div className="sm-modal-body" style={{ padding: "24px 28px" }}>
+          <div style={{ padding: "24px 28px" }}>
             {/* Meta */}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 18 }}>
               <Pill label={`⏱ ${r.time}`} color="rgba(26,138,106,.15)" textColor="#2aaa85" />
@@ -862,12 +852,51 @@ function RecipeModal({ r, onClose }) {
             </div>
 
             {/* Shelf life */}
-            <div style={{
-              fontSize: ".7rem", color: "rgba(255,255,255,.3)",
-              textAlign: "center", fontFamily: "'Jost', sans-serif",
-            }}>
+            <div style={{ fontSize: ".7rem", color: "rgba(255,255,255,.3)", textAlign: "center", fontFamily: "'Jost',sans-serif", marginBottom: 20 }}>
               🧊 {r.shelfLife}
             </div>
+
+            {/* Kit ingredient split */}
+            <div style={{ background: "rgba(26,138,106,.12)", border: "1px solid rgba(26,138,106,.3)", borderRadius: 14, padding: "14px 16px", marginBottom: 14 }}>
+              <div style={{ fontSize: ".6rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#2aaa85", marginBottom: 10 }}>✦ Included in Your Kit (6 packs)</div>
+              {r.ingredients.filter(ing => !isSmKitchen(ing)).map((ing, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 0", fontSize: ".75rem", color: "rgba(255,255,255,.7)" }}>
+                  <span style={{ color: "#2aaa85", fontSize: ".6rem" }}>✓</span>{ing}
+                </div>
+              ))}
+              <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid rgba(26,138,106,.15)", fontSize: ".6rem", color: "rgba(255,255,255,.35)" }}>
+                Also included: spring shaker cup · instruction card · raw honey packet
+              </div>
+            </div>
+
+            {r.ingredients.filter(ing => isSmKitchen(ing)).length > 0 && (
+              <div style={{ background: "rgba(192,136,48,.07)", border: "1px solid rgba(192,136,48,.2)", borderRadius: 14, padding: "12px 16px", marginBottom: 20 }}>
+                <div style={{ fontSize: ".6rem", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(192,136,48,.7)", marginBottom: 8 }}>From Your Kitchen</div>
+                {r.ingredients.filter(ing => isSmKitchen(ing)).map((ing, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "3px 0", fontSize: ".74rem", color: "rgba(255,255,255,.5)" }}>
+                    <span style={{ color: "rgba(192,136,48,.5)", fontSize: ".6rem" }}>◇</span>{ing}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Add to Cart */}
+            {onAddToCart && (
+              <div style={{ background: "linear-gradient(135deg,rgba(26,138,106,.2),rgba(10,58,42,.4))", border: "1px solid rgba(26,138,106,.4)", borderRadius: 16, padding: "18px 20px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                  <div>
+                    <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", color: "white" }}>{r.name} Kit</div>
+                    <div style={{ fontSize: ".65rem", color: "rgba(255,255,255,.45)", marginTop: 2 }}>6 packs · spring shaker · honey packet · instruction card</div>
+                  </div>
+                  <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.3rem", color: "#2aaa85", fontWeight: 600 }}>${SEAMOSS_KIT_PRICE}</div>
+                </div>
+                <button
+                  onClick={() => { onAddToCart({ id: r.id + "_kit", name: r.name + " Sea Moss Kit", price: SEAMOSS_KIT_PRICE, emoji: "🌿", qty: 1 }); onClose(); }}
+                  style={{ width: "100%", background: "linear-gradient(135deg,#1a8a6a,#0d5a45)", border: "1px solid #2aaa85", color: "white", padding: "13px 20px", borderRadius: 50, fontSize: ".78rem", letterSpacing: ".1em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif", fontWeight: 500, cursor: "pointer" }}>
+                  🛒 Add Kit to Cart — ${SEAMOSS_KIT_PRICE}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -876,12 +905,23 @@ function RecipeModal({ r, onClose }) {
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
-export default function SeaMossPage() {
+const SEAMOSS_KIT_PRICE = 32;
+const SEAMOSS_BUNDLE_PRICE = 52;
+
+const SM_KITCHEN = ["spring water","water","ice","fresh ","lemon juice","lime juice","coconut milk","oat milk","almond milk","fresh fruit","fresh mango","fresh strawberries","fresh lychees","fresh mint","fresh ginger","whole lychees"];
+
+function isSmKitchen(ing) {
+  const lower = ing.toLowerCase();
+  return SM_KITCHEN.some(k => lower.includes(k)) ||
+    lower.startsWith("fresh ") || lower.startsWith("ice") ||
+    lower.includes("optional") || lower.includes("to garnish");
+}
+
+export default function SeaMossPage({ onAddToCart }) {
   const [category, setCategory] = useState("All");
   const [search, setSearch]     = useState("");
   const [active, setActive]     = useState(null);
   const [whyOpen, setWhyOpen]   = useState(false);
-  const isMobile                = useIsMobile();
 
   const filtered = RECIPES.filter(r => {
     const catOk  = category === "All" || r.category === category;
@@ -893,6 +933,18 @@ export default function SeaMossPage() {
     return catOk && srchOk;
   });
 
+  <style>{`
+    @media(max-width:600px){
+      section{padding-left:1.2rem !important;padding-right:1.2rem !important;}
+      [style*="maxWidth: 1200"]{padding-left:1.2rem !important;padding-right:1.2rem !important;}
+      [style*="maxWidth: 960"]{padding-left:1.2rem !important;padding-right:1.2rem !important;}
+      [style*="flex: 1 1 480px"]{flex:1 1 100% !important;}
+      [style*="flex: 0 1 280px"]{flex:1 1 100% !important;}
+      [style*="gap: 60"]{gap:32px !important;}
+      [style*="fontSize: clamp(2.4rem"]{font-size:clamp(1.8rem,7vw,2.8rem) !important;}
+      [style*="maxWidth: 1280"]{padding-left:1.2rem !important;padding-right:1.2rem !important;}
+    }
+  `}</style>
   return (
     <div style={{ background: C.deep, minHeight: "100vh" }}>
       <style>{`
@@ -902,33 +954,12 @@ export default function SeaMossPage() {
         @keyframes glowPulse {
           0%,100%{opacity:.4} 50%{opacity:.8}
         }
-        @keyframes smIn{from{opacity:0;transform:scale(.95) translateY(14px)}to{opacity:1;transform:scale(1) translateY(0)}}
-        @media(max-width:639px){
-          .sm-hero{padding:44px 1.2rem 40px !important;}
-          .sm-hero-inner{flex-direction:column !important;gap:28px !important;}
-          .sm-hero-left{flex:1 1 100% !important;min-width:0 !important;}
-          .sm-hero-right{flex:1 1 100% !important;min-width:0 !important;width:100% !important;}
-          .sm-why-section{padding:32px 1.2rem !important;}
-          .sm-why-grid{grid-template-columns:1fr !important;gap:12px !important;}
-          .sm-filters{padding:10px 1rem !important;}
-          .sm-filter-row{flex-direction:column !important;align-items:stretch !important;}
-          .sm-filter-row input{min-width:0 !important;width:100% !important;}
-          .sm-filter-buttons{flex-wrap:wrap !important;}
-          .sm-grid-wrap{padding:24px 1.2rem 60px !important;}
-          .sm-cards{grid-template-columns:1fr !important;gap:12px !important;}
-          .sm-howto-grid{grid-template-columns:1fr 1fr !important;gap:10px !important;}
-          .sm-modal-overlay{padding:8px !important;align-items:flex-end !important;}
-          .sm-modal-inner{max-height:96vh !important;border-radius:18px !important;}
-          .sm-modal-header{padding:20px 18px 18px !important;}
-          .sm-modal-body{padding:18px 16px !important;}
-          .sm-science-grid{grid-template-columns:1fr !important;}
-        }
       `}</style>
 
       {/* ══════════════════════════════════════════════════════════════
           HERO — THE ORIGIN STORY
       ══════════════════════════════════════════════════════════════ */}
-      <section className="sm-hero" style={{
+      <section style={{
         background: `linear-gradient(160deg, #040f09 0%, #0a2418 40%, #051209 100%)`,
         padding: "72px 2.5rem 64px",
         borderBottom: `3px solid ${C.aqua}`,
@@ -959,10 +990,10 @@ export default function SeaMossPage() {
             }}>Chai Holistic · Sea Moss Gel Kits</span>
           </div>
 
-          <div className="sm-hero-inner" style={{ display: "flex", flexWrap: "wrap", gap: 60, alignItems: "flex-start" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 60, alignItems: "flex-start" }}>
 
             {/* Left — headline + story */}
-            <div className="sm-hero-left" style={{ flex: "1 1 480px" }}>
+            <div style={{ flex: "1 1 480px" }}>
               <h1 style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: "clamp(2.4rem, 6vw, 4.2rem)",
@@ -1050,7 +1081,7 @@ export default function SeaMossPage() {
             </div>
 
             {/* Right — mineral stats */}
-            <div className="sm-hero-right" style={{ flex: "0 1 280px" }}>
+            <div style={{ flex: "0 1 280px" }}>
               <div style={{
                 background: "rgba(26,138,106,.08)",
                 border: "1px solid rgba(26,138,106,.2)",
@@ -1116,7 +1147,7 @@ export default function SeaMossPage() {
           WHY SEA MOSS — THE SCIENCE (expandable)
       ══════════════════════════════════════════════════════════════ */}
       {whyOpen && (
-        <section className="sm-why-section" style={{
+        <section style={{
           background: `linear-gradient(135deg, #051209, #0a2418)`,
           borderBottom: `1px solid rgba(26,138,106,.2)`,
           padding: "48px 2.5rem",
@@ -1140,7 +1171,7 @@ export default function SeaMossPage() {
               Into <em style={{ color: C.aquaL }}>Extraordinary Health.</em>
             </h2>
 
-            <div className="sm-science-grid" style={{
+            <div style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
               gap: 20, marginBottom: 32,
@@ -1236,13 +1267,13 @@ export default function SeaMossPage() {
       {/* ══════════════════════════════════════════════════════════════
           FILTERS
       ══════════════════════════════════════════════════════════════ */}
-      <div className="sm-filters" style={{
+      <div style={{
         background: C.forest,
         borderBottom: "1px solid rgba(26,138,106,.15)",
         padding: "14px 2.5rem",
         position: "sticky", top: 74, zIndex: 100,
       }}>
-        <div className="sm-filter-row" style={{
+        <div style={{
           maxWidth: 1280, margin: "0 auto",
           display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap",
         }}>
@@ -1261,7 +1292,7 @@ export default function SeaMossPage() {
             onFocus={e => e.target.style.borderColor = C.aqua}
             onBlur={e => e.target.style.borderColor = "rgba(26,138,106,.25)"}
           />
-          <div className="sm-filter-buttons" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {CATEGORIES_SM.map(c => (
               <button key={c} onClick={() => setCategory(c)} style={{
                 background: category === c ? C.aqua : "transparent",
@@ -1284,7 +1315,7 @@ export default function SeaMossPage() {
       {/* ══════════════════════════════════════════════════════════════
           RECIPE GRID
       ══════════════════════════════════════════════════════════════ */}
-      <div className="sm-grid-wrap" style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,.4)" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>🌊</div>
@@ -1295,7 +1326,7 @@ export default function SeaMossPage() {
             <div style={{ fontSize: ".85rem" }}>Try clearing your search or filters.</div>
           </div>
         ) : (
-          <div className="sm-cards" style={{
+          <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
             gap: 18,
@@ -1324,7 +1355,7 @@ export default function SeaMossPage() {
               fontSize: "1.3rem", color: "white",
               fontWeight: 400, marginBottom: 20,
             }}>How to Use Sea Moss Gel Daily</h3>
-            <div className="sm-howto-grid" style={{
+            <div style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
               gap: 14,
@@ -1375,7 +1406,7 @@ export default function SeaMossPage() {
         </div>
       </div>
 
-      {active && <RecipeModal r={active} onClose={() => setActive(null)} />}
+      {active && <RecipeModal r={active} onClose={() => setActive(null)} onAddToCart={onAddToCart} />}
     </div>
   );
 }
