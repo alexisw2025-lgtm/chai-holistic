@@ -310,8 +310,8 @@ function LinkUrlInput({ onCommit }) {
 
 
 function MensWellness({ onNav }) {
-  const [filter, setFilter] = React.useState("all");
-  const [selected, setSelected] = React.useState(null);
+  const [filter, setFilter] = useState("all");
+  const [selected, setSelected] = useState(null);
 
   const CATEGORIES = [
     { key:"all",      label:"All 20 Blends",       emoji:"⚡" },
@@ -454,8 +454,6 @@ function MensWellness({ onNav }) {
                   <div style={{fontSize:".82rem",color:"#F7F2EA",fontFamily:"Jost,sans-serif",lineHeight:1.3}}>{selected.steepTemp}</div>
                 </div>
               </div>
-
-              {/* Cup value info */}
               {selected.oz && (
                 <div style={{background:"rgba(82,184,130,.06)",border:"1px solid rgba(82,184,130,.18)",borderRadius:10,padding:"12px 14px",marginBottom:16,fontFamily:"Jost,sans-serif",fontSize:".75rem"}}>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
@@ -701,11 +699,7 @@ export default function ChaiHolistic() {
     setCart(p => { const ex = p.find(i=>i.id===item.id); return ex ? p.map(i=>i.id===item.id?{...i,qty:i.qty+1}:i) : [...p,{...item,qty:1,type}]; });
     toast(`✦ ${item.name} added to cart`);
   };
-  // Expose for cross-component navigation and cart access
-  if (typeof window !== "undefined") {
-    window._chaiAddToCart = addToCart;
-    window._chaiNav = (p) => nav(p);
-  }
+  if (typeof window !== "undefined") { window._chaiAddToCart = addToCart; window._chaiNav = (p) => nav(p); }
   const removeItem = id => setCart(p => p.filter(i => i.id !== id));
   const changeQty = (id,d) => setCart(p => p.map(i => i.id===id?{...i,qty:Math.max(1,i.qty+d)}:i));
   const cartTotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
@@ -870,18 +864,19 @@ export default function ChaiHolistic() {
     .btn-ghost:hover{border-color:var(--sage-d);color:var(--sage-d);}
     .btn-finder{background:var(--gold);color:white;border:none;padding:12px 30px;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;display:flex;align-items:center;gap:8px;}
     .btn-finder:hover{background:#D4943A;transform:translateY(-2px);}
-    .hero-visual{position:relative;height:500px;}
-    .h-card{position:absolute;background:white;overflow:hidden;box-shadow:0 18px 55px rgba(28,26,23,.13);transition:transform .4s;border-radius:20px;}
-    .h-card:hover{transform:rotate(0deg) scale(1.03) !important;}
-    .h-card.c1{width:210px;height:290px;top:20px;left:20px;transform:rotate(-4deg);}
-    .h-card.c2{width:200px;height:270px;top:55px;left:175px;transform:rotate(3deg);}
-    .h-card.c3{width:180px;height:235px;top:195px;left:75px;transform:rotate(-1.5deg);}
-    .h-card.c4{width:160px;height:210px;top:240px;left:220px;transform:rotate(2deg);}
-    .h-card-inner{width:100%;height:65%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
+    .hero-visual{position:relative;height:520px;}
+    .h-card{position:absolute;background:white;overflow:visible;box-shadow:0 18px 55px rgba(28,26,23,.13);transition:transform .4s, z-index 0s;border-radius:20px;}
+    .h-card .h-card-clip{border-radius:20px;overflow:hidden;width:100%;height:100%;}
+    .h-card:hover{transform:rotate(0deg) scale(1.05) !important;z-index:20 !important;}
+    .h-card.c1{width:210px;height:290px;top:20px;left:20px;transform:rotate(-4deg);z-index:4;}
+    .h-card.c2{width:200px;height:270px;top:55px;left:175px;transform:rotate(3deg);z-index:3;}
+    .h-card.c3{width:180px;height:235px;top:195px;left:75px;transform:rotate(-1.5deg);z-index:2;}
+    .h-card.c4{width:160px;height:210px;top:240px;left:220px;transform:rotate(2deg);z-index:1;}
+    .h-card-inner{width:100%;height:65%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-radius:20px 20px 0 0;}
     .h-card-body{padding:11px 13px;}
     .h-card-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);}
     .h-card-tag{font-size:.62rem;color:var(--sage);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
-    .h-badge{position:absolute;bottom:28px;right:0;background:var(--gold);color:white;padding:14px 18px;font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:5;border-radius:16px;transition:all .2s;}
+    .h-badge{position:absolute;bottom:-48px;right:0;background:var(--gold);color:white;padding:10px 14px;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:2;border-radius:14px;transition:all .2s;}
     .h-badge:hover{background:var(--bark);box-shadow:0 8px 28px rgba(61,43,31,.4);transform:translateY(-2px);}
     .h-badge small{display:block;font-family:'Jost',sans-serif;font-size:.62rem;font-style:normal;letter-spacing:.1em;opacity:.85;margin-top:2px;}
 
@@ -1183,7 +1178,8 @@ export default function ChaiHolistic() {
     .drw-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--bark);}
     .drw-close{background:none;border:1.5px solid var(--dust);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:.9rem;color:var(--bark);display:flex;align-items:center;justify-content:center;transition:all .2s;}
     .drw-close:hover{background:var(--bark);color:white;border-color:var(--bark);}
-    .drw-items{flex:1;overflow-y:auto;padding:16px 24px;}
+    .drw-items{flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;}
+    .drw-cart-list{margin-bottom:4px;}
     .ditem{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--dust);}
     .ditem-icon{width:52px;height:52px;border-radius:12px;background:var(--linen);border:1px solid var(--dust);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
     .ditem-info{flex:1;}
@@ -1194,7 +1190,7 @@ export default function ChaiHolistic() {
     .qty-b:hover{border-color:var(--bark);}
     .qty-v{font-size:.86rem;min-width:16px;text-align:center;}
     .rm-btn{background:none;border:none;color:#AA9A8A;font-size:.68rem;cursor:pointer;text-decoration:underline;}
-    .cart-sugg{background:var(--sage-p);border-top:1px solid #C8DEC8;padding:13px 24px;}
+    .cart-sugg{background:var(--sage-p);border-radius:14px;margin-top:12px;padding:12px 16px;max-height:140px;overflow-y:auto;flex-shrink:0;}
     .sugg-h{font-size:.63rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--sage-d);margin-bottom:8px;}
     .sugg-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #C8DEC8;}
     .sugg-row:last-child{border-bottom:none;}
@@ -1202,7 +1198,8 @@ export default function ChaiHolistic() {
     .sugg-save{font-size:.65rem;color:var(--sage-d);}
     .btn-sugg{background:var(--sage-d);color:white;border:none;padding:5px 13px;font-size:.63rem;font-family:'Jost',sans-serif;cursor:pointer;border-radius:50px;transition:all .2s;}
     .btn-sugg:hover{background:var(--bark);}
-    .drw-foot{padding:16px 24px;border-top:1px solid var(--dust);}
+    .cart-ritual{margin-top:12px;flex-shrink:0;}
+    .drw-foot{padding:16px 24px;border-top:1px solid var(--dust);flex-shrink:0;}
     .d-sub{display:flex;justify-content:space-between;margin-bottom:12px;}
     .d-sub-l{font-size:.76rem;color:#6A5F50;letter-spacing:.06em;text-transform:uppercase;}
     .d-sub-r{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--bark);}
@@ -2149,131 +2146,146 @@ export default function ChaiHolistic() {
             <button className="drw-close" onClick={()=>setCartOpen(false)}>✕</button>
           </div>
           <div className="drw-items">
-            {cart.length===0?(
-              <div className="empty"><div className="empty-icon">🍵</div><div className="empty-msg">Your cart is quiet</div><div className="empty-sub">Add some blends to begin.</div></div>
-            ):cart.map(item=>(
-              <div key={item.id} className="ditem">
-                <div className="ditem-icon">{item.emoji||"✦"}</div>
-                <div className="ditem-info">
-                  <div className="ditem-name">{item.name}</div>
-                  {item.subtitle && <div style={{fontSize:".68rem",color:"var(--sage-d)",marginBottom:2}}>{item.subtitle}</div>}
-                  <div className="ditem-price">${(item.price*item.qty).toFixed(2)}</div>
-                  {item.oz && <div style={{fontSize:".65rem",color:"var(--sage-d)",marginBottom:"6px"}}>~{item.oz*item.cupsPerOz} cups · ${costPerCup(item.price,item.oz,item.cupsPerOz)}/cup</div>}
-                  <div className="ditem-ctrl">
-                    <button className="qty-b" onClick={()=>changeQty(item.id,-1)}>−</button>
-                    <span className="qty-v">{item.qty}</span>
-                    <button className="qty-b" onClick={()=>changeQty(item.id,1)}>+</button>
-                    <button className="rm-btn" onClick={()=>removeItem(item.id)}>remove</button>
+            {/* Cart items — always at top */}
+            <div className="drw-cart-list">
+              {cart.length===0?(
+                <div className="empty"><div className="empty-icon">🍵</div><div className="empty-msg">Your cart is quiet</div><div className="empty-sub">Add some blends to begin.</div></div>
+              ):cart.map(item=>(
+                <div key={item.id} className="ditem">
+                  <div className="ditem-icon">{item.emoji||"✦"}</div>
+                  <div className="ditem-info">
+                    <div className="ditem-name">{item.name}</div>
+                    {item.subtitle && <div style={{fontSize:".68rem",color:"var(--sage-d)",marginBottom:2}}>{item.subtitle}</div>}
+                    <div className="ditem-price">${(item.price*item.qty).toFixed(2)}</div>
+                    {item.oz && <div style={{fontSize:".65rem",color:"var(--sage-d)",marginBottom:"6px"}}>~{item.oz*item.cupsPerOz} cups · ${costPerCup(item.price,item.oz,item.cupsPerOz)}/cup</div>}
+                    <div className="ditem-ctrl">
+                      <button className="qty-b" onClick={()=>changeQty(item.id,-1)}>−</button>
+                      <span className="qty-v">{item.qty}</span>
+                      <button className="qty-b" onClick={()=>changeQty(item.id,1)}>+</button>
+                      <button className="rm-btn" onClick={()=>removeItem(item.id)}>remove</button>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          {cart.length>0&&suggestions.length>0&&(
-            <div className="cart-sugg">
-              <div className="sugg-h">💚 Save more with a bundle</div>
-              {suggestions.map(b=>(
-                <div key={b.id} className="sugg-row">
-                  <div><div className="sugg-name">{b.name}</div><div className="sugg-save">Save ${b.savings.toFixed(2)}</div></div>
-                  <button className="btn-sugg" onClick={()=>addToCart({...b})}>+ Add</button>
                 </div>
               ))}
             </div>
-          )}
-          {ritualPairings.length>0&&(
-            <div style={{margin:"0 16px 14px",background:"linear-gradient(160deg,#FBF7F1 0%,#F4EDE2 100%)",border:"1.5px solid rgba(196,137,58,.28)",borderRadius:18,overflow:"hidden"}}>
-              {/* Header */}
-              <div style={{padding:"12px 16px 8px",borderBottom:"1px solid rgba(196,137,58,.15)"}}>
-                <div style={{display:"flex",alignItems:"center",gap:7}}>
-                  <span style={{fontSize:".95rem"}}>🫖</span>
-                  <div>
-                    <div style={{fontSize:".6rem",letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",fontWeight:600,lineHeight:1}}>Complete Your Ritual</div>
-                    <div style={{fontSize:".68rem",color:"#8A7A6A",fontWeight:300,lineHeight:1.3,marginTop:2}}>
-                      {hasCleanseInCart
-                        ? "Your cleanse needs the right tools to honour the process."
-                        : "Every tea deserves a vessel worthy of the moment."}
+
+            {/* Bundle suggestions — capped height, scrollable */}
+            {cart.length>0&&suggestions.length>0&&(
+              <div className="cart-sugg">
+                <div className="sugg-h">💚 Save more with a bundle</div>
+                {suggestions.map(b=>(
+                  <div key={b.id} className="sugg-row">
+                    <div><div className="sugg-name">{b.name}</div><div className="sugg-save">Save ${b.savings.toFixed(2)}</div></div>
+                    <button className="btn-sugg" onClick={()=>addToCart({...b})}>+ Add</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Ritual pairings — inside scroll area */}
+            {ritualPairings.length>0&&(
+              <div className="cart-ritual" style={{background:"linear-gradient(160deg,#FBF7F1 0%,#F4EDE2 100%)",border:"1.5px solid rgba(196,137,58,.28)",borderRadius:18,overflow:"hidden"}}>
+                {/* Header */}
+                <div style={{padding:"12px 16px 8px",borderBottom:"1px solid rgba(196,137,58,.15)"}}>
+                  <div style={{display:"flex",alignItems:"center",gap:7}}>
+                    <span style={{fontSize:".95rem"}}>🫖</span>
+                    <div>
+                      <div style={{fontSize:".6rem",letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",fontWeight:600,lineHeight:1}}>Complete Your Ritual</div>
+                      <div style={{fontSize:".68rem",color:"#8A7A6A",fontWeight:300,lineHeight:1.3,marginTop:2}}>
+                        {hasCleanseInCart
+                          ? "Your cleanse needs the right tools to honour the process."
+                          : "Every tea deserves a vessel worthy of the moment."}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              {/* Paired items */}
-              <div style={{padding:"10px 12px",display:"flex",flexDirection:"column",gap:10}}>
-                {ritualPairings.map(t=>{
-                  const isOpen = expandedTool === t.id;
-                  return (
-                  <div key={t.id} style={{background:"white",borderRadius:12,border:`1px solid ${isOpen?"rgba(196,137,58,.35)":"rgba(196,137,58,.12)"}`,boxShadow:isOpen?"0 4px 18px rgba(28,26,23,.08)":"0 2px 8px rgba(28,26,23,.04)",transition:"border-color .2s, box-shadow .2s",overflow:"hidden"}}>
-                    {/* Collapsed row — always visible, click to expand */}
-                    <div
-                      style={{display:"flex",gap:10,alignItems:"center",padding:"10px 12px",cursor:"pointer"}}
-                      onClick={()=>setExpandedTool(isOpen ? null : t.id)}>
-                      {/* Photo */}
-                      <div style={{width:54,height:54,borderRadius:10,overflow:"hidden",flexShrink:0,background:"#F0EBE3"}}>
-                        <img
-                          src={t.photo}
-                          alt={t.name}
-                          onError={e=>{if(t.fallback)e.currentTarget.src=t.fallback;}}
-                          style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}
-                        />
-                      </div>
-                      {/* Info */}
-                      <div style={{flex:1,minWidth:0}}>
-                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:".84rem",color:"var(--bark)",lineHeight:1.2,marginBottom:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{t.name}</div>
-                        <div style={{fontSize:".64rem",color:"#9A8A78",fontStyle:"italic",marginBottom:5,lineHeight:1.3}}>{t.tagline}</div>
-                        <div style={{display:"flex",alignItems:"center",gap:8}}>
-                          <span style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",fontWeight:500}}>${t.price.toFixed(2)}</span>
-                          <span style={{fontSize:".58rem",color:"var(--sage-d)",background:"rgba(74,114,80,.08)",padding:"2px 7px",borderRadius:50,border:"1px solid rgba(74,114,80,.18)"}}>{t.material}</span>
+                {/* Paired items */}
+                <div style={{padding:"10px 12px",display:"flex",flexDirection:"column",gap:10}}>
+                  {ritualPairings.map(t=>{
+                    const isOpen = expandedTool === t.id;
+                    return (
+                    <div key={t.id} style={{background:"white",borderRadius:12,border:`1px solid ${isOpen?"rgba(196,137,58,.35)":"rgba(196,137,58,.12)"}`,boxShadow:isOpen?"0 4px 18px rgba(28,26,23,.08)":"0 2px 8px rgba(28,26,23,.04)",transition:"border-color .2s, box-shadow .2s"}}>
+                      {/* Collapsed row */}
+                      <div
+                        style={{display:"flex",gap:10,alignItems:"center",padding:"10px 12px",cursor:"pointer"}}
+                        onClick={()=>setExpandedTool(isOpen ? null : t.id)}>
+                        <div style={{width:54,height:54,borderRadius:10,overflow:"hidden",flexShrink:0,background:"#F0EBE3"}}>
+                          <img src={t.photo} alt={t.name} onError={e=>{if(t.fallback)e.currentTarget.src=t.fallback;}} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/>
+                        </div>
+                        <div style={{flex:1,minWidth:0}}>
+                          <div style={{fontFamily:"'Playfair Display',serif",fontSize:".84rem",color:"var(--bark)",lineHeight:1.2,marginBottom:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{t.name}</div>
+                          <div style={{fontSize:".64rem",color:"#9A8A78",fontStyle:"italic",marginBottom:5,lineHeight:1.3}}>{t.tagline}</div>
+                          <div style={{display:"flex",alignItems:"center",gap:8}}>
+                            <span style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",fontWeight:500}}>${t.price.toFixed(2)}</span>
+                            <span style={{fontSize:".58rem",color:"var(--sage-d)",background:"rgba(74,114,80,.08)",padding:"2px 7px",borderRadius:50,border:"1px solid rgba(74,114,80,.18)"}}>{t.material}</span>
+                          </div>
+                        </div>
+                        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:5,flexShrink:0}}>
+                          <button onClick={e=>{e.stopPropagation();addToCart({...t,type:"tool"});}}
+                            style={{background:"var(--gold)",color:"white",border:"none",padding:"7px 13px",fontFamily:"'Jost',sans-serif",fontSize:".6rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",borderRadius:50,whiteSpace:"nowrap"}}
+                            onMouseEnter={e=>{e.currentTarget.style.background="var(--bark)";}}
+                            onMouseLeave={e=>{e.currentTarget.style.background="var(--gold)";}}>
+                            + Add
+                          </button>
+                          <span style={{fontSize:".58rem",color:"var(--gold)",transition:"transform .2s",transform:isOpen?"rotate(180deg)":"rotate(0deg)",display:"block",lineHeight:1}}>▼</span>
                         </div>
                       </div>
-                      {/* Add button + Chevron */}
-                      <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:5,flexShrink:0}}>
-                        <button
-                          onClick={e=>{e.stopPropagation();addToCart({...t,type:"tool"});}}
-                          style={{background:"var(--gold)",color:"white",border:"none",padding:"7px 13px",fontFamily:"'Jost',sans-serif",fontSize:".6rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",borderRadius:50,transition:"background .2s",whiteSpace:"nowrap"}}
-                          onMouseEnter={e=>{e.currentTarget.style.background="var(--bark)";}}
-                          onMouseLeave={e=>{e.currentTarget.style.background="var(--gold)";}}>
-                          + Add
-                        </button>
-                        <span style={{fontSize:".58rem",color:"var(--gold)",transition:"transform .2s",transform:isOpen?"rotate(180deg)":"rotate(0deg)",display:"block",lineHeight:1}}>▼</span>
-                      </div>
+                      {/* Expanded detail — scrollable within card */}
+                      {isOpen&&(
+                        <div style={{padding:"0 14px 14px",borderTop:"1px solid rgba(196,137,58,.12)",maxHeight:320,overflowY:"auto"}}>
+                          <div style={{width:"100%",height:130,borderRadius:10,overflow:"hidden",margin:"10px 0 12px",background:"#F0EBE3"}}>
+                            <img src={t.photo} alt={t.name} onError={e=>{if(t.fallback)e.currentTarget.src=t.fallback;}} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/>
+                          </div>
+                          <p style={{fontSize:".76rem",color:"#6A5F50",lineHeight:1.7,fontWeight:300,margin:"0 0 10px"}}>{t.desc}</p>
+                          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
+                            <span style={{fontSize:".58rem",letterSpacing:".08em",background:"var(--sage-p)",color:"var(--sage-d)",padding:"3px 9px",borderRadius:50,border:"1px solid rgba(74,114,80,.15)"}}>{t.capacity}</span>
+                            <span style={{fontSize:".58rem",letterSpacing:".08em",background:"var(--sage-p)",color:"var(--sage-d)",padding:"3px 9px",borderRadius:50,border:"1px solid rgba(74,114,80,.15)"}}>Ritual: {t.ritual}</span>
+                          </div>
+                          <div style={{fontSize:".66rem",color:"#9A8A7A",fontStyle:"italic",padding:"7px 10px",background:"#FAF8F5",borderRadius:8,borderLeft:"2px solid var(--gold)",lineHeight:1.5,marginBottom:12}}>{t.care}</div>
+                          <button onClick={e=>{e.stopPropagation();addToCart({...t,type:"tool"});setExpandedTool(null);}}
+                            style={{width:"100%",background:"var(--gold)",color:"white",border:"none",padding:"10px",fontFamily:"'Jost',sans-serif",fontSize:".66rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",borderRadius:50}}
+                            onMouseEnter={e=>{e.currentTarget.style.background="var(--bark)";}}
+                            onMouseLeave={e=>{e.currentTarget.style.background="var(--gold)";}}>
+                            Add {t.name} to Cart — ${t.price.toFixed(2)}
+                          </button>
+                        </div>
+                      )}
                     </div>
-                    {/* Expanded detail panel */}
-                    {isOpen&&(
-                      <div style={{padding:"0 14px 14px",borderTop:"1px solid rgba(196,137,58,.12)"}}>
-                        {/* Larger photo strip */}
-                        <div style={{width:"100%",height:130,borderRadius:10,overflow:"hidden",margin:"10px 0 12px",background:"#F0EBE3"}}>
-                          <img
-                            src={t.photo}
-                            alt={t.name}
-                            onError={e=>{if(t.fallback)e.currentTarget.src=t.fallback;}}
-                            style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}
-                          />
-                        </div>
-                        {/* Description */}
-                        <p style={{fontSize:".76rem",color:"#6A5F50",lineHeight:1.7,fontWeight:300,margin:"0 0 10px"}}>{t.desc}</p>
-                        {/* Chips row */}
-                        <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
-                          <span style={{fontSize:".58rem",letterSpacing:".08em",background:"var(--sage-p)",color:"var(--sage-d)",padding:"3px 9px",borderRadius:50,border:"1px solid rgba(74,114,80,.15)"}}>{t.capacity}</span>
-                          <span style={{fontSize:".58rem",letterSpacing:".08em",background:"var(--sage-p)",color:"var(--sage-d)",padding:"3px 9px",borderRadius:50,border:"1px solid rgba(74,114,80,.15)"}}>Ritual: {t.ritual}</span>
-                        </div>
-                        {/* Care note */}
-                        <div style={{fontSize:".66rem",color:"#9A8A7A",fontStyle:"italic",padding:"7px 10px",background:"#FAF8F5",borderRadius:8,borderLeft:"2px solid var(--gold)",lineHeight:1.5,marginBottom:12}}>{t.care}</div>
-                        {/* Add CTA */}
-                        <button
-                          onClick={e=>{e.stopPropagation();addToCart({...t,type:"tool"});setExpandedTool(null);}}
-                          style={{width:"100%",background:"var(--gold)",color:"white",border:"none",padding:"10px",fontFamily:"'Jost',sans-serif",fontSize:".66rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",borderRadius:50,transition:"background .2s"}}
-                          onMouseEnter={e=>{e.currentTarget.style.background="var(--bark)";}}
-                          onMouseLeave={e=>{e.currentTarget.style.background="var(--gold)";}}>
-                          Add {t.name} to Cart — ${t.price.toFixed(2)}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
           <div className="drw-foot">
+            {/* Honey add-on — shows when kit is in cart */}
+            {cart.some(i => i.id && i.id.includes('_kit')) && !cart.some(i => i.id === 'honey_jar') && (
+              <div style={{background:"rgba(192,136,48,.08)",border:"1px dashed rgba(192,136,48,.35)",borderRadius:12,padding:"10px 14px",marginBottom:8,display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:"1.2rem",flexShrink:0}}>🍯</span>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Raw Honey Jar — $7</div>
+                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>Your kit recipe calls for raw honey</div>
+                </div>
+                <button onClick={()=>addToCart({id:"honey_jar",name:"Raw Honey Jar",price:7,emoji:"🍯"})}
+                  style={{background:"var(--gold)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
+                  + Add
+                </button>
+              </div>
+            )}
+            {/* Extra shaker bottle add-on */}
+            {cart.some(i => i.id && i.id.includes('_kit')) && !cart.some(i => i.id === 'shaker_extra') && (
+              <div style={{background:"rgba(74,114,80,.06)",border:"1px dashed rgba(74,114,80,.3)",borderRadius:12,padding:"10px 14px",marginBottom:10,display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:"1.2rem",flexShrink:0}}>🥤</span>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Extra Shaker Bottle — $8</div>
+                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>One included with your kit — add a spare for gym, desk, or a friend</div>
+                </div>
+                <button onClick={()=>addToCart({id:"shaker_extra",name:"Extra Shaker Bottle",price:8,emoji:"🥤"})}
+                  style={{background:"var(--sage-d)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
+                  + Add
+                </button>
+              </div>
+            )}
             <div className="d-sub"><span className="d-sub-l">Subtotal</span><span className="d-sub-r">${cartTotal.toFixed(2)}</span></div>
             <button className="btn-chk" disabled={cart.length===0}>Continue to Checkout</button>
           </div>
@@ -2283,12 +2295,153 @@ export default function ChaiHolistic() {
   };
 
   // --- HOME -----------------------------------------------------------------
+// ── Auto-rotating hero cards ──────────────────────────────────────────────────
+const HERO_NEW_SECTIONS = [
+  {page:"jelly",   emoji:"🌊", name:"Jelly Kits",      tag:"New · Kit Ships to You",  color:"#1a3a2a", desc:"13 all-natural agar & herb jelly recipes. Kit includes 6 packs + shaker bottle."},
+  {page:"seamoss", emoji:"🌿", name:"Sea Moss Gel",     tag:"New · Grandmother's Recipe", color:"#0a3a2a", desc:"15 flavored sea moss gel kits. 92 of 102 minerals. Pure Caribbean tradition."},
+  {page:"men",     emoji:"⚡", name:"Men's Wellness",   tag:"New · 20 Blends",         color:"#1a1a3a", desc:"20 blends built for the male body. Testosterone, heart, stress, prostate & more."},
+];
+
+const BLEND_EMOJIS_HERO = {"Morning":"🌅","Evening":"🌙","Seasonal":"🌺","Wellness":"🌿"};
+
+function HeroCards({ onNav, onOpenRecipe }) {
+  const [indices, setIndices] = useState([0, 3, 7]);
+  const [newIdx, setNewIdx] = useState(0);
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [paused, setPaused] = useState([false,false,false]);
+
+  // Rotate tea cards — staggered so they don't all change at once
+  useEffect(() => {
+    const timers = [0,1,2].map(slot => {
+      return setInterval(() => {
+        if (!paused[slot]) {
+          setIndices(prev => {
+            const next = [...prev];
+            let n = (next[slot] + 1) % BLENDS.length;
+            // avoid duplicates
+            while (next.includes(n)) n = (n + 1) % BLENDS.length;
+            next[slot] = n;
+            return next;
+          });
+        }
+      }, 3500 + slot * 1200);
+    });
+    return () => timers.forEach(clearInterval);
+  }, [paused]);
+
+  // Rotate "What's New" card
+  useEffect(() => {
+    const t = setInterval(() => setNewIdx(i => (i+1) % HERO_NEW_SECTIONS.length), 3000);
+    return () => clearInterval(t);
+  }, []);
+
+  const positions = ["c1","c2","c3"];
+  const newSection = HERO_NEW_SECTIONS[newIdx];
+
+  // Base z-index per slot — front card highest
+  const BASE_Z = [4, 3, 2];
+
+  return (
+    <>
+      {positions.map((cls, slot) => {
+        const blend = BLENDS[indices[slot]];
+        const isHov = hoveredCard === slot;
+        return (
+          <div key={cls} className={`h-card ${cls}`}
+            style={{
+              cursor:"pointer",
+              zIndex: isHov ? 20 : BASE_Z[slot],
+              overflow:"visible",
+            }}
+            onClick={() => onOpenRecipe(`w${indices[slot]}`)}
+            onMouseEnter={() => { setHoveredCard(slot); setPaused(p => { const n=[...p]; n[slot]=true; return n; }); }}
+            onMouseLeave={() => { setHoveredCard(null); setPaused(p => { const n=[...p]; n[slot]=false; return n; }); }}>
+            {/* Inner clipping wrapper — clips the card visuals but not the tooltip */}
+            <div style={{width:"100%",height:"100%",borderRadius:20,overflow:"hidden",position:"relative"}}>
+              <div className="h-card-inner" style={{background:`linear-gradient(135deg,${blend.color},#1C1A17)`, transition:"all .4s"}}>
+                {BLEND_EMOJIS_HERO[blend.occasion] || "🍵"}
+              </div>
+              <div className="h-card-body">
+                <div className="h-card-name" style={{transition:"all .3s"}}>{blend.name}</div>
+                <div className="h-card-tag">{blend.occasion}</div>
+              </div>
+            </div>
+            {/* Tooltip — outside the clipping wrapper so it's never hidden */}
+            {isHov && (
+              <div style={{
+                position:"absolute",
+                bottom:"calc(100% + 12px)",
+                left:"50%",
+                transform:"translateX(-50%)",
+                width:230,
+                background:"#1C1A17",
+                borderRadius:14,
+                padding:"14px 16px",
+                border:"1px solid rgba(196,137,58,.4)",
+                boxShadow:"0 16px 48px rgba(0,0,0,.65)",
+                zIndex:100,
+                pointerEvents:"none",
+                whiteSpace:"normal",
+              }}>
+                <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>{blend.occasion} · {blend.steepMin} min steep</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:5}}>{blend.name}</div>
+                <div style={{fontSize:".72rem",color:"rgba(255,255,255,.55)",fontStyle:"italic",marginBottom:10,lineHeight:1.55}}>{blend.tagline}</div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:10}}>
+                  {blend.ingredients.slice(0,3).map(h=>(
+                    <span key={h} style={{background:"rgba(255,255,255,.08)",borderRadius:20,padding:"2px 9px",fontSize:".6rem",color:"rgba(255,255,255,.6)"}}>{h}</span>
+                  ))}
+                </div>
+                <div style={{fontSize:".65rem",color:"rgba(196,137,58,.85)",letterSpacing:".06em",fontWeight:500}}>Click to view full recipe →</div>
+                <div style={{position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",borderLeft:"7px solid transparent",borderRight:"7px solid transparent",borderTop:"7px solid #1C1A17"}}/>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* What's New rotating spotlight card */}
+      <div className="h-card c4"
+        style={{cursor:"pointer", overflow:"visible", zIndex: hoveredCard === 3 ? 10 : undefined}}
+        onClick={() => onNav(newSection.page)}
+        onMouseEnter={() => setHoveredCard(3)}
+        onMouseLeave={() => setHoveredCard(null)}>
+        <div className="h-card-inner" style={{background:`linear-gradient(135deg,${newSection.color},#0a0a0a)`, transition:"all .6s"}}>
+          <span style={{fontSize:"1.8rem", transition:"all .4s"}}>{newSection.emoji}</span>
+        </div>
+        <div className="h-card-body">
+          <div className="h-card-name" style={{fontSize:".78rem", transition:"all .4s"}}>{newSection.name}</div>
+          <div className="h-card-tag" style={{color:"#c08830", fontSize:".58rem"}}>{newSection.tag}</div>
+        </div>
+        {/* Pulse dot */}
+        <div style={{position:"absolute",top:8,right:8,width:7,height:7,borderRadius:"50%",background:"#c08830",boxShadow:"0 0 0 3px rgba(192,136,48,.25)",animation:"pulse 2s infinite"}}/>
+        {/* Hover preview */}
+        {hoveredCard === 3 && (
+          <div style={{
+            position:"absolute", bottom:"calc(100% + 10px)", left:"50%",
+            transform:"translateX(-50%)", width:210,
+            background:"#1C1A17", borderRadius:14, padding:"12px 14px",
+            border:"1px solid rgba(196,137,58,.35)",
+            boxShadow:"0 12px 36px rgba(0,0,0,.5)",
+            zIndex:50, pointerEvents:"none",
+          }}>
+            <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6}}>✦ New Section</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"white",marginBottom:6}}>{newSection.name}</div>
+            <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.6,marginBottom:8}}>{newSection.desc}</div>
+            <div style={{fontSize:".65rem",color:"rgba(196,137,58,.8)"}}>Click to explore →</div>
+            <div style={{position:"absolute",top:"100%",left:"50%",transform:"translateX(-50%)",borderLeft:"7px solid transparent",borderRight:"7px solid transparent",borderTop:"7px solid #1C1A17"}}/>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
   const Home = () => {
     return (
     <div>
       {/* SEASONAL BANNER */}
       {seasonalBlends.length > 0 && (
-        <div className="season-banner" style={{marginTop:148}}>
+        <div className="season-banner" style={{marginTop:4}}>
           <span className="season-banner-txt">✦ {MONTH_NAMES[currentMonth]} pick:</span>
           {seasonalBlends.map(b=>(
             <span key={b.id}>
@@ -2355,30 +2508,7 @@ export default function ChaiHolistic() {
             </div>
           </div>
           <div className="hero-visual">
-            {[{cls:"c1",name:"2AM Reset",occ:"Evening",e:"🍵",filter:"Evening"},{cls:"c2",name:"Morning Rise",occ:"Morning",e:"🌿",filter:"Morning"},{cls:"c3",name:"Rose & Hibiscus",occ:"Seasonal",e:"🌺",filter:"Seasonal"}].map(c=>(
-              <div key={c.cls} className={`h-card ${c.cls}`} style={{cursor:"pointer"}}
-                onClick={()=>{nav("shop");setBlendFilter(c.filter);}}
-                onMouseEnter={e=>e.currentTarget.style.transform="translateY(-4px) scale(1.03)"}
-                onMouseLeave={e=>e.currentTarget.style.transform=""}>
-                <div className="h-card-inner" style={{background:`linear-gradient(135deg,${c.cls==="c2"?"#3A6B3A":c.cls==="c3"?"#8B2A4A":"#4A3728"},#1C1A17)`}}>{c.e}</div>
-                <div className="h-card-body"><div className="h-card-name">{c.name}</div><div className="h-card-tag">{c.occ}</div></div>
-              </div>
-            ))}
-            {/* Jelly Kit highlight card */}
-            <div
-              className="h-card c4"
-              style={{cursor:"pointer",overflow:"hidden"}}
-              onClick={()=>nav("jelly")}
-              onMouseEnter={e=>e.currentTarget.style.transform="translateY(-4px) scale(1.03)"}
-              onMouseLeave={e=>e.currentTarget.style.transform="rotate(2deg)"}>
-              <div className="h-card-inner" style={{background:"linear-gradient(135deg,#1a3a2a,#2a1a0a)"}}>🌊</div>
-              <div className="h-card-body">
-                <div className="h-card-name">Jelly Kits</div>
-                <div className="h-card-tag" style={{color:"#c08830"}}>New · Coming Soon</div>
-              </div>
-              {/* gold pulse dot */}
-              <div style={{position:"absolute",top:10,right:10,width:8,height:8,borderRadius:"50%",background:"#c08830",boxShadow:"0 0 0 3px rgba(192,136,48,.3)",animation:"pulse 2s infinite"}}/>
-            </div>
+            <HeroCards onNav={nav} onOpenRecipe={(id)=>{nav("recipes");setTimeout(()=>setActiveRecipe(id),150);}} />
             <div className="h-badge" style={{cursor:"pointer"}} onClick={()=>nav("recipes")}>Sip &amp; Heal<small>40 Recipes from the book</small></div>
           </div>
         </div>
@@ -2482,6 +2612,7 @@ export default function ChaiHolistic() {
               {icon:"💰",title:"Cost Per Cup",sub:"vs. a $5 coffee — always shown",action:()=>nav("shop"),btn:"Shop"},
               {icon:"✨",title:"Seasonal Picks",sub:"This month's best blends",action:()=>nav("shop"),btn:"See"},
               {icon:"🫖",title:"Brew Tools",sub:"Cups, teapots & ritual essentials",action:()=>{nav("shop");setTimeout(()=>{const el=document.getElementById("sec-shop-tools");if(el)el.scrollIntoView({behavior:"smooth"});},120);},btn:"Shop"},
+              {icon:"💊",title:"Supplements",sub:"Critical nutrients — coming soon",action:()=>{},btn:"Soon",disabled:true},
             ].map(f=>(
               <div key={f.title}
                 onClick={f.action}
@@ -5239,7 +5370,7 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {[["home","🏠 Home"],["shop","Shop"],["recipes","Recipes"],["men","⚡ Men's"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+          {[["home","🏠 Home"],["shop","Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>{l}</span>
           ))}
           <span className="nav-lnk" onClick={()=>setProfileOpen(true)}
@@ -5266,7 +5397,7 @@ Thank you!`);
 
       {/* ── Mobile slide-down menu ── */}
       <div className={`mob-menu${mobMenuOpen?" open":""}`}>
-        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","📖 Recipes"],["men","⚡ Men's Wellness"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's Wellness"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
           <div key={p} className="mob-lnk" onClick={()=>{nav(p);setMobMenuOpen(false);}}>
             {l} <span style={{color:"var(--dust)"}}>›</span>
           </div>
@@ -5290,8 +5421,8 @@ Thank you!`);
         {page==="shop"&&<Shop/>}
         {page==="recipes"&&<Recipes/>}
         {page==="mocktails"&&<MocktailsPage/>}
-        {page==="jelly"&&<JellyPage/>}
-        {page==="seamoss"&&<SeaMossPage/>}
+        {page==="jelly"&&<JellyPage onAddToCart={addToCart}/>}
+        {page==="seamoss"&&<SeaMossPage onAddToCart={addToCart}/>}
         {page==="rings"&&<Rings/>}
         {page==="faq"&&<FAQPage/>}
         {page==="men"&&<MensWellness onNav={nav}/>}
@@ -5415,6 +5546,7 @@ Thank you!`);
               <span className="ft-lnk" onClick={()=>nav("mocktails")}>🍹 Mocktail Recipes</span>
               <span className="ft-lnk" onClick={()=>nav("jelly")}>🌊 Jelly Kits</span>
               <span className="ft-lnk" onClick={()=>nav("seamoss")}>🌿 Sea Moss Gel</span>
+              <span className="ft-lnk" style={{opacity:.55,cursor:"default"}}>💊 Supplements <em style={{fontSize:".6rem",color:"var(--gold)"}}>· Coming Soon</em></span>
               <span className="ft-lnk" onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
               <span className="ft-lnk" onClick={()=>setRitualOpen(true)}>☀ Build My Ritual</span>
               <span className="ft-lnk" onClick={()=>setTrackerOpen(true)}>🌿 Cleanse Tracker</span>
