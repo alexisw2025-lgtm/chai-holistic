@@ -3054,7 +3054,7 @@ export default function ChaiHolistic() {
                 <div className="rng-tag">{r.tagline}</div>
                 <div className="rng-name">{r.name}</div><div className="rng-desc">{r.desc}</div>
                 <div className="rng-mat">{r.material}</div>
-                <div className="rng-foot"><span className="rng-price">${r.price.toFixed(2)}</span><button className="btn-rng" onClick={()=>{const d=RING_DESIGNS.find(x=>x.ringRef===r.id)||null;setRingConfig({ring:r});setRcStep(1);setRcDesign(d);setRcSize(null);setRcFreq(null);setRcOuterColor(null);setRcInnerColor(null);setRcOrderConfirmed(false);}}>Customize &amp; Buy</button></div>
+                <div className="rng-foot"><span className="rng-price">{r.price.toFixed(2)}</span><button className="btn-rng" onClick={()=>{const d=RING_DESIGNS.find(x=>x.ringRef===r.id)||null;setRingConfig({ring:r});setRcStep(1);setRcDesign(d);setRcSize(null);setRcFreq(null);setRcOuterColor(null);setRcInnerColor(null);setRcOrderConfirmed(false);}}>Customize &amp; Buy</button></div>
               </div>
             ))}
           </div>
@@ -3313,7 +3313,7 @@ export default function ChaiHolistic() {
                         <div className="rcard-tag-sm">{r.occasion} · {r.steepMin} min</div>
                       </div>
                     </div>
-                    <div className="rcard-meta"><span className="rtag occ">{r.mood}</span><span className="rtag time">${r.price}</span></div>
+                    <div className="rcard-meta"><span className="rtag occ">{r.mood}</span><span className="rtag time">{r.price}</span></div>
                     </div>
                   </div>
                 );
@@ -3335,7 +3335,7 @@ export default function ChaiHolistic() {
                         <div className="rcard-tag-sm" style={{color:"#8B3A2A"}}>{r.organ} · {r.steepMin} min</div>
                       </div>
                     </div>
-                    <div className="rcard-meta"><span className="rtag" style={{background:"#F5E0DC",color:"#8B3A2A"}}>{r.mood}</span><span className="rtag time">${r.price}</span></div>
+                    <div className="rcard-meta"><span className="rtag" style={{background:"#F5E0DC",color:"#8B3A2A"}}>{r.mood}</span><span className="rtag time">{r.price}</span></div>
                     </div>
                   </div>
                 );
@@ -3985,7 +3985,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
                       <div style={{padding:"10px 12px"}}>
                         <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:2}}>{r.name}</div>
                         <div style={{fontSize:".65rem",color:"rgba(196,137,58,.7)",marginBottom:4}}>{r.tagline}</div>
-                        <div style={{fontSize:".62rem",color:"rgba(255,255,255,.35)"}}>${r.price.toFixed(2)}</div>
+                        <div style={{fontSize:".62rem",color:"rgba(255,255,255,.35)"}}>{r.price.toFixed(2)}</div>
                       </div>
                     </div>
                   ))}
@@ -5217,7 +5217,7 @@ Thank you!`);
                   <span style={{fontSize:".62rem",color:"rgba(196,137,58,.9)",letterSpacing:".08em",textTransform:"uppercase",fontWeight:500}}>Tap to Pray · 2amcompanion.com</span>
                 </div>
                 <div className="rng-foot">
-                  <span className="rng-price">${r.price.toFixed(2)}</span>
+                  <span className="rng-price">{r.price.toFixed(2)}</span>
                   <button className="btn-rng" onClick={()=>{const d=RING_DESIGNS.find(x=>x.ringRef===r.id)||null;setRingConfig({ring:r});setRcStep(1);setRcDesign(d);setRcSize(null);setRcFreq(null);setRcOuterColor(null);setRcInnerColor(null);setRcOrderConfirmed(false);}}>Customize &amp; Buy</button>
                 </div>
               </div>
