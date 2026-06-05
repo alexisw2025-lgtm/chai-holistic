@@ -494,1807 +494,7 @@ function MensWellness({ onNav }) {
   );
 }
 
-export default function ChaiHolistic() {
-  const [page, setPage] = useState("home");
-  const [cart, setCart] = useState([]);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [blendFilter, setBlendFilter] = useState("All");
-  const [organFilter, setOrganFilter] = useState("All");
-  const [activeRecipe, setActiveRecipe] = useState(null);
-  const [timerSec, setTimerSec] = useState(null);
-  const [timerOn, setTimerOn] = useState(false);
-  const [timerFor, setTimerFor] = useState(null);
-  const [notif, setNotif] = useState(null);
-  const [search, setSearch] = useState("");
-  const [herbPair, setHerbPair] = useState(null);
-  // Tea Finder
-  const [finderOpen, setFinderOpen] = useState(false);
-  const [finderStep, setFinderStep] = useState(0);
-  const [finderAnswers, setFinderAnswers] = useState({});
-  const [finderResults, setFinderResults] = useState(null);
-  // Sip & Seek
-  const [ringConfig, setRingConfig] = useState(null);
-  const [rcStep, setRcStep] = useState(1);
-  const [blendExpanded, setBlendExpanded] = useState(null);
-  const [rcFreq, setRcFreq] = useState(null);
-  const [rcDesign, setRcDesign] = useState(null);
-  const [rcSize, setRcSize] = useState(null);
-  const [rcOuterColor, setRcOuterColor] = useState(null);
-  const [rcInnerColor, setRcInnerColor] = useState(null);
-  const [rcPrayerLink, setRcPrayerLink] = useState(null);
-  const [rcLinkUrl, setRcLinkUrl] = useState('');
-  const [rcLinkTestShown, setRcLinkTestShown] = useState(false);
-  const [rcLinkAttempts, setRcLinkAttempts] = useState(0);
-  const [rcOrderConfirmed, setRcOrderConfirmed] = useState(false);
-  const [intentionStep, setIntentionStep] = useState(0);
-  const [intentionData, setIntentionData] = useState({});
-  const [intentionResult, setIntentionResult] = useState(null);
-  const [intentionOpen, setIntentionOpen] = useState(false);
-  const [welcomeSeen, setWelcomeSeen] = useState(() => {
-    try { return localStorage.getItem('chai_welcome_seen') === 'true'; } catch { return false; }
-  });
-  const [showWelcome, setShowWelcome] = useState(false);
-  // Ritual Builder
-  const [ritualOpen, setRitualOpen] = useState(false);
-  const [ritual, setRitual] = useState({ morning:null, evening:null, extras:[] });
-  // Cleanse Tracker
-  const [trackerOpen, setTrackerOpen] = useState(false);
-  const [activeTracker, setActiveTracker] = useState(null);
-  // Tea Library deep-link
-  const [teaLibraryBlend, setTeaLibraryBlend] = useState(null);
-  const [checkedDays, setCheckedDays] = useState(() => {
-    try {
-      const saved = localStorage.getItem('chai_cleanse_progress');
-      return saved ? JSON.parse(saved) : {};
-    } catch { return {}; }
-  });
-  // 2AM mode
-  const [twoAM, setTwoAM] = useState(false);
 
-  const timerRef = useRef(null);
-  const topRef = useRef(null);
-  const [showBackTop, setShowBackTop] = useState(false);
-  const [activeSecIdx, setActiveSecIdx] = useState(0);
-  const [bookPreview, setBookPreview] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
-  const [jellyOpen, setJellyOpen] = useState(false);
-  const [mobMenuOpen, setMobMenuOpen] = useState(false);
-  const [timerDone, setTimerDone] = useState(false);
-  const [timerBlendName, setTimerBlendName] = useState("");
-
-  // -- AUDIO SYSTEM ----------------------------------------------------------
-  // We create and UNLOCK the AudioContext when user taps "Start Brewing"
-  // (must be from a direct user interaction -- browser requirement)
-  // Then we schedule the sound to play at timer completion.
-  const audioCtxRef = useRef(null);
-  const soundScheduledRef = useRef(false);
-
-  const unlockAndScheduleSound = (secondsFromNow) => {
-    try {
-      // Close any old context
-      if (audioCtxRef.current) {
-        try { audioCtxRef.current.close(); } catch {}
-      }
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      audioCtxRef.current = ctx;
-      soundScheduledRef.current = true;
-
-      const playStrike = (startOffset) => {
-        [[196, 0, 0.9], [392, 0.01, 0.65], [588, 0.02, 0.38],
-         [784, 0.03, 0.22], [980, 0.04, 0.12]].forEach(([freq, delay, gain]) => {
-          const osc = ctx.createOscillator();
-          const gn = ctx.createGain();
-          osc.connect(gn); gn.connect(ctx.destination);
-          osc.type = "sine";
-          const t = ctx.currentTime + startOffset + delay;
-          osc.frequency.setValueAtTime(freq, t);
-          gn.gain.setValueAtTime(0.001, t);
-          gn.gain.linearRampToValueAtTime(gain, t + 0.06);
-          gn.gain.exponentialRampToValueAtTime(0.001, t + 5.2);
-          osc.start(t);
-          osc.stop(t + 5.5);
-        });
-      };
-
-      // Schedule 3 bowl strikes at the exact moment the timer ends
-      playStrike(secondsFromNow);
-      playStrike(secondsFromNow + 2.8);
-      playStrike(secondsFromNow + 5.6);
-    } catch(e) { console.log("Audio not available:", e); }
-  };
-
-  const cancelScheduledSound = () => {
-    soundScheduledRef.current = false;
-    if (audioCtxRef.current) {
-      try { audioCtxRef.current.close(); } catch {}
-      audioCtxRef.current = null;
-    }
-  };
-
-  // Show back-to-top after scrolling 400px
-  useEffect(() => {
-    const onScroll = () => setShowBackTop(window.scrollY > 400);
-    window.addEventListener("scroll", onScroll, { passive:true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const PAGE_SECTIONS = {
-    home:    [["↑ Top","sec-hero"],["Features","sec-features"],["Blends","sec-blends"],["Story","sec-story"],["Tea","sec-tea"],["Bundles","sec-bundles"],["Brew Tools","sec-tools-home"],["Rings","sec-rings-home"],["Brewing","sec-brewing"],["FAQ","sec-faq-teaser"]],
-    shop:    [["↩ Home","home-page"],["↑ Top","sec-shop-top"],["Blends","sec-shop-blends"],["Cleansing","sec-shop-cleanse"],["Herbs","sec-shop-herbs"],["Bundles","sec-shop-bundles"],["Brew Tools","sec-shop-tools"]],
-    recipes: [["↩ Home","home-page"],["↑ Top","sec-rec-top"],["Wellness","sec-rec-wellness"],["Cleansing","sec-rec-cleanse"]],
-    rings:   [["↩ Rings","home-page-rings"],["↑ Top","sec-rings-top"],["Collection","sec-rings-grid"],["How It Works","sec-rings-how"],["Frequency","sec-rings-meridian"]],
-    faq:         [["↩ Home","home-page"],["↑ Top","sec-faq-top"],["FAQ","sec-faq-content"]],
-    men:         [["↩ Home","home-page"],["↑ Top","sec-men-top"],["Blends","sec-men-blends"]],
-    mocktails:   [["↩ Home","home-page"],["↑ Top","sec-mkt-top"],["Wellness","sec-mkt-wellness"],["Social","sec-mkt-social"]],
-    "tea-library": [["↩ Home","home-page"],["↑ Top","sec-tl-top"],["Search","sec-tl-search"],["Collection","sec-tl-grid"]],
-  };
-
-  useEffect(() => {
-    if (!(PAGE_SECTIONS[page]||[]).length) { setActiveSecIdx(0); return; }
-    const IDS = (PAGE_SECTIONS[page]||[]).map(s=>s[1]);
-    const onScroll = () => {
-      const mid = window.scrollY + window.innerHeight * 0.38;
-      let active = 0;
-      IDS.forEach((id,i) => { const el = document.getElementById(id); if (el && el.offsetTop <= mid) active = i; });
-      setActiveSecIdx(active);
-    };
-    window.addEventListener("scroll", onScroll, { passive:true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [page]);
-
-  // Lock body scroll when any modal is open
-  useEffect(() => {
-    const anyOpen = finderOpen || ritualOpen || trackerOpen || cartOpen || bookPreview || intentionOpen || showWelcome || !!ringConfig || profileOpen;
-    document.body.style.overflow = anyOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [finderOpen, ritualOpen, trackerOpen, cartOpen, bookPreview, intentionOpen, profileOpen]);
-
-  const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentHour = now.getHours();
-  const isNight = currentHour >= 21 || currentHour < 5;
-
-  const nav = (p, extra) => {
-    setPage(p);
-    if (extra && extra.filter) setBlendFilter(extra.filter);
-    if (extra && extra.blend !== undefined) setTeaLibraryBlend(extra.blend);
-    setTimeout(() => topRef.current && topRef.current.scrollIntoView({ behavior:"smooth" }), 20);
-  };
-
-  const timerDoneRef = useRef(false);
-  const timerEndMsRef = useRef(null);
-
-  // Auto-scroll Tea Finder modal to top when step changes
-  useEffect(() => {
-    if (finderOpen) {
-      const el = document.getElementById('tea-finder-modal');
-      if (el) el.scrollTop = 0;
-    }
-  }, [finderStep, finderOpen]);
-
-  useEffect(() => {
-    if (timerOn && timerEndMsRef.current !== null) {
-      const tick = () => {
-        const remaining = Math.round((timerEndMsRef.current - Date.now()) / 1000);
-        if (remaining > 0) {
-          setTimerSec(remaining);
-          timerRef.current = setTimeout(tick, 250);
-        } else {
-          setTimerSec(0);
-          if (!timerDoneRef.current) {
-            timerDoneRef.current = true;
-            setTimerOn(false);
-            setTimerDone(true);
-          }
-        }
-      };
-      timerRef.current = setTimeout(tick, 250);
-    }
-    return () => clearTimeout(timerRef.current);
-  }, [timerOn]);
-
-  const toast = msg => { setNotif(msg); setTimeout(() => setNotif(null), 3200); };
-  const addToCart = (item, type="blend") => {
-    setCart(p => { const ex = p.find(i=>i.id===item.id); return ex ? p.map(i=>i.id===item.id?{...i,qty:i.qty+1}:i) : [...p,{...item,qty:1,type}]; });
-    toast(`✦ ${item.name} added to cart`);
-  };
-  if (typeof window !== "undefined") { window._chaiAddToCart = addToCart; window._chaiNav = (p) => nav(p); }
-  const removeItem = id => setCart(p => p.filter(i => i.id !== id));
-  const changeQty = (id,d) => setCart(p => p.map(i => i.id===id?{...i,qty:Math.max(1,i.qty+d)}:i));
-  const cartTotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
-  const cartCount = cart.reduce((s,i) => s+i.qty, 0);
-  const fmt = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
-  const startTimer = (r, idx) => {
-    timerDoneRef.current = false;
-    const secs = r.steepMin * 60;
-    timerEndMsRef.current = Date.now() + secs * 1000;
-    setTimerFor(idx);
-    setTimerSec(secs);
-    setTimerOn(true);
-    setTimerDone(false);
-    setTimerBlendName(r.name || "Your Tea");
-    // Schedule sound NOW from this user tap -- only direct interactions allow audio
-    // Add 0.6s buffer: slight ramp-in so the bowl plays AT zero, never before
-    unlockAndScheduleSound(secs + 0.6);
-  };
-
-  const stopTimer = () => {
-    timerDoneRef.current = false;
-    timerEndMsRef.current = null;
-    cancelScheduledSound();
-    setTimerOn(false);
-    setTimerSec(null);
-    setTimerFor(null);
-    setTimerDone(false);
-  };
-
-  // dismissTimer -- fully clears all timer state in one shot (no double-close)
-  const dismissTimer = () => {
-    timerDoneRef.current = false;
-    timerEndMsRef.current = null;
-    cancelScheduledSound();
-    setTimerOn(false);
-    setTimerSec(null);
-    setTimerFor(null);
-    setTimerDone(false);
-  };
-
-  const scrollPosRef = useRef(0);
-  const open2AM = () => {
-    scrollPosRef.current = window.scrollY || document.documentElement.scrollTop || 0;
-    setTwoAM(true);
-  };
-  const close2AM = () => {
-    setTwoAM(false);
-    stopTimer();
-    setTimeout(() => window.scrollTo({ top: scrollPosRef.current, behavior: "instant" }), 30);
-  };
-
-  const filteredBlends = blendFilter==="All" ? BLENDS : BLENDS.filter(b=>b.occasion===blendFilter);
-  const filteredCleansing = organFilter==="All" ? CLEANSING : CLEANSING.filter(c=>c.organ===organFilter);
-  const searchedHerbs = search ? HERBS.filter(h=>h.name.toLowerCase().includes(search.toLowerCase())||h.benefit.toLowerCase().includes(search.toLowerCase())) : HERBS;
-  const seasonalBlends = (SEASONAL_PICKS[currentMonth]||[]).map(name=>[...BLENDS,...CLEANSING].find(b=>b.name===name)).filter(Boolean);
-
-  // Tea Finder logic
-  const runFinder = (answers) => {
-    const all = [...BLENDS, ...CLEANSING];
-    let scored = all.map(b => {
-      let score = 0;
-      if (b.energy === answers.energy) score += 3;
-      if (b.feeling === answers.feeling) score += 4;
-      if (b.time === answers.time || b.time === "anytime") score += 2;
-      return { ...b, score };
-    });
-    scored.sort((a,b) => b.score - a.score);
-    setFinderResults(scored.slice(0,3));
-  };
-
-  const handleFinderAnswer = (key, val) => {
-    const next = { ...finderAnswers, [key]: val };
-    setFinderAnswers(next);
-    if (finderStep < TEA_FINDER_STEPS.length - 1) {
-      setFinderStep(s => s+1);
-    } else {
-      runFinder(next);
-    }
-  };
-
-  const resetFinder = () => { setFinderStep(0); setFinderAnswers({}); setFinderResults(null); };
-
-  // Ritual builder add to cart
-  const addRitualToCart = () => {
-    if (ritual.morning) addToCart({...ritual.morning, emoji:"🌅"});
-    if (ritual.evening) addToCart({...ritual.evening, emoji:"🌙"});
-    ritual.extras.forEach(e => addToCart({...e, emoji:"✦"}));
-    setRitualOpen(false);
-    toast("✦ Your daily ritual has been added!");
-  };
-
-  // Cleanse tracker
-  const toggleDay = (blendId, day) => {
-    const key = `${blendId}-${day}`;
-    setCheckedDays(p => {
-      const next = {...p, [key]: !p[key]};
-      try { localStorage.setItem('chai_cleanse_progress', JSON.stringify(next)); } catch {}
-      return next;
-    });
-  };
-
-  const CSS = `
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap');
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{
-      --ink:#1C1A17;--bark:#3D2B1F;--parch:#F7F2EA;--linen:#EDE7DC;
-      --sage:#7A9E7E;--sage-d:#4A7250;--sage-p:#EBF2EC;
-      --gold:#C4893A;--gold-p:#F5E6CE;--dust:#D4C9B8;
-    }
-    html{scroll-behavior:smooth;}
-    body{font-family:'Jost',sans-serif;background:var(--parch);color:var(--ink);overflow-x:hidden;}
-    ::selection{background:var(--sage-p);}
-    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:.38;}
-
-    nav{position:sticky;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:74px;background:rgba(247,242,234,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--dust);border-radius:22px 22px 0 0;}
-    .nav-logo{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--bark);cursor:pointer;display:flex;align-items:center;gap:8px;letter-spacing:.02em;}
-    .nav-logo-img{width:46px;height:46px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.12);flex-shrink:0;}
-    .nav-logo-text{display:flex;flex-direction:column;line-height:1.1;}
-    .nav-logo-text span:first-child{font-size:1.35rem;}
-    .nav-logo-text span:last-child{font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-family:'Jost',sans-serif;font-weight:400;}
-    @keyframes spin{to{transform:rotate(360deg);}}
-    .nav-links{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;}
-    .nav-lnk{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;}
-    .nav-lnk:hover,.nav-lnk.on{opacity:1;border-bottom-color:var(--gold);}
-    .nav-right{display:flex;align-items:center;gap:10px;}
-    .cart-btn{background:var(--bark);color:var(--parch);border:none;padding:8px 18px;font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;display:flex;align-items:center;gap:7px;}
-    .cart-btn:hover{background:var(--sage-d);}
-    .cart-badge{background:var(--gold);color:white;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.56rem;font-weight:500;}
-
-    /* SEASONAL BANNER */
-    .season-banner{background:linear-gradient(90deg,var(--sage-d),#3A6B50);padding:10px 2rem;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
-    .season-banner-txt{font-size:.72rem;color:rgba(255,255,255,.85);letter-spacing:.06em;}
-    .season-banner-name{font-family:'Playfair Display',serif;font-size:.88rem;color:white;font-style:italic;}
-    .btn-season{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;padding:5px 14px;font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:50px;transition:all .2s;}
-    .btn-season:hover{background:rgba(255,255,255,.25);}
-
-    /* 2AM BUTTON */
-    .twoam-btn{position:fixed;bottom:28px;right:28px;z-index:400;background:#1C1A17;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);padding:11px 18px;font-family:'Jost',sans-serif;font-size:.7rem;letter-spacing:.1em;cursor:pointer;border-radius:50px;transition:all .3s;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:pulse2am 3s ease-in-out infinite;}
-    .twoam-btn:hover{background:var(--bark);color:white;border-color:rgba(255,255,255,.3);}
-    div:has(> .print-tooltip):hover .print-tooltip{opacity:1 !important;}
-    @keyframes pulse2am{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.3)}50%{box-shadow:0 4px 32px rgba(196,137,58,.35)}}
-
-    /* HERO */
-    .hero{min-height:620px;position:relative;overflow:hidden;display:flex;align-items:center;background:linear-gradient(140deg,#F0E8D8 0%,#E5DDD0 45%,#D8CEBE 100%);border-radius:0 0 20px 20px;}
-    .hero-orb{position:absolute;border-radius:50%;pointer-events:none;}
-    .hero-orb.a{width:650px;height:650px;top:-180px;right:-120px;background:radial-gradient(circle,rgba(122,158,126,.18) 0%,transparent 70%);animation:floatA 12s ease-in-out infinite;}
-    .hero-orb.b{width:380px;height:380px;bottom:-80px;left:-60px;background:radial-gradient(circle,rgba(196,137,58,.12) 0%,transparent 70%);animation:floatB 9s ease-in-out infinite;}
-    @keyframes floatA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-28px,18px) scale(1.04)}}
-    @keyframes floatB{0%,100%{transform:translate(0,0)}50%{transform:translate(18px,-22px)}}
-    .hero-inner{position:relative;z-index:2;width:100%;max-width:1280px;margin:0 auto;padding:40px 2.5rem 60px;display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:center;}
-    .hero-eye{display:flex;align-items:center;gap:10px;margin-bottom:1.4rem;}
-    .hero-eye-line{width:36px;height:1px;background:var(--gold);}
-    .hero-eye-txt{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
-    .hero-h{font-family:'Playfair Display',serif;font-size:clamp(3rem,5.5vw,5.5rem);font-weight:400;line-height:1.18;color:var(--bark);margin-bottom:1.6rem;letter-spacing:.01em;}
-    .hero-h em{font-style:italic;color:var(--sage-d);}
-    .hero-h .g{color:var(--gold);}
-    .hero-p{font-size:.96rem;font-weight:300;color:#5A5040;line-height:1.8;max-width:420px;margin-bottom:2rem;}
-    .hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.5rem;}
-    .btn-main{background:var(--bark);color:var(--parch);border:none;padding:12px 30px;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;}
-    .btn-main:hover{background:var(--sage-d);transform:translateY(-2px);box-shadow:0 8px 22px rgba(74,114,80,.3);}
-    .btn-ghost{background:transparent;color:var(--bark);border:1.5px solid var(--bark);padding:12px 30px;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;}
-    .btn-ghost:hover{border-color:var(--sage-d);color:var(--sage-d);}
-    .btn-finder{background:var(--gold);color:white;border:none;padding:12px 30px;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;display:flex;align-items:center;gap:8px;}
-    .btn-finder:hover{background:#D4943A;transform:translateY(-2px);}
-    .hero-visual{position:relative;height:520px;}
-    .h-card{position:absolute;background:white;overflow:visible;box-shadow:0 18px 55px rgba(28,26,23,.13);transition:transform .4s, z-index 0s;border-radius:20px;}
-    .h-card .h-card-clip{border-radius:20px;overflow:hidden;width:100%;height:100%;}
-    .h-card:hover{transform:rotate(0deg) scale(1.05) !important;z-index:20 !important;}
-    .h-card.c1{width:210px;height:290px;top:20px;left:20px;transform:rotate(-4deg);z-index:4;}
-    .h-card.c2{width:200px;height:270px;top:55px;left:175px;transform:rotate(3deg);z-index:3;}
-    .h-card.c3{width:180px;height:235px;top:195px;left:75px;transform:rotate(-1.5deg);z-index:2;}
-    .h-card.c4{width:160px;height:210px;top:240px;left:220px;transform:rotate(2deg);z-index:1;}
-    .h-card-inner{width:100%;height:65%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-radius:20px 20px 0 0;}
-    .h-card-body{padding:11px 13px;}
-    .h-card-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);}
-    .h-card-tag{font-size:.62rem;color:var(--sage);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
-    .h-badge{position:absolute;bottom:-48px;right:0;background:var(--gold);color:white;padding:10px 14px;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:2;border-radius:14px;transition:all .2s;}
-    .h-badge:hover{background:var(--bark);box-shadow:0 8px 28px rgba(61,43,31,.4);transform:translateY(-2px);}
-    .h-badge small{display:block;font-family:'Jost',sans-serif;font-size:.62rem;font-style:normal;letter-spacing:.1em;opacity:.85;margin-top:2px;}
-
-    /* MARQUEE */
-    .mq{background:var(--bark);overflow:hidden;padding:12px 0;cursor:pointer;border-radius:16px;margin:6px 0;} .mq:hover .mq-track{animation-play-state:paused;}
-    .mq-track{display:flex;white-space:nowrap;animation:mq 28s linear infinite;}
-    .mq-item{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);padding:0 2.5rem;border-right:1px solid rgba(255,255,255,.12);}
-    .mq-item span{color:var(--gold);margin-right:6px;}
-    @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-    /* SECTIONS */
-    .sec{padding:75px 2.5rem;scroll-margin-top:120px;border-radius:20px;margin:6px 0;}
-    .sec-linen{background:var(--linen);}
-    .sec-dark{background:var(--bark);}
-    .sec-sage{background:var(--sage-p);}
-    .sec-in{max-width:1280px;margin:0 auto;}
-    .sh{margin-bottom:2.8rem;}
-    .sh.c{text-align:center;}
-    .sh-eye{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;display:flex;align-items:center;gap:8px;}
-    .sh.c .sh-eye{justify-content:center;}
-    .sh-eye::before,.sh-eye::after{content:'';height:1px;background:var(--gold);flex:1;max-width:32px;}
-    .sh.c .sh-eye::before,.sh.c .sh-eye::after{display:inline-block;}
-    .sh-h{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.9rem);font-weight:400;color:var(--bark);line-height:1.15;}
-    .sh-h.lt{color:white;}
-    .sh-h em{font-style:italic;color:var(--sage-d);}
-    .sh-p{font-size:.88rem;font-weight:300;color:#6A5F50;line-height:1.75;margin-top:.65rem;max-width:500px;}
-    .sh.c .sh-p{margin:auto;margin-top:.65rem;}
-    .sh-p.lt{color:rgba(255,255,255,.58);}
-
-    /* BLEND TILES */
-    .b-showcase{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
-    .b-tile{position:relative;overflow:hidden;cursor:pointer;background:#2A1F15;transition:all .4s;display:flex;flex-direction:column;}
-    .b-tile:hover{transform:scale(1.02);z-index:2;}
-    .b-tile-exp{grid-column:span 2;transform:none !important;z-index:3;}
-    .b-tile-close{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:white;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);z-index:4;transition:background .2s;}
-    .b-tile-close:hover{background:rgba(0,0,0,.8);}
-    .b-tile-recipe{border-top:1px solid rgba(255,255,255,.1);margin-top:10px;padding-top:10px;}
-    .b-recipe-desc{font-size:.72rem;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:10px;font-style:italic;}
-    .b-recipe-label{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:500;}
-    .b-recipe-list{margin:0 0 10px 0;padding-left:14px;list-style:disc;}
-    .b-recipe-list li{font-size:.72rem;color:rgba(255,255,255,.8);margin-bottom:3px;line-height:1.4;}
-    .b-recipe-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
-    .b-recipe-meta{font-size:.6rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.65);padding:3px 8px;border-radius:50px;}
-    .b-recipe-warn{font-size:.62rem;color:#E8A87C;background:rgba(232,168,124,.08);border:1px solid rgba(232,168,124,.2);border-radius:8px;padding:7px 10px;line-height:1.5;}
-    .b-tile-visual{width:100%;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;transition:all .4s;}
-    .b-tile:hover .b-tile-visual{filter:brightness(1.1);}
-    .b-tile-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s;}
-    .b-tile:hover .b-tile-photo{transform:scale(1.08);}
-    .b-tile-occ-badge{font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:3px 12px;border-radius:50px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);position:relative;z-index:1;}
-    .b-tile-body{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1;background:linear-gradient(175deg,#1C1A17 0%,#2A1F15 100%);}
-    .b-occ{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:4px;}
-    .b-name{font-family:'Playfair Display',serif;font-size:clamp(.88rem,1.4vw,1.1rem);color:white;margin-bottom:3px;line-height:1.2;}
-    .b-tag{font-size:.66rem;color:rgba(255,255,255,.42);font-style:italic;margin-bottom:5px;font-weight:300;}
-    .b-ben{font-size:.62rem;color:var(--gold);letter-spacing:.07em;margin-bottom:8px;flex:1;}
-    .b-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;}
-    .b-price{font-family:'Playfair Display',serif;font-size:1.05rem;color:white;}
-    .btn-tile{background:var(--gold);color:white;border:none;padding:7px 15px;font-family:'Jost',sans-serif;font-size:.64rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;white-space:nowrap;}
-    .btn-tile:hover{background:white;color:var(--bark);}
-    /* PRODUCT CARD VISUAL HEADER */
-    .pcard-visual{width:100%;height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:20px 20px 0 0;position:relative;overflow:hidden;transition:all .3s;}
-    .pcard:hover .pcard-visual{filter:brightness(1.08);}
-    .pcard-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s;}
-    .pcard:hover .pcard-photo{transform:scale(1.08);}
-    .pcard-visual-occ{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:2px 10px;border-radius:50px;white-space:nowrap;backdrop-filter:blur(4px);z-index:1;}
-
-    /* PILLS */
-    .pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:2.2rem;}
-    .pill{padding:7px 18px;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;font-weight:400;cursor:pointer;border:1.5px solid var(--dust);background:white;color:#7A6E5A;transition:all .2s;font-family:'Jost',sans-serif;border-radius:50px;}
-    .pill.on{background:var(--bark);color:white;border-color:var(--bark);}
-    .pill:hover:not(.on){border-color:var(--sage);color:var(--sage-d);background:var(--sage-p);}
-    .pill.cleanse-pill.on{background:#8B3A2A;border-color:#8B3A2A;}
-
-    /* PRODUCT CARDS */
-    .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;}
-    .pcard{background:white;border:1px solid var(--dust);overflow:hidden;transition:all .3s;border-radius:20px;}
-    .pcard:hover{box-shadow:0 14px 44px rgba(28,26,23,.1);transform:translateY(-4px);}
-    .pcard-stripe{height:5px;border-radius:20px 20px 0 0;}
-    .pcard-body{padding:18px;}
-    .pcard-occ{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage);margin-bottom:4px;}
-    .pcard-name{font-family:'Playfair Display',serif;font-size:1.12rem;color:var(--bark);margin-bottom:3px;}
-    .pcard-tag{font-size:.74rem;font-style:italic;color:#8A7A6A;margin-bottom:8px;font-weight:300;}
-    .pcard-desc{font-size:.78rem;color:#6A5F50;line-height:1.6;margin-bottom:10px;font-weight:300;}
-    .pcard-ingr{font-size:.66rem;color:#8A7A6A;margin-bottom:10px;line-height:1.5;}
-    .pcard-ingr strong{font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-size:.58rem;color:#5A5040;display:block;margin-bottom:2px;}
-    .pcard-benefit{font-size:.66rem;color:var(--gold);letter-spacing:.07em;margin-bottom:10px;}
-    .pcard-foot{display:flex;justify-content:space-between;align-items:center;}
-    .pcard-price{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--bark);}
-    .btn-add{background:var(--bark);color:white;border:none;padding:8px 15px;font-family:'Jost',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
-    .btn-add:hover{background:var(--sage-d);}
-
-    /* CLEANSE CARDS */
-    .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;}
-    .ccard{background:white;border:1px solid var(--dust);border-radius:20px;overflow:hidden;transition:all .3s;}
-    .ccard:hover{box-shadow:0 14px 44px rgba(28,26,23,.1);transform:translateY(-3px);}
-    .ccard-top{padding:16px 18px 12px;background:linear-gradient(135deg,#3D2B1F,#2A1F15);border-radius:20px 20px 0 0;}
-    .ccard-organ{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;opacity:.85;}
-    .ccard-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:white;margin-bottom:2px;}
-    .ccard-tag{font-size:.72rem;font-style:italic;color:rgba(255,255,255,.52);font-weight:300;}
-    .ccard-body{padding:16px 18px;}
-    .ccard-desc{font-size:.78rem;color:#6A5F50;line-height:1.6;margin-bottom:9px;font-weight:300;}
-    .ccard-protocol{font-size:.72rem;color:#5A5040;background:var(--sage-p);padding:9px 11px;border-radius:10px;line-height:1.5;margin-bottom:10px;}
-    .ccard-protocol strong{display:block;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sage-d);margin-bottom:2px;}
-    .ccard-ingr{font-size:.66rem;color:#8A7A6A;margin-bottom:12px;}
-    .ccard-ingr strong{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#5A5040;display:block;margin-bottom:2px;}
-    .ccard-foot{display:flex;justify-content:space-between;align-items:center;}
-    .ccard-price{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--bark);}
-    .btn-add-c{background:#8B3A2A;color:white;border:none;padding:7px 14px;font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
-    .btn-add-c:hover{background:#A04A3A;}
-    .btn-track{background:none;border:1.5px solid #8B3A2A;color:#8B3A2A;padding:7px 14px;font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
-    .btn-track:hover{background:#8B3A2A;color:white;}
-
-    /* HERBS */
-    .hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
-    .hcard{background:white;border:1px solid var(--dust);border-radius:18px;transition:all .25s;cursor:pointer;overflow:hidden;}
-    .hcard:hover{box-shadow:0 8px 28px rgba(28,26,23,.08);transform:translateY(-2px);border-color:var(--sage);}
-    .hcard.paired{border-color:var(--gold);background:var(--gold-p);}
-    .hcard-img{width:100%;height:140px;overflow:hidden;border-radius:12px 12px 0 0;}
-    .hcard-img img{transition:transform .4s;}
-    .hcard:hover .hcard-img img{transform:scale(1.05);}
-    .hcard-name{font-family:'Playfair Display',serif;font-size:.9rem;color:var(--bark);margin-bottom:3px;padding:12px 14px 0;}
-    .hcard-benefit{font-size:.66rem;color:#8A7A6A;line-height:1.45;margin-bottom:10px;font-weight:300;padding:0 14px;}
-    .hcard-pairs{font-size:.62rem;color:var(--gold);margin-bottom:10px;font-weight:500;padding:0 14px;}
-    .hcard-foot{display:flex;justify-content:space-between;align-items:center;padding:0 14px 14px;}
-    .hcard-price{font-size:.85rem;color:var(--bark);}
-    .btn-herb{background:none;border:1.5px solid var(--sage);color:var(--sage-d);padding:4px 12px;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;border-radius:50px;}
-    .btn-herb:hover{background:var(--sage-d);color:white;border-color:var(--sage-d);}
-
-    /* SEARCH */
-    .search-wrap{max-width:380px;margin:0 auto 1.8rem;position:relative;}
-    .search-input{width:100%;padding:10px 18px 10px 40px;border:1.5px solid var(--dust);background:white;font-family:'Jost',sans-serif;font-size:.82rem;color:var(--bark);outline:none;border-radius:50px;transition:border-color .2s;}
-    .search-input:focus{border-color:var(--sage);}
-    .search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:.85rem;opacity:.4;pointer-events:none;}
-
-    /* BUNDLES */
-    .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:20px;}
-    .bcard{border:1px solid var(--dust);background:white;overflow:hidden;border-radius:20px;transition:all .3s;}
-    .bcard:hover{box-shadow:0 18px 55px rgba(28,26,23,.1);transform:translateY(-4px);}
-    .bcard-top{background:linear-gradient(135deg,var(--bark) 0%,#2A1F15 100%);padding:24px;border-radius:20px 20px 0 0;position:relative;overflow:hidden;}
-    .bcard-top::after{content:'✦';position:absolute;right:-8px;top:-18px;font-size:7rem;color:rgba(255,255,255,.03);pointer-events:none;}
-    .bcard-badge{display:inline-block;background:var(--gold);color:white;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 12px;margin-bottom:10px;border-radius:50px;}
-    .bcard-name{font-family:'Playfair Display',serif;font-size:1.25rem;color:white;margin-bottom:4px;}
-    .bcard-desc{font-size:.78rem;color:rgba(255,255,255,.55);font-weight:300;line-height:1.6;}
-    .bcard-body{padding:20px;}
-    .bcard-lbl{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:#8A7A6A;margin-bottom:7px;}
-    .bcard-list{list-style:none;margin-bottom:16px;}
-    .bcard-list li{font-size:.78rem;color:#5A5040;padding:3px 0;border-bottom:1px solid var(--dust);display:flex;align-items:center;gap:7px;font-weight:300;}
-    .bcard-list li::before{content:'--';color:var(--sage);font-size:.66rem;}
-    .bcard-foot{display:flex;justify-content:space-between;align-items:flex-end;}
-    .bcard-price{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--bark);}
-    .bcard-save{font-size:.68rem;color:var(--sage-d);}
-    .btn-bundle{background:var(--bark);color:white;border:none;padding:9px 18px;font-family:'Jost',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
-    .btn-bundle:hover{background:var(--sage-d);}
-
-    /* BREW TOOLS */
-    .tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
-    .tcard{background:white;border:1px solid var(--dust);border-radius:20px;overflow:hidden;transition:all .3s;display:flex;flex-direction:column;}
-    .tcard:hover{box-shadow:0 16px 50px rgba(28,26,23,.1);transform:translateY(-4px);}
-    .tcard-visual{width:100%;height:180px;position:relative;overflow:hidden;border-radius:20px 20px 0 0;}
-    .tcard-photo{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
-    .tcard:hover .tcard-photo{transform:scale(1.07);}
-    .tcard-badge{position:absolute;top:12px;left:12px;background:rgba(28,26,23,.72);color:rgba(255,255,255,.92);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;padding:3px 11px;border-radius:50px;backdrop-filter:blur(6px);}
-    .tcard-emoji{position:absolute;bottom:10px;right:12px;font-size:1.4rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));}
-    .tcard-body{padding:18px;flex:1;display:flex;flex-direction:column;}
-    .tcard-material{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sage-d);margin-bottom:5px;}
-    .tcard-name{font-family:'Playfair Display',serif;font-size:1.08rem;color:var(--bark);margin-bottom:3px;line-height:1.25;}
-    .tcard-tagline{font-size:.74rem;font-style:italic;color:#8A7A6A;margin-bottom:10px;font-weight:300;}
-    .tcard-desc{font-size:.78rem;color:#6A5F50;line-height:1.65;margin-bottom:12px;font-weight:300;flex:1;}
-    .tcard-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
-    .tcard-chip{font-size:.6rem;letter-spacing:.08em;background:var(--sage-p);color:var(--sage-d);padding:3px 10px;border-radius:50px;border:1px solid rgba(74,114,80,.15);}
-    .tcard-care{font-size:.64rem;color:#9A8A7A;font-style:italic;margin-bottom:14px;padding:8px 10px;background:#FAF8F5;border-radius:8px;border-left:2px solid var(--gold);line-height:1.5;}
-    .tcard-foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;}
-    .tcard-price{font-family:'Playfair Display',serif;font-size:1.12rem;color:var(--bark);}
-    .btn-tool{background:var(--bark);color:white;border:none;padding:8px 16px;font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
-    .btn-tool:hover{background:var(--sage-d);}
-    .tools-intro{max-width:560px;margin:0 auto 2.5rem;text-align:center;}
-    .tools-intro-p{font-size:.88rem;color:#6A5F50;line-height:1.8;font-weight:300;}
-
-    /* PHILOSOPHY */
-    .philo{display:grid;grid-template-columns:1fr 1fr;min-height:440px;}
-    .philo-vis{background:linear-gradient(160deg,var(--sage-d) 0%,#2D4A2D 100%);display:flex;align-items:center;justify-content:center;padding:60px;position:relative;overflow:hidden;}
-    .philo-vis::before,.philo-vis::after{content:'';position:absolute;border:1px solid rgba(255,255,255,.07);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
-    .philo-vis::before{width:380px;height:380px;}
-    .philo-vis::after{width:220px;height:220px;}
-    .philo-quote{font-family:'Playfair Display',serif;font-size:clamp(1.35rem,2.2vw,1.9rem);font-style:italic;color:white;line-height:1.45;text-align:center;position:relative;z-index:2;}
-    .philo-txt{background:var(--linen);padding:55px 45px;display:flex;flex-direction:column;justify-content:center;}
-    .philo-p{font-size:.88rem;font-weight:300;color:#5A5040;line-height:1.8;margin-bottom:1rem;}
-    .philo-sig{font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:var(--gold);}
-
-    /* RECIPES */
-    .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;}
-    .rcard{border:1px solid var(--dust);background:white;overflow:hidden;cursor:pointer;transition:all .25s;border-radius:16px;position:relative;}
-    .rcard:hover{box-shadow:0 6px 22px rgba(28,26,23,.1);border-color:var(--sage);transform:translateY(-2px);}
-    .rcard.open{border-color:var(--sage-d);box-shadow:0 10px 32px rgba(74,114,80,.14);transform:none;}
-    .rcard-head{padding:14px 14px 10px;display:flex;gap:10px;align-items:flex-start;}
-    .rcard-icon{width:36px;height:36px;border-radius:10px;background:var(--sage-p);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-    .rcard-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);line-height:1.25;}
-    .rcard-tag-sm{font-size:.58rem;color:var(--sage);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
-    .rcard-meta{display:flex;gap:5px;flex-wrap:wrap;padding:0 14px 10px;}
-    .rcard-hover-desc{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#1C1A17;color:rgba(255,255,255,.85);font-size:.72rem;line-height:1.6;padding:10px 14px;border-radius:12px;pointer-events:none;z-index:200;font-family:'Jost',sans-serif;border:1px solid rgba(196,137,58,.3);font-weight:300;box-shadow:0 8px 28px rgba(0,0,0,.4);}
-    .rcard-hover-desc::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1C1A17;}
-    .rcard:hover .rcard-hover-desc{display:block;}
-    .rcard-expand-arrow{position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:50%;background:var(--sage-p);display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--sage-d);transition:transform .25s;}
-    .rcard.open .rcard-expand-arrow{transform:rotate(180deg);background:var(--sage-d);color:white;}
-    .rcard-expand{max-height:0;overflow:hidden;transition:max-height .4s ease;background:var(--linen);border-radius:0 0 16px 16px;}
-    .rcard.open .rcard-expand{max-height:1100px;}
-    .rsteps{padding:16px 18px;}
-    .timer-row{display:flex;align-items:center;gap:11px;padding:11px 14px;background:white;border-top:1px solid var(--dust);border-radius:0 0 14px 14px;}
-    .timer-face{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--bark);min-width:62px;}
-    .btn-t{border:none;padding:7px 15px;font-family:'Jost',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:50px;transition:all .2s;}
-    .btn-t.go{background:var(--sage-d);color:white;}
-    .btn-t.stop{background:var(--gold);color:white;}
-    .btn-t.rst{background:none;border:1.5px solid var(--dust);color:#8A7A6A;}
-
-    /* RINGS */
-    .ringsgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;}
-    .rng{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:32px 28px;border-radius:24px;transition:all .35s;position:relative;overflow:hidden;}
-    .rng::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,137,58,.6),transparent);transform:scaleX(0);transition:transform .4s;}
-    .rng:hover::before{transform:scaleX(1);}
-    .rng:hover{background:rgba(255,255,255,.09);}
-    .rng-sym{font-size:2.8rem;margin-bottom:16px;opacity:.65;color:white;}
-    .rng-tag{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;opacity:.8;}
-    .rng-name{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;margin-bottom:8px;}
-    .rng-desc{font-size:.8rem;color:rgba(255,255,255,.52);line-height:1.6;margin-bottom:11px;font-weight:300;}
-    .rng-mat{font-size:.66rem;letter-spacing:.1em;color:rgba(196,137,58,.8);margin-bottom:18px;}
-    .rng-foot{display:flex;justify-content:space-between;align-items:center;}
-    .rng-price{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;}
-    .btn-rng{background:none;border:1.5px solid rgba(255,255,255,.28);color:rgba(255,255,255,.82);padding:7px 16px;font-family:'Jost',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;}
-    .btn-rng:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.5);}
-
-    /* BOOK CTA */
-    .book-cta{background:var(--bark);padding:65px 2.5rem;text-align:center;position:relative;overflow:hidden;}
-    .book-cta::before{content:'✦';position:absolute;font-size:18rem;color:rgba(255,255,255,.02);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
-    .book-cta h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.7rem);color:white;font-weight:400;margin-bottom:10px;}
-    .book-cta h2 em{color:var(--gold);font-style:italic;}
-    .book-cta p{font-size:.88rem;color:rgba(255,255,255,.5);font-weight:300;margin-bottom:1.8rem;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.7;}
-    .btn-book{background:var(--gold);color:white;border:none;padding:13px 38px;font-family:'Jost',sans-serif;font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;}
-    .btn-book:hover{background:#D4943A;transform:translateY(-2px);}
-
-    /* MODALS */
-    .modal-ov{position:fixed;inset:0;background:rgba(28,26,23,.6);z-index:800;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1rem;}
-    .modal-open{overflow:hidden;}
-    .modal{background:var(--parch);max-width:620px;width:100%;max-height:90vh;overflow-y:auto;border-radius:24px;box-shadow:0 24px 80px rgba(28,26,23,.3);}
-    .modal-head{padding:26px 28px 18px;border-bottom:1px solid var(--dust);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--parch);border-radius:24px 24px 0 0;z-index:2;}
-    .modal-title{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--bark);}
-    .modal-close{background:none;border:1.5px solid var(--dust);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:.9rem;color:var(--bark);display:flex;align-items:center;justify-content:center;transition:all .2s;}
-    .modal-close:hover{background:var(--bark);color:white;border-color:var(--bark);}
-    .modal-body{padding:24px 28px;}
-
-    /* TEA FINDER */
-    .finder-q{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--bark);margin-bottom:1.4rem;line-height:1.3;}
-    .finder-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
-    .finder-opt{background:white;border:1.5px solid var(--dust);padding:14px;border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;}
-    .finder-opt:hover{border-color:var(--sage-d);background:var(--sage-p);}
-    .finder-opt-e{font-size:1.6rem;margin-bottom:6px;}
-    .finder-opt-l{font-size:.78rem;color:var(--bark);font-weight:400;}
-    .finder-result{background:white;border:1.5px solid var(--dust);border-radius:16px;padding:18px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;}
-    .finder-result-rank{width:28px;height:28px;background:var(--gold);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;flex-shrink:0;}
-    .finder-result-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--bark);margin-bottom:3px;}
-    .finder-result-benefit{font-size:.7rem;color:var(--gold);margin-bottom:6px;}
-    .finder-result-desc{font-size:.78rem;color:#6A5F50;line-height:1.55;font-weight:300;}
-    .finder-progress{display:flex;gap:6px;margin-bottom:1.6rem;}
-    .finder-dot{width:8px;height:8px;border-radius:50%;background:var(--dust);transition:all .3s;}
-    .finder-dot.done{background:var(--gold);}
-
-    /* RITUAL BUILDER */
-    .ritual-section{margin-bottom:1.8rem;}
-    .ritual-section-h{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage-d);margin-bottom:10px;font-weight:500;}
-    .ritual-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;max-height:220px;overflow-y:auto;}
-    .ritual-opt{background:white;border:1.5px solid var(--dust);padding:10px 12px;border-radius:12px;cursor:pointer;transition:all .2s;}
-    .ritual-opt:hover{border-color:var(--sage);}
-    .ritual-opt.selected{border-color:var(--sage-d);background:var(--sage-p);}
-    .ritual-opt-name{font-family:'Playfair Display',serif;font-size:.9rem;color:var(--bark);margin-bottom:2px;}
-    .ritual-opt-tag{font-size:.65rem;color:var(--sage);letter-spacing:.08em;}
-    .ritual-summary{background:var(--linen);border-radius:16px;padding:16px;margin-bottom:1.5rem;}
-    .ritual-summary-h{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:#8A7A6A;margin-bottom:10px;}
-    .ritual-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--dust);}
-    .ritual-item:last-child{border-bottom:none;}
-    .ritual-item-name{font-size:.82rem;color:var(--bark);}
-    .ritual-total{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--bark);margin-top:10px;text-align:right;}
-
-    /* CLEANSE TRACKER */
-    .tracker-select{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:1.5rem;}
-    .tracker-opt{background:white;border:1.5px solid var(--dust);padding:12px;border-radius:12px;cursor:pointer;transition:all .2s;}
-    .tracker-opt:hover{border-color:#8B3A2A;}
-    .tracker-opt.on{border-color:#8B3A2A;background:#FFF5F3;}
-    .tracker-opt-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);}
-    .tracker-opt-days{font-size:.66rem;color:#8B3A2A;margin-top:2px;}
-    .day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:1.2rem;}
-    .day-cell{aspect-ratio:1;border:1.5px solid var(--dust);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.72rem;cursor:pointer;transition:all .2s;color:#8A7A6A;font-family:'Jost',sans-serif;}
-    .day-cell:hover{border-color:#8B3A2A;}
-    .day-cell.checked{background:#8B3A2A;border-color:#8B3A2A;color:white;}
-    .tracker-progress-bar{height:8px;background:var(--dust);border-radius:50px;overflow:hidden;margin-bottom:6px;}
-    .tracker-progress-fill{height:100%;background:linear-gradient(90deg,#8B3A2A,var(--gold));border-radius:50px;transition:width .4s;}
-
-    /* CART */
-    .overlay{position:fixed;inset:0;background:rgba(28,26,23,.5);z-index:800;backdrop-filter:blur(4px);}
-    .drawer{position:fixed;top:0;right:0;height:100vh;width:min(420px,100vw);background:var(--parch);z-index:900;display:flex;flex-direction:column;box-shadow:-14px 0 55px rgba(28,26,23,.2);border-radius:24px 0 0 24px;}
-    .drw-head{padding:24px 24px 16px;border-bottom:1px solid var(--dust);display:flex;justify-content:space-between;align-items:center;}
-    .drw-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--bark);}
-    .drw-close{background:none;border:1.5px solid var(--dust);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:.9rem;color:var(--bark);display:flex;align-items:center;justify-content:center;transition:all .2s;}
-    .drw-close:hover{background:var(--bark);color:white;border-color:var(--bark);}
-    .drw-items{flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;}
-    .drw-cart-list{margin-bottom:4px;}
-    .ditem{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--dust);}
-    .ditem-icon{width:52px;height:52px;border-radius:12px;background:var(--linen);border:1px solid var(--dust);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
-    .ditem-info{flex:1;}
-    .ditem-name{font-family:'Playfair Display',serif;font-size:.9rem;color:var(--bark);margin-bottom:2px;}
-    .ditem-price{font-size:.76rem;color:#6A5F50;margin-bottom:7px;}
-    .ditem-ctrl{display:flex;align-items:center;gap:8px;}
-    .qty-b{width:24px;height:24px;border:1.5px solid var(--dust);border-radius:50%;background:none;cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:all .15s;}
-    .qty-b:hover{border-color:var(--bark);}
-    .qty-v{font-size:.86rem;min-width:16px;text-align:center;}
-    .rm-btn{background:none;border:none;color:#AA9A8A;font-size:.68rem;cursor:pointer;text-decoration:underline;}
-    .cart-sugg{background:var(--sage-p);border-radius:14px;margin-top:12px;padding:12px 16px;max-height:140px;overflow-y:auto;flex-shrink:0;}
-    .sugg-h{font-size:.63rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--sage-d);margin-bottom:8px;}
-    .sugg-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #C8DEC8;}
-    .sugg-row:last-child{border-bottom:none;}
-    .sugg-name{font-size:.78rem;color:var(--bark);}
-    .sugg-save{font-size:.65rem;color:var(--sage-d);}
-    .btn-sugg{background:var(--sage-d);color:white;border:none;padding:5px 13px;font-size:.63rem;font-family:'Jost',sans-serif;cursor:pointer;border-radius:50px;transition:all .2s;}
-    .btn-sugg:hover{background:var(--bark);}
-    .cart-ritual{margin-top:12px;flex-shrink:0;}
-    .drw-foot{padding:16px 24px;border-top:1px solid var(--dust);flex-shrink:0;}
-    .d-sub{display:flex;justify-content:space-between;margin-bottom:12px;}
-    .d-sub-l{font-size:.76rem;color:#6A5F50;letter-spacing:.06em;text-transform:uppercase;}
-    .d-sub-r{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--bark);}
-    .btn-chk{width:100%;background:var(--bark);color:white;border:none;padding:14px;font-family:'Jost',sans-serif;font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
-    .btn-chk:hover{background:var(--sage-d);}
-    .btn-chk:disabled{opacity:.4;cursor:default;}
-    .empty{text-align:center;padding:3rem 2rem;}
-    .empty-icon{font-size:2.6rem;margin-bottom:.8rem;opacity:.45;}
-    .empty-msg{font-family:'Playfair Display',serif;font-size:1rem;color:var(--bark);}
-    .empty-sub{font-size:.78rem;color:#8A7A6A;font-weight:300;margin-top:.3rem;}
-
-    /* TOAST */
-    /* LARGE TIMER OVERLAY */
-    .timer-overlay{position:fixed;inset:0;background:rgba(10,10,10,.97);z-index:700;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
-    .timer-overlay-name{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3vw,1.8rem);color:rgba(255,255,255,.5);font-style:italic;margin-bottom:.6rem;text-align:center;}
-    .timer-overlay-face{font-family:'Playfair Display',serif;font-size:clamp(5rem,20vw,10rem);color:white;line-height:1;margin-bottom:.4rem;letter-spacing:.04em;font-weight:300;}
-    .timer-overlay-face.done{color:var(--gold);animation:timerPulse 1s ease-in-out 3;}
-    @keyframes timerPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-
-    /* STEAMING CUP ANIMATION */
-    .tea-cup-wrap{position:relative;width:120px;height:120px;margin:0 auto 1.2rem;display:flex;align-items:flex-end;justify-content:center;}
-    .tea-cup{font-size:3.8rem;line-height:1;filter:drop-shadow(0 0 18px rgba(196,137,58,.35));animation:cupGlow 3s ease-in-out infinite;}
-    @keyframes cupGlow{0%,100%{filter:drop-shadow(0 0 14px rgba(196,137,58,.3))}50%{filter:drop-shadow(0 0 28px rgba(196,137,58,.6))}}
-    .steam{position:absolute;bottom:62px;display:flex;gap:10px;left:50%;transform:translateX(-50%);}
-    .steam-line{width:3px;border-radius:3px;background:linear-gradient(to top,rgba(255,255,255,.5),transparent);animation:steamRise 2.4s ease-in-out infinite;}
-    .steam-line:nth-child(1){height:28px;animation-delay:0s;animation-duration:2.2s;}
-    .steam-line:nth-child(2){height:38px;animation-delay:.4s;animation-duration:2.6s;}
-    .steam-line:nth-child(3){height:24px;animation-delay:.8s;animation-duration:2.1s;}
-    .steam-line:nth-child(4){height:34px;animation-delay:1.2s;animation-duration:2.8s;}
-    @keyframes steamRise{0%{transform:translateY(0) scaleX(1);opacity:0}20%{opacity:.7}80%{opacity:.3}100%{transform:translateY(-28px) scaleX(1.6);opacity:0}}
-
-    /* PULSING STEEPING LABEL */
-    .steeping-label{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:1.6rem;animation:steepPulse 2s ease-in-out infinite;}
-    .paused-label{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:1.6rem;}
-    @keyframes steepPulse{0%,100%{opacity:.45;letter-spacing:.28em}50%{opacity:.9;letter-spacing:.34em;color:rgba(196,137,58,.85)}}
-
-    .timer-overlay-keepopen{background:rgba(196,137,58,.12);border:1px solid rgba(196,137,58,.3);border-radius:16px;padding:12px 20px;margin-bottom:1.6rem;text-align:center;max-width:340px;}
-    .timer-overlay-keepopen strong{display:block;color:var(--gold);font-size:.78rem;letter-spacing:.06em;margin-bottom:3px;}
-    .timer-overlay-keepopen span{font-size:.7rem;color:rgba(255,255,255,.38);font-weight:300;line-height:1.5;}
-    .timer-overlay-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
-    .timer-ready-msg{position:fixed;inset:0;background:rgba(10,10,10,.97);z-index:710;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:fadeInBig .6s ease;}
-    @keyframes fadeInBig{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-    .timer-ready-emoji{font-size:5rem;margin-bottom:1rem;animation:teaBounce 1s ease-in-out infinite alternate;}
-    @keyframes teaBounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
-    .timer-ready-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.5rem);color:white;margin-bottom:.5rem;text-align:center;}
-    .timer-ready-sub{font-size:1rem;color:rgba(255,255,255,.55);font-weight:300;margin-bottom:2rem;text-align:center;}
-    /* RECIPE BOOK CTA */
-    .recipe-book-cta{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#2D4A2D,#1B3A1B);border-radius:14px;padding:14px 18px;margin-top:12px;flex-wrap:wrap;gap:10px;}
-    .recipe-book-cta-text{font-size:.8rem;color:rgba(255,255,255,.7);font-weight:300;}
-    .recipe-book-cta-text strong{color:white;display:block;font-family:'Playfair Display',serif;font-size:.95rem;margin-bottom:2px;}
-    .btn-recipe-book{background:var(--gold);color:white;border:none;padding:8px 18px;border-radius:50px;font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .2s;}
-    .btn-recipe-book:hover{background:#D4943A;}
-    .sec-nav{position:fixed;right:16px;bottom:28%;z-index:450;display:flex;flex-direction:column;gap:10px;}
-    .sec-dot-wrap{display:flex;align-items:center;gap:8px;cursor:pointer;justify-content:flex-end;}
-    .sec-dot-lbl{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:#1C1A17;background:rgba(255,255,255,.96);padding:4px 10px;border-radius:50px;white-space:nowrap;opacity:0;transition:opacity .18s;border:1px solid rgba(0,0,0,.08);pointer-events:none;box-shadow:0 2px 12px rgba(0,0,0,.2);font-weight:500;}
-    .sec-dot-wrap:hover .sec-dot-lbl{opacity:1;}
-    .sec-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.55);border:none;transition:all .3s;flex-shrink:0;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 0 0 4px rgba(0,0,0,.2);}
-    .sec-dot.active{background:var(--gold);transform:scale(1.5);box-shadow:0 0 0 2.5px rgba(255,255,255,1),0 0 0 5px rgba(196,137,58,.6),0 0 14px rgba(196,137,58,.6);}
-    .sec-dot-wrap:hover .sec-dot:not(.active){transform:scale(1.2);}
-    .back-top{position:fixed;bottom:90px;right:28px;z-index:399;background:var(--bark);color:white;border:none;width:44px;height:44px;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 16px rgba(28,26,23,.25);transition:all .3s;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;}
-    .back-top.visible{opacity:1;pointer-events:all;}
-    .back-top:hover{background:var(--sage-d);transform:translateY(-3px);}
-    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bark);color:var(--parch);padding:10px 24px;font-size:.76rem;letter-spacing:.06em;z-index:1000;box-shadow:0 8px 28px rgba(28,26,23,.25);border-radius:50px;animation:toastIn .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
-    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(13px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-
-    /* 2AM OVERLAY */
-    .twoam-ov{position:fixed;inset:0;background:#0A0A0A;z-index:700;display:flex;align-items:center;justify-content:center;padding:2rem;}
-    .twoam-inner{max-width:500px;text-align:center;}
-    .twoam-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);color:white;font-weight:300;margin-bottom:1rem;font-style:italic;}
-    .twoam-sub{font-size:.9rem;color:rgba(255,255,255,.45);font-weight:300;line-height:1.8;margin-bottom:2rem;}
-    .twoam-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:28px;margin-bottom:1.5rem;text-align:left;}
-    .twoam-blend-name{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;margin-bottom:8px;}
-    .twoam-steps{list-style:none;margin-bottom:16px;}
-    .twoam-steps li{font-size:.82rem;color:rgba(255,255,255,.6);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:flex-start;gap:10px;}
-    .twoam-steps li::before{content:'✦';color:var(--gold);font-size:.55rem;margin-top:4px;flex-shrink:0;}
-    .twoam-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-    .btn-twoam{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);padding:10px 24px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:50px;transition:all .2s;}
-    .btn-twoam:hover{background:rgba(255,255,255,.15);}
-    .btn-twoam.gold{background:var(--gold);border-color:var(--gold);color:white;}
-
-    /* RING TAG TOOLTIPS */
-    .ring-tag-wrap{position:relative;display:inline-block;}
-    .ring-tag-tip{position:absolute;bottom:calc(100% + 10px);left:0;transform:none;
-      width:230px;background:#1C1A17;color:rgba(255,255,255,.88);font-size:.74rem;
-      line-height:1.6;padding:12px 16px;border-radius:14px;pointer-events:none;
-      opacity:0;transition:opacity .25s ease;z-index:200;font-family:'Jost',sans-serif;
-      border:1px solid rgba(196,137,58,.3);text-align:left;font-weight:300;
-      box-shadow:0 10px 32px rgba(0,0,0,.55);}
-    .ring-tag-tip::after{content:'';position:absolute;top:100%;left:20px;transform:none;
-      border:7px solid transparent;border-top-color:#1C1A17;}
-    .ring-tag-wrap:hover .ring-tag-tip{opacity:1;}
-
-    /* COUNT BADGE */
-    .cbadge{display:inline-block;background:var(--sage-p);color:var(--sage-d);font-size:.65rem;padding:2px 9px;border-radius:50px;margin-left:7px;font-weight:500;}
-
-    /* FOOTER */
-    footer{background:#1C1A17;padding:60px 2.5rem 32px;border-radius:0 0 22px 22px;}
-    .ft-in{max-width:1280px;margin:0 auto;}
-    .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2.8rem;}
-    .ft-brand{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;margin-bottom:9px;}
-    .ft-sub{font-size:.76rem;color:rgba(255,255,255,.3);font-weight:300;line-height:1.7;max-width:250px;}
-    .ft-col-h{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:13px;}
-    .ft-lnk{display:block;font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:8px;cursor:pointer;transition:color .2s;font-weight:300;}
-    .ft-lnk:hover{color:var(--gold);}
-    .ft-disclaimer{border-top:1px solid rgba(255,255,255,.08);padding:20px 0 0;margin-bottom:16px;}
-    .ft-disclaimer-txt{font-size:.7rem;color:rgba(255,255,255,.28);font-weight:300;line-height:1.75;text-align:center;max-width:900px;margin:0 auto;}
-    .ft-disclaimer-txt strong{color:rgba(255,255,255,.45);font-weight:500;}
-    .ft-div{border:none;border-top:1px solid rgba(255,255,255,.06);margin-bottom:20px;}
-    .ft-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
-    .ft-copy{font-size:.68rem;color:rgba(255,255,255,.2);}
-    .tea-sci-card{background:white;border:1px solid var(--dust);border-radius:20px;padding:22px;transition:box-shadow .3s,transform .3s;min-width:0;}
-    .tea-sci-card:hover{box-shadow:0 8px 32px rgba(28,26,23,.1);transform:translateY(-3px);}
-    .warn-badge{display:inline-flex;align-items:center;gap:5px;background:#FFF5F0;border:1px solid #F0C0B0;color:#8B3A2A;font-size:.62rem;font-weight:500;letter-spacing:.06em;padding:3px 10px;border-radius:50px;margin-bottom:6px;}
-    .warn-block{background:#FFF8F6;border:1px solid #F0C0B0;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:.74rem;color:#7A3020;line-height:1.55;font-weight:300;}
-    .warn-block strong{color:#8B3A2A;font-weight:600;display:block;margin-bottom:3px;}
-
-    /* FREQUENCY RIPPLE RINGS */
-    @keyframes freqRingA{0%{transform:scale(1);border-color:rgba(196,137,58,.6);}100%{transform:scale(1.08);border-color:rgba(196,137,58,0);}}
-    @keyframes freqRingB{0%{transform:scale(1);border-color:rgba(196,137,58,.35);}100%{transform:scale(1.15);border-color:rgba(196,137,58,0);}}
-    @keyframes freqRingC{0%{transform:scale(1);border-color:rgba(196,137,58,.18);}100%{transform:scale(1.22);border-color:rgba(196,137,58,0);}}
-    .freq-wrap{position:relative;border-radius:12px;}
-    .freq-rA,.freq-rB,.freq-rC{position:absolute;inset:-3px;border-radius:15px;border:1.5px solid rgba(196,137,58,0);pointer-events:none;}
-    .freq-wrap:hover .freq-rA{animation:freqRingA 1.6s ease-out infinite;}
-    .freq-wrap:hover .freq-rB{animation:freqRingB 1.6s ease-out .55s infinite;}
-    .freq-wrap:hover .freq-rC{animation:freqRingC 1.6s ease-out 1.1s infinite;}
-
-    /* SPINNING SHOP NOW */
-    .spin-cta{position:relative;width:140px;height:140px;cursor:pointer;flex-shrink:0;}
-    .spin-outer{position:absolute;inset:0;border-radius:50%;animation:spinRing 14s linear infinite;}
-    .spin-text-wrap{position:absolute;inset:0;}
-    .spin-char{position:absolute;top:0;left:50%;font-size:9.5px;font-family:'Jost',sans-serif;font-weight:500;color:rgba(196,137,58,.9);letter-spacing:.02em;transform-origin:0 70px;width:12px;text-align:center;margin-left:-6px;}
-    .spin-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:76px;height:76px;background:var(--gold);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(196,137,58,.45);transition:all .3s;}
-    .spin-cta:hover .spin-center{background:var(--bark);box-shadow:0 8px 28px rgba(61,43,31,.4);transform:translate(-50%,-50%) scale(1.1);}
-    .spin-arrow{font-size:1.3rem;color:white;line-height:1;}
-    .spin-label{font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.85);margin-top:2px;font-family:'Jost',sans-serif;}
-    @keyframes spinRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-    @keyframes spinRingCCW{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
-
-    /* HOME PAGE CHAI HOLISTIC SPINNING BADGE */
-    .chai-spin{position:relative;width:160px;height:160px;cursor:pointer;flex-shrink:0;}
-    .chai-spin-outer{position:absolute;inset:0;border-radius:50%;animation:spinRingCCW 16s linear infinite;}
-    .chai-spin-char{position:absolute;top:0;left:50%;font-size:9px;font-family:'Jost',sans-serif;font-weight:500;color:var(--bark);letter-spacing:.04em;transform-origin:0 80px;width:11px;text-align:center;margin-left:-5.5px;}
-    .chai-spin-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:98px;height:98px;background:var(--bark);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 28px rgba(61,43,31,.28);transition:all .35s;border:2px solid var(--dust);}
-    .chai-spin:hover .chai-spin-center{background:var(--sage-d);transform:translate(-50%,-50%) scale(1.08);box-shadow:0 10px 36px rgba(74,114,80,.35);}
-    .chai-spin-arrow{font-size:1.5rem;color:var(--parch);transform:rotate(-30deg);display:inline-block;line-height:1;}
-    .chai-spin-lbl{font-size:.44rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(247,242,234,.78);font-family:'Jost',sans-serif;text-align:center;line-height:1.5;margin-top:2px;}
-
-    /* RINGS PAGE SPINNING BADGE */
-    .ring-spin-badge{position:relative;width:180px;height:180px;cursor:pointer;flex-shrink:0;margin:0 auto;}
-    .ring-spin-outer{position:absolute;inset:0;border-radius:50%;animation:spinRing 18s linear infinite;}
-    .ring-spin-char{position:absolute;top:0;left:50%;font-size:9px;font-family:'Jost',sans-serif;font-weight:500;color:rgba(196,137,58,.85);letter-spacing:.04em;transform-origin:0 90px;width:11px;text-align:center;margin-left:-5.5px;}
-    .ring-spin-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:110px;height:110px;background:linear-gradient(135deg,rgba(45,74,45,.9),rgba(27,58,27,1));border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 0 1px rgba(196,137,58,.3),0 8px 32px rgba(0,0,0,.5);transition:all .4s;border:1px solid rgba(196,137,58,.2);}
-    .ring-spin-badge:hover .ring-spin-center{background:linear-gradient(135deg,rgba(196,137,58,.9),rgba(180,120,30,1));box-shadow:0 0 0 1px rgba(196,137,58,.6),0 12px 40px rgba(196,137,58,.3);transform:translate(-50%,-50%) scale(1.06);}
-    .ring-spin-icon{font-size:2.2rem;margin-bottom:4px;transform:rotate(-30deg);display:inline-block;}
-    .ring-spin-lbl{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.92);font-family:'Playfair Display',serif;text-align:center;line-height:1.35;font-style:italic;}
-
-    /* BOOK & RINGS FEATURED */
-    .featured-band{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
-    .feat-book{background:linear-gradient(135deg,#2D4A2D 0%,#1B3A1B 100%);padding:48px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
-    .feat-book::before{content:'📖';position:absolute;right:-20px;bottom:-20px;font-size:8rem;opacity:.07;}
-    .feat-rings{background:linear-gradient(135deg,#1C1A17 0%,#2D2520 100%);padding:48px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
-    .feat-rings::before{content:'◎';position:absolute;right:-10px;bottom:-20px;font-size:10rem;color:rgba(196,137,58,.08);font-weight:300;}
-    .feat-eye{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;}
-    .feat-title{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.5vw,2.2rem);color:white;font-weight:400;line-height:1.2;margin-bottom:10px;}
-    .feat-title em{font-style:italic;color:var(--gold);}
-    .feat-desc{font-size:.84rem;color:rgba(255,255,255,.55);font-weight:300;line-height:1.7;margin-bottom:1.5rem;max-width:340px;}
-    .feat-price{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);margin-bottom:1.2rem;}
-    .btn-feat{background:var(--gold);color:white;border:none;padding:12px 28px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;display:inline-block;}
-    .btn-feat:hover{background:#D4943A;transform:translateY(-2px);box-shadow:0 6px 20px rgba(196,137,58,.35);}
-    .btn-feat-ghost{background:transparent;color:rgba(255,255,255,.75);border:1.5px solid rgba(255,255,255,.25);padding:12px 28px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;display:inline-block;}
-    .btn-feat-ghost:hover{border-color:var(--gold);color:var(--gold);}
-
-    .page{padding-top:0;}
-
-    /* ── HAMBURGER MENU ── */
-    .ham-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:600;}
-    .ham-btn span{display:block;width:22px;height:2px;background:var(--bark);border-radius:2px;transition:all .3s;}
-    .mob-menu{display:none;position:fixed;inset:0;top:74px;background:rgba(247,242,234,.98);backdrop-filter:blur(20px);z-index:490;padding:24px 2rem;overflow-y:auto;flex-direction:column;gap:0;}
-    .mob-menu.open{display:flex;}
-    .mob-lnk{font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bark);padding:16px 0;border-bottom:1px solid var(--dust);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:'Jost',sans-serif;}
-    .mob-lnk:hover{color:var(--gold);}
-    .mob-lnk-special{color:var(--gold);font-weight:500;}
-
-    /* ── TABLET (≤960px) ── */
-    @media(max-width:960px){
-      nav{padding:0 1.2rem;border-radius:0;}
-      .nav-links{display:none;}
-      .ham-btn{display:flex;}
-      .hero-inner{grid-template-columns:1fr;gap:2rem;padding:32px 1.5rem 40px;}
-      .hero-visual{display:none;}
-      .hero-h{font-size:clamp(2.2rem,7vw,3.5rem);}
-      .hero-p{font-size:.88rem;max-width:100%;}
-      .philo{grid-template-columns:1fr;}
-      .philo-vis{min-height:220px;padding:40px;}
-      .featured-band{grid-template-columns:1fr;}
-      .feat-book,.feat-rings{padding:36px 28px;}
-      .b-showcase{grid-template-columns:repeat(2,1fr);}
-      .ft-grid{grid-template-columns:1fr 1fr;gap:2rem;}
-      .sec{padding:50px 1.5rem;}
-      .pgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
-      .cgrid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
-      .rgrid{grid-template-columns:1fr;}
-      .ringsgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
-      .chai-spin{width:120px;height:120px;}
-      .chai-spin-center{width:74px;height:74px;}
-      .chai-spin-char{transform-origin:0 60px;}
-    }
-
-    /* ── MOBILE (≤600px) ── */
-    @media(max-width:600px){
-      nav{height:64px;padding:0 1rem;}
-      .nav-logo-img{width:38px;height:38px;}
-      .nav-logo-text span:first-child{font-size:1.1rem;}
-      .nav-logo-text span:last-child{display:none;}
-      .cart-btn{padding:7px 12px;font-size:.6rem;}
-      .mob-menu{top:64px;}
-
-      /* Hero */
-      .hero{min-height:auto;}
-      .hero-inner{padding:28px 1.2rem 36px;gap:1.5rem;}
-      .hero-h{font-size:clamp(1.9rem,8vw,2.8rem);margin-bottom:1rem;}
-      .hero-p{font-size:.84rem;margin-bottom:1.4rem;}
-      .hero-btns{gap:8px;}
-      .btn-main,.btn-ghost,.btn-finder{padding:11px 20px;font-size:.68rem;}
-      .hero-eye{margin-bottom:1rem;}
-      .chai-spin{display:none;}
-
-      /* Sections */
-      .sec{padding:40px 1.2rem;border-radius:14px;margin:4px 0;}
-      .sh-h{font-size:clamp(1.5rem,6vw,2.2rem);}
-      .sh{margin-bottom:1.8rem;}
-
-      /* Grids → single column */
-      .b-showcase{grid-template-columns:1fr;}
-      .pgrid{grid-template-columns:1fr;}
-      .cgrid{grid-template-columns:1fr;}
-      .rgrid{grid-template-columns:1fr;}
-      .ringsgrid{grid-template-columns:1fr;}
-      .hgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
-      .ft-grid{grid-template-columns:1fr;gap:1.5rem;}
-      footer{padding:40px 1.2rem 24px;border-radius:0;}
-
-      /* Pills/filters */
-      .pills{gap:6px;}
-      .pill{padding:6px 14px;font-size:.62rem;}
-
-      /* Cards */
-      .pcard-name{font-size:1rem;}
-      .ccard-name{font-size:.95rem;}
-      .rcard-name{font-size:.95rem;}
-
-      /* Cart drawer */
-      .drawer{width:100vw;border-radius:20px 20px 0 0;top:auto;bottom:0;height:88vh;}
-
-      /* Modals */
-      .modal{max-height:95vh;border-radius:20px 20px 0 0;position:fixed;bottom:0;left:0;right:0;width:100%;max-width:100%;}
-      .modal-ov{align-items:flex-end;padding:0;}
-      .modal-head{border-radius:20px 20px 0 0;}
-
-      /* Featured band */
-      .featured-band{grid-template-columns:1fr;}
-      .feat-book,.feat-rings{padding:28px 22px;}
-      .feat-title{font-size:clamp(1.2rem,5vw,1.7rem);}
-
-      /* Philosophy */
-      .philo{grid-template-columns:1fr;}
-      .philo-vis{min-height:180px;padding:32px 24px;}
-      .philo-txt{padding:32px 24px;}
-      .philo-quote{font-size:clamp(1.1rem,4vw,1.5rem);}
-
-      /* Marquee */
-      .mq{border-radius:10px;margin:4px 0;}
-
-      /* Rings page */
-      .rng{padding:24px 20px;}
-      .rng-name{font-size:1.2rem;}
-
-      /* Floating buttons */
-      .twoam-btn{bottom:20px;right:16px;padding:9px 14px;font-size:.64rem;}
-      .back-top{bottom:72px;right:16px;width:38px;height:38px;font-size:1rem;}
-      .sec-nav{right:10px;}
-
-      /* Hero cards hidden on mobile — replace with simpler layout */
-      .hero-visual{display:none;}
-
-      /* Season banner */
-      .season-banner{padding:8px 1rem;gap:8px;flex-direction:column;text-align:center;}
-
-      /* Intention / Sip & Seek buttons */
-      .hero-btns button{width:100%;justify-content:center;}
-    }
-
-    /* ── SMALL MOBILE (≤380px) ── */
-    @media(max-width:380px){
-      .hero-h{font-size:1.75rem;}
-      .btn-main,.btn-ghost,.btn-finder{padding:10px 16px;font-size:.65rem;}
-      .sec{padding:32px 1rem;}
-    }
-  `;
-
-  // --- 2AM OVERLAY ---------------------------------------------------------
-  const TwoAMOverlay = () => {
-    const blend = BLENDS.find(b => b.id === "m2");
-    return (
-      <div className="twoam-ov">
-        <div className="twoam-inner">
-          <div className="twoam-title">Can't sleep?</div>
-          <div className="twoam-sub">You're not alone. Let's make you something warm.<br />This blend was made for exactly this moment.</div>
-          <div className="twoam-card">
-            <div className="twoam-blend-name">2AM Reset</div>
-            <ul className="twoam-steps">
-              <li>Combine 1 tsp cinnamon, 1/2 tsp cardamom, 1/4 tsp ginger, 2 cloves</li>
-              <li>⏱ Bring water to just off the boil -- boil then wait 60 seconds</li>
-              <li>Steep for 8 minutes. Let it sit and work.</li>
-              <li>Strain. Add raw honey if you'd like.</li>
-              <li>Sit somewhere soft. Breathe. Sip slowly.</li>
-            </ul>
-            {timerFor === "2am" && (timerSec !== null || timerDone) ? (
-              // When 2AM timer is running -- show the full overlay on top of 2AM screen
-              // (The LargeTimerOverlay renders globally so it appears automatically)
-              <div style={{textAlign:"center",padding:"16px",background:"rgba(196,137,58,.1)",borderRadius:14,border:"1px solid rgba(196,137,58,.3)"}}>
-                <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",letterSpacing:".12em",textTransform:"uppercase",marginBottom:6}}>Timer started -- full screen counting</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"2.2rem",color:"var(--gold)"}}>{timerSec !== null ? fmt(timerSec) : "Ready"}</div>
-                <div style={{fontSize:".68rem",color:"rgba(255,255,255,.35)",marginTop:4}}>The steaming cup timer is counting above this screen</div>
-                <button className="btn-twoam" style={{marginTop:10,background:"rgba(196,137,58,.2)",borderColor:"rgba(196,137,58,.4)"}} onClick={stopTimer}>Stop Timer</button>
-              </div>
-            ) : (
-              <button className="btn-twoam gold" onClick={() => startTimer(blend,"2am")}>Start Brewing -- 8 min</button>
-            )}
-          </div>
-          <div className="twoam-actions">
-            <button className="btn-twoam gold" onClick={() => { addToCart({...blend,emoji:"🍵"}); close2AM(); }}>Add to Cart -- ${(blend ? blend.price : "")}</button>
-            <button className="btn-twoam" onClick={() => { close2AM(); window.open("https://2amcompanion.com","_blank"); }}>2amcompanion.com ↗</button>
-            <button className="btn-twoam" onClick={close2AM}>Close</button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // --- TEA FINDER MODAL -----------------------------------------------------
-  const TeaFinderModal = () => {
-    return (
-    <div className="modal-ov" onClick={() => setFinderOpen(false)}>
-      <div id="tea-finder-modal" className="modal" onClick={e => e.stopPropagation()}>
-        <div className="modal-head">
-          <span className="modal-title">✦ Find Your Tea</span>
-          <button className="modal-close" onClick={() => { setFinderOpen(false); resetFinder(); }}>✕</button>
-        </div>
-        <div className="modal-body">
-          {!finderResults ? (
-            <>
-              <div className="finder-progress">
-                {TEA_FINDER_STEPS.map((_,i) => <div key={i} className={`finder-dot ${i<=finderStep?"done":""}`}/>)}
-              </div>
-              <div className="finder-q">{TEA_FINDER_STEPS[finderStep].q}</div>
-              <div className="finder-opts">
-                {TEA_FINDER_STEPS[finderStep].opts.map(opt => (
-                  <div key={opt.v} className="finder-opt" onClick={() => handleFinderAnswer(TEA_FINDER_STEPS[finderStep].key, opt.v)}>
-                    <div className="finder-opt-e">{opt.e}</div>
-                    <div className="finder-opt-l">{opt.l}</div>
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <>
-              <div style={{textAlign:"center",marginBottom:"1.4rem"}}>
-                <div style={{fontSize:"1.8rem",marginBottom:"8px"}}>🍵</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.2rem",color:"var(--bark)"}}>Your perfect blends</div>
-                <div style={{fontSize:".78rem",color:"#8A7A6A",marginTop:"4px",fontWeight:300}}>Based on how you're feeling right now</div>
-              </div>
-              {finderResults.map((r,i) => (
-                <div key={r.id} className="finder-result">
-                  <div className="finder-result-rank">{i+1}</div>
-                  <div style={{flex:1}}>
-                    <div className="finder-result-name">{r.name}</div>
-                    <div className="finder-result-benefit">{r.benefit}</div>
-                    <div className="finder-result-desc">{r.desc}</div>
-                    <CupValue item={r} />
-                    {r.warning && <div className="warn-block" style={{marginTop:8}}><strong>⚠ Safety Note</strong>{r.warning}</div>}
-                    <div style={{display:"flex",gap:"8px",marginTop:"10px",flexWrap:"wrap"}}>
-                      <button className="btn-add" onClick={() => { addToCart({...r,emoji:"🍵"}); setFinderOpen(false); resetFinder(); }}>Add to Cart -- ${r.price}</button>
-                      <button className="btn-ghost" style={{fontSize:".65rem",padding:"7px 14px"}} onClick={() => {
-                        const blendIdx = BLENDS.findIndex(b => b.id === r.id);
-                        const cleanseIdx = CLEANSING.findIndex(c => c.id === r.id);
-                        const recipeKey = blendIdx >= 0 ? `w${blendIdx}` : cleanseIdx >= 0 ? `c${cleanseIdx}` : null;
-                        setBlendFilter("All");
-                        if (recipeKey) setActiveRecipe(recipeKey);
-                        setFinderOpen(false);
-                        resetFinder();
-                        nav("recipes");
-                        if (recipeKey) {
-                          setTimeout(() => {
-                            const el = document.querySelector(`[data-recipe="${recipeKey}"]`);
-                            if (el) el.scrollIntoView({ behavior:"smooth", block:"center" });
-                          }, 380);
-                        }
-                      }}>See Recipe</button>
-                    </div>
-                    <button
-                      style={{marginTop:"10px",width:"100%",background:"rgba(13,26,17,.85)",border:"1px solid rgba(82,184,130,.35)",borderRadius:10,padding:"9px 14px",color:"#52b882",fontFamily:"'Cinzel',serif",fontSize:".62rem",fontWeight:500,letterSpacing:".16em",textTransform:"uppercase",cursor:"pointer",transition:"all .18s"}}
-                      onMouseEnter={e=>{e.currentTarget.style.background="rgba(82,184,130,.12)";e.currentTarget.style.borderColor="rgba(82,184,130,.7)";e.currentTarget.style.color="#7dd9a8";}}
-                      onMouseLeave={e=>{e.currentTarget.style.background="rgba(13,26,17,.85)";e.currentTarget.style.borderColor="rgba(82,184,130,.35)";e.currentTarget.style.color="#52b882";}}
-                      onClick={()=>{ setFinderOpen(false); resetFinder(); nav("tea-library",{blend:r.name}); }}>
-                      See Your Full Recipe in the Tea Library →
-                    </button>
-                  </div>
-                </div>
-              ))}
-              <button className="btn-ghost" style={{width:"100%",marginTop:"1rem"}} onClick={resetFinder}>Try Again</button>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-  }
-
-  // --- RITUAL BUILDER MODAL -------------------------------------------------
-  const RitualBuilderModal = () => {
-    const morningBlends = BLENDS.filter(b => b.occasion === "Morning");
-    const eveningBlends = BLENDS.filter(b => b.occasion === "Evening");
-    const extras = [...BLENDS.filter(b=>b.occasion==="Wellness"), ...CLEANSING.slice(0,4)];
-    const ritualTotal = [ritual.morning,ritual.evening,...ritual.extras].filter(Boolean).reduce((s,i)=>s+i.price,0);
-    const hasSelection = ritual.morning || ritual.evening || ritual.extras.length > 0;
-
-    // Auto-scroll to a section inside the ritual modal body
-    const scrollToSection = (sectionId) => {
-      setTimeout(() => {
-        const modal = document.getElementById("ritual-modal-body");
-        const el = document.getElementById(sectionId);
-        if (modal && el) modal.scrollTo({ top: el.offsetTop - 12, behavior:"smooth" });
-      }, 180);
-    };
-
-    return (
-      <div className="modal-ov" onClick={() => setRitualOpen(false)}>
-        {/* Modal uses flex-column so header + footer stay fixed, body scrolls */}
-        <div className="modal" style={{display:"flex",flexDirection:"column",overflow:"hidden",maxHeight:"90vh"}} onClick={e => e.stopPropagation()}>
-
-          {/* FIXED HEADER */}
-          <div className="modal-head" style={{flexShrink:0}}>
-            <span className="modal-title">☀ Build Your Daily Ritual</span>
-            <button className="modal-close" onClick={() => setRitualOpen(false)}>✕</button>
-          </div>
-
-          {/* SCROLLABLE BODY */}
-          <div id="ritual-modal-body" style={{flex:1,overflowY:"auto",padding:"20px 28px"}}>
-            <div style={{fontSize:".8rem",color:"#8A7A6A",marginBottom:"1.4rem",fontWeight:300}}>
-              Pick your morning blend, your evening blend, and any add-ons. Your full ritual adds to cart in one click.
-            </div>
-
-            {/* MORNING */}
-            <div id="ritual-morning" className="ritual-section">
-              <div className="ritual-section-h">
-                🌅 Morning Blend (pick one)
-                {ritual.morning && <span style={{marginLeft:8,fontSize:".65rem",color:"var(--sage-d)",fontWeight:500,background:"var(--sage-p)",padding:"2px 10px",borderRadius:50}}>✓ {ritual.morning.name}</span>}
-              </div>
-              <div className="ritual-opts">
-                {morningBlends.map(b => {
-                  const selected = (ritual.morning ? ritual.morning.id : null) === b.id;
-                  return (
-                    <div key={b.id}
-                      className={`ritual-opt ${selected?"selected":""}`}
-                      onClick={() => {
-                        const nowSelected = !selected;
-                        setRitual(p=>({...p,morning:selected?null:b}));
-                        if (nowSelected) scrollToSection("ritual-evening");
-                      }}>
-                      <div className="ritual-opt-name">{b.name}</div>
-                      <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${b.price}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* EVENING */}
-            <div id="ritual-evening" className="ritual-section">
-              <div className="ritual-section-h">
-                🌙 Evening Blend (pick one)
-                {ritual.evening && <span style={{marginLeft:8,fontSize:".65rem",color:"var(--sage-d)",fontWeight:500,background:"var(--sage-p)",padding:"2px 10px",borderRadius:50}}>✓ {ritual.evening.name}</span>}
-              </div>
-              <div className="ritual-opts">
-                {eveningBlends.map(b => {
-                  const selected = (ritual.evening ? ritual.evening.id : null) === b.id;
-                  return (
-                    <div key={b.id}
-                      className={`ritual-opt ${selected?"selected":""}`}
-                      onClick={() => {
-                        const nowSelected = !selected;
-                        setRitual(p=>({...p,evening:selected?null:b}));
-                        if (nowSelected) scrollToSection("ritual-addons");
-                      }}>
-                      <div className="ritual-opt-name">{b.name}</div>
-                      <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${b.price}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* ADD-ONS */}
-            <div id="ritual-addons" className="ritual-section">
-              <div className="ritual-section-h">✦ Add-ons (optional)</div>
-              <div className="ritual-opts">
-                {extras.map(b => (
-                  <div key={b.id}
-                    className={`ritual-opt ${ritual.extras.find(e=>e.id===b.id)?"selected":""}`}
-                    onClick={() => setRitual(p=>({...p,extras:p.extras.find(e=>e.id===b.id)?p.extras.filter(e=>e.id!==b.id):[...p.extras,b]}))}>
-                    <div className="ritual-opt-name">{b.name}</div>
-                    <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${b.price}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Spacer so last section isn't hidden behind sticky footer */}
-            <div style={{height:hasSelection?8:0}}/>
-          </div>
-
-          {/* STICKY SUMMARY FOOTER — always visible once anything is selected */}
-          {hasSelection && (
-            <div style={{flexShrink:0,borderTop:"2px solid var(--sage-p)",background:"var(--linen)",padding:"14px 28px 20px"}}>
-              {/* Mini selection list */}
-              <div style={{marginBottom:10}}>
-                <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"#8A7A6A",marginBottom:6,fontWeight:500}}>Your Ritual So Far</div>
-                {ritual.morning && (
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",borderBottom:"1px solid var(--dust)"}}>
-                    <span style={{fontSize:".8rem",color:"var(--bark)"}}>🌅 {ritual.morning.name}</span>
-                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${ritual.morning.price}</span>
-                  </div>
-                )}
-                {ritual.evening && (
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",borderBottom:"1px solid var(--dust)"}}>
-                    <span style={{fontSize:".8rem",color:"var(--bark)"}}>🌙 {ritual.evening.name}</span>
-                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${ritual.evening.price}</span>
-                  </div>
-                )}
-                {ritual.extras.map(e => (
-                  <div key={e.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",borderBottom:"1px solid var(--dust)"}}>
-                    <span style={{fontSize:".8rem",color:"var(--bark)"}}>✦ {e.name}</span>
-                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${e.price}</span>
-                  </div>
-                ))}
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",paddingTop:8}}>
-                  <span style={{fontSize:".72rem",color:"#8A7A6A",letterSpacing:".06em",textTransform:"uppercase"}}>Total</span>
-                  <span style={{fontFamily:"'Playfair Display',serif",fontSize:"1.2rem",color:"var(--bark)"}}>${ritualTotal.toFixed(2)}</span>
-                </div>
-              </div>
-              <button
-                className="btn-main"
-                style={{width:"100%",padding:"13px"}}
-                disabled={!ritual.morning && !ritual.evening && ritual.extras.length===0}
-                onClick={addRitualToCart}>
-                Add My Ritual to Cart — ${ritualTotal.toFixed(2)}
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  // --- CLEANSE TRACKER MODAL ------------------------------------------------
-  const CleanseTrackerModal = () => {
-    const tracker = activeTracker ? CLEANSING.find(cl=>cl.id===activeTracker) : null;
-    const checkedCount = tracker ? Array.from({length:tracker.days},(_,i)=>checkedDays[`${tracker.id}-${i}`]).filter(Boolean).length : 0;
-    const pct = tracker ? Math.round(checkedCount/tracker.days*100) : 0;
-    const alreadyInCart = !!(tracker && cart.find(i=>i.id===tracker.id));
-    return (
-      <div className="modal-ov" onClick={() => setTrackerOpen(false)}>
-        <div className="modal" onClick={e=>e.stopPropagation()}>
-          <div className="modal-head">
-            <span className="modal-title">🌿 Cleanse Tracker</span>
-            <button className="modal-close" onClick={() => setTrackerOpen(false)}>✕</button>
-          </div>
-          {tracker && (
-            <div style={{position:"sticky",top:74,zIndex:3,background:"white",borderBottom:"1px solid var(--dust)",padding:"9px 28px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-              <button style={{background:"none",border:"none",color:"var(--sage-d)",cursor:"pointer",fontSize:".72rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"Jost,sans-serif",padding:0}} onClick={() => setActiveTracker(null)}>
-                ← All Cleanses
-              </button>
-              <div style={{textAlign:"right"}}>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"var(--bark)"}}>{tracker.name}</div>
-                <div style={{fontSize:".62rem",color:"#8A7A6A"}}>{checkedCount}/{tracker.days} days · {pct}%</div>
-              </div>
-            </div>
-          )}
-          <div className="modal-body">
-            {!tracker ? (
-              <>
-                <div style={{fontSize:".8rem",color:"#8A7A6A",marginBottom:"1.2rem",fontWeight:300}}>Select a cleansing protocol to track your daily progress.</div>
-                <div className="tracker-select">
-                  {CLEANSING.map(cl => (
-                    <div key={cl.id} className={`tracker-opt ${activeTracker===cl.id?"on":""}`} onClick={() => setActiveTracker(cl.id)}>
-                      <div className="tracker-opt-name">{cl.name}</div>
-                      <div className="tracker-opt-days">{cl.days} days · {cl.organ}</div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <>
-                <div style={{background:"linear-gradient(135deg,#3D2B1F,#2A1F15)",borderRadius:"16px 16px 0 0",padding:"18px 20px",marginBottom:0}}>
-                  <div style={{fontSize:".6rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:5,opacity:.85}}>{tracker.organ} · Cleanse</div>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"white",marginBottom:4}}>{tracker.name}</div>
-                  <div style={{fontSize:".76rem",fontStyle:"italic",color:"rgba(255,255,255,.5)",fontWeight:300}}>{tracker.tagline}</div>
-                </div>
-                <div style={{background:"white",borderRadius:"0 0 16px 16px",padding:"16px 20px",marginBottom:"1rem",border:"1px solid var(--dust)",borderTop:"none"}}>
-                  <div style={{fontSize:".8rem",color:"#6A5F50",lineHeight:1.6,marginBottom:10,fontWeight:300}}>{tracker.desc}</div>
-                  <CupValue item={tracker}/>
-                  <div style={{fontSize:".66rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--sage-d)",marginBottom:4}}>Ingredients</div>
-                  <div style={{fontSize:".76rem",color:"#5A5040",marginBottom:10,lineHeight:1.5}}>{tracker.ingredients.join(" · ")}</div>
-                  <div style={{background:"var(--sage-p)",borderRadius:10,padding:"10px 14px",marginBottom:10}}>
-                    <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--sage-d)",marginBottom:4}}>Your Protocol</div>
-                    <div style={{fontSize:".78rem",color:"#3D2B1F",lineHeight:1.55}}>{tracker.protocol}</div>
-                  </div>
-                  <div style={{fontSize:".68rem",color:"#8A7A6A",display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
-                    <span>⏱ {tracker.steepMin} min steep</span>
-                    <span style={{color:tempIcon(tracker.steepTemp).color,fontWeight:500}}>{tempIcon(tracker.steepTemp).icon} {tempIcon(tracker.steepTemp).label}</span>
-                  </div>
-                  {tracker.warning && <div className="warn-block" style={{marginTop:10}}><strong>⚠ Safety Note</strong>{tracker.warning}</div>}
-                </div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"var(--bark)",marginBottom:8}}>Your Progress</div>
-                <div className="tracker-progress-bar"><div className="tracker-progress-fill" style={{width:`${pct}%`}}/></div>
-                <div style={{fontSize:".72rem",color:"#8A7A6A",marginBottom:"1rem"}}>{checkedCount} of {tracker.days} days complete · {pct}%</div>
-                <div style={{fontSize:".68rem",color:"#8A7A6A",marginBottom:"8px",letterSpacing:".1em",textTransform:"uppercase"}}>Tap a day to mark complete</div>
-                <div className="day-grid">
-                  {Array.from({length:tracker.days},(_,i) => (
-                    <div key={i} className={`day-cell ${checkedDays[`${tracker.id}-${i}`]?"checked":""}`} onClick={() => toggleDay(tracker.id,i)}>
-                      {i+1}
-                    </div>
-                  ))}
-                </div>
-                {pct===100 && (
-                  <div style={{textAlign:"center",padding:"1rem",background:"var(--sage-p)",borderRadius:16,marginTop:"1rem"}}>
-                    <div style={{fontSize:"1.5rem",marginBottom:"6px"}}>🎉</div>
-                    <div style={{fontFamily:"'Playfair Display',serif",color:"var(--sage-d)"}}>Protocol Complete!</div>
-                    <div style={{fontSize:".78rem",color:"#6A5F50",marginTop:"4px",fontWeight:300}}>Your body thanks you. How do you feel?</div>
-                  </div>
-                )}
-                {!alreadyInCart ? (
-                  <div style={{position:"sticky",bottom:0,background:"#FFF8F4",borderTop:"2px solid #F0C0A0",padding:"14px 0 4px",marginTop:"1.2rem"}}>
-                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-                      <div>
-                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)"}}>{tracker.name}</div>
-                        <div style={{fontSize:".64rem",color:"#8A7A6A"}}>{tracker.days}-day protocol · ~{tracker.oz*tracker.cupsPerOz} cups</div>
-                      </div>
-                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"var(--bark)"}}>${tracker.price}</div>
-                    </div>
-                    <button className="btn-add-c" style={{width:"100%",padding:"12px",fontSize:".74rem"}} onClick={() => addToCart({...tracker,emoji:"✦"})}>
-                      Add to Cart — ${tracker.price} · Start Your {tracker.days}-Day Cleanse
-                    </button>
-                  </div>
-                ) : (
-                  <div style={{position:"sticky",bottom:0,background:"var(--sage-p)",borderTop:"1px solid #C8DEC8",padding:"12px 0",marginTop:"1rem",textAlign:"center"}}>
-                    <span style={{fontSize:".76rem",color:"var(--sage-d)",fontWeight:500}}>✓ {tracker.name} is already in your cart</span>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // --- BOOK PREVIEW MODAL ---------------------------------------------------
-  const BookPreviewModal = () => {
-    const samples = [
-      BLENDS.find(b=>b.id==="m2"), // 2AM Reset
-      BLENDS.find(b=>b.id==="e1"), // Chamomile & Calm
-      CLEANSING.find(c=>c.id==="c1"), // Liver & Love
-      BLENDS.find(b=>b.id==="s1"), // Turmeric Tonic
-    ].filter(Boolean);
-    const [previewPage, setPreviewPage] = useState(0);
-    const sample = samples[previewPage];
-    return (
-      <div className="modal-ov" onClick={()=>setBookPreview(false)}>
-        <div className="modal" style={{maxWidth:700,background:"#FAF7F0"}} onClick={e=>e.stopPropagation()}>
-          <div className="modal-head" style={{background:"#2D4A2D",borderRadius:"24px 24px 0 0"}}>
-            <div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"white"}}>Sip &amp; Heal</div>
-              <div style={{fontSize:".68rem",color:"rgba(255,255,255,.5)",letterSpacing:".1em"}}>THE CHAI HOLISTIC COLLECTION · 40 RECIPES</div>
-            </div>
-            <button className="modal-close" style={{borderColor:"rgba(255,255,255,.2)",color:"white"}} onClick={()=>setBookPreview(false)}>✕</button>
-          </div>
-
-          {/* Book intro */}
-          <div style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",padding:"28px",textAlign:"center"}}>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",fontStyle:"italic",color:"rgba(255,255,255,.6)",marginBottom:"6px"}}>A preview from inside the book</div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.6rem",color:"white",marginBottom:"4px"}}>
-              "{sample.tagline}"
-            </div>
-            <div style={{display:"flex",justifyContent:"center",gap:8,marginTop:"12px"}}>
-              {samples.map((_,i)=>(
-                <div key={i} onClick={()=>setPreviewPage(i)} style={{width:8,height:8,borderRadius:"50%",background:i===previewPage?"var(--gold)":"rgba(255,255,255,.25)",cursor:"pointer",transition:"all .2s"}}/>
-              ))}
-            </div>
-          </div>
-
-          {/* Recipe page */}
-          <div className="modal-body" style={{background:"#FAF7F0"}}>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"1.5rem",marginBottom:"1.5rem"}}>
-              <div>
-                <div style={{fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:6}}>{sample.occasion||sample.organ}</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.6rem",color:"#2D4A2D",marginBottom:6,lineHeight:1.2}}>{sample.name}</div>
-                <div style={{fontSize:".82rem",color:"#6A5F50",lineHeight:1.7,fontWeight:300,marginBottom:12}}>{sample.desc}</div>
-                <div style={{fontSize:".7rem",color:"#8A7A6A",marginBottom:4,fontWeight:500,letterSpacing:".08em",textTransform:"uppercase"}}>Ingredients</div>
-                {sample.ingredients.map((ing,i)=>(
-                  <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"5px 0",borderBottom:"1px solid #E8E0D0",fontSize:".8rem",color:"#3D2B1F"}}>
-                    <span style={{color:"#C4893A",fontSize:".6rem"}}>✦</span>{ing}
-                  </div>
-                ))}
-              </div>
-              <div>
-                <div style={{background:"white",borderRadius:16,padding:"20px",border:"1px solid #E8E0D0",marginBottom:12}}>
-                  <div style={{fontSize:".6rem",letterSpacing:".15em",textTransform:"uppercase",color:"#8A7A6A",marginBottom:8}}>How to Brew</div>
-                  <div style={{display:"flex",gap:10,marginBottom:8}}>
-                    <div style={{background:"#EBF2EC",borderRadius:10,padding:"8px 12px",flex:1,textAlign:"center"}}>
-                      <div style={{fontSize:"1.1rem",fontFamily:"'Playfair Display',serif",color:"#2D4A2D"}}>{sample.steepMin} min</div>
-                      <div style={{fontSize:".6rem",color:"#8A7A6A"}}>steep time</div>
-                    </div>
-                    <div style={{background:"#FFF5E0",borderRadius:10,padding:"8px 12px",flex:1,textAlign:"center"}}>
-                      <div style={{fontSize:".75rem",fontFamily:"'Playfair Display',serif",color:"#C4893A"}}>{tempIcon(sample.steepTemp).icon}</div>
-                      <div style={{fontSize:".6rem",color:"#8A7A6A"}}>{tempIcon(sample.steepTemp).label}</div>
-                    </div>
-                  </div>
-                  <div style={{fontSize:".7rem",color:"#6A5F50",lineHeight:1.6,fontWeight:300}}>
-                    Use {sample.servingSize} per 8oz cup. {sample.steepMin >= 10 ? "Simmer low -- don't rush this one." : "Don't over-steep -- pour promptly."} Add honey to taste.
-                  </div>
-                </div>
-                <CupValue item={sample}/>
-                <div style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",borderRadius:12,padding:"14px",textAlign:"center"}}>
-                  <div style={{fontSize:".68rem",color:"rgba(255,255,255,.5)",marginBottom:4}}>Best for</div>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontStyle:"italic",color:"white",fontSize:".9rem"}}>{sample.mood}</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Navigation between previews */}
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1rem"}}>
-              <button onClick={()=>setPreviewPage(p=>Math.max(0,p-1))} disabled={previewPage===0}
-                style={{background:"none",border:"1.5px solid var(--dust)",padding:"7px 16px",borderRadius:50,fontSize:".72rem",cursor:"pointer",opacity:previewPage===0 ? 0.3:1,fontFamily:"Jost,sans-serif",color:"var(--bark)"}}>
-                ← Previous
-              </button>
-              <span style={{fontSize:".72rem",color:"#8A7A6A"}}>Recipe {previewPage+1} of {samples.length} · 40 total in the book</span>
-              <button onClick={()=>setPreviewPage(p=>Math.min(samples.length-1,p+1))} disabled={previewPage===samples.length-1}
-                style={{background:"none",border:"1.5px solid var(--dust)",padding:"7px 16px",borderRadius:50,fontSize:".72rem",cursor:"pointer",opacity:previewPage===samples.length-1 ? 0.3:1,fontFamily:"Jost,sans-serif",color:"var(--bark)"}}>
-                Next →
-              </button>
-            </div>
-
-            {/* CTA */}
-            <div style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",borderRadius:16,padding:"24px",textAlign:"center"}}>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"white",marginBottom:6}}>
-                All 40 recipes. One beautiful book.
-              </div>
-              <div style={{fontSize:".8rem",color:"rgba(255,255,255,.55)",marginBottom:"1.2rem",fontWeight:300}}>
-                Morning rituals · Evening calm · Seasonal blends · 10 cleansing protocols.<br/>Your complete home apothecary -- $24.99.
-              </div>
-              <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-                <button className="btn-book" onClick={()=>{addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"});setBookPreview(false);}}>
-                  Add to Cart -- $24.99
-                </button>
-                <button style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.2)",color:"white",padding:"13px 24px",borderRadius:50,fontSize:".73rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif"}} onClick={()=>{setBookPreview(false);nav("recipes");}}>
-                  Browse All Recipes Free
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  // --- LARGE TIMER OVERLAY --------------------------------------------------
-  const LargeTimerOverlay = () => {
-    return (
-    <div className="timer-overlay">
-      <div className="timer-overlay-name">{timerBlendName}</div>
-
-      {/* STEAMING CUP   only shows while actively steeping */}
-      {timerOn && (
-        <div className="tea-cup-wrap">
-          <div className="steam">
-            <div className="steam-line"/>
-            <div className="steam-line"/>
-            <div className="steam-line"/>
-            <div className="steam-line"/>
-          </div>
-          <div className="tea-cup">🍵</div>
-        </div>
-      )}
-
-      <div className={`timer-overlay-face ${timerSec === 0 ? "done" : ""}`}>
-        {timerSec !== null ? fmt(timerSec) : "0:00"}
-      </div>
-
-      {/* PULSING STEEPING / PAUSED LABEL */}
-      {timerOn
-        ? <div className="steeping-label">· steeping ·</div>
-        : <div className="paused-label">paused -- tap Resume when ready</div>
-      }
-
-      <div className="timer-overlay-keepopen">
-        <strong>⚠ Keep This Screen Open</strong>
-        <span>Your phone needs to stay awake for the timer to count. If you lock your screen, the timer will pause until you return.</span>
-      </div>
-      <div className="timer-overlay-btns">
-        {timerOn ? (
-          <button className="btn-t stop" onClick={() => setTimerOn(false)}>Pause</button>
-        ) : (
-          <button className="btn-t go" onClick={() => { timerDoneRef.current = false; setTimerOn(true); }}>Resume</button>
-        )}
-        <button className="btn-t rst" style={{borderColor:"rgba(255,255,255,.2)",color:"rgba(255,255,255,.5)"}} onClick={dismissTimer}>Close</button>
-        <button
-          onClick={() => { dismissTimer(); window.open("https://2amcompanion.com","_blank"); }}
-          style={{background:"rgba(196,137,58,.15)",border:"1px solid rgba(196,137,58,.4)",color:"rgba(196,137,58,.9)",padding:"8px 16px",borderRadius:50,fontSize:".7rem",letterSpacing:".08em",cursor:"pointer",fontFamily:"Jost,sans-serif",whiteSpace:"nowrap"}}>
-          🌙 2AM Companion
-        </button>
-      </div>
-    </div>
-  );
-  }
-
-  // --- TEA READY SCREEN -----------------------------------------------------
-  const TeaReadyScreen = () => {
-    return (
-    <div className="timer-ready-msg">
-      <div className="timer-ready-emoji">🍵</div>
-      <div className="timer-ready-title">Your tea is ready</div>
-      <div className="timer-ready-sub">
-        {timerBlendName} -- brewed to perfection.<br/>
-        Sip slowly. You deserve this moment.
-      </div>
-      <div style={{display:"flex",gap:12,flexWrap:"wrap",justifyContent:"center"}}>
-        <button className="btn-main" style={{fontSize:"1rem",padding:"14px 40px"}} onClick={dismissTimer}>
-          Enjoy ✦
-        </button>
-        <button
-          style={{background:"rgba(196,137,58,.15)",border:"1px solid rgba(196,137,58,.4)",color:"rgba(196,137,58,.9)",padding:"14px 24px",borderRadius:50,fontSize:".78rem",letterSpacing:".08em",cursor:"pointer",fontFamily:"Jost,sans-serif"}}
-          onClick={() => { dismissTimer(); window.open("https://2amcompanion.com","_blank"); }}>
-          🌙 2AM Companion
-        </button>
-      </div>
-      <button
-        style={{marginTop:20,background:"none",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.35)",padding:"8px 24px",borderRadius:50,fontSize:".7rem",cursor:"pointer",fontFamily:"Jost,sans-serif",letterSpacing:".08em"}}
-        onClick={dismissTimer}>
-        Close
-      </button>
-    </div>
-  );
-  }
-
-  // --- BOOK CTA INLINE -----------------------------------------------------
-  const BookCTA = () => {
-    return (
-    <div className="recipe-book-cta" style={{alignItems:"center",gap:16}}>
-      <BookCoverMockup size="sm" onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}/>
-      <div className="recipe-book-cta-text">
-        <strong>Sip &amp; Heal -- The Complete Collection</strong>
-        All 40 recipes in one beautifully crafted guide -- $24.99
-      </div>
-      <button className="btn-recipe-book" onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}>
-        Get the Book
-      </button>
-    </div>
-  );
-  }
-
-
-  // --- BOOK COVER MOCKUP COMPONENT ------------------------------------------
-  const BookCoverMockup = ({ size="md", onClick }) => {
-    const w = size==="lg" ? 230 : size==="sm" ? 130 : 180;
-    const h = Math.round(w * 1.48);
-    return (
-      <div onClick={onClick}
-        style={{cursor:onClick?"pointer":"default",position:"relative",width:w,height:h,
-          borderRadius:"3px 10px 10px 3px",
-          background:"linear-gradient(160deg,#2D4A2D 0%,#1B3A1B 60%,#142E14 100%)",
-          boxShadow:"-8px 8px 0 #142E14,-10px 10px 24px rgba(0,0,0,.5),3px 0 8px rgba(255,255,255,.04) inset",
-          padding:size==="lg"?"28px 24px":"20px 16px",
-          display:"flex",flexDirection:"column",justifyContent:"space-between",
-          border:"1px solid rgba(196,137,58,.35)",transition:"all .35s",flexShrink:0}}
-        onMouseEnter={e=>{if(onClick)e.currentTarget.style.transform="translateY(-4px) rotate(.5deg)";}}
-        onMouseLeave={e=>{e.currentTarget.style.transform="none";}}>
-        {/* Top gold rule */}
-        <div style={{width:"100%",height:1,background:"linear-gradient(90deg,transparent,rgba(196,137,58,.7),transparent)",marginBottom:size==="lg"?14:10}}/>
-        {/* Herb icon */}
-        <div style={{textAlign:"center",fontSize:size==="lg"?"2.6rem":"1.8rem",marginBottom:6,opacity:.88}}>🌿</div>
-        {/* Title */}
-        <div style={{fontFamily:"'Playfair Display',serif",fontSize:size==="lg"?"1.7rem":"1.2rem",color:"var(--gold)",textAlign:"center",lineHeight:1.15,fontStyle:"italic",marginBottom:4}}>Sip &amp; Heal</div>
-        {/* Rule */}
-        <div style={{width:"60%",height:1,background:"rgba(196,137,58,.35)",margin:"6px auto"}}/>
-        {/* Subtitle */}
-        <div style={{fontFamily:"'Playfair Display',serif",fontSize:size==="lg"?".65rem":".52rem",color:"rgba(255,255,255,.65)",textAlign:"center",letterSpacing:".14em",textTransform:"uppercase",marginBottom:size==="lg"?16:10,lineHeight:1.55}}>The Chai Holistic<br/>Collection</div>
-        {/* Centre detail */}
-        <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center"}}>
-          <div style={{textAlign:"center",background:"rgba(196,137,58,.1)",border:"1px solid rgba(196,137,58,.25)",borderRadius:8,padding:"8px 12px"}}>
-            <div style={{fontSize:size==="lg"?".78rem":".6rem",color:"rgba(196,137,58,.9)",fontFamily:"'Playfair Display',serif",fontStyle:"italic"}}>40 Recipes</div>
-            <div style={{fontSize:size==="lg"?".58rem":".46rem",color:"rgba(255,255,255,.5)",letterSpacing:".1em",textTransform:"uppercase",marginTop:2,fontFamily:"Jost,sans-serif"}}>30 Wellness · 10 Cleanse</div>
-          </div>
-        </div>
-        {/* Bottom */}
-        <div style={{marginTop:size==="lg"?16:10}}>
-          <div style={{width:"100%",height:1,background:"linear-gradient(90deg,transparent,rgba(196,137,58,.5),transparent)",marginBottom:8}}/>
-          <div style={{fontSize:size==="lg"?".5rem":".42rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(255,255,255,.3)",textAlign:"center",fontFamily:"Jost,sans-serif"}}>Chai Holistic</div>
-        </div>
-        {/* Spine shadow strip */}
-        <div style={{position:"absolute",left:0,top:0,bottom:0,width:10,
-          background:"linear-gradient(90deg,rgba(0,0,0,.4),rgba(0,0,0,.1))",
-          borderRadius:"3px 0 0 3px"}}/>
-      </div>
-    );
-  };
-
-  // --- CART DRAWER ----------------------------------------------------------
-  const CartDrawer = () => {
-    const suggestions = BUNDLES.filter(b=>!cart.find(i=>i.id===b.id)).slice(0,2);
-    const hasTeaInCart = cart.some(i=>i.type==="blend"||i.type==="herb"||(!i.type&&i.oz));
-    const hasCleanseInCart = cart.some(i=>i.type==="cleanse"||(i.organ));
-    const hasToolInCart = cart.some(i=>i.type==="tool");
-    const [expandedTool, setExpandedTool] = useState(null);
-
-    // Pick 2 contextual pairings based on what's in the cart
-    const ritualPairings = (() => {
-      if (!cart.length || hasToolInCart) return [];
-      const cup     = BREW_TOOLS.find(t=>t.id==="t1");
-      const ceramic = BREW_TOOLS.find(t=>t.id==="t2");
-      const strainer = BREW_TOOLS.find(t=>t.id==="t4");
-      const teapot  = BREW_TOOLS.find(t=>t.id==="t5");
-      if (hasCleanseInCart) return [strainer, teapot].filter(Boolean);
-      if (hasTeaInCart)     return [cup, strainer].filter(Boolean);
-      return [cup, ceramic].filter(Boolean);
-    })();
-    return cartOpen ? (
-      <>
-        <div className="overlay" onClick={()=>setCartOpen(false)}/>
-        <div className="drawer">
-          <div className="drw-head">
-            <span className="drw-title">Your Cart {cartCount>0&&`(${cartCount})`}</span>
-            <button className="drw-close" onClick={()=>setCartOpen(false)}>✕</button>
-          </div>
-          <div className="drw-items">
-            {/* Cart items — always at top */}
-            <div className="drw-cart-list">
-              {cart.length===0?(
-                <div className="empty"><div className="empty-icon">🍵</div><div className="empty-msg">Your cart is quiet</div><div className="empty-sub">Add some blends to begin.</div></div>
-              ):cart.map(item=>(
-                <div key={item.id} className="ditem">
-                  <div className="ditem-icon">{item.emoji||"✦"}</div>
-                  <div className="ditem-info">
-                    <div className="ditem-name">{item.name}</div>
-                    {item.subtitle && <div style={{fontSize:".68rem",color:"var(--sage-d)",marginBottom:2}}>{item.subtitle}</div>}
-                    <div className="ditem-price">${(item.price*item.qty).toFixed(2)}</div>
-                    {item.oz && <div style={{fontSize:".65rem",color:"var(--sage-d)",marginBottom:"6px"}}>~{item.oz*item.cupsPerOz} cups · ${costPerCup(item.price,item.oz,item.cupsPerOz)}/cup</div>}
-                    <div className="ditem-ctrl">
-                      <button className="qty-b" onClick={()=>changeQty(item.id,-1)}>−</button>
-                      <span className="qty-v">{item.qty}</span>
-                      <button className="qty-b" onClick={()=>changeQty(item.id,1)}>+</button>
-                      <button className="rm-btn" onClick={()=>removeItem(item.id)}>remove</button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Bundle suggestions — capped height, scrollable */}
-            {cart.length>0&&suggestions.length>0&&(
-              <div className="cart-sugg">
-                <div className="sugg-h">💚 Save more with a bundle</div>
-                {suggestions.map(b=>(
-                  <div key={b.id} className="sugg-row">
-                    <div><div className="sugg-name">{b.name}</div><div className="sugg-save">Save ${b.savings.toFixed(2)}</div></div>
-                    <button className="btn-sugg" onClick={()=>addToCart({...b})}>+ Add</button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Ritual pairings — inside scroll area */}
-            {ritualPairings.length>0&&(
-              <div className="cart-ritual" style={{background:"linear-gradient(160deg,#FBF7F1 0%,#F4EDE2 100%)",border:"1.5px solid rgba(196,137,58,.28)",borderRadius:18,overflow:"hidden"}}>
-                {/* Header */}
-                <div style={{padding:"12px 16px 8px",borderBottom:"1px solid rgba(196,137,58,.15)"}}>
-                  <div style={{display:"flex",alignItems:"center",gap:7}}>
-                    <span style={{fontSize:".95rem"}}>🫖</span>
-                    <div>
-                      <div style={{fontSize:".6rem",letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",fontWeight:600,lineHeight:1}}>Complete Your Ritual</div>
-                      <div style={{fontSize:".68rem",color:"#8A7A6A",fontWeight:300,lineHeight:1.3,marginTop:2}}>
-                        {hasCleanseInCart
-                          ? "Your cleanse needs the right tools to honour the process."
-                          : "Every tea deserves a vessel worthy of the moment."}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* Paired items */}
-                <div style={{padding:"10px 12px",display:"flex",flexDirection:"column",gap:10}}>
-                  {ritualPairings.map(t=>{
-                    const isOpen = expandedTool === t.id;
-                    return (
-                    <div key={t.id} style={{background:"white",borderRadius:12,border:`1px solid ${isOpen?"rgba(196,137,58,.35)":"rgba(196,137,58,.12)"}`,boxShadow:isOpen?"0 4px 18px rgba(28,26,23,.08)":"0 2px 8px rgba(28,26,23,.04)",transition:"border-color .2s, box-shadow .2s"}}>
-                      {/* Collapsed row */}
-                      <div
-                        style={{display:"flex",gap:10,alignItems:"center",padding:"10px 12px",cursor:"pointer"}}
-                        onClick={()=>setExpandedTool(isOpen ? null : t.id)}>
-                        <div style={{width:54,height:54,borderRadius:10,overflow:"hidden",flexShrink:0,background:"#F0EBE3"}}>
-                          <img src={t.photo} alt={t.name} onError={e=>{if(t.fallback)e.currentTarget.src=t.fallback;}} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/>
-                        </div>
-                        <div style={{flex:1,minWidth:0}}>
-                          <div style={{fontFamily:"'Playfair Display',serif",fontSize:".84rem",color:"var(--bark)",lineHeight:1.2,marginBottom:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{t.name}</div>
-                          <div style={{fontSize:".64rem",color:"#9A8A78",fontStyle:"italic",marginBottom:5,lineHeight:1.3}}>{t.tagline}</div>
-                          <div style={{display:"flex",alignItems:"center",gap:8}}>
-                            <span style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",fontWeight:500}}>${t.price.toFixed(2)}</span>
-                            <span style={{fontSize:".58rem",color:"var(--sage-d)",background:"rgba(74,114,80,.08)",padding:"2px 7px",borderRadius:50,border:"1px solid rgba(74,114,80,.18)"}}>{t.material}</span>
-                          </div>
-                        </div>
-                        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:5,flexShrink:0}}>
-                          <button onClick={e=>{e.stopPropagation();addToCart({...t,type:"tool"});}}
-                            style={{background:"var(--gold)",color:"white",border:"none",padding:"7px 13px",fontFamily:"'Jost',sans-serif",fontSize:".6rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",borderRadius:50,whiteSpace:"nowrap"}}
-                            onMouseEnter={e=>{e.currentTarget.style.background="var(--bark)";}}
-                            onMouseLeave={e=>{e.currentTarget.style.background="var(--gold)";}}>
-                            + Add
-                          </button>
-                          <span style={{fontSize:".58rem",color:"var(--gold)",transition:"transform .2s",transform:isOpen?"rotate(180deg)":"rotate(0deg)",display:"block",lineHeight:1}}>▼</span>
-                        </div>
-                      </div>
-                      {/* Expanded detail — scrollable within card */}
-                      {isOpen&&(
-                        <div style={{padding:"0 14px 14px",borderTop:"1px solid rgba(196,137,58,.12)",maxHeight:320,overflowY:"auto"}}>
-                          <div style={{width:"100%",height:130,borderRadius:10,overflow:"hidden",margin:"10px 0 12px",background:"#F0EBE3"}}>
-                            <img src={t.photo} alt={t.name} onError={e=>{if(t.fallback)e.currentTarget.src=t.fallback;}} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/>
-                          </div>
-                          <p style={{fontSize:".76rem",color:"#6A5F50",lineHeight:1.7,fontWeight:300,margin:"0 0 10px"}}>{t.desc}</p>
-                          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
-                            <span style={{fontSize:".58rem",letterSpacing:".08em",background:"var(--sage-p)",color:"var(--sage-d)",padding:"3px 9px",borderRadius:50,border:"1px solid rgba(74,114,80,.15)"}}>{t.capacity}</span>
-                            <span style={{fontSize:".58rem",letterSpacing:".08em",background:"var(--sage-p)",color:"var(--sage-d)",padding:"3px 9px",borderRadius:50,border:"1px solid rgba(74,114,80,.15)"}}>Ritual: {t.ritual}</span>
-                          </div>
-                          <div style={{fontSize:".66rem",color:"#9A8A7A",fontStyle:"italic",padding:"7px 10px",background:"#FAF8F5",borderRadius:8,borderLeft:"2px solid var(--gold)",lineHeight:1.5,marginBottom:12}}>{t.care}</div>
-                          <button onClick={e=>{e.stopPropagation();addToCart({...t,type:"tool"});setExpandedTool(null);}}
-                            style={{width:"100%",background:"var(--gold)",color:"white",border:"none",padding:"10px",fontFamily:"'Jost',sans-serif",fontSize:".66rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",borderRadius:50}}
-                            onMouseEnter={e=>{e.currentTarget.style.background="var(--bark)";}}
-                            onMouseLeave={e=>{e.currentTarget.style.background="var(--gold)";}}>
-                            Add {t.name} to Cart — ${t.price.toFixed(2)}
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="drw-foot">
-            {/* Honey add-on — shows when kit is in cart */}
-            {cart.some(i => i.id && i.id.includes('_kit')) && !cart.some(i => i.id === 'honey_jar') && (
-              <div style={{background:"rgba(192,136,48,.08)",border:"1px dashed rgba(192,136,48,.35)",borderRadius:12,padding:"10px 14px",marginBottom:8,display:"flex",alignItems:"center",gap:10}}>
-                <span style={{fontSize:"1.2rem",flexShrink:0}}>🍯</span>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Raw Honey Jar — $7</div>
-                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>Your kit recipe calls for raw honey</div>
-                </div>
-                <button onClick={()=>addToCart({id:"honey_jar",name:"Raw Honey Jar",price:7,emoji:"🍯"})}
-                  style={{background:"var(--gold)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
-                  + Add
-                </button>
-              </div>
-            )}
-            {/* Extra shaker bottle add-on */}
-            {cart.some(i => i.id && i.id.includes('_kit')) && !cart.some(i => i.id === 'shaker_extra') && (
-              <div style={{background:"rgba(74,114,80,.06)",border:"1px dashed rgba(74,114,80,.3)",borderRadius:12,padding:"10px 14px",marginBottom:10,display:"flex",alignItems:"center",gap:10}}>
-                <span style={{fontSize:"1.2rem",flexShrink:0}}>🥤</span>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Extra Shaker Bottle — $8</div>
-                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>One included with your kit — add a spare for gym, desk, or a friend</div>
-                </div>
-                <button onClick={()=>addToCart({id:"shaker_extra",name:"Extra Shaker Bottle",price:8,emoji:"🥤"})}
-                  style={{background:"var(--sage-d)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
-                  + Add
-                </button>
-              </div>
-            )}
-            <div className="d-sub"><span className="d-sub-l">Subtotal</span><span className="d-sub-r">${cartTotal.toFixed(2)}</span></div>
-            <button className="btn-chk" disabled={cart.length===0}>Continue to Checkout</button>
-          </div>
-        </div>
-      </>
-    ):null;
-  };
-
-  // --- HOME -----------------------------------------------------------------
 // ── Auto-rotating hero cards ──────────────────────────────────────────────────
 const HERO_NEW_SECTIONS = [
   {page:"jelly",   emoji:"🌊", name:"Jelly Kits",      tag:"New · Kit Ships to You",  color:"#1a3a2a", desc:"13 all-natural agar & herb jelly recipes. Kit includes 6 packs + shaker bottle."},
@@ -5579,3 +3779,1806 @@ Thank you!`);
     </>
   );
 }
+
+export default function ChaiHolistic() {
+  const [page, setPage] = useState("home");
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [blendFilter, setBlendFilter] = useState("All");
+  const [organFilter, setOrganFilter] = useState("All");
+  const [activeRecipe, setActiveRecipe] = useState(null);
+  const [timerSec, setTimerSec] = useState(null);
+  const [timerOn, setTimerOn] = useState(false);
+  const [timerFor, setTimerFor] = useState(null);
+  const [notif, setNotif] = useState(null);
+  const [search, setSearch] = useState("");
+  const [herbPair, setHerbPair] = useState(null);
+  // Tea Finder
+  const [finderOpen, setFinderOpen] = useState(false);
+  const [finderStep, setFinderStep] = useState(0);
+  const [finderAnswers, setFinderAnswers] = useState({});
+  const [finderResults, setFinderResults] = useState(null);
+  // Sip & Seek
+  const [ringConfig, setRingConfig] = useState(null);
+  const [rcStep, setRcStep] = useState(1);
+  const [blendExpanded, setBlendExpanded] = useState(null);
+  const [rcFreq, setRcFreq] = useState(null);
+  const [rcDesign, setRcDesign] = useState(null);
+  const [rcSize, setRcSize] = useState(null);
+  const [rcOuterColor, setRcOuterColor] = useState(null);
+  const [rcInnerColor, setRcInnerColor] = useState(null);
+  const [rcPrayerLink, setRcPrayerLink] = useState(null);
+  const [rcLinkUrl, setRcLinkUrl] = useState('');
+  const [rcLinkTestShown, setRcLinkTestShown] = useState(false);
+  const [rcLinkAttempts, setRcLinkAttempts] = useState(0);
+  const [rcOrderConfirmed, setRcOrderConfirmed] = useState(false);
+  const [intentionStep, setIntentionStep] = useState(0);
+  const [intentionData, setIntentionData] = useState({});
+  const [intentionResult, setIntentionResult] = useState(null);
+  const [intentionOpen, setIntentionOpen] = useState(false);
+  const [welcomeSeen, setWelcomeSeen] = useState(() => {
+    try { return localStorage.getItem('chai_welcome_seen') === 'true'; } catch { return false; }
+  });
+  const [showWelcome, setShowWelcome] = useState(false);
+  // Ritual Builder
+  const [ritualOpen, setRitualOpen] = useState(false);
+  const [ritual, setRitual] = useState({ morning:null, evening:null, extras:[] });
+  // Cleanse Tracker
+  const [trackerOpen, setTrackerOpen] = useState(false);
+  const [activeTracker, setActiveTracker] = useState(null);
+  // Tea Library deep-link
+  const [teaLibraryBlend, setTeaLibraryBlend] = useState(null);
+  const [checkedDays, setCheckedDays] = useState(() => {
+    try {
+      const saved = localStorage.getItem('chai_cleanse_progress');
+      return saved ? JSON.parse(saved) : {};
+    } catch { return {}; }
+  });
+  // 2AM mode
+  const [twoAM, setTwoAM] = useState(false);
+
+  const timerRef = useRef(null);
+  const topRef = useRef(null);
+  const [showBackTop, setShowBackTop] = useState(false);
+  const [activeSecIdx, setActiveSecIdx] = useState(0);
+  const [bookPreview, setBookPreview] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [jellyOpen, setJellyOpen] = useState(false);
+  const [mobMenuOpen, setMobMenuOpen] = useState(false);
+  const [timerDone, setTimerDone] = useState(false);
+  const [timerBlendName, setTimerBlendName] = useState("");
+
+  // -- AUDIO SYSTEM ----------------------------------------------------------
+  // We create and UNLOCK the AudioContext when user taps "Start Brewing"
+  // (must be from a direct user interaction -- browser requirement)
+  // Then we schedule the sound to play at timer completion.
+  const audioCtxRef = useRef(null);
+  const soundScheduledRef = useRef(false);
+
+  const unlockAndScheduleSound = (secondsFromNow) => {
+    try {
+      // Close any old context
+      if (audioCtxRef.current) {
+        try { audioCtxRef.current.close(); } catch {}
+      }
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      audioCtxRef.current = ctx;
+      soundScheduledRef.current = true;
+
+      const playStrike = (startOffset) => {
+        [[196, 0, 0.9], [392, 0.01, 0.65], [588, 0.02, 0.38],
+         [784, 0.03, 0.22], [980, 0.04, 0.12]].forEach(([freq, delay, gain]) => {
+          const osc = ctx.createOscillator();
+          const gn = ctx.createGain();
+          osc.connect(gn); gn.connect(ctx.destination);
+          osc.type = "sine";
+          const t = ctx.currentTime + startOffset + delay;
+          osc.frequency.setValueAtTime(freq, t);
+          gn.gain.setValueAtTime(0.001, t);
+          gn.gain.linearRampToValueAtTime(gain, t + 0.06);
+          gn.gain.exponentialRampToValueAtTime(0.001, t + 5.2);
+          osc.start(t);
+          osc.stop(t + 5.5);
+        });
+      };
+
+      // Schedule 3 bowl strikes at the exact moment the timer ends
+      playStrike(secondsFromNow);
+      playStrike(secondsFromNow + 2.8);
+      playStrike(secondsFromNow + 5.6);
+    } catch(e) { console.log("Audio not available:", e); }
+  };
+
+  const cancelScheduledSound = () => {
+    soundScheduledRef.current = false;
+    if (audioCtxRef.current) {
+      try { audioCtxRef.current.close(); } catch {}
+      audioCtxRef.current = null;
+    }
+  };
+
+  // Show back-to-top after scrolling 400px
+  useEffect(() => {
+    const onScroll = () => setShowBackTop(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive:true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const PAGE_SECTIONS = {
+    home:    [["↑ Top","sec-hero"],["Features","sec-features"],["Blends","sec-blends"],["Story","sec-story"],["Tea","sec-tea"],["Bundles","sec-bundles"],["Brew Tools","sec-tools-home"],["Rings","sec-rings-home"],["Brewing","sec-brewing"],["FAQ","sec-faq-teaser"]],
+    shop:    [["↩ Home","home-page"],["↑ Top","sec-shop-top"],["Blends","sec-shop-blends"],["Cleansing","sec-shop-cleanse"],["Herbs","sec-shop-herbs"],["Bundles","sec-shop-bundles"],["Brew Tools","sec-shop-tools"]],
+    recipes: [["↩ Home","home-page"],["↑ Top","sec-rec-top"],["Wellness","sec-rec-wellness"],["Cleansing","sec-rec-cleanse"]],
+    rings:   [["↩ Rings","home-page-rings"],["↑ Top","sec-rings-top"],["Collection","sec-rings-grid"],["How It Works","sec-rings-how"],["Frequency","sec-rings-meridian"]],
+    faq:         [["↩ Home","home-page"],["↑ Top","sec-faq-top"],["FAQ","sec-faq-content"]],
+    men:         [["↩ Home","home-page"],["↑ Top","sec-men-top"],["Blends","sec-men-blends"]],
+    mocktails:   [["↩ Home","home-page"],["↑ Top","sec-mkt-top"],["Wellness","sec-mkt-wellness"],["Social","sec-mkt-social"]],
+    "tea-library": [["↩ Home","home-page"],["↑ Top","sec-tl-top"],["Search","sec-tl-search"],["Collection","sec-tl-grid"]],
+  };
+
+  useEffect(() => {
+    if (!(PAGE_SECTIONS[page]||[]).length) { setActiveSecIdx(0); return; }
+    const IDS = (PAGE_SECTIONS[page]||[]).map(s=>s[1]);
+    const onScroll = () => {
+      const mid = window.scrollY + window.innerHeight * 0.38;
+      let active = 0;
+      IDS.forEach((id,i) => { const el = document.getElementById(id); if (el && el.offsetTop <= mid) active = i; });
+      setActiveSecIdx(active);
+    };
+    window.addEventListener("scroll", onScroll, { passive:true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [page]);
+
+  // Lock body scroll when any modal is open
+  useEffect(() => {
+    const anyOpen = finderOpen || ritualOpen || trackerOpen || cartOpen || bookPreview || intentionOpen || showWelcome || !!ringConfig || profileOpen;
+    document.body.style.overflow = anyOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [finderOpen, ritualOpen, trackerOpen, cartOpen, bookPreview, intentionOpen, profileOpen]);
+
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentHour = now.getHours();
+  const isNight = currentHour >= 21 || currentHour < 5;
+
+  const nav = (p, extra) => {
+    setPage(p);
+    if (extra && extra.filter) setBlendFilter(extra.filter);
+    if (extra && extra.blend !== undefined) setTeaLibraryBlend(extra.blend);
+    setTimeout(() => topRef.current && topRef.current.scrollIntoView({ behavior:"smooth" }), 20);
+  };
+
+  const timerDoneRef = useRef(false);
+  const timerEndMsRef = useRef(null);
+
+  // Auto-scroll Tea Finder modal to top when step changes
+  useEffect(() => {
+    if (finderOpen) {
+      const el = document.getElementById('tea-finder-modal');
+      if (el) el.scrollTop = 0;
+    }
+  }, [finderStep, finderOpen]);
+
+  useEffect(() => {
+    if (timerOn && timerEndMsRef.current !== null) {
+      const tick = () => {
+        const remaining = Math.round((timerEndMsRef.current - Date.now()) / 1000);
+        if (remaining > 0) {
+          setTimerSec(remaining);
+          timerRef.current = setTimeout(tick, 250);
+        } else {
+          setTimerSec(0);
+          if (!timerDoneRef.current) {
+            timerDoneRef.current = true;
+            setTimerOn(false);
+            setTimerDone(true);
+          }
+        }
+      };
+      timerRef.current = setTimeout(tick, 250);
+    }
+    return () => clearTimeout(timerRef.current);
+  }, [timerOn]);
+
+  const toast = msg => { setNotif(msg); setTimeout(() => setNotif(null), 3200); };
+  const addToCart = (item, type="blend") => {
+    setCart(p => { const ex = p.find(i=>i.id===item.id); return ex ? p.map(i=>i.id===item.id?{...i,qty:i.qty+1}:i) : [...p,{...item,qty:1,type}]; });
+    toast(`✦ ${item.name} added to cart`);
+  };
+  useEffect(() => { if (typeof window !== "undefined") { window._chaiAddToCart = addToCart; window._chaiNav = (p) => nav(p); } });
+  const removeItem = id => setCart(p => p.filter(i => i.id !== id));
+  const changeQty = (id,d) => setCart(p => p.map(i => i.id===id?{...i,qty:Math.max(1,i.qty+d)}:i));
+  const cartTotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  const cartCount = cart.reduce((s,i) => s+i.qty, 0);
+  const fmt = s => `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+  const startTimer = (r, idx) => {
+    timerDoneRef.current = false;
+    const secs = r.steepMin * 60;
+    timerEndMsRef.current = Date.now() + secs * 1000;
+    setTimerFor(idx);
+    setTimerSec(secs);
+    setTimerOn(true);
+    setTimerDone(false);
+    setTimerBlendName(r.name || "Your Tea");
+    // Schedule sound NOW from this user tap -- only direct interactions allow audio
+    // Add 0.6s buffer: slight ramp-in so the bowl plays AT zero, never before
+    unlockAndScheduleSound(secs + 0.6);
+  };
+
+  const stopTimer = () => {
+    timerDoneRef.current = false;
+    timerEndMsRef.current = null;
+    cancelScheduledSound();
+    setTimerOn(false);
+    setTimerSec(null);
+    setTimerFor(null);
+    setTimerDone(false);
+  };
+
+  // dismissTimer -- fully clears all timer state in one shot (no double-close)
+  const dismissTimer = () => {
+    timerDoneRef.current = false;
+    timerEndMsRef.current = null;
+    cancelScheduledSound();
+    setTimerOn(false);
+    setTimerSec(null);
+    setTimerFor(null);
+    setTimerDone(false);
+  };
+
+  const scrollPosRef = useRef(0);
+  const open2AM = () => {
+    scrollPosRef.current = window.scrollY || document.documentElement.scrollTop || 0;
+    setTwoAM(true);
+  };
+  const close2AM = () => {
+    setTwoAM(false);
+    stopTimer();
+    setTimeout(() => window.scrollTo({ top: scrollPosRef.current, behavior: "instant" }), 30);
+  };
+
+  const filteredBlends = blendFilter==="All" ? BLENDS : BLENDS.filter(b=>b.occasion===blendFilter);
+  const filteredCleansing = organFilter==="All" ? CLEANSING : CLEANSING.filter(c=>c.organ===organFilter);
+  const searchedHerbs = search ? HERBS.filter(h=>h.name.toLowerCase().includes(search.toLowerCase())||h.benefit.toLowerCase().includes(search.toLowerCase())) : HERBS;
+  const seasonalBlends = (SEASONAL_PICKS[currentMonth]||[]).map(name=>[...BLENDS,...CLEANSING].find(b=>b.name===name)).filter(Boolean);
+
+  // Tea Finder logic
+  const runFinder = (answers) => {
+    const all = [...BLENDS, ...CLEANSING];
+    let scored = all.map(b => {
+      let score = 0;
+      if (b.energy === answers.energy) score += 3;
+      if (b.feeling === answers.feeling) score += 4;
+      if (b.time === answers.time || b.time === "anytime") score += 2;
+      return { ...b, score };
+    });
+    scored.sort((a,b) => b.score - a.score);
+    setFinderResults(scored.slice(0,3));
+  };
+
+  const handleFinderAnswer = (key, val) => {
+    const next = { ...finderAnswers, [key]: val };
+    setFinderAnswers(next);
+    if (finderStep < TEA_FINDER_STEPS.length - 1) {
+      setFinderStep(s => s+1);
+    } else {
+      runFinder(next);
+    }
+  };
+
+  const resetFinder = () => { setFinderStep(0); setFinderAnswers({}); setFinderResults(null); };
+
+  // Ritual builder add to cart
+  const addRitualToCart = () => {
+    if (ritual.morning) addToCart({...ritual.morning, emoji:"🌅"});
+    if (ritual.evening) addToCart({...ritual.evening, emoji:"🌙"});
+    ritual.extras.forEach(e => addToCart({...e, emoji:"✦"}));
+    setRitualOpen(false);
+    toast("✦ Your daily ritual has been added!");
+  };
+
+  // Cleanse tracker
+  const toggleDay = (blendId, day) => {
+    const key = `${blendId}-${day}`;
+    setCheckedDays(p => {
+      const next = {...p, [key]: !p[key]};
+      try { localStorage.setItem('chai_cleanse_progress', JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+
+  const CSS = `
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --ink:#1C1A17;--bark:#3D2B1F;--parch:#F7F2EA;--linen:#EDE7DC;
+      --sage:#7A9E7E;--sage-d:#4A7250;--sage-p:#EBF2EC;
+      --gold:#C4893A;--gold-p:#F5E6CE;--dust:#D4C9B8;
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:'Jost',sans-serif;background:var(--parch);color:var(--ink);overflow-x:hidden;}
+    ::selection{background:var(--sage-p);}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:.38;}
+
+    nav{position:sticky;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:74px;background:rgba(247,242,234,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--dust);border-radius:22px 22px 0 0;}
+    .nav-logo{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--bark);cursor:pointer;display:flex;align-items:center;gap:8px;letter-spacing:.02em;}
+    .nav-logo-img{width:46px;height:46px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.12);flex-shrink:0;}
+    .nav-logo-text{display:flex;flex-direction:column;line-height:1.1;}
+    .nav-logo-text span:first-child{font-size:1.35rem;}
+    .nav-logo-text span:last-child{font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-family:'Jost',sans-serif;font-weight:400;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .nav-links{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;}
+    .nav-lnk{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;}
+    .nav-lnk:hover,.nav-lnk.on{opacity:1;border-bottom-color:var(--gold);}
+    .nav-right{display:flex;align-items:center;gap:10px;}
+    .cart-btn{background:var(--bark);color:var(--parch);border:none;padding:8px 18px;font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;display:flex;align-items:center;gap:7px;}
+    .cart-btn:hover{background:var(--sage-d);}
+    .cart-badge{background:var(--gold);color:white;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.56rem;font-weight:500;}
+
+    /* SEASONAL BANNER */
+    .season-banner{background:linear-gradient(90deg,var(--sage-d),#3A6B50);padding:10px 2rem;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+    .season-banner-txt{font-size:.72rem;color:rgba(255,255,255,.85);letter-spacing:.06em;}
+    .season-banner-name{font-family:'Playfair Display',serif;font-size:.88rem;color:white;font-style:italic;}
+    .btn-season{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:white;padding:5px 14px;font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:50px;transition:all .2s;}
+    .btn-season:hover{background:rgba(255,255,255,.25);}
+
+    /* 2AM BUTTON */
+    .twoam-btn{position:fixed;bottom:28px;right:28px;z-index:400;background:#1C1A17;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);padding:11px 18px;font-family:'Jost',sans-serif;font-size:.7rem;letter-spacing:.1em;cursor:pointer;border-radius:50px;transition:all .3s;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:pulse2am 3s ease-in-out infinite;}
+    .twoam-btn:hover{background:var(--bark);color:white;border-color:rgba(255,255,255,.3);}
+    div:has(> .print-tooltip):hover .print-tooltip{opacity:1 !important;}
+    @keyframes pulse2am{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.3)}50%{box-shadow:0 4px 32px rgba(196,137,58,.35)}}
+
+    /* HERO */
+    .hero{min-height:620px;position:relative;overflow:hidden;display:flex;align-items:center;background:linear-gradient(140deg,#F0E8D8 0%,#E5DDD0 45%,#D8CEBE 100%);border-radius:0 0 20px 20px;}
+    .hero-orb{position:absolute;border-radius:50%;pointer-events:none;}
+    .hero-orb.a{width:650px;height:650px;top:-180px;right:-120px;background:radial-gradient(circle,rgba(122,158,126,.18) 0%,transparent 70%);animation:floatA 12s ease-in-out infinite;}
+    .hero-orb.b{width:380px;height:380px;bottom:-80px;left:-60px;background:radial-gradient(circle,rgba(196,137,58,.12) 0%,transparent 70%);animation:floatB 9s ease-in-out infinite;}
+    @keyframes floatA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-28px,18px) scale(1.04)}}
+    @keyframes floatB{0%,100%{transform:translate(0,0)}50%{transform:translate(18px,-22px)}}
+    .hero-inner{position:relative;z-index:2;width:100%;max-width:1280px;margin:0 auto;padding:40px 2.5rem 60px;display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:center;}
+    .hero-eye{display:flex;align-items:center;gap:10px;margin-bottom:1.4rem;}
+    .hero-eye-line{width:36px;height:1px;background:var(--gold);}
+    .hero-eye-txt{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
+    .hero-h{font-family:'Playfair Display',serif;font-size:clamp(3rem,5.5vw,5.5rem);font-weight:400;line-height:1.18;color:var(--bark);margin-bottom:1.6rem;letter-spacing:.01em;}
+    .hero-h em{font-style:italic;color:var(--sage-d);}
+    .hero-h .g{color:var(--gold);}
+    .hero-p{font-size:.96rem;font-weight:300;color:#5A5040;line-height:1.8;max-width:420px;margin-bottom:2rem;}
+    .hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.5rem;}
+    .btn-main{background:var(--bark);color:var(--parch);border:none;padding:12px 30px;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;}
+    .btn-main:hover{background:var(--sage-d);transform:translateY(-2px);box-shadow:0 8px 22px rgba(74,114,80,.3);}
+    .btn-ghost{background:transparent;color:var(--bark);border:1.5px solid var(--bark);padding:12px 30px;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;}
+    .btn-ghost:hover{border-color:var(--sage-d);color:var(--sage-d);}
+    .btn-finder{background:var(--gold);color:white;border:none;padding:12px 30px;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;display:flex;align-items:center;gap:8px;}
+    .btn-finder:hover{background:#D4943A;transform:translateY(-2px);}
+    .hero-visual{position:relative;height:520px;}
+    .h-card{position:absolute;background:white;overflow:visible;box-shadow:0 18px 55px rgba(28,26,23,.13);transition:transform .4s, z-index 0s;border-radius:20px;}
+    .h-card .h-card-clip{border-radius:20px;overflow:hidden;width:100%;height:100%;}
+    .h-card:hover{transform:rotate(0deg) scale(1.05) !important;z-index:20 !important;}
+    .h-card.c1{width:210px;height:290px;top:20px;left:20px;transform:rotate(-4deg);z-index:4;}
+    .h-card.c2{width:200px;height:270px;top:55px;left:175px;transform:rotate(3deg);z-index:3;}
+    .h-card.c3{width:180px;height:235px;top:195px;left:75px;transform:rotate(-1.5deg);z-index:2;}
+    .h-card.c4{width:160px;height:210px;top:240px;left:220px;transform:rotate(2deg);z-index:1;}
+    .h-card-inner{width:100%;height:65%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-radius:20px 20px 0 0;}
+    .h-card-body{padding:11px 13px;}
+    .h-card-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);}
+    .h-card-tag{font-size:.62rem;color:var(--sage);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+    .h-badge{position:absolute;bottom:-48px;right:0;background:var(--gold);color:white;padding:10px 14px;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:2;border-radius:14px;transition:all .2s;}
+    .h-badge:hover{background:var(--bark);box-shadow:0 8px 28px rgba(61,43,31,.4);transform:translateY(-2px);}
+    .h-badge small{display:block;font-family:'Jost',sans-serif;font-size:.62rem;font-style:normal;letter-spacing:.1em;opacity:.85;margin-top:2px;}
+
+    /* MARQUEE */
+    .mq{background:var(--bark);overflow:hidden;padding:12px 0;cursor:pointer;border-radius:16px;margin:6px 0;} .mq:hover .mq-track{animation-play-state:paused;}
+    .mq-track{display:flex;white-space:nowrap;animation:mq 28s linear infinite;}
+    .mq-item{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);padding:0 2.5rem;border-right:1px solid rgba(255,255,255,.12);}
+    .mq-item span{color:var(--gold);margin-right:6px;}
+    @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* SECTIONS */
+    .sec{padding:75px 2.5rem;scroll-margin-top:120px;border-radius:20px;margin:6px 0;}
+    .sec-linen{background:var(--linen);}
+    .sec-dark{background:var(--bark);}
+    .sec-sage{background:var(--sage-p);}
+    .sec-in{max-width:1280px;margin:0 auto;}
+    .sh{margin-bottom:2.8rem;}
+    .sh.c{text-align:center;}
+    .sh-eye{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;display:flex;align-items:center;gap:8px;}
+    .sh.c .sh-eye{justify-content:center;}
+    .sh-eye::before,.sh-eye::after{content:'';height:1px;background:var(--gold);flex:1;max-width:32px;}
+    .sh.c .sh-eye::before,.sh.c .sh-eye::after{display:inline-block;}
+    .sh-h{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.9rem);font-weight:400;color:var(--bark);line-height:1.15;}
+    .sh-h.lt{color:white;}
+    .sh-h em{font-style:italic;color:var(--sage-d);}
+    .sh-p{font-size:.88rem;font-weight:300;color:#6A5F50;line-height:1.75;margin-top:.65rem;max-width:500px;}
+    .sh.c .sh-p{margin:auto;margin-top:.65rem;}
+    .sh-p.lt{color:rgba(255,255,255,.58);}
+
+    /* BLEND TILES */
+    .b-showcase{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+    .b-tile{position:relative;overflow:hidden;cursor:pointer;background:#2A1F15;transition:all .4s;display:flex;flex-direction:column;}
+    .b-tile:hover{transform:scale(1.02);z-index:2;}
+    .b-tile-exp{grid-column:span 2;transform:none !important;z-index:3;}
+    .b-tile-close{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:white;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);z-index:4;transition:background .2s;}
+    .b-tile-close:hover{background:rgba(0,0,0,.8);}
+    .b-tile-recipe{border-top:1px solid rgba(255,255,255,.1);margin-top:10px;padding-top:10px;}
+    .b-recipe-desc{font-size:.72rem;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:10px;font-style:italic;}
+    .b-recipe-label{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:500;}
+    .b-recipe-list{margin:0 0 10px 0;padding-left:14px;list-style:disc;}
+    .b-recipe-list li{font-size:.72rem;color:rgba(255,255,255,.8);margin-bottom:3px;line-height:1.4;}
+    .b-recipe-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
+    .b-recipe-meta{font-size:.6rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.65);padding:3px 8px;border-radius:50px;}
+    .b-recipe-warn{font-size:.62rem;color:#E8A87C;background:rgba(232,168,124,.08);border:1px solid rgba(232,168,124,.2);border-radius:8px;padding:7px 10px;line-height:1.5;}
+    .b-tile-visual{width:100%;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;transition:all .4s;}
+    .b-tile:hover .b-tile-visual{filter:brightness(1.1);}
+    .b-tile-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+    .b-tile:hover .b-tile-photo{transform:scale(1.08);}
+    .b-tile-occ-badge{font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:3px 12px;border-radius:50px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);position:relative;z-index:1;}
+    .b-tile-body{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1;background:linear-gradient(175deg,#1C1A17 0%,#2A1F15 100%);}
+    .b-occ{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:4px;}
+    .b-name{font-family:'Playfair Display',serif;font-size:clamp(.88rem,1.4vw,1.1rem);color:white;margin-bottom:3px;line-height:1.2;}
+    .b-tag{font-size:.66rem;color:rgba(255,255,255,.42);font-style:italic;margin-bottom:5px;font-weight:300;}
+    .b-ben{font-size:.62rem;color:var(--gold);letter-spacing:.07em;margin-bottom:8px;flex:1;}
+    .b-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;}
+    .b-price{font-family:'Playfair Display',serif;font-size:1.05rem;color:white;}
+    .btn-tile{background:var(--gold);color:white;border:none;padding:7px 15px;font-family:'Jost',sans-serif;font-size:.64rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;white-space:nowrap;}
+    .btn-tile:hover{background:white;color:var(--bark);}
+    /* PRODUCT CARD VISUAL HEADER */
+    .pcard-visual{width:100%;height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:20px 20px 0 0;position:relative;overflow:hidden;transition:all .3s;}
+    .pcard:hover .pcard-visual{filter:brightness(1.08);}
+    .pcard-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+    .pcard:hover .pcard-photo{transform:scale(1.08);}
+    .pcard-visual-occ{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:2px 10px;border-radius:50px;white-space:nowrap;backdrop-filter:blur(4px);z-index:1;}
+
+    /* PILLS */
+    .pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:2.2rem;}
+    .pill{padding:7px 18px;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;font-weight:400;cursor:pointer;border:1.5px solid var(--dust);background:white;color:#7A6E5A;transition:all .2s;font-family:'Jost',sans-serif;border-radius:50px;}
+    .pill.on{background:var(--bark);color:white;border-color:var(--bark);}
+    .pill:hover:not(.on){border-color:var(--sage);color:var(--sage-d);background:var(--sage-p);}
+    .pill.cleanse-pill.on{background:#8B3A2A;border-color:#8B3A2A;}
+
+    /* PRODUCT CARDS */
+    .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;}
+    .pcard{background:white;border:1px solid var(--dust);overflow:hidden;transition:all .3s;border-radius:20px;}
+    .pcard:hover{box-shadow:0 14px 44px rgba(28,26,23,.1);transform:translateY(-4px);}
+    .pcard-stripe{height:5px;border-radius:20px 20px 0 0;}
+    .pcard-body{padding:18px;}
+    .pcard-occ{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage);margin-bottom:4px;}
+    .pcard-name{font-family:'Playfair Display',serif;font-size:1.12rem;color:var(--bark);margin-bottom:3px;}
+    .pcard-tag{font-size:.74rem;font-style:italic;color:#8A7A6A;margin-bottom:8px;font-weight:300;}
+    .pcard-desc{font-size:.78rem;color:#6A5F50;line-height:1.6;margin-bottom:10px;font-weight:300;}
+    .pcard-ingr{font-size:.66rem;color:#8A7A6A;margin-bottom:10px;line-height:1.5;}
+    .pcard-ingr strong{font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-size:.58rem;color:#5A5040;display:block;margin-bottom:2px;}
+    .pcard-benefit{font-size:.66rem;color:var(--gold);letter-spacing:.07em;margin-bottom:10px;}
+    .pcard-foot{display:flex;justify-content:space-between;align-items:center;}
+    .pcard-price{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--bark);}
+    .btn-add{background:var(--bark);color:white;border:none;padding:8px 15px;font-family:'Jost',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
+    .btn-add:hover{background:var(--sage-d);}
+
+    /* CLEANSE CARDS */
+    .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;}
+    .ccard{background:white;border:1px solid var(--dust);border-radius:20px;overflow:hidden;transition:all .3s;}
+    .ccard:hover{box-shadow:0 14px 44px rgba(28,26,23,.1);transform:translateY(-3px);}
+    .ccard-top{padding:16px 18px 12px;background:linear-gradient(135deg,#3D2B1F,#2A1F15);border-radius:20px 20px 0 0;}
+    .ccard-organ{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;opacity:.85;}
+    .ccard-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:white;margin-bottom:2px;}
+    .ccard-tag{font-size:.72rem;font-style:italic;color:rgba(255,255,255,.52);font-weight:300;}
+    .ccard-body{padding:16px 18px;}
+    .ccard-desc{font-size:.78rem;color:#6A5F50;line-height:1.6;margin-bottom:9px;font-weight:300;}
+    .ccard-protocol{font-size:.72rem;color:#5A5040;background:var(--sage-p);padding:9px 11px;border-radius:10px;line-height:1.5;margin-bottom:10px;}
+    .ccard-protocol strong{display:block;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sage-d);margin-bottom:2px;}
+    .ccard-ingr{font-size:.66rem;color:#8A7A6A;margin-bottom:12px;}
+    .ccard-ingr strong{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:#5A5040;display:block;margin-bottom:2px;}
+    .ccard-foot{display:flex;justify-content:space-between;align-items:center;}
+    .ccard-price{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--bark);}
+    .btn-add-c{background:#8B3A2A;color:white;border:none;padding:7px 14px;font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
+    .btn-add-c:hover{background:#A04A3A;}
+    .btn-track{background:none;border:1.5px solid #8B3A2A;color:#8B3A2A;padding:7px 14px;font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
+    .btn-track:hover{background:#8B3A2A;color:white;}
+
+    /* HERBS */
+    .hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+    .hcard{background:white;border:1px solid var(--dust);border-radius:18px;transition:all .25s;cursor:pointer;overflow:hidden;}
+    .hcard:hover{box-shadow:0 8px 28px rgba(28,26,23,.08);transform:translateY(-2px);border-color:var(--sage);}
+    .hcard.paired{border-color:var(--gold);background:var(--gold-p);}
+    .hcard-img{width:100%;height:140px;overflow:hidden;border-radius:12px 12px 0 0;}
+    .hcard-img img{transition:transform .4s;}
+    .hcard:hover .hcard-img img{transform:scale(1.05);}
+    .hcard-name{font-family:'Playfair Display',serif;font-size:.9rem;color:var(--bark);margin-bottom:3px;padding:12px 14px 0;}
+    .hcard-benefit{font-size:.66rem;color:#8A7A6A;line-height:1.45;margin-bottom:10px;font-weight:300;padding:0 14px;}
+    .hcard-pairs{font-size:.62rem;color:var(--gold);margin-bottom:10px;font-weight:500;padding:0 14px;}
+    .hcard-foot{display:flex;justify-content:space-between;align-items:center;padding:0 14px 14px;}
+    .hcard-price{font-size:.85rem;color:var(--bark);}
+    .btn-herb{background:none;border:1.5px solid var(--sage);color:var(--sage-d);padding:4px 12px;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;border-radius:50px;}
+    .btn-herb:hover{background:var(--sage-d);color:white;border-color:var(--sage-d);}
+
+    /* SEARCH */
+    .search-wrap{max-width:380px;margin:0 auto 1.8rem;position:relative;}
+    .search-input{width:100%;padding:10px 18px 10px 40px;border:1.5px solid var(--dust);background:white;font-family:'Jost',sans-serif;font-size:.82rem;color:var(--bark);outline:none;border-radius:50px;transition:border-color .2s;}
+    .search-input:focus{border-color:var(--sage);}
+    .search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:.85rem;opacity:.4;pointer-events:none;}
+
+    /* BUNDLES */
+    .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:20px;}
+    .bcard{border:1px solid var(--dust);background:white;overflow:hidden;border-radius:20px;transition:all .3s;}
+    .bcard:hover{box-shadow:0 18px 55px rgba(28,26,23,.1);transform:translateY(-4px);}
+    .bcard-top{background:linear-gradient(135deg,var(--bark) 0%,#2A1F15 100%);padding:24px;border-radius:20px 20px 0 0;position:relative;overflow:hidden;}
+    .bcard-top::after{content:'✦';position:absolute;right:-8px;top:-18px;font-size:7rem;color:rgba(255,255,255,.03);pointer-events:none;}
+    .bcard-badge{display:inline-block;background:var(--gold);color:white;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 12px;margin-bottom:10px;border-radius:50px;}
+    .bcard-name{font-family:'Playfair Display',serif;font-size:1.25rem;color:white;margin-bottom:4px;}
+    .bcard-desc{font-size:.78rem;color:rgba(255,255,255,.55);font-weight:300;line-height:1.6;}
+    .bcard-body{padding:20px;}
+    .bcard-lbl{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:#8A7A6A;margin-bottom:7px;}
+    .bcard-list{list-style:none;margin-bottom:16px;}
+    .bcard-list li{font-size:.78rem;color:#5A5040;padding:3px 0;border-bottom:1px solid var(--dust);display:flex;align-items:center;gap:7px;font-weight:300;}
+    .bcard-list li::before{content:'--';color:var(--sage);font-size:.66rem;}
+    .bcard-foot{display:flex;justify-content:space-between;align-items:flex-end;}
+    .bcard-price{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--bark);}
+    .bcard-save{font-size:.68rem;color:var(--sage-d);}
+    .btn-bundle{background:var(--bark);color:white;border:none;padding:9px 18px;font-family:'Jost',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
+    .btn-bundle:hover{background:var(--sage-d);}
+
+    /* BREW TOOLS */
+    .tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+    .tcard{background:white;border:1px solid var(--dust);border-radius:20px;overflow:hidden;transition:all .3s;display:flex;flex-direction:column;}
+    .tcard:hover{box-shadow:0 16px 50px rgba(28,26,23,.1);transform:translateY(-4px);}
+    .tcard-visual{width:100%;height:180px;position:relative;overflow:hidden;border-radius:20px 20px 0 0;}
+    .tcard-photo{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+    .tcard:hover .tcard-photo{transform:scale(1.07);}
+    .tcard-badge{position:absolute;top:12px;left:12px;background:rgba(28,26,23,.72);color:rgba(255,255,255,.92);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;padding:3px 11px;border-radius:50px;backdrop-filter:blur(6px);}
+    .tcard-emoji{position:absolute;bottom:10px;right:12px;font-size:1.4rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));}
+    .tcard-body{padding:18px;flex:1;display:flex;flex-direction:column;}
+    .tcard-material{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sage-d);margin-bottom:5px;}
+    .tcard-name{font-family:'Playfair Display',serif;font-size:1.08rem;color:var(--bark);margin-bottom:3px;line-height:1.25;}
+    .tcard-tagline{font-size:.74rem;font-style:italic;color:#8A7A6A;margin-bottom:10px;font-weight:300;}
+    .tcard-desc{font-size:.78rem;color:#6A5F50;line-height:1.65;margin-bottom:12px;font-weight:300;flex:1;}
+    .tcard-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+    .tcard-chip{font-size:.6rem;letter-spacing:.08em;background:var(--sage-p);color:var(--sage-d);padding:3px 10px;border-radius:50px;border:1px solid rgba(74,114,80,.15);}
+    .tcard-care{font-size:.64rem;color:#9A8A7A;font-style:italic;margin-bottom:14px;padding:8px 10px;background:#FAF8F5;border-radius:8px;border-left:2px solid var(--gold);line-height:1.5;}
+    .tcard-foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;}
+    .tcard-price{font-family:'Playfair Display',serif;font-size:1.12rem;color:var(--bark);}
+    .btn-tool{background:var(--bark);color:white;border:none;padding:8px 16px;font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
+    .btn-tool:hover{background:var(--sage-d);}
+    .tools-intro{max-width:560px;margin:0 auto 2.5rem;text-align:center;}
+    .tools-intro-p{font-size:.88rem;color:#6A5F50;line-height:1.8;font-weight:300;}
+
+    /* PHILOSOPHY */
+    .philo{display:grid;grid-template-columns:1fr 1fr;min-height:440px;}
+    .philo-vis{background:linear-gradient(160deg,var(--sage-d) 0%,#2D4A2D 100%);display:flex;align-items:center;justify-content:center;padding:60px;position:relative;overflow:hidden;}
+    .philo-vis::before,.philo-vis::after{content:'';position:absolute;border:1px solid rgba(255,255,255,.07);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
+    .philo-vis::before{width:380px;height:380px;}
+    .philo-vis::after{width:220px;height:220px;}
+    .philo-quote{font-family:'Playfair Display',serif;font-size:clamp(1.35rem,2.2vw,1.9rem);font-style:italic;color:white;line-height:1.45;text-align:center;position:relative;z-index:2;}
+    .philo-txt{background:var(--linen);padding:55px 45px;display:flex;flex-direction:column;justify-content:center;}
+    .philo-p{font-size:.88rem;font-weight:300;color:#5A5040;line-height:1.8;margin-bottom:1rem;}
+    .philo-sig{font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:var(--gold);}
+
+    /* RECIPES */
+    .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;}
+    .rcard{border:1px solid var(--dust);background:white;overflow:hidden;cursor:pointer;transition:all .25s;border-radius:16px;position:relative;}
+    .rcard:hover{box-shadow:0 6px 22px rgba(28,26,23,.1);border-color:var(--sage);transform:translateY(-2px);}
+    .rcard.open{border-color:var(--sage-d);box-shadow:0 10px 32px rgba(74,114,80,.14);transform:none;}
+    .rcard-head{padding:14px 14px 10px;display:flex;gap:10px;align-items:flex-start;}
+    .rcard-icon{width:36px;height:36px;border-radius:10px;background:var(--sage-p);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+    .rcard-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);line-height:1.25;}
+    .rcard-tag-sm{font-size:.58rem;color:var(--sage);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+    .rcard-meta{display:flex;gap:5px;flex-wrap:wrap;padding:0 14px 10px;}
+    .rcard-hover-desc{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#1C1A17;color:rgba(255,255,255,.85);font-size:.72rem;line-height:1.6;padding:10px 14px;border-radius:12px;pointer-events:none;z-index:200;font-family:'Jost',sans-serif;border:1px solid rgba(196,137,58,.3);font-weight:300;box-shadow:0 8px 28px rgba(0,0,0,.4);}
+    .rcard-hover-desc::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1C1A17;}
+    .rcard:hover .rcard-hover-desc{display:block;}
+    .rcard-expand-arrow{position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:50%;background:var(--sage-p);display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--sage-d);transition:transform .25s;}
+    .rcard.open .rcard-expand-arrow{transform:rotate(180deg);background:var(--sage-d);color:white;}
+    .rcard-expand{max-height:0;overflow:hidden;transition:max-height .4s ease;background:var(--linen);border-radius:0 0 16px 16px;}
+    .rcard.open .rcard-expand{max-height:1100px;}
+    .rsteps{padding:16px 18px;}
+    .timer-row{display:flex;align-items:center;gap:11px;padding:11px 14px;background:white;border-top:1px solid var(--dust);border-radius:0 0 14px 14px;}
+    .timer-face{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--bark);min-width:62px;}
+    .btn-t{border:none;padding:7px 15px;font-family:'Jost',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:50px;transition:all .2s;}
+    .btn-t.go{background:var(--sage-d);color:white;}
+    .btn-t.stop{background:var(--gold);color:white;}
+    .btn-t.rst{background:none;border:1.5px solid var(--dust);color:#8A7A6A;}
+
+    /* RINGS */
+    .ringsgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;}
+    .rng{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:32px 28px;border-radius:24px;transition:all .35s;position:relative;overflow:hidden;}
+    .rng::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,137,58,.6),transparent);transform:scaleX(0);transition:transform .4s;}
+    .rng:hover::before{transform:scaleX(1);}
+    .rng:hover{background:rgba(255,255,255,.09);}
+    .rng-sym{font-size:2.8rem;margin-bottom:16px;opacity:.65;color:white;}
+    .rng-tag{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;opacity:.8;}
+    .rng-name{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;margin-bottom:8px;}
+    .rng-desc{font-size:.8rem;color:rgba(255,255,255,.52);line-height:1.6;margin-bottom:11px;font-weight:300;}
+    .rng-mat{font-size:.66rem;letter-spacing:.1em;color:rgba(196,137,58,.8);margin-bottom:18px;}
+    .rng-foot{display:flex;justify-content:space-between;align-items:center;}
+    .rng-price{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;}
+    .btn-rng{background:none;border:1.5px solid rgba(255,255,255,.28);color:rgba(255,255,255,.82);padding:7px 16px;font-family:'Jost',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;}
+    .btn-rng:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.5);}
+
+    /* BOOK CTA */
+    .book-cta{background:var(--bark);padding:65px 2.5rem;text-align:center;position:relative;overflow:hidden;}
+    .book-cta::before{content:'✦';position:absolute;font-size:18rem;color:rgba(255,255,255,.02);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+    .book-cta h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.7rem);color:white;font-weight:400;margin-bottom:10px;}
+    .book-cta h2 em{color:var(--gold);font-style:italic;}
+    .book-cta p{font-size:.88rem;color:rgba(255,255,255,.5);font-weight:300;margin-bottom:1.8rem;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.7;}
+    .btn-book{background:var(--gold);color:white;border:none;padding:13px 38px;font-family:'Jost',sans-serif;font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;}
+    .btn-book:hover{background:#D4943A;transform:translateY(-2px);}
+
+    /* MODALS */
+    .modal-ov{position:fixed;inset:0;background:rgba(28,26,23,.6);z-index:800;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1rem;}
+    .modal-open{overflow:hidden;}
+    .modal{background:var(--parch);max-width:620px;width:100%;max-height:90vh;overflow-y:auto;border-radius:24px;box-shadow:0 24px 80px rgba(28,26,23,.3);}
+    .modal-head{padding:26px 28px 18px;border-bottom:1px solid var(--dust);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--parch);border-radius:24px 24px 0 0;z-index:2;}
+    .modal-title{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--bark);}
+    .modal-close{background:none;border:1.5px solid var(--dust);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:.9rem;color:var(--bark);display:flex;align-items:center;justify-content:center;transition:all .2s;}
+    .modal-close:hover{background:var(--bark);color:white;border-color:var(--bark);}
+    .modal-body{padding:24px 28px;}
+
+    /* TEA FINDER */
+    .finder-q{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--bark);margin-bottom:1.4rem;line-height:1.3;}
+    .finder-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+    .finder-opt{background:white;border:1.5px solid var(--dust);padding:14px;border-radius:16px;cursor:pointer;transition:all .2s;text-align:center;}
+    .finder-opt:hover{border-color:var(--sage-d);background:var(--sage-p);}
+    .finder-opt-e{font-size:1.6rem;margin-bottom:6px;}
+    .finder-opt-l{font-size:.78rem;color:var(--bark);font-weight:400;}
+    .finder-result{background:white;border:1.5px solid var(--dust);border-radius:16px;padding:18px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;}
+    .finder-result-rank{width:28px;height:28px;background:var(--gold);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;flex-shrink:0;}
+    .finder-result-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--bark);margin-bottom:3px;}
+    .finder-result-benefit{font-size:.7rem;color:var(--gold);margin-bottom:6px;}
+    .finder-result-desc{font-size:.78rem;color:#6A5F50;line-height:1.55;font-weight:300;}
+    .finder-progress{display:flex;gap:6px;margin-bottom:1.6rem;}
+    .finder-dot{width:8px;height:8px;border-radius:50%;background:var(--dust);transition:all .3s;}
+    .finder-dot.done{background:var(--gold);}
+
+    /* RITUAL BUILDER */
+    .ritual-section{margin-bottom:1.8rem;}
+    .ritual-section-h{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage-d);margin-bottom:10px;font-weight:500;}
+    .ritual-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;max-height:220px;overflow-y:auto;}
+    .ritual-opt{background:white;border:1.5px solid var(--dust);padding:10px 12px;border-radius:12px;cursor:pointer;transition:all .2s;}
+    .ritual-opt:hover{border-color:var(--sage);}
+    .ritual-opt.selected{border-color:var(--sage-d);background:var(--sage-p);}
+    .ritual-opt-name{font-family:'Playfair Display',serif;font-size:.9rem;color:var(--bark);margin-bottom:2px;}
+    .ritual-opt-tag{font-size:.65rem;color:var(--sage);letter-spacing:.08em;}
+    .ritual-summary{background:var(--linen);border-radius:16px;padding:16px;margin-bottom:1.5rem;}
+    .ritual-summary-h{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:#8A7A6A;margin-bottom:10px;}
+    .ritual-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--dust);}
+    .ritual-item:last-child{border-bottom:none;}
+    .ritual-item-name{font-size:.82rem;color:var(--bark);}
+    .ritual-total{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--bark);margin-top:10px;text-align:right;}
+
+    /* CLEANSE TRACKER */
+    .tracker-select{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:1.5rem;}
+    .tracker-opt{background:white;border:1.5px solid var(--dust);padding:12px;border-radius:12px;cursor:pointer;transition:all .2s;}
+    .tracker-opt:hover{border-color:#8B3A2A;}
+    .tracker-opt.on{border-color:#8B3A2A;background:#FFF5F3;}
+    .tracker-opt-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);}
+    .tracker-opt-days{font-size:.66rem;color:#8B3A2A;margin-top:2px;}
+    .day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:1.2rem;}
+    .day-cell{aspect-ratio:1;border:1.5px solid var(--dust);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.72rem;cursor:pointer;transition:all .2s;color:#8A7A6A;font-family:'Jost',sans-serif;}
+    .day-cell:hover{border-color:#8B3A2A;}
+    .day-cell.checked{background:#8B3A2A;border-color:#8B3A2A;color:white;}
+    .tracker-progress-bar{height:8px;background:var(--dust);border-radius:50px;overflow:hidden;margin-bottom:6px;}
+    .tracker-progress-fill{height:100%;background:linear-gradient(90deg,#8B3A2A,var(--gold));border-radius:50px;transition:width .4s;}
+
+    /* CART */
+    .overlay{position:fixed;inset:0;background:rgba(28,26,23,.5);z-index:800;backdrop-filter:blur(4px);}
+    .drawer{position:fixed;top:0;right:0;height:100vh;width:min(420px,100vw);background:var(--parch);z-index:900;display:flex;flex-direction:column;box-shadow:-14px 0 55px rgba(28,26,23,.2);border-radius:24px 0 0 24px;}
+    .drw-head{padding:24px 24px 16px;border-bottom:1px solid var(--dust);display:flex;justify-content:space-between;align-items:center;}
+    .drw-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--bark);}
+    .drw-close{background:none;border:1.5px solid var(--dust);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:.9rem;color:var(--bark);display:flex;align-items:center;justify-content:center;transition:all .2s;}
+    .drw-close:hover{background:var(--bark);color:white;border-color:var(--bark);}
+    .drw-items{flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;}
+    .drw-cart-list{margin-bottom:4px;}
+    .ditem{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--dust);}
+    .ditem-icon{width:52px;height:52px;border-radius:12px;background:var(--linen);border:1px solid var(--dust);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+    .ditem-info{flex:1;}
+    .ditem-name{font-family:'Playfair Display',serif;font-size:.9rem;color:var(--bark);margin-bottom:2px;}
+    .ditem-price{font-size:.76rem;color:#6A5F50;margin-bottom:7px;}
+    .ditem-ctrl{display:flex;align-items:center;gap:8px;}
+    .qty-b{width:24px;height:24px;border:1.5px solid var(--dust);border-radius:50%;background:none;cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+    .qty-b:hover{border-color:var(--bark);}
+    .qty-v{font-size:.86rem;min-width:16px;text-align:center;}
+    .rm-btn{background:none;border:none;color:#AA9A8A;font-size:.68rem;cursor:pointer;text-decoration:underline;}
+    .cart-sugg{background:var(--sage-p);border-radius:14px;margin-top:12px;padding:12px 16px;max-height:140px;overflow-y:auto;flex-shrink:0;}
+    .sugg-h{font-size:.63rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--sage-d);margin-bottom:8px;}
+    .sugg-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #C8DEC8;}
+    .sugg-row:last-child{border-bottom:none;}
+    .sugg-name{font-size:.78rem;color:var(--bark);}
+    .sugg-save{font-size:.65rem;color:var(--sage-d);}
+    .btn-sugg{background:var(--sage-d);color:white;border:none;padding:5px 13px;font-size:.63rem;font-family:'Jost',sans-serif;cursor:pointer;border-radius:50px;transition:all .2s;}
+    .btn-sugg:hover{background:var(--bark);}
+    .cart-ritual{margin-top:12px;flex-shrink:0;}
+    .drw-foot{padding:16px 24px;border-top:1px solid var(--dust);flex-shrink:0;}
+    .d-sub{display:flex;justify-content:space-between;margin-bottom:12px;}
+    .d-sub-l{font-size:.76rem;color:#6A5F50;letter-spacing:.06em;text-transform:uppercase;}
+    .d-sub-r{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--bark);}
+    .btn-chk{width:100%;background:var(--bark);color:white;border:none;padding:14px;font-family:'Jost',sans-serif;font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
+    .btn-chk:hover{background:var(--sage-d);}
+    .btn-chk:disabled{opacity:.4;cursor:default;}
+    .empty{text-align:center;padding:3rem 2rem;}
+    .empty-icon{font-size:2.6rem;margin-bottom:.8rem;opacity:.45;}
+    .empty-msg{font-family:'Playfair Display',serif;font-size:1rem;color:var(--bark);}
+    .empty-sub{font-size:.78rem;color:#8A7A6A;font-weight:300;margin-top:.3rem;}
+
+    /* TOAST */
+    /* LARGE TIMER OVERLAY */
+    .timer-overlay{position:fixed;inset:0;background:rgba(10,10,10,.97);z-index:700;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
+    .timer-overlay-name{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3vw,1.8rem);color:rgba(255,255,255,.5);font-style:italic;margin-bottom:.6rem;text-align:center;}
+    .timer-overlay-face{font-family:'Playfair Display',serif;font-size:clamp(5rem,20vw,10rem);color:white;line-height:1;margin-bottom:.4rem;letter-spacing:.04em;font-weight:300;}
+    .timer-overlay-face.done{color:var(--gold);animation:timerPulse 1s ease-in-out 3;}
+    @keyframes timerPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+    /* STEAMING CUP ANIMATION */
+    .tea-cup-wrap{position:relative;width:120px;height:120px;margin:0 auto 1.2rem;display:flex;align-items:flex-end;justify-content:center;}
+    .tea-cup{font-size:3.8rem;line-height:1;filter:drop-shadow(0 0 18px rgba(196,137,58,.35));animation:cupGlow 3s ease-in-out infinite;}
+    @keyframes cupGlow{0%,100%{filter:drop-shadow(0 0 14px rgba(196,137,58,.3))}50%{filter:drop-shadow(0 0 28px rgba(196,137,58,.6))}}
+    .steam{position:absolute;bottom:62px;display:flex;gap:10px;left:50%;transform:translateX(-50%);}
+    .steam-line{width:3px;border-radius:3px;background:linear-gradient(to top,rgba(255,255,255,.5),transparent);animation:steamRise 2.4s ease-in-out infinite;}
+    .steam-line:nth-child(1){height:28px;animation-delay:0s;animation-duration:2.2s;}
+    .steam-line:nth-child(2){height:38px;animation-delay:.4s;animation-duration:2.6s;}
+    .steam-line:nth-child(3){height:24px;animation-delay:.8s;animation-duration:2.1s;}
+    .steam-line:nth-child(4){height:34px;animation-delay:1.2s;animation-duration:2.8s;}
+    @keyframes steamRise{0%{transform:translateY(0) scaleX(1);opacity:0}20%{opacity:.7}80%{opacity:.3}100%{transform:translateY(-28px) scaleX(1.6);opacity:0}}
+
+    /* PULSING STEEPING LABEL */
+    .steeping-label{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:1.6rem;animation:steepPulse 2s ease-in-out infinite;}
+    .paused-label{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:1.6rem;}
+    @keyframes steepPulse{0%,100%{opacity:.45;letter-spacing:.28em}50%{opacity:.9;letter-spacing:.34em;color:rgba(196,137,58,.85)}}
+
+    .timer-overlay-keepopen{background:rgba(196,137,58,.12);border:1px solid rgba(196,137,58,.3);border-radius:16px;padding:12px 20px;margin-bottom:1.6rem;text-align:center;max-width:340px;}
+    .timer-overlay-keepopen strong{display:block;color:var(--gold);font-size:.78rem;letter-spacing:.06em;margin-bottom:3px;}
+    .timer-overlay-keepopen span{font-size:.7rem;color:rgba(255,255,255,.38);font-weight:300;line-height:1.5;}
+    .timer-overlay-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+    .timer-ready-msg{position:fixed;inset:0;background:rgba(10,10,10,.97);z-index:710;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:fadeInBig .6s ease;}
+    @keyframes fadeInBig{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+    .timer-ready-emoji{font-size:5rem;margin-bottom:1rem;animation:teaBounce 1s ease-in-out infinite alternate;}
+    @keyframes teaBounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+    .timer-ready-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.5rem);color:white;margin-bottom:.5rem;text-align:center;}
+    .timer-ready-sub{font-size:1rem;color:rgba(255,255,255,.55);font-weight:300;margin-bottom:2rem;text-align:center;}
+    /* RECIPE BOOK CTA */
+    .recipe-book-cta{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#2D4A2D,#1B3A1B);border-radius:14px;padding:14px 18px;margin-top:12px;flex-wrap:wrap;gap:10px;}
+    .recipe-book-cta-text{font-size:.8rem;color:rgba(255,255,255,.7);font-weight:300;}
+    .recipe-book-cta-text strong{color:white;display:block;font-family:'Playfair Display',serif;font-size:.95rem;margin-bottom:2px;}
+    .btn-recipe-book{background:var(--gold);color:white;border:none;padding:8px 18px;border-radius:50px;font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .2s;}
+    .btn-recipe-book:hover{background:#D4943A;}
+    .sec-nav{position:fixed;right:16px;bottom:28%;z-index:450;display:flex;flex-direction:column;gap:10px;}
+    .sec-dot-wrap{display:flex;align-items:center;gap:8px;cursor:pointer;justify-content:flex-end;}
+    .sec-dot-lbl{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:#1C1A17;background:rgba(255,255,255,.96);padding:4px 10px;border-radius:50px;white-space:nowrap;opacity:0;transition:opacity .18s;border:1px solid rgba(0,0,0,.08);pointer-events:none;box-shadow:0 2px 12px rgba(0,0,0,.2);font-weight:500;}
+    .sec-dot-wrap:hover .sec-dot-lbl{opacity:1;}
+    .sec-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.55);border:none;transition:all .3s;flex-shrink:0;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 0 0 4px rgba(0,0,0,.2);}
+    .sec-dot.active{background:var(--gold);transform:scale(1.5);box-shadow:0 0 0 2.5px rgba(255,255,255,1),0 0 0 5px rgba(196,137,58,.6),0 0 14px rgba(196,137,58,.6);}
+    .sec-dot-wrap:hover .sec-dot:not(.active){transform:scale(1.2);}
+    .back-top{position:fixed;bottom:90px;right:28px;z-index:399;background:var(--bark);color:white;border:none;width:44px;height:44px;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 16px rgba(28,26,23,.25);transition:all .3s;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;}
+    .back-top.visible{opacity:1;pointer-events:all;}
+    .back-top:hover{background:var(--sage-d);transform:translateY(-3px);}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bark);color:var(--parch);padding:10px 24px;font-size:.76rem;letter-spacing:.06em;z-index:1000;box-shadow:0 8px 28px rgba(28,26,23,.25);border-radius:50px;animation:toastIn .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+    @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(13px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+    /* 2AM OVERLAY */
+    .twoam-ov{position:fixed;inset:0;background:#0A0A0A;z-index:700;display:flex;align-items:center;justify-content:center;padding:2rem;}
+    .twoam-inner{max-width:500px;text-align:center;}
+    .twoam-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);color:white;font-weight:300;margin-bottom:1rem;font-style:italic;}
+    .twoam-sub{font-size:.9rem;color:rgba(255,255,255,.45);font-weight:300;line-height:1.8;margin-bottom:2rem;}
+    .twoam-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:28px;margin-bottom:1.5rem;text-align:left;}
+    .twoam-blend-name{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;margin-bottom:8px;}
+    .twoam-steps{list-style:none;margin-bottom:16px;}
+    .twoam-steps li{font-size:.82rem;color:rgba(255,255,255,.6);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:flex-start;gap:10px;}
+    .twoam-steps li::before{content:'✦';color:var(--gold);font-size:.55rem;margin-top:4px;flex-shrink:0;}
+    .twoam-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+    .btn-twoam{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);padding:10px 24px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:50px;transition:all .2s;}
+    .btn-twoam:hover{background:rgba(255,255,255,.15);}
+    .btn-twoam.gold{background:var(--gold);border-color:var(--gold);color:white;}
+
+    /* RING TAG TOOLTIPS */
+    .ring-tag-wrap{position:relative;display:inline-block;}
+    .ring-tag-tip{position:absolute;bottom:calc(100% + 10px);left:0;transform:none;
+      width:230px;background:#1C1A17;color:rgba(255,255,255,.88);font-size:.74rem;
+      line-height:1.6;padding:12px 16px;border-radius:14px;pointer-events:none;
+      opacity:0;transition:opacity .25s ease;z-index:200;font-family:'Jost',sans-serif;
+      border:1px solid rgba(196,137,58,.3);text-align:left;font-weight:300;
+      box-shadow:0 10px 32px rgba(0,0,0,.55);}
+    .ring-tag-tip::after{content:'';position:absolute;top:100%;left:20px;transform:none;
+      border:7px solid transparent;border-top-color:#1C1A17;}
+    .ring-tag-wrap:hover .ring-tag-tip{opacity:1;}
+
+    /* COUNT BADGE */
+    .cbadge{display:inline-block;background:var(--sage-p);color:var(--sage-d);font-size:.65rem;padding:2px 9px;border-radius:50px;margin-left:7px;font-weight:500;}
+
+    /* FOOTER */
+    footer{background:#1C1A17;padding:60px 2.5rem 32px;border-radius:0 0 22px 22px;}
+    .ft-in{max-width:1280px;margin:0 auto;}
+    .ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2.8rem;}
+    .ft-brand{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;margin-bottom:9px;}
+    .ft-sub{font-size:.76rem;color:rgba(255,255,255,.3);font-weight:300;line-height:1.7;max-width:250px;}
+    .ft-col-h{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:13px;}
+    .ft-lnk{display:block;font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:8px;cursor:pointer;transition:color .2s;font-weight:300;}
+    .ft-lnk:hover{color:var(--gold);}
+    .ft-disclaimer{border-top:1px solid rgba(255,255,255,.08);padding:20px 0 0;margin-bottom:16px;}
+    .ft-disclaimer-txt{font-size:.7rem;color:rgba(255,255,255,.28);font-weight:300;line-height:1.75;text-align:center;max-width:900px;margin:0 auto;}
+    .ft-disclaimer-txt strong{color:rgba(255,255,255,.45);font-weight:500;}
+    .ft-div{border:none;border-top:1px solid rgba(255,255,255,.06);margin-bottom:20px;}
+    .ft-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+    .ft-copy{font-size:.68rem;color:rgba(255,255,255,.2);}
+    .tea-sci-card{background:white;border:1px solid var(--dust);border-radius:20px;padding:22px;transition:box-shadow .3s,transform .3s;min-width:0;}
+    .tea-sci-card:hover{box-shadow:0 8px 32px rgba(28,26,23,.1);transform:translateY(-3px);}
+    .warn-badge{display:inline-flex;align-items:center;gap:5px;background:#FFF5F0;border:1px solid #F0C0B0;color:#8B3A2A;font-size:.62rem;font-weight:500;letter-spacing:.06em;padding:3px 10px;border-radius:50px;margin-bottom:6px;}
+    .warn-block{background:#FFF8F6;border:1px solid #F0C0B0;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:.74rem;color:#7A3020;line-height:1.55;font-weight:300;}
+    .warn-block strong{color:#8B3A2A;font-weight:600;display:block;margin-bottom:3px;}
+
+    /* FREQUENCY RIPPLE RINGS */
+    @keyframes freqRingA{0%{transform:scale(1);border-color:rgba(196,137,58,.6);}100%{transform:scale(1.08);border-color:rgba(196,137,58,0);}}
+    @keyframes freqRingB{0%{transform:scale(1);border-color:rgba(196,137,58,.35);}100%{transform:scale(1.15);border-color:rgba(196,137,58,0);}}
+    @keyframes freqRingC{0%{transform:scale(1);border-color:rgba(196,137,58,.18);}100%{transform:scale(1.22);border-color:rgba(196,137,58,0);}}
+    .freq-wrap{position:relative;border-radius:12px;}
+    .freq-rA,.freq-rB,.freq-rC{position:absolute;inset:-3px;border-radius:15px;border:1.5px solid rgba(196,137,58,0);pointer-events:none;}
+    .freq-wrap:hover .freq-rA{animation:freqRingA 1.6s ease-out infinite;}
+    .freq-wrap:hover .freq-rB{animation:freqRingB 1.6s ease-out .55s infinite;}
+    .freq-wrap:hover .freq-rC{animation:freqRingC 1.6s ease-out 1.1s infinite;}
+
+    /* SPINNING SHOP NOW */
+    .spin-cta{position:relative;width:140px;height:140px;cursor:pointer;flex-shrink:0;}
+    .spin-outer{position:absolute;inset:0;border-radius:50%;animation:spinRing 14s linear infinite;}
+    .spin-text-wrap{position:absolute;inset:0;}
+    .spin-char{position:absolute;top:0;left:50%;font-size:9.5px;font-family:'Jost',sans-serif;font-weight:500;color:rgba(196,137,58,.9);letter-spacing:.02em;transform-origin:0 70px;width:12px;text-align:center;margin-left:-6px;}
+    .spin-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:76px;height:76px;background:var(--gold);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(196,137,58,.45);transition:all .3s;}
+    .spin-cta:hover .spin-center{background:var(--bark);box-shadow:0 8px 28px rgba(61,43,31,.4);transform:translate(-50%,-50%) scale(1.1);}
+    .spin-arrow{font-size:1.3rem;color:white;line-height:1;}
+    .spin-label{font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.85);margin-top:2px;font-family:'Jost',sans-serif;}
+    @keyframes spinRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    @keyframes spinRingCCW{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+
+    /* HOME PAGE CHAI HOLISTIC SPINNING BADGE */
+    .chai-spin{position:relative;width:160px;height:160px;cursor:pointer;flex-shrink:0;}
+    .chai-spin-outer{position:absolute;inset:0;border-radius:50%;animation:spinRingCCW 16s linear infinite;}
+    .chai-spin-char{position:absolute;top:0;left:50%;font-size:9px;font-family:'Jost',sans-serif;font-weight:500;color:var(--bark);letter-spacing:.04em;transform-origin:0 80px;width:11px;text-align:center;margin-left:-5.5px;}
+    .chai-spin-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:98px;height:98px;background:var(--bark);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 28px rgba(61,43,31,.28);transition:all .35s;border:2px solid var(--dust);}
+    .chai-spin:hover .chai-spin-center{background:var(--sage-d);transform:translate(-50%,-50%) scale(1.08);box-shadow:0 10px 36px rgba(74,114,80,.35);}
+    .chai-spin-arrow{font-size:1.5rem;color:var(--parch);transform:rotate(-30deg);display:inline-block;line-height:1;}
+    .chai-spin-lbl{font-size:.44rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(247,242,234,.78);font-family:'Jost',sans-serif;text-align:center;line-height:1.5;margin-top:2px;}
+
+    /* RINGS PAGE SPINNING BADGE */
+    .ring-spin-badge{position:relative;width:180px;height:180px;cursor:pointer;flex-shrink:0;margin:0 auto;}
+    .ring-spin-outer{position:absolute;inset:0;border-radius:50%;animation:spinRing 18s linear infinite;}
+    .ring-spin-char{position:absolute;top:0;left:50%;font-size:9px;font-family:'Jost',sans-serif;font-weight:500;color:rgba(196,137,58,.85);letter-spacing:.04em;transform-origin:0 90px;width:11px;text-align:center;margin-left:-5.5px;}
+    .ring-spin-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:110px;height:110px;background:linear-gradient(135deg,rgba(45,74,45,.9),rgba(27,58,27,1));border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 0 1px rgba(196,137,58,.3),0 8px 32px rgba(0,0,0,.5);transition:all .4s;border:1px solid rgba(196,137,58,.2);}
+    .ring-spin-badge:hover .ring-spin-center{background:linear-gradient(135deg,rgba(196,137,58,.9),rgba(180,120,30,1));box-shadow:0 0 0 1px rgba(196,137,58,.6),0 12px 40px rgba(196,137,58,.3);transform:translate(-50%,-50%) scale(1.06);}
+    .ring-spin-icon{font-size:2.2rem;margin-bottom:4px;transform:rotate(-30deg);display:inline-block;}
+    .ring-spin-lbl{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.92);font-family:'Playfair Display',serif;text-align:center;line-height:1.35;font-style:italic;}
+
+    /* BOOK & RINGS FEATURED */
+    .featured-band{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+    .feat-book{background:linear-gradient(135deg,#2D4A2D 0%,#1B3A1B 100%);padding:48px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+    .feat-book::before{content:'📖';position:absolute;right:-20px;bottom:-20px;font-size:8rem;opacity:.07;}
+    .feat-rings{background:linear-gradient(135deg,#1C1A17 0%,#2D2520 100%);padding:48px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+    .feat-rings::before{content:'◎';position:absolute;right:-10px;bottom:-20px;font-size:10rem;color:rgba(196,137,58,.08);font-weight:300;}
+    .feat-eye{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;}
+    .feat-title{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.5vw,2.2rem);color:white;font-weight:400;line-height:1.2;margin-bottom:10px;}
+    .feat-title em{font-style:italic;color:var(--gold);}
+    .feat-desc{font-size:.84rem;color:rgba(255,255,255,.55);font-weight:300;line-height:1.7;margin-bottom:1.5rem;max-width:340px;}
+    .feat-price{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);margin-bottom:1.2rem;}
+    .btn-feat{background:var(--gold);color:white;border:none;padding:12px 28px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;display:inline-block;}
+    .btn-feat:hover{background:#D4943A;transform:translateY(-2px);box-shadow:0 6px 20px rgba(196,137,58,.35);}
+    .btn-feat-ghost{background:transparent;color:rgba(255,255,255,.75);border:1.5px solid rgba(255,255,255,.25);padding:12px 28px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;display:inline-block;}
+    .btn-feat-ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+    .page{padding-top:0;}
+
+    /* ── HAMBURGER MENU ── */
+    .ham-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:600;}
+    .ham-btn span{display:block;width:22px;height:2px;background:var(--bark);border-radius:2px;transition:all .3s;}
+    .mob-menu{display:none;position:fixed;inset:0;top:74px;background:rgba(247,242,234,.98);backdrop-filter:blur(20px);z-index:490;padding:24px 2rem;overflow-y:auto;flex-direction:column;gap:0;}
+    .mob-menu.open{display:flex;}
+    .mob-lnk{font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bark);padding:16px 0;border-bottom:1px solid var(--dust);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:'Jost',sans-serif;}
+    .mob-lnk:hover{color:var(--gold);}
+    .mob-lnk-special{color:var(--gold);font-weight:500;}
+
+    /* ── TABLET (≤960px) ── */
+    @media(max-width:960px){
+      nav{padding:0 1.2rem;border-radius:0;}
+      .nav-links{display:none;}
+      .ham-btn{display:flex;}
+      .hero-inner{grid-template-columns:1fr;gap:2rem;padding:32px 1.5rem 40px;}
+      .hero-visual{display:none;}
+      .hero-h{font-size:clamp(2.2rem,7vw,3.5rem);}
+      .hero-p{font-size:.88rem;max-width:100%;}
+      .philo{grid-template-columns:1fr;}
+      .philo-vis{min-height:220px;padding:40px;}
+      .featured-band{grid-template-columns:1fr;}
+      .feat-book,.feat-rings{padding:36px 28px;}
+      .b-showcase{grid-template-columns:repeat(2,1fr);}
+      .ft-grid{grid-template-columns:1fr 1fr;gap:2rem;}
+      .sec{padding:50px 1.5rem;}
+      .pgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+      .cgrid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
+      .rgrid{grid-template-columns:1fr;}
+      .ringsgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+      .chai-spin{width:120px;height:120px;}
+      .chai-spin-center{width:74px;height:74px;}
+      .chai-spin-char{transform-origin:0 60px;}
+    }
+
+    /* ── MOBILE (≤600px) ── */
+    @media(max-width:600px){
+      nav{height:64px;padding:0 1rem;}
+      .nav-logo-img{width:38px;height:38px;}
+      .nav-logo-text span:first-child{font-size:1.1rem;}
+      .nav-logo-text span:last-child{display:none;}
+      .cart-btn{padding:7px 12px;font-size:.6rem;}
+      .mob-menu{top:64px;}
+
+      /* Hero */
+      .hero{min-height:auto;}
+      .hero-inner{padding:28px 1.2rem 36px;gap:1.5rem;}
+      .hero-h{font-size:clamp(1.9rem,8vw,2.8rem);margin-bottom:1rem;}
+      .hero-p{font-size:.84rem;margin-bottom:1.4rem;}
+      .hero-btns{gap:8px;}
+      .btn-main,.btn-ghost,.btn-finder{padding:11px 20px;font-size:.68rem;}
+      .hero-eye{margin-bottom:1rem;}
+      .chai-spin{display:none;}
+
+      /* Sections */
+      .sec{padding:40px 1.2rem;border-radius:14px;margin:4px 0;}
+      .sh-h{font-size:clamp(1.5rem,6vw,2.2rem);}
+      .sh{margin-bottom:1.8rem;}
+
+      /* Grids → single column */
+      .b-showcase{grid-template-columns:1fr;}
+      .pgrid{grid-template-columns:1fr;}
+      .cgrid{grid-template-columns:1fr;}
+      .rgrid{grid-template-columns:1fr;}
+      .ringsgrid{grid-template-columns:1fr;}
+      .hgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+      .ft-grid{grid-template-columns:1fr;gap:1.5rem;}
+      footer{padding:40px 1.2rem 24px;border-radius:0;}
+
+      /* Pills/filters */
+      .pills{gap:6px;}
+      .pill{padding:6px 14px;font-size:.62rem;}
+
+      /* Cards */
+      .pcard-name{font-size:1rem;}
+      .ccard-name{font-size:.95rem;}
+      .rcard-name{font-size:.95rem;}
+
+      /* Cart drawer */
+      .drawer{width:100vw;border-radius:20px 20px 0 0;top:auto;bottom:0;height:88vh;}
+
+      /* Modals */
+      .modal{max-height:95vh;border-radius:20px 20px 0 0;position:fixed;bottom:0;left:0;right:0;width:100%;max-width:100%;}
+      .modal-ov{align-items:flex-end;padding:0;}
+      .modal-head{border-radius:20px 20px 0 0;}
+
+      /* Featured band */
+      .featured-band{grid-template-columns:1fr;}
+      .feat-book,.feat-rings{padding:28px 22px;}
+      .feat-title{font-size:clamp(1.2rem,5vw,1.7rem);}
+
+      /* Philosophy */
+      .philo{grid-template-columns:1fr;}
+      .philo-vis{min-height:180px;padding:32px 24px;}
+      .philo-txt{padding:32px 24px;}
+      .philo-quote{font-size:clamp(1.1rem,4vw,1.5rem);}
+
+      /* Marquee */
+      .mq{border-radius:10px;margin:4px 0;}
+
+      /* Rings page */
+      .rng{padding:24px 20px;}
+      .rng-name{font-size:1.2rem;}
+
+      /* Floating buttons */
+      .twoam-btn{bottom:20px;right:16px;padding:9px 14px;font-size:.64rem;}
+      .back-top{bottom:72px;right:16px;width:38px;height:38px;font-size:1rem;}
+      .sec-nav{right:10px;}
+
+      /* Hero cards hidden on mobile — replace with simpler layout */
+      .hero-visual{display:none;}
+
+      /* Season banner */
+      .season-banner{padding:8px 1rem;gap:8px;flex-direction:column;text-align:center;}
+
+      /* Intention / Sip & Seek buttons */
+      .hero-btns button{width:100%;justify-content:center;}
+    }
+
+    /* ── SMALL MOBILE (≤380px) ── */
+    @media(max-width:380px){
+      .hero-h{font-size:1.75rem;}
+      .btn-main,.btn-ghost,.btn-finder{padding:10px 16px;font-size:.65rem;}
+      .sec{padding:32px 1rem;}
+    }
+  `;
+
+  // --- 2AM OVERLAY ---------------------------------------------------------
+  const TwoAMOverlay = () => {
+    const blend = BLENDS.find(b => b.id === "m2");
+    return (
+      <div className="twoam-ov">
+        <div className="twoam-inner">
+          <div className="twoam-title">Can't sleep?</div>
+          <div className="twoam-sub">You're not alone. Let's make you something warm.<br />This blend was made for exactly this moment.</div>
+          <div className="twoam-card">
+            <div className="twoam-blend-name">2AM Reset</div>
+            <ul className="twoam-steps">
+              <li>Combine 1 tsp cinnamon, 1/2 tsp cardamom, 1/4 tsp ginger, 2 cloves</li>
+              <li>⏱ Bring water to just off the boil -- boil then wait 60 seconds</li>
+              <li>Steep for 8 minutes. Let it sit and work.</li>
+              <li>Strain. Add raw honey if you'd like.</li>
+              <li>Sit somewhere soft. Breathe. Sip slowly.</li>
+            </ul>
+            {timerFor === "2am" && (timerSec !== null || timerDone) ? (
+              // When 2AM timer is running -- show the full overlay on top of 2AM screen
+              // (The LargeTimerOverlay renders globally so it appears automatically)
+              <div style={{textAlign:"center",padding:"16px",background:"rgba(196,137,58,.1)",borderRadius:14,border:"1px solid rgba(196,137,58,.3)"}}>
+                <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",letterSpacing:".12em",textTransform:"uppercase",marginBottom:6}}>Timer started -- full screen counting</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"2.2rem",color:"var(--gold)"}}>{timerSec !== null ? fmt(timerSec) : "Ready"}</div>
+                <div style={{fontSize:".68rem",color:"rgba(255,255,255,.35)",marginTop:4}}>The steaming cup timer is counting above this screen</div>
+                <button className="btn-twoam" style={{marginTop:10,background:"rgba(196,137,58,.2)",borderColor:"rgba(196,137,58,.4)"}} onClick={stopTimer}>Stop Timer</button>
+              </div>
+            ) : (
+              <button className="btn-twoam gold" onClick={() => startTimer(blend,"2am")}>Start Brewing -- 8 min</button>
+            )}
+          </div>
+          <div className="twoam-actions">
+            <button className="btn-twoam gold" onClick={() => { addToCart({...blend,emoji:"🍵"}); close2AM(); }}>Add to Cart -- ${(blend ? blend.price : "")}</button>
+            <button className="btn-twoam" onClick={() => { close2AM(); window.open("https://2amcompanion.com","_blank"); }}>2amcompanion.com ↗</button>
+            <button className="btn-twoam" onClick={close2AM}>Close</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // --- TEA FINDER MODAL -----------------------------------------------------
+  const TeaFinderModal = () => {
+    return (
+    <div className="modal-ov" onClick={() => setFinderOpen(false)}>
+      <div id="tea-finder-modal" className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-head">
+          <span className="modal-title">✦ Find Your Tea</span>
+          <button className="modal-close" onClick={() => { setFinderOpen(false); resetFinder(); }}>✕</button>
+        </div>
+        <div className="modal-body">
+          {!finderResults ? (
+            <>
+              <div className="finder-progress">
+                {TEA_FINDER_STEPS.map((_,i) => <div key={i} className={`finder-dot ${i<=finderStep?"done":""}`}/>)}
+              </div>
+              <div className="finder-q">{TEA_FINDER_STEPS[finderStep].q}</div>
+              <div className="finder-opts">
+                {TEA_FINDER_STEPS[finderStep].opts.map(opt => (
+                  <div key={opt.v} className="finder-opt" onClick={() => handleFinderAnswer(TEA_FINDER_STEPS[finderStep].key, opt.v)}>
+                    <div className="finder-opt-e">{opt.e}</div>
+                    <div className="finder-opt-l">{opt.l}</div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={{textAlign:"center",marginBottom:"1.4rem"}}>
+                <div style={{fontSize:"1.8rem",marginBottom:"8px"}}>🍵</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.2rem",color:"var(--bark)"}}>Your perfect blends</div>
+                <div style={{fontSize:".78rem",color:"#8A7A6A",marginTop:"4px",fontWeight:300}}>Based on how you're feeling right now</div>
+              </div>
+              {finderResults.map((r,i) => (
+                <div key={r.id} className="finder-result">
+                  <div className="finder-result-rank">{i+1}</div>
+                  <div style={{flex:1}}>
+                    <div className="finder-result-name">{r.name}</div>
+                    <div className="finder-result-benefit">{r.benefit}</div>
+                    <div className="finder-result-desc">{r.desc}</div>
+                    <CupValue item={r} />
+                    {r.warning && <div className="warn-block" style={{marginTop:8}}><strong>⚠ Safety Note</strong>{r.warning}</div>}
+                    <div style={{display:"flex",gap:"8px",marginTop:"10px",flexWrap:"wrap"}}>
+                      <button className="btn-add" onClick={() => { addToCart({...r,emoji:"🍵"}); setFinderOpen(false); resetFinder(); }}>Add to Cart -- ${r.price}</button>
+                      <button className="btn-ghost" style={{fontSize:".65rem",padding:"7px 14px"}} onClick={() => {
+                        const blendIdx = BLENDS.findIndex(b => b.id === r.id);
+                        const cleanseIdx = CLEANSING.findIndex(c => c.id === r.id);
+                        const recipeKey = blendIdx >= 0 ? `w${blendIdx}` : cleanseIdx >= 0 ? `c${cleanseIdx}` : null;
+                        setBlendFilter("All");
+                        if (recipeKey) setActiveRecipe(recipeKey);
+                        setFinderOpen(false);
+                        resetFinder();
+                        nav("recipes");
+                        if (recipeKey) {
+                          setTimeout(() => {
+                            const el = document.querySelector(`[data-recipe="${recipeKey}"]`);
+                            if (el) el.scrollIntoView({ behavior:"smooth", block:"center" });
+                          }, 380);
+                        }
+                      }}>See Recipe</button>
+                    </div>
+                    <button
+                      style={{marginTop:"10px",width:"100%",background:"rgba(13,26,17,.85)",border:"1px solid rgba(82,184,130,.35)",borderRadius:10,padding:"9px 14px",color:"#52b882",fontFamily:"'Cinzel',serif",fontSize:".62rem",fontWeight:500,letterSpacing:".16em",textTransform:"uppercase",cursor:"pointer",transition:"all .18s"}}
+                      onMouseEnter={e=>{e.currentTarget.style.background="rgba(82,184,130,.12)";e.currentTarget.style.borderColor="rgba(82,184,130,.7)";e.currentTarget.style.color="#7dd9a8";}}
+                      onMouseLeave={e=>{e.currentTarget.style.background="rgba(13,26,17,.85)";e.currentTarget.style.borderColor="rgba(82,184,130,.35)";e.currentTarget.style.color="#52b882";}}
+                      onClick={()=>{ setFinderOpen(false); resetFinder(); nav("tea-library",{blend:r.name}); }}>
+                      See Your Full Recipe in the Tea Library →
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <button className="btn-ghost" style={{width:"100%",marginTop:"1rem"}} onClick={resetFinder}>Try Again</button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+  }
+
+  // --- RITUAL BUILDER MODAL -------------------------------------------------
+  const RitualBuilderModal = () => {
+    const morningBlends = BLENDS.filter(b => b.occasion === "Morning");
+    const eveningBlends = BLENDS.filter(b => b.occasion === "Evening");
+    const extras = [...BLENDS.filter(b=>b.occasion==="Wellness"), ...CLEANSING.slice(0,4)];
+    const ritualTotal = [ritual.morning,ritual.evening,...ritual.extras].filter(Boolean).reduce((s,i)=>s+i.price,0);
+    const hasSelection = ritual.morning || ritual.evening || ritual.extras.length > 0;
+
+    // Auto-scroll to a section inside the ritual modal body
+    const scrollToSection = (sectionId) => {
+      setTimeout(() => {
+        const modal = document.getElementById("ritual-modal-body");
+        const el = document.getElementById(sectionId);
+        if (modal && el) modal.scrollTo({ top: el.offsetTop - 12, behavior:"smooth" });
+      }, 180);
+    };
+
+    return (
+      <div className="modal-ov" onClick={() => setRitualOpen(false)}>
+        {/* Modal uses flex-column so header + footer stay fixed, body scrolls */}
+        <div className="modal" style={{display:"flex",flexDirection:"column",overflow:"hidden",maxHeight:"90vh"}} onClick={e => e.stopPropagation()}>
+
+          {/* FIXED HEADER */}
+          <div className="modal-head" style={{flexShrink:0}}>
+            <span className="modal-title">☀ Build Your Daily Ritual</span>
+            <button className="modal-close" onClick={() => setRitualOpen(false)}>✕</button>
+          </div>
+
+          {/* SCROLLABLE BODY */}
+          <div id="ritual-modal-body" style={{flex:1,overflowY:"auto",padding:"20px 28px"}}>
+            <div style={{fontSize:".8rem",color:"#8A7A6A",marginBottom:"1.4rem",fontWeight:300}}>
+              Pick your morning blend, your evening blend, and any add-ons. Your full ritual adds to cart in one click.
+            </div>
+
+            {/* MORNING */}
+            <div id="ritual-morning" className="ritual-section">
+              <div className="ritual-section-h">
+                🌅 Morning Blend (pick one)
+                {ritual.morning && <span style={{marginLeft:8,fontSize:".65rem",color:"var(--sage-d)",fontWeight:500,background:"var(--sage-p)",padding:"2px 10px",borderRadius:50}}>✓ {ritual.morning.name}</span>}
+              </div>
+              <div className="ritual-opts">
+                {morningBlends.map(b => {
+                  const selected = (ritual.morning ? ritual.morning.id : null) === b.id;
+                  return (
+                    <div key={b.id}
+                      className={`ritual-opt ${selected?"selected":""}`}
+                      onClick={() => {
+                        const nowSelected = !selected;
+                        setRitual(p=>({...p,morning:selected?null:b}));
+                        if (nowSelected) scrollToSection("ritual-evening");
+                      }}>
+                      <div className="ritual-opt-name">{b.name}</div>
+                      <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${b.price}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* EVENING */}
+            <div id="ritual-evening" className="ritual-section">
+              <div className="ritual-section-h">
+                🌙 Evening Blend (pick one)
+                {ritual.evening && <span style={{marginLeft:8,fontSize:".65rem",color:"var(--sage-d)",fontWeight:500,background:"var(--sage-p)",padding:"2px 10px",borderRadius:50}}>✓ {ritual.evening.name}</span>}
+              </div>
+              <div className="ritual-opts">
+                {eveningBlends.map(b => {
+                  const selected = (ritual.evening ? ritual.evening.id : null) === b.id;
+                  return (
+                    <div key={b.id}
+                      className={`ritual-opt ${selected?"selected":""}`}
+                      onClick={() => {
+                        const nowSelected = !selected;
+                        setRitual(p=>({...p,evening:selected?null:b}));
+                        if (nowSelected) scrollToSection("ritual-addons");
+                      }}>
+                      <div className="ritual-opt-name">{b.name}</div>
+                      <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${b.price}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ADD-ONS */}
+            <div id="ritual-addons" className="ritual-section">
+              <div className="ritual-section-h">✦ Add-ons (optional)</div>
+              <div className="ritual-opts">
+                {extras.map(b => (
+                  <div key={b.id}
+                    className={`ritual-opt ${ritual.extras.find(e=>e.id===b.id)?"selected":""}`}
+                    onClick={() => setRitual(p=>({...p,extras:p.extras.find(e=>e.id===b.id)?p.extras.filter(e=>e.id!==b.id):[...p.extras,b]}))}>
+                    <div className="ritual-opt-name">{b.name}</div>
+                    <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${b.price}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Spacer so last section isn't hidden behind sticky footer */}
+            <div style={{height:hasSelection?8:0}}/>
+          </div>
+
+          {/* STICKY SUMMARY FOOTER — always visible once anything is selected */}
+          {hasSelection && (
+            <div style={{flexShrink:0,borderTop:"2px solid var(--sage-p)",background:"var(--linen)",padding:"14px 28px 20px"}}>
+              {/* Mini selection list */}
+              <div style={{marginBottom:10}}>
+                <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"#8A7A6A",marginBottom:6,fontWeight:500}}>Your Ritual So Far</div>
+                {ritual.morning && (
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",borderBottom:"1px solid var(--dust)"}}>
+                    <span style={{fontSize:".8rem",color:"var(--bark)"}}>🌅 {ritual.morning.name}</span>
+                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${ritual.morning.price}</span>
+                  </div>
+                )}
+                {ritual.evening && (
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",borderBottom:"1px solid var(--dust)"}}>
+                    <span style={{fontSize:".8rem",color:"var(--bark)"}}>🌙 {ritual.evening.name}</span>
+                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${ritual.evening.price}</span>
+                  </div>
+                )}
+                {ritual.extras.map(e => (
+                  <div key={e.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",borderBottom:"1px solid var(--dust)"}}>
+                    <span style={{fontSize:".8rem",color:"var(--bark)"}}>✦ {e.name}</span>
+                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${e.price}</span>
+                  </div>
+                ))}
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",paddingTop:8}}>
+                  <span style={{fontSize:".72rem",color:"#8A7A6A",letterSpacing:".06em",textTransform:"uppercase"}}>Total</span>
+                  <span style={{fontFamily:"'Playfair Display',serif",fontSize:"1.2rem",color:"var(--bark)"}}>${ritualTotal.toFixed(2)}</span>
+                </div>
+              </div>
+              <button
+                className="btn-main"
+                style={{width:"100%",padding:"13px"}}
+                disabled={!ritual.morning && !ritual.evening && ritual.extras.length===0}
+                onClick={addRitualToCart}>
+                Add My Ritual to Cart — ${ritualTotal.toFixed(2)}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  // --- CLEANSE TRACKER MODAL ------------------------------------------------
+  const CleanseTrackerModal = () => {
+    const tracker = activeTracker ? CLEANSING.find(cl=>cl.id===activeTracker) : null;
+    const checkedCount = tracker ? Array.from({length:tracker.days},(_,i)=>checkedDays[`${tracker.id}-${i}`]).filter(Boolean).length : 0;
+    const pct = tracker ? Math.round(checkedCount/tracker.days*100) : 0;
+    const alreadyInCart = !!(tracker && cart.find(i=>i.id===tracker.id));
+    return (
+      <div className="modal-ov" onClick={() => setTrackerOpen(false)}>
+        <div className="modal" onClick={e=>e.stopPropagation()}>
+          <div className="modal-head">
+            <span className="modal-title">🌿 Cleanse Tracker</span>
+            <button className="modal-close" onClick={() => setTrackerOpen(false)}>✕</button>
+          </div>
+          {tracker && (
+            <div style={{position:"sticky",top:74,zIndex:3,background:"white",borderBottom:"1px solid var(--dust)",padding:"9px 28px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+              <button style={{background:"none",border:"none",color:"var(--sage-d)",cursor:"pointer",fontSize:".72rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"Jost,sans-serif",padding:0}} onClick={() => setActiveTracker(null)}>
+                ← All Cleanses
+              </button>
+              <div style={{textAlign:"right"}}>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"var(--bark)"}}>{tracker.name}</div>
+                <div style={{fontSize:".62rem",color:"#8A7A6A"}}>{checkedCount}/{tracker.days} days · {pct}%</div>
+              </div>
+            </div>
+          )}
+          <div className="modal-body">
+            {!tracker ? (
+              <>
+                <div style={{fontSize:".8rem",color:"#8A7A6A",marginBottom:"1.2rem",fontWeight:300}}>Select a cleansing protocol to track your daily progress.</div>
+                <div className="tracker-select">
+                  {CLEANSING.map(cl => (
+                    <div key={cl.id} className={`tracker-opt ${activeTracker===cl.id?"on":""}`} onClick={() => setActiveTracker(cl.id)}>
+                      <div className="tracker-opt-name">{cl.name}</div>
+                      <div className="tracker-opt-days">{cl.days} days · {cl.organ}</div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{background:"linear-gradient(135deg,#3D2B1F,#2A1F15)",borderRadius:"16px 16px 0 0",padding:"18px 20px",marginBottom:0}}>
+                  <div style={{fontSize:".6rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:5,opacity:.85}}>{tracker.organ} · Cleanse</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"white",marginBottom:4}}>{tracker.name}</div>
+                  <div style={{fontSize:".76rem",fontStyle:"italic",color:"rgba(255,255,255,.5)",fontWeight:300}}>{tracker.tagline}</div>
+                </div>
+                <div style={{background:"white",borderRadius:"0 0 16px 16px",padding:"16px 20px",marginBottom:"1rem",border:"1px solid var(--dust)",borderTop:"none"}}>
+                  <div style={{fontSize:".8rem",color:"#6A5F50",lineHeight:1.6,marginBottom:10,fontWeight:300}}>{tracker.desc}</div>
+                  <CupValue item={tracker}/>
+                  <div style={{fontSize:".66rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--sage-d)",marginBottom:4}}>Ingredients</div>
+                  <div style={{fontSize:".76rem",color:"#5A5040",marginBottom:10,lineHeight:1.5}}>{tracker.ingredients.join(" · ")}</div>
+                  <div style={{background:"var(--sage-p)",borderRadius:10,padding:"10px 14px",marginBottom:10}}>
+                    <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--sage-d)",marginBottom:4}}>Your Protocol</div>
+                    <div style={{fontSize:".78rem",color:"#3D2B1F",lineHeight:1.55}}>{tracker.protocol}</div>
+                  </div>
+                  <div style={{fontSize:".68rem",color:"#8A7A6A",display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+                    <span>⏱ {tracker.steepMin} min steep</span>
+                    <span style={{color:tempIcon(tracker.steepTemp).color,fontWeight:500}}>{tempIcon(tracker.steepTemp).icon} {tempIcon(tracker.steepTemp).label}</span>
+                  </div>
+                  {tracker.warning && <div className="warn-block" style={{marginTop:10}}><strong>⚠ Safety Note</strong>{tracker.warning}</div>}
+                </div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"var(--bark)",marginBottom:8}}>Your Progress</div>
+                <div className="tracker-progress-bar"><div className="tracker-progress-fill" style={{width:`${pct}%`}}/></div>
+                <div style={{fontSize:".72rem",color:"#8A7A6A",marginBottom:"1rem"}}>{checkedCount} of {tracker.days} days complete · {pct}%</div>
+                <div style={{fontSize:".68rem",color:"#8A7A6A",marginBottom:"8px",letterSpacing:".1em",textTransform:"uppercase"}}>Tap a day to mark complete</div>
+                <div className="day-grid">
+                  {Array.from({length:tracker.days},(_,i) => (
+                    <div key={i} className={`day-cell ${checkedDays[`${tracker.id}-${i}`]?"checked":""}`} onClick={() => toggleDay(tracker.id,i)}>
+                      {i+1}
+                    </div>
+                  ))}
+                </div>
+                {pct===100 && (
+                  <div style={{textAlign:"center",padding:"1rem",background:"var(--sage-p)",borderRadius:16,marginTop:"1rem"}}>
+                    <div style={{fontSize:"1.5rem",marginBottom:"6px"}}>🎉</div>
+                    <div style={{fontFamily:"'Playfair Display',serif",color:"var(--sage-d)"}}>Protocol Complete!</div>
+                    <div style={{fontSize:".78rem",color:"#6A5F50",marginTop:"4px",fontWeight:300}}>Your body thanks you. How do you feel?</div>
+                  </div>
+                )}
+                {!alreadyInCart ? (
+                  <div style={{position:"sticky",bottom:0,background:"#FFF8F4",borderTop:"2px solid #F0C0A0",padding:"14px 0 4px",marginTop:"1.2rem"}}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+                      <div>
+                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)"}}>{tracker.name}</div>
+                        <div style={{fontSize:".64rem",color:"#8A7A6A"}}>{tracker.days}-day protocol · ~{tracker.oz*tracker.cupsPerOz} cups</div>
+                      </div>
+                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"var(--bark)"}}>${tracker.price}</div>
+                    </div>
+                    <button className="btn-add-c" style={{width:"100%",padding:"12px",fontSize:".74rem"}} onClick={() => addToCart({...tracker,emoji:"✦"})}>
+                      Add to Cart — ${tracker.price} · Start Your {tracker.days}-Day Cleanse
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{position:"sticky",bottom:0,background:"var(--sage-p)",borderTop:"1px solid #C8DEC8",padding:"12px 0",marginTop:"1rem",textAlign:"center"}}>
+                    <span style={{fontSize:".76rem",color:"var(--sage-d)",fontWeight:500}}>✓ {tracker.name} is already in your cart</span>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // --- BOOK PREVIEW MODAL ---------------------------------------------------
+  const BookPreviewModal = () => {
+    const samples = [
+      BLENDS.find(b=>b.id==="m2"), // 2AM Reset
+      BLENDS.find(b=>b.id==="e1"), // Chamomile & Calm
+      CLEANSING.find(c=>c.id==="c1"), // Liver & Love
+      BLENDS.find(b=>b.id==="s1"), // Turmeric Tonic
+    ].filter(Boolean);
+    const [previewPage, setPreviewPage] = useState(0);
+    const sample = samples[previewPage];
+    return (
+      <div className="modal-ov" onClick={()=>setBookPreview(false)}>
+        <div className="modal" style={{maxWidth:700,background:"#FAF7F0"}} onClick={e=>e.stopPropagation()}>
+          <div className="modal-head" style={{background:"#2D4A2D",borderRadius:"24px 24px 0 0"}}>
+            <div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"white"}}>Sip &amp; Heal</div>
+              <div style={{fontSize:".68rem",color:"rgba(255,255,255,.5)",letterSpacing:".1em"}}>THE CHAI HOLISTIC COLLECTION · 40 RECIPES</div>
+            </div>
+            <button className="modal-close" style={{borderColor:"rgba(255,255,255,.2)",color:"white"}} onClick={()=>setBookPreview(false)}>✕</button>
+          </div>
+
+          {/* Book intro */}
+          <div style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",padding:"28px",textAlign:"center"}}>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",fontStyle:"italic",color:"rgba(255,255,255,.6)",marginBottom:"6px"}}>A preview from inside the book</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.6rem",color:"white",marginBottom:"4px"}}>
+              "{sample.tagline}"
+            </div>
+            <div style={{display:"flex",justifyContent:"center",gap:8,marginTop:"12px"}}>
+              {samples.map((_,i)=>(
+                <div key={i} onClick={()=>setPreviewPage(i)} style={{width:8,height:8,borderRadius:"50%",background:i===previewPage?"var(--gold)":"rgba(255,255,255,.25)",cursor:"pointer",transition:"all .2s"}}/>
+              ))}
+            </div>
+          </div>
+
+          {/* Recipe page */}
+          <div className="modal-body" style={{background:"#FAF7F0"}}>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"1.5rem",marginBottom:"1.5rem"}}>
+              <div>
+                <div style={{fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:6}}>{sample.occasion||sample.organ}</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.6rem",color:"#2D4A2D",marginBottom:6,lineHeight:1.2}}>{sample.name}</div>
+                <div style={{fontSize:".82rem",color:"#6A5F50",lineHeight:1.7,fontWeight:300,marginBottom:12}}>{sample.desc}</div>
+                <div style={{fontSize:".7rem",color:"#8A7A6A",marginBottom:4,fontWeight:500,letterSpacing:".08em",textTransform:"uppercase"}}>Ingredients</div>
+                {sample.ingredients.map((ing,i)=>(
+                  <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"5px 0",borderBottom:"1px solid #E8E0D0",fontSize:".8rem",color:"#3D2B1F"}}>
+                    <span style={{color:"#C4893A",fontSize:".6rem"}}>✦</span>{ing}
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div style={{background:"white",borderRadius:16,padding:"20px",border:"1px solid #E8E0D0",marginBottom:12}}>
+                  <div style={{fontSize:".6rem",letterSpacing:".15em",textTransform:"uppercase",color:"#8A7A6A",marginBottom:8}}>How to Brew</div>
+                  <div style={{display:"flex",gap:10,marginBottom:8}}>
+                    <div style={{background:"#EBF2EC",borderRadius:10,padding:"8px 12px",flex:1,textAlign:"center"}}>
+                      <div style={{fontSize:"1.1rem",fontFamily:"'Playfair Display',serif",color:"#2D4A2D"}}>{sample.steepMin} min</div>
+                      <div style={{fontSize:".6rem",color:"#8A7A6A"}}>steep time</div>
+                    </div>
+                    <div style={{background:"#FFF5E0",borderRadius:10,padding:"8px 12px",flex:1,textAlign:"center"}}>
+                      <div style={{fontSize:".75rem",fontFamily:"'Playfair Display',serif",color:"#C4893A"}}>{tempIcon(sample.steepTemp).icon}</div>
+                      <div style={{fontSize:".6rem",color:"#8A7A6A"}}>{tempIcon(sample.steepTemp).label}</div>
+                    </div>
+                  </div>
+                  <div style={{fontSize:".7rem",color:"#6A5F50",lineHeight:1.6,fontWeight:300}}>
+                    Use {sample.servingSize} per 8oz cup. {sample.steepMin >= 10 ? "Simmer low -- don't rush this one." : "Don't over-steep -- pour promptly."} Add honey to taste.
+                  </div>
+                </div>
+                <CupValue item={sample}/>
+                <div style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",borderRadius:12,padding:"14px",textAlign:"center"}}>
+                  <div style={{fontSize:".68rem",color:"rgba(255,255,255,.5)",marginBottom:4}}>Best for</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontStyle:"italic",color:"white",fontSize:".9rem"}}>{sample.mood}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation between previews */}
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"1rem"}}>
+              <button onClick={()=>setPreviewPage(p=>Math.max(0,p-1))} disabled={previewPage===0}
+                style={{background:"none",border:"1.5px solid var(--dust)",padding:"7px 16px",borderRadius:50,fontSize:".72rem",cursor:"pointer",opacity:previewPage===0 ? 0.3:1,fontFamily:"Jost,sans-serif",color:"var(--bark)"}}>
+                ← Previous
+              </button>
+              <span style={{fontSize:".72rem",color:"#8A7A6A"}}>Recipe {previewPage+1} of {samples.length} · 40 total in the book</span>
+              <button onClick={()=>setPreviewPage(p=>Math.min(samples.length-1,p+1))} disabled={previewPage===samples.length-1}
+                style={{background:"none",border:"1.5px solid var(--dust)",padding:"7px 16px",borderRadius:50,fontSize:".72rem",cursor:"pointer",opacity:previewPage===samples.length-1 ? 0.3:1,fontFamily:"Jost,sans-serif",color:"var(--bark)"}}>
+                Next →
+              </button>
+            </div>
+
+            {/* CTA */}
+            <div style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",borderRadius:16,padding:"24px",textAlign:"center"}}>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"white",marginBottom:6}}>
+                All 40 recipes. One beautiful book.
+              </div>
+              <div style={{fontSize:".8rem",color:"rgba(255,255,255,.55)",marginBottom:"1.2rem",fontWeight:300}}>
+                Morning rituals · Evening calm · Seasonal blends · 10 cleansing protocols.<br/>Your complete home apothecary -- $24.99.
+              </div>
+              <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
+                <button className="btn-book" onClick={()=>{addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"});setBookPreview(false);}}>
+                  Add to Cart -- $24.99
+                </button>
+                <button style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.2)",color:"white",padding:"13px 24px",borderRadius:50,fontSize:".73rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif"}} onClick={()=>{setBookPreview(false);nav("recipes");}}>
+                  Browse All Recipes Free
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // --- LARGE TIMER OVERLAY --------------------------------------------------
+  const LargeTimerOverlay = () => {
+    return (
+    <div className="timer-overlay">
+      <div className="timer-overlay-name">{timerBlendName}</div>
+
+      {/* STEAMING CUP   only shows while actively steeping */}
+      {timerOn && (
+        <div className="tea-cup-wrap">
+          <div className="steam">
+            <div className="steam-line"/>
+            <div className="steam-line"/>
+            <div className="steam-line"/>
+            <div className="steam-line"/>
+          </div>
+          <div className="tea-cup">🍵</div>
+        </div>
+      )}
+
+      <div className={`timer-overlay-face ${timerSec === 0 ? "done" : ""}`}>
+        {timerSec !== null ? fmt(timerSec) : "0:00"}
+      </div>
+
+      {/* PULSING STEEPING / PAUSED LABEL */}
+      {timerOn
+        ? <div className="steeping-label">· steeping ·</div>
+        : <div className="paused-label">paused -- tap Resume when ready</div>
+      }
+
+      <div className="timer-overlay-keepopen">
+        <strong>⚠ Keep This Screen Open</strong>
+        <span>Your phone needs to stay awake for the timer to count. If you lock your screen, the timer will pause until you return.</span>
+      </div>
+      <div className="timer-overlay-btns">
+        {timerOn ? (
+          <button className="btn-t stop" onClick={() => setTimerOn(false)}>Pause</button>
+        ) : (
+          <button className="btn-t go" onClick={() => { timerDoneRef.current = false; setTimerOn(true); }}>Resume</button>
+        )}
+        <button className="btn-t rst" style={{borderColor:"rgba(255,255,255,.2)",color:"rgba(255,255,255,.5)"}} onClick={dismissTimer}>Close</button>
+        <button
+          onClick={() => { dismissTimer(); window.open("https://2amcompanion.com","_blank"); }}
+          style={{background:"rgba(196,137,58,.15)",border:"1px solid rgba(196,137,58,.4)",color:"rgba(196,137,58,.9)",padding:"8px 16px",borderRadius:50,fontSize:".7rem",letterSpacing:".08em",cursor:"pointer",fontFamily:"Jost,sans-serif",whiteSpace:"nowrap"}}>
+          🌙 2AM Companion
+        </button>
+      </div>
+    </div>
+  );
+  }
+
+  // --- TEA READY SCREEN -----------------------------------------------------
+  const TeaReadyScreen = () => {
+    return (
+    <div className="timer-ready-msg">
+      <div className="timer-ready-emoji">🍵</div>
+      <div className="timer-ready-title">Your tea is ready</div>
+      <div className="timer-ready-sub">
+        {timerBlendName} -- brewed to perfection.<br/>
+        Sip slowly. You deserve this moment.
+      </div>
+      <div style={{display:"flex",gap:12,flexWrap:"wrap",justifyContent:"center"}}>
+        <button className="btn-main" style={{fontSize:"1rem",padding:"14px 40px"}} onClick={dismissTimer}>
+          Enjoy ✦
+        </button>
+        <button
+          style={{background:"rgba(196,137,58,.15)",border:"1px solid rgba(196,137,58,.4)",color:"rgba(196,137,58,.9)",padding:"14px 24px",borderRadius:50,fontSize:".78rem",letterSpacing:".08em",cursor:"pointer",fontFamily:"Jost,sans-serif"}}
+          onClick={() => { dismissTimer(); window.open("https://2amcompanion.com","_blank"); }}>
+          🌙 2AM Companion
+        </button>
+      </div>
+      <button
+        style={{marginTop:20,background:"none",border:"1px solid rgba(255,255,255,.15)",color:"rgba(255,255,255,.35)",padding:"8px 24px",borderRadius:50,fontSize:".7rem",cursor:"pointer",fontFamily:"Jost,sans-serif",letterSpacing:".08em"}}
+        onClick={dismissTimer}>
+        Close
+      </button>
+    </div>
+  );
+  }
+
+  // --- BOOK CTA INLINE -----------------------------------------------------
+  const BookCTA = () => {
+    return (
+    <div className="recipe-book-cta" style={{alignItems:"center",gap:16}}>
+      <BookCoverMockup size="sm" onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}/>
+      <div className="recipe-book-cta-text">
+        <strong>Sip &amp; Heal -- The Complete Collection</strong>
+        All 40 recipes in one beautifully crafted guide -- $24.99
+      </div>
+      <button className="btn-recipe-book" onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}>
+        Get the Book
+      </button>
+    </div>
+  );
+  }
+
+
+  // --- BOOK COVER MOCKUP COMPONENT ------------------------------------------
+  const BookCoverMockup = ({ size="md", onClick }) => {
+    const w = size==="lg" ? 230 : size==="sm" ? 130 : 180;
+    const h = Math.round(w * 1.48);
+    return (
+      <div onClick={onClick}
+        style={{cursor:onClick?"pointer":"default",position:"relative",width:w,height:h,
+          borderRadius:"3px 10px 10px 3px",
+          background:"linear-gradient(160deg,#2D4A2D 0%,#1B3A1B 60%,#142E14 100%)",
+          boxShadow:"-8px 8px 0 #142E14,-10px 10px 24px rgba(0,0,0,.5),3px 0 8px rgba(255,255,255,.04) inset",
+          padding:size==="lg"?"28px 24px":"20px 16px",
+          display:"flex",flexDirection:"column",justifyContent:"space-between",
+          border:"1px solid rgba(196,137,58,.35)",transition:"all .35s",flexShrink:0}}
+        onMouseEnter={e=>{if(onClick)e.currentTarget.style.transform="translateY(-4px) rotate(.5deg)";}}
+        onMouseLeave={e=>{e.currentTarget.style.transform="none";}}>
+        {/* Top gold rule */}
+        <div style={{width:"100%",height:1,background:"linear-gradient(90deg,transparent,rgba(196,137,58,.7),transparent)",marginBottom:size==="lg"?14:10}}/>
+        {/* Herb icon */}
+        <div style={{textAlign:"center",fontSize:size==="lg"?"2.6rem":"1.8rem",marginBottom:6,opacity:.88}}>🌿</div>
+        {/* Title */}
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:size==="lg"?"1.7rem":"1.2rem",color:"var(--gold)",textAlign:"center",lineHeight:1.15,fontStyle:"italic",marginBottom:4}}>Sip &amp; Heal</div>
+        {/* Rule */}
+        <div style={{width:"60%",height:1,background:"rgba(196,137,58,.35)",margin:"6px auto"}}/>
+        {/* Subtitle */}
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:size==="lg"?".65rem":".52rem",color:"rgba(255,255,255,.65)",textAlign:"center",letterSpacing:".14em",textTransform:"uppercase",marginBottom:size==="lg"?16:10,lineHeight:1.55}}>The Chai Holistic<br/>Collection</div>
+        {/* Centre detail */}
+        <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <div style={{textAlign:"center",background:"rgba(196,137,58,.1)",border:"1px solid rgba(196,137,58,.25)",borderRadius:8,padding:"8px 12px"}}>
+            <div style={{fontSize:size==="lg"?".78rem":".6rem",color:"rgba(196,137,58,.9)",fontFamily:"'Playfair Display',serif",fontStyle:"italic"}}>40 Recipes</div>
+            <div style={{fontSize:size==="lg"?".58rem":".46rem",color:"rgba(255,255,255,.5)",letterSpacing:".1em",textTransform:"uppercase",marginTop:2,fontFamily:"Jost,sans-serif"}}>30 Wellness · 10 Cleanse</div>
+          </div>
+        </div>
+        {/* Bottom */}
+        <div style={{marginTop:size==="lg"?16:10}}>
+          <div style={{width:"100%",height:1,background:"linear-gradient(90deg,transparent,rgba(196,137,58,.5),transparent)",marginBottom:8}}/>
+          <div style={{fontSize:size==="lg"?".5rem":".42rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(255,255,255,.3)",textAlign:"center",fontFamily:"Jost,sans-serif"}}>Chai Holistic</div>
+        </div>
+        {/* Spine shadow strip */}
+        <div style={{position:"absolute",left:0,top:0,bottom:0,width:10,
+          background:"linear-gradient(90deg,rgba(0,0,0,.4),rgba(0,0,0,.1))",
+          borderRadius:"3px 0 0 3px"}}/>
+      </div>
+    );
+  };
+
+  // --- CART DRAWER ----------------------------------------------------------
+  const CartDrawer = () => {
+    const suggestions = BUNDLES.filter(b=>!cart.find(i=>i.id===b.id)).slice(0,2);
+    const hasTeaInCart = cart.some(i=>i.type==="blend"||i.type==="herb"||(!i.type&&i.oz));
+    const hasCleanseInCart = cart.some(i=>i.type==="cleanse"||(i.organ));
+    const hasToolInCart = cart.some(i=>i.type==="tool");
+    const [expandedTool, setExpandedTool] = useState(null);
+
+    // Pick 2 contextual pairings based on what's in the cart
+    const ritualPairings = (() => {
+      if (!cart.length || hasToolInCart) return [];
+      const cup     = BREW_TOOLS.find(t=>t.id==="t1");
+      const ceramic = BREW_TOOLS.find(t=>t.id==="t2");
+      const strainer = BREW_TOOLS.find(t=>t.id==="t4");
+      const teapot  = BREW_TOOLS.find(t=>t.id==="t5");
+      if (hasCleanseInCart) return [strainer, teapot].filter(Boolean);
+      if (hasTeaInCart)     return [cup, strainer].filter(Boolean);
+      return [cup, ceramic].filter(Boolean);
+    })();
+    return cartOpen ? (
+      <>
+        <div className="overlay" onClick={()=>setCartOpen(false)}/>
+        <div className="drawer">
+          <div className="drw-head">
+            <span className="drw-title">Your Cart {cartCount>0&&`(${cartCount})`}</span>
+            <button className="drw-close" onClick={()=>setCartOpen(false)}>✕</button>
+          </div>
+          <div className="drw-items">
+            {/* Cart items — always at top */}
+            <div className="drw-cart-list">
+              {cart.length===0?(
+                <div className="empty"><div className="empty-icon">🍵</div><div className="empty-msg">Your cart is quiet</div><div className="empty-sub">Add some blends to begin.</div></div>
+              ):cart.map(item=>(
+                <div key={item.id} className="ditem">
+                  <div className="ditem-icon">{item.emoji||"✦"}</div>
+                  <div className="ditem-info">
+                    <div className="ditem-name">{item.name}</div>
+                    {item.subtitle && <div style={{fontSize:".68rem",color:"var(--sage-d)",marginBottom:2}}>{item.subtitle}</div>}
+                    <div className="ditem-price">${(item.price*item.qty).toFixed(2)}</div>
+                    {item.oz && <div style={{fontSize:".65rem",color:"var(--sage-d)",marginBottom:"6px"}}>~{item.oz*item.cupsPerOz} cups · ${costPerCup(item.price,item.oz,item.cupsPerOz)}/cup</div>}
+                    <div className="ditem-ctrl">
+                      <button className="qty-b" onClick={()=>changeQty(item.id,-1)}>−</button>
+                      <span className="qty-v">{item.qty}</span>
+                      <button className="qty-b" onClick={()=>changeQty(item.id,1)}>+</button>
+                      <button className="rm-btn" onClick={()=>removeItem(item.id)}>remove</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bundle suggestions — capped height, scrollable */}
+            {cart.length>0&&suggestions.length>0&&(
+              <div className="cart-sugg">
+                <div className="sugg-h">💚 Save more with a bundle</div>
+                {suggestions.map(b=>(
+                  <div key={b.id} className="sugg-row">
+                    <div><div className="sugg-name">{b.name}</div><div className="sugg-save">Save ${b.savings.toFixed(2)}</div></div>
+                    <button className="btn-sugg" onClick={()=>addToCart({...b})}>+ Add</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Ritual pairings — inside scroll area */}
+            {ritualPairings.length>0&&(
+              <div className="cart-ritual" style={{background:"linear-gradient(160deg,#FBF7F1 0%,#F4EDE2 100%)",border:"1.5px solid rgba(196,137,58,.28)",borderRadius:18,overflow:"hidden"}}>
+                {/* Header */}
+                <div style={{padding:"12px 16px 8px",borderBottom:"1px solid rgba(196,137,58,.15)"}}>
+                  <div style={{display:"flex",alignItems:"center",gap:7}}>
+                    <span style={{fontSize:".95rem"}}>🫖</span>
+                    <div>
+                      <div style={{fontSize:".6rem",letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",fontWeight:600,lineHeight:1}}>Complete Your Ritual</div>
+                      <div style={{fontSize:".68rem",color:"#8A7A6A",fontWeight:300,lineHeight:1.3,marginTop:2}}>
+                        {hasCleanseInCart
+                          ? "Your cleanse needs the right tools to honour the process."
+                          : "Every tea deserves a vessel worthy of the moment."}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Paired items */}
+                <div style={{padding:"10px 12px",display:"flex",flexDirection:"column",gap:10}}>
+                  {ritualPairings.map(t=>{
+                    const isOpen = expandedTool === t.id;
+                    return (
+                    <div key={t.id} style={{background:"white",borderRadius:12,border:`1px solid ${isOpen?"rgba(196,137,58,.35)":"rgba(196,137,58,.12)"}`,boxShadow:isOpen?"0 4px 18px rgba(28,26,23,.08)":"0 2px 8px rgba(28,26,23,.04)",transition:"border-color .2s, box-shadow .2s"}}>
+                      {/* Collapsed row */}
+                      <div
+                        style={{display:"flex",gap:10,alignItems:"center",padding:"10px 12px",cursor:"pointer"}}
+                        onClick={()=>setExpandedTool(isOpen ? null : t.id)}>
+                        <div style={{width:54,height:54,borderRadius:10,overflow:"hidden",flexShrink:0,background:"#F0EBE3"}}>
+                          <img src={t.photo} alt={t.name} onError={e=>{if(t.fallback)e.currentTarget.src=t.fallback;}} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/>
+                        </div>
+                        <div style={{flex:1,minWidth:0}}>
+                          <div style={{fontFamily:"'Playfair Display',serif",fontSize:".84rem",color:"var(--bark)",lineHeight:1.2,marginBottom:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{t.name}</div>
+                          <div style={{fontSize:".64rem",color:"#9A8A78",fontStyle:"italic",marginBottom:5,lineHeight:1.3}}>{t.tagline}</div>
+                          <div style={{display:"flex",alignItems:"center",gap:8}}>
+                            <span style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",fontWeight:500}}>${t.price.toFixed(2)}</span>
+                            <span style={{fontSize:".58rem",color:"var(--sage-d)",background:"rgba(74,114,80,.08)",padding:"2px 7px",borderRadius:50,border:"1px solid rgba(74,114,80,.18)"}}>{t.material}</span>
+                          </div>
+                        </div>
+                        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:5,flexShrink:0}}>
+                          <button onClick={e=>{e.stopPropagation();addToCart({...t,type:"tool"});}}
+                            style={{background:"var(--gold)",color:"white",border:"none",padding:"7px 13px",fontFamily:"'Jost',sans-serif",fontSize:".6rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",borderRadius:50,whiteSpace:"nowrap"}}
+                            onMouseEnter={e=>{e.currentTarget.style.background="var(--bark)";}}
+                            onMouseLeave={e=>{e.currentTarget.style.background="var(--gold)";}}>
+                            + Add
+                          </button>
+                          <span style={{fontSize:".58rem",color:"var(--gold)",transition:"transform .2s",transform:isOpen?"rotate(180deg)":"rotate(0deg)",display:"block",lineHeight:1}}>▼</span>
+                        </div>
+                      </div>
+                      {/* Expanded detail — scrollable within card */}
+                      {isOpen&&(
+                        <div style={{padding:"0 14px 14px",borderTop:"1px solid rgba(196,137,58,.12)",maxHeight:320,overflowY:"auto"}}>
+                          <div style={{width:"100%",height:130,borderRadius:10,overflow:"hidden",margin:"10px 0 12px",background:"#F0EBE3"}}>
+                            <img src={t.photo} alt={t.name} onError={e=>{if(t.fallback)e.currentTarget.src=t.fallback;}} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/>
+                          </div>
+                          <p style={{fontSize:".76rem",color:"#6A5F50",lineHeight:1.7,fontWeight:300,margin:"0 0 10px"}}>{t.desc}</p>
+                          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:10}}>
+                            <span style={{fontSize:".58rem",letterSpacing:".08em",background:"var(--sage-p)",color:"var(--sage-d)",padding:"3px 9px",borderRadius:50,border:"1px solid rgba(74,114,80,.15)"}}>{t.capacity}</span>
+                            <span style={{fontSize:".58rem",letterSpacing:".08em",background:"var(--sage-p)",color:"var(--sage-d)",padding:"3px 9px",borderRadius:50,border:"1px solid rgba(74,114,80,.15)"}}>Ritual: {t.ritual}</span>
+                          </div>
+                          <div style={{fontSize:".66rem",color:"#9A8A7A",fontStyle:"italic",padding:"7px 10px",background:"#FAF8F5",borderRadius:8,borderLeft:"2px solid var(--gold)",lineHeight:1.5,marginBottom:12}}>{t.care}</div>
+                          <button onClick={e=>{e.stopPropagation();addToCart({...t,type:"tool"});setExpandedTool(null);}}
+                            style={{width:"100%",background:"var(--gold)",color:"white",border:"none",padding:"10px",fontFamily:"'Jost',sans-serif",fontSize:".66rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",borderRadius:50}}
+                            onMouseEnter={e=>{e.currentTarget.style.background="var(--bark)";}}
+                            onMouseLeave={e=>{e.currentTarget.style.background="var(--gold)";}}>
+                            Add {t.name} to Cart — ${t.price.toFixed(2)}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="drw-foot">
+            {/* Honey add-on — shows when kit is in cart */}
+            {cart.some(i => i.id && i.id.includes('_kit')) && !cart.some(i => i.id === 'honey_jar') && (
+              <div style={{background:"rgba(192,136,48,.08)",border:"1px dashed rgba(192,136,48,.35)",borderRadius:12,padding:"10px 14px",marginBottom:8,display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:"1.2rem",flexShrink:0}}>🍯</span>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Raw Honey Jar — $7</div>
+                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>Your kit recipe calls for raw honey</div>
+                </div>
+                <button onClick={()=>addToCart({id:"honey_jar",name:"Raw Honey Jar",price:7,emoji:"🍯"})}
+                  style={{background:"var(--gold)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
+                  + Add
+                </button>
+              </div>
+            )}
+            {/* Extra shaker bottle add-on */}
+            {cart.some(i => i.id && i.id.includes('_kit')) && !cart.some(i => i.id === 'shaker_extra') && (
+              <div style={{background:"rgba(74,114,80,.06)",border:"1px dashed rgba(74,114,80,.3)",borderRadius:12,padding:"10px 14px",marginBottom:10,display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:"1.2rem",flexShrink:0}}>🥤</span>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Extra Shaker Bottle — $8</div>
+                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>One included with your kit — add a spare for gym, desk, or a friend</div>
+                </div>
+                <button onClick={()=>addToCart({id:"shaker_extra",name:"Extra Shaker Bottle",price:8,emoji:"🥤"})}
+                  style={{background:"var(--sage-d)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
+                  + Add
+                </button>
+              </div>
+            )}
+            <div className="d-sub"><span className="d-sub-l">Subtotal</span><span className="d-sub-r">${cartTotal.toFixed(2)}</span></div>
+            <button className="btn-chk" disabled={cart.length===0}>Continue to Checkout</button>
+          </div>
+        </div>
+      </>
+    ):null;
+  };
+
+  // --- HOME -----------------------------------------------------------------
+
