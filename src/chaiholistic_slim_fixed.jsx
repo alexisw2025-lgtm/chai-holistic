@@ -1261,7 +1261,7 @@ export default function ChaiHolistic() {
     .btn-book:hover{background:#D4943A;transform:translateY(-2px);}
 
     /* MODALS */
-    .modal-ov{display:flex;align-items:center;justify-content:center;position:fixed;inset:0;background:rgba(28,26,23,.6);z-index:800;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:1rem;}
+    .modal-ov{display:flex;align-items:center;justify-content:center;position:fixed;inset:0;background:rgba(28,26,23,.6);z-index:800;backdrop-filter:blur(6px);padding:1rem;}
     .modal-open{overflow:hidden;}
     .modal{background:var(--parch);max-width:620px;width:100%;max-height:90vh;overflow-y:auto;border-radius:24px;box-shadow:0 24px 80px rgba(28,26,23,.3);}
     .modal-head{padding:26px 28px 18px;border-bottom:1px solid var(--dust);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--parch);border-radius:24px 24px 0 0;z-index:2;}
@@ -1688,7 +1688,7 @@ export default function ChaiHolistic() {
   // --- TEA FINDER MODAL -----------------------------------------------------
   const TeaFinderModal = () => {
     return (
-    <div className="modal-ov" onClick={() => setFinderOpen(false)}>
+    <div className="modal-ov" onClick={() = style={{display:"flex",alignItems:"center",justifyContent:"center"}}> setFinderOpen(false)}>
       <div id="tea-finder-modal" className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-head">
           <span className="modal-title">✦ Find Your Tea</span>
@@ -1782,7 +1782,7 @@ export default function ChaiHolistic() {
     };
 
     return (
-      <div className="modal-ov" onClick={() => setRitualOpen(false)}>
+      <div className="modal-ov" onClick={() = style={{display:"flex",alignItems:"center",justifyContent:"center"}}> setRitualOpen(false)}>
         {/* Modal uses flex-column so header + footer stay fixed, body scrolls */}
         <div className="modal" style={{display:"flex",flexDirection:"column",overflow:"hidden",maxHeight:"90vh"}} onClick={e => e.stopPropagation()}>
 
@@ -1917,7 +1917,7 @@ export default function ChaiHolistic() {
     const pct = tracker ? Math.round(checkedCount/tracker.days*100) : 0;
     const alreadyInCart = !!(tracker && cart.find(i=>i.id===tracker.id));
     return (
-      <div className="modal-ov" onClick={() => setTrackerOpen(false)}>
+      <div className="modal-ov" onClick={() = style={{display:"flex",alignItems:"center",justifyContent:"center"}}> setTrackerOpen(false)}>
         <div className="modal" onClick={e=>e.stopPropagation()}>
           <div className="modal-head">
             <span className="modal-title">🌿 Cleanse Tracker</span>
@@ -2024,7 +2024,7 @@ export default function ChaiHolistic() {
     const [previewPage, setPreviewPage] = useState(0);
     const sample = samples[previewPage];
     return (
-      <div className="modal-ov" onClick={()=>setBookPreview(false)}>
+      <div className="modal-ov" onClick={()= style={{display:"flex",alignItems:"center",justifyContent:"center"}}>setBookPreview(false)}>
         <div className="modal" style={{maxWidth:700,background:"#FAF7F0"}} onClick={e=>e.stopPropagation()}>
           <div className="modal-head" style={{background:"#2D4A2D",borderRadius:"24px 24px 0 0"}}>
             <div>
@@ -3304,9 +3304,8 @@ export default function ChaiHolistic() {
               {filteredBlends.map((r,i)=>{
                 const idx=`w${i}`;const isOpen=activeRecipe===idx;
                 return(
-                  <div key={r.id} data-recipe={idx} className={`rcard ${isOpen?"open":""}`} onClick={()=>setActiveRecipe(isOpen?null:idx)}>
+                  <div key={r.id} data-recipe={idx} className="rcard" onClick={()=>setActiveRecipe(idx)}>
                     <div className="rcard-hover-desc">{r.desc}</div>
-                    <div className="rcard-expand-arrow">▾</div>
                     <div className="rcard-head">
                       <div className="rcard-icon">{BLEND_EMOJIS[r.id]||"🍵"}</div>
                       <div>
@@ -3315,28 +3314,6 @@ export default function ChaiHolistic() {
                       </div>
                     </div>
                     <div className="rcard-meta"><span className="rtag occ">{r.mood}</span><span className="rtag time">${r.price}</span></div>
-                    <div className="rcard-expand" onClick={e=>e.stopPropagation()}>
-                      <div className="rsteps">
-                        <CupValue item={r}/>
-                        {r.warning && <div className="warn-block" style={{marginBottom:10}}><strong>⚠ Safety Note</strong>{r.warning}</div>}
-                        <div style={{fontSize:".66rem",color:"var(--sage-d)",letterSpacing:".1em",textTransform:"uppercase",marginBottom:"6px",fontWeight:500}}>Ingredients</div>
-                        <div style={{fontSize:".76rem",color:"#5A5040",marginBottom:"10px",lineHeight:1.5}}>{r.ingredients.join(" · ")}</div>
-                        <div style={{fontSize:".66rem",color:"var(--gold)",marginBottom:"10px"}}>{r.benefit}</div>
-                        <div style={{fontSize:".66rem",marginBottom:"12px",display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
-                          <span style={{color:"#8A7A6A"}}>Steep {r.steepMin} min · {r.servingSize} per cup</span>
-                          <span style={{background:tempIcon(r.steepTemp).color,color:"white",padding:"2px 10px",borderRadius:50,fontSize:".62rem",fontWeight:500}}>{tempIcon(r.steepTemp).icon} {tempIcon(r.steepTemp).label}</span>
-                          <span style={{fontSize:".62rem",color:"#8A7A6A",fontStyle:"italic"}}>{tempIcon(r.steepTemp).tip}</span>
-                        </div>
-                        <button className="btn-add" style={{fontSize:".63rem",marginBottom:"12px"}} onClick={()=>addToCart({...r,emoji:"🍵"})}>Add to Cart -- ${r.price}</button>
-                        <div className="timer-row">
-                          <span className="timer-face">{timerFor===idx&&timerSec!==null?fmt(timerSec):`${r.steepMin}:00`}</span>
-                          <button className={`btn-t ${timerOn&&timerFor===idx?"stop":"go"}`} onClick={()=>{if(timerOn&&timerFor===idx)stopTimer();else startTimer(r,idx);}}>
-                            {timerOn&&timerFor===idx?"Stop Brewing":"Start Brewing"}
-                          </button>
-                          {timerFor===idx&&timerSec!==null&&<button className="btn-t rst" onClick={e=>{e.stopPropagation();stopTimer();}}>Reset</button>}
-                        </div>
-                        <BookCTA/>
-                      </div>
                     </div>
                   </div>
                 );
@@ -3349,9 +3326,8 @@ export default function ChaiHolistic() {
               {CLEANSING.map((r,i)=>{
                 const idx=`c${i}`;const isOpen=activeRecipe===idx;
                 return(
-                  <div key={r.id} data-recipe={idx} className={`rcard ${isOpen?"open":""}`} onClick={()=>setActiveRecipe(isOpen?null:idx)} style={isOpen?{borderColor:"#8B3A2A"}:{}}>
+                  <div key={r.id} data-recipe={idx} className="rcard" onClick={()=>setActiveRecipe(idx)} style={isOpen?{borderColor:"#8B3A2A"}:{}}>
                     <div className="rcard-hover-desc">{r.desc}</div>
-                    <div className="rcard-expand-arrow" style={{background:isOpen?"#8B3A2A":"#F5E0DC",color:isOpen?"white":"#8B3A2A"}}>▾</div>
                     <div className="rcard-head">
                       <div className="rcard-icon" style={{background:"#F5E0DC"}}>🌿</div>
                       <div>
@@ -3360,30 +3336,6 @@ export default function ChaiHolistic() {
                       </div>
                     </div>
                     <div className="rcard-meta"><span className="rtag" style={{background:"#F5E0DC",color:"#8B3A2A"}}>{r.mood}</span><span className="rtag time">${r.price}</span></div>
-                    <div className="rcard-expand" onClick={e=>e.stopPropagation()}>
-                      <div className="rsteps">
-                        <CupValue item={r}/>
-                        <div style={{fontSize:".7rem",color:"#8B3A2A",letterSpacing:".1em",textTransform:"uppercase",marginBottom:"5px",fontWeight:500}}>Protocol</div>
-                        <div style={{fontSize:".76rem",color:"#5A5040",marginBottom:"10px",lineHeight:1.5,background:"#F5E0DC",padding:"9px 11px",borderRadius:10}}>{r.protocol}</div>
-                        <div style={{fontSize:".66rem",color:"var(--gold)",marginBottom:"8px"}}>{r.benefit}</div>
-                        <div style={{fontSize:".66rem",color:"#8A7A6A",marginBottom:"8px"}}>{r.ingredients.join(" · ")}</div>
-                        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:"10px",flexWrap:"wrap"}}>
-                          <span style={{background:tempIcon(r.steepTemp).color,color:"white",padding:"2px 10px",borderRadius:50,fontSize:".62rem",fontWeight:500}}>{tempIcon(r.steepTemp).icon} {tempIcon(r.steepTemp).label}</span>
-                          <span style={{fontSize:".62rem",color:"#8A7A6A",fontStyle:"italic"}}>{tempIcon(r.steepTemp).tip}</span>
-                        </div>
-                        <div style={{display:"flex",gap:8,marginBottom:"10px",flexWrap:"wrap"}}>
-                          <button className="btn-add-c" style={{fontSize:".63rem"}} onClick={()=>addToCart({...r,emoji:"✦"})}>Add to Cart -- ${r.price}</button>
-                          <button className="btn-track" style={{fontSize:".63rem"}} onClick={()=>{setActiveTracker(r.id);setTrackerOpen(true);}}>Track {r.days} Days</button>
-                        </div>
-                        <div className="timer-row">
-                          <span className="timer-face">{timerFor===idx&&timerSec!==null?fmt(timerSec):`${r.steepMin}:00`}</span>
-                          <button className={`btn-t ${timerOn&&timerFor===idx?"stop":"go"}`} onClick={()=>{if(timerOn&&timerFor===idx)stopTimer();else startTimer(r,idx);}}>
-                            {timerOn&&timerFor===idx?"Stop Brewing":"Start Brewing"}
-                          </button>
-                          {timerFor===idx&&timerSec!==null&&<button className="btn-t rst" onClick={e=>{e.stopPropagation();stopTimer();}}>Reset</button>}
-                        </div>
-                        <BookCTA/>
-                      </div>
                     </div>
                   </div>
                 );
@@ -3400,6 +3352,88 @@ export default function ChaiHolistic() {
     </div>
   );
   }
+
+
+  // ── Recipe detail modal ────────────────────────────────────────────────────
+  const RecipeModal = () => {
+    if (!activeRecipe) return null;
+    const isClean = activeRecipe.startsWith('c');
+    const idx = parseInt(activeRecipe.slice(1));
+    const r = isClean ? CLEANSING[idx] : filteredBlends[idx];
+    if (!r) return null;
+    const accent = isClean ? "#8B3A2A" : "var(--sage-d)";
+    const accentBg = isClean ? "#F5E0DC" : "var(--sage-p)";
+    return (
+      <div style={{
+        position:"fixed",inset:0,zIndex:850,
+        background:"rgba(28,26,23,.75)",backdropFilter:"blur(10px)",
+        display:"flex",alignItems:"center",justifyContent:"center",padding:"16px",
+      }} onClick={()=>setActiveRecipe(null)}>
+        <div style={{
+          background:"#FFFDF8",borderRadius:24,width:"100%",
+          maxWidth:520,maxHeight:"88vh",overflowY:"auto",
+          boxShadow:"0 32px 80px rgba(0,0,0,.4)",
+        }} onClick={e=>e.stopPropagation()}>
+          <div style={{
+            background:`linear-gradient(135deg,${r.color||"#3D2B1F"},#1C1A17)`,
+            borderRadius:"24px 24px 0 0",padding:"26px 26px 20px",position:"relative",
+          }}>
+            <button onClick={()=>setActiveRecipe(null)} style={{
+              position:"absolute",top:14,right:14,background:"rgba(255,255,255,.15)",
+              border:"none",borderRadius:"50%",width:32,height:32,color:"white",
+              fontSize:"1rem",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",
+            }}>✕</button>
+            <div style={{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"rgba(255,255,255,.55)",marginBottom:6}}>
+              {r.occasion||r.organ} · {r.steepMin} min
+            </div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(1.2rem,3vw,1.6rem)",color:"white",fontWeight:400,marginBottom:4}}>{r.name}</div>
+            <div style={{fontSize:".78rem",color:"rgba(255,255,255,.6)",fontStyle:"italic"}}>{r.tagline||r.benefit}</div>
+          </div>
+          <div style={{padding:"22px 24px"}}>
+            <CupValue item={r}/>
+            <p style={{fontSize:".86rem",color:"#4A3F30",lineHeight:1.8,marginBottom:18,fontWeight:300}}>{r.desc}</p>
+            <div style={{marginBottom:16}}>
+              <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:accent,marginBottom:8,fontWeight:600}}>Ingredients</div>
+              <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                {r.ingredients.map(h=>(
+                  <span key={h} style={{background:accentBg,borderRadius:50,padding:"4px 12px",fontSize:".74rem",color:accent}}>{h}</span>
+                ))}
+              </div>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+              <div style={{background:"var(--linen)",borderRadius:12,padding:"12px 14px"}}>
+                <div style={{fontSize:".58rem",letterSpacing:".12em",textTransform:"uppercase",color:"#8A7A6A",marginBottom:4}}>Steep Time</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"var(--bark)"}}>{r.steepMin} min</div>
+              </div>
+              <div style={{background:"var(--linen)",borderRadius:12,padding:"12px 14px"}}>
+                <div style={{fontSize:".58rem",letterSpacing:".12em",textTransform:"uppercase",color:"#8A7A6A",marginBottom:4}}>Serving</div>
+                <div style={{fontSize:".82rem",color:"var(--bark)"}}>{r.servingSize||"1 tsp"} per cup</div>
+              </div>
+            </div>
+            {r.benefit&&<div style={{background:`linear-gradient(135deg,${accentBg},white)`,borderLeft:`4px solid ${accent}`,borderRadius:"0 12px 12px 0",padding:"10px 14px",marginBottom:16,fontSize:".78rem",color:accent,fontWeight:500}}>{r.benefit}</div>}
+            {r.warning&&(
+              <div style={{background:"rgba(255,180,0,.06)",border:"1px solid rgba(255,180,0,.25)",borderRadius:10,padding:"10px 14px",marginBottom:16,fontSize:".74rem",color:"#8A6A00",lineHeight:1.65}}>
+                <strong style={{display:"block",marginBottom:4}}>⚠ Safety Note</strong>{r.warning}
+              </div>
+            )}
+            <div style={{display:"flex",gap:10,alignItems:"center",padding:"14px 16px",background:"var(--linen)",borderRadius:12,marginBottom:12,flexWrap:"wrap"}}>
+              <span style={{fontFamily:"'Playfair Display',serif",fontSize:"1.6rem",color:"var(--bark)",minWidth:60}}>
+                {timerFor===activeRecipe&&timerSec!==null?fmt(timerSec):`${r.steepMin}:00`}
+              </span>
+              <button className={`btn-t ${timerOn&&timerFor===activeRecipe?"stop":"go"}`}
+                onClick={()=>{if(timerOn&&timerFor===activeRecipe)stopTimer();else startTimer(r,activeRecipe);}}>
+                {timerOn&&timerFor===activeRecipe?"Stop":"Start Brewing"}
+              </button>
+              {timerFor===activeRecipe&&timerSec!==null&&<button className="btn-t rst" onClick={e=>{e.stopPropagation();stopTimer();}}>Reset</button>}
+            </div>
+            <button className="btn-add" style={{width:"100%"}} onClick={()=>{addToCart({...r,emoji:"🍵"});setActiveRecipe(null);}}>
+              Add to Cart — ${r.price}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   // --- INTENTION ENGINE -----------------------------------------------------
   const INTENTION_STEPS = [
@@ -3530,7 +3564,7 @@ export default function ChaiHolistic() {
     if (intentionStep === 99 && intentionResult) {
       const { name, intention, blend, affirmation, ritual } = intentionResult;
       return (
-        <div className="modal-ov" onClick={()=>{}}>
+        <div className="modal-ov" onClick={()= style={{display:"flex",alignItems:"center",justifyContent:"center"}}>{}}>
           <div className="modal" style={{maxWidth:680,background:"#FAF7F0"}} onClick={e=>e.stopPropagation()}>
             <div className="modal-head" style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",borderRadius:"24px 24px 0 0"}}>
               <div>
@@ -3805,7 +3839,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
 
     // Quiz steps
     return (
-      <div className="modal-ov" onClick={()=>{}}>
+      <div className="modal-ov" onClick={()= style={{display:"flex",alignItems:"center",justifyContent:"center"}}>{}}>
         <div className="modal" style={{maxWidth:580}} onClick={e=>e.stopPropagation()}>
           <div className="modal-head" style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",borderRadius:"24px 24px 0 0"}}>
             <div>
@@ -3908,7 +3942,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
     // RING MODEL CHOOSER — shows when no ring is pre-selected
     if (!ring) {
       return (
-        <div className="modal-ov" onClick={()=>setRingConfig(null)}>
+        <div className="modal-ov" onClick={()= style={{display:"flex",alignItems:"center",justifyContent:"center"}}>setRingConfig(null)}>
           <div id="ring-config-modal" className="modal" style={{maxWidth:620,background:"#0E0E0E",border:"1px solid rgba(255,255,255,.08)"}} onClick={e=>e.stopPropagation()}>
             <div className="modal-head" style={{background:"#0E0E0E",borderBottom:"1px solid rgba(255,255,255,.08)",borderRadius:"24px 24px 0 0"}}>
               <div>
@@ -4011,7 +4045,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
     };
 
     return (
-      <div className="modal-ov" onClick={() => setRingConfig(null)}>
+      <div className="modal-ov" onClick={() = style={{display:"flex",alignItems:"center",justifyContent:"center"}}> setRingConfig(null)}>
         <div id="ring-config-modal" className="modal" style={{maxWidth:560,background:"#0E0E0E",border:"1px solid rgba(255,255,255,.08)"}} onClick={e=>e.stopPropagation()}>
 
           {/* Header */}
@@ -5450,6 +5484,7 @@ Thank you!`);
 
       {intentionOpen && <IntentionEngine/>}
       {finderOpen && <TeaFinderModal/>}
+      {activeRecipe && <RecipeModal/>}
       {ritualOpen && <RitualBuilderModal/>}
       {trackerOpen && <CleanseTrackerModal/>}
       {bookPreview && <BookPreviewModal/>}
