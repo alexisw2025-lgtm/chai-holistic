@@ -372,7 +372,7 @@ function JellyCard({ j, onOpen }) {
           fontFamily: "'Jost', sans-serif", textAlign: "right",
         }}>View Kit →</div>
         <div style={{ marginTop: 8, background: "rgba(39,92,62,.2)", borderRadius: 8, padding: "6px 10px", fontSize: ".61rem", color: "#8ab89a", lineHeight: 1.5 }}>
-          🧴 6 packs · 🥤 Shaker cup · 🍯 Honey · <strong style={{color:"#deb96a"}}>${JELLY_KIT_PRICE}</strong>
+          🧴 6 packs · 🥤 Shaker bottle · 🍯 Honey · <strong style={{color:"#deb96a"}}>${JELLY_KIT_PRICE}</strong>
         </div>
       </div>
     </div>
@@ -579,7 +579,7 @@ function JellyModal({ j, onClose, onAddToCart }) {
                 </div>
               ))}
               <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid rgba(255,255,255,.08)" }}>
-                <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.35)", marginBottom: 6 }}>Also included: spring shaker cup · instruction card · raw honey packet</div>
+                <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.35)", marginBottom: 6 }}>Also included: shaker bottle · instruction card · raw honey packet</div>
               </div>
             </div>
 
@@ -600,7 +600,7 @@ function JellyModal({ j, onClose, onAddToCart }) {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                   <div>
                     <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.1rem", color: "white" }}>{j.name} Kit</div>
-                    <div style={{ fontSize: ".68rem", color: "rgba(255,255,255,.5)", marginTop: 2 }}>6 packs · spring shaker · honey packet · instruction card</div>
+                    <div style={{ fontSize: ".68rem", color: "rgba(255,255,255,.5)", marginTop: 2 }}>6 packs · shaker bottle · honey packet · instruction card</div>
                   </div>
                   <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.4rem", color: "#deb96a", fontWeight: 600 }}>${JELLY_KIT_PRICE}</div>
                 </div>
@@ -659,7 +659,7 @@ export default function JellyPage({ onAddToCart }) {
     }
   `}</style>
   return (
-    <div style={{ background: C.forest, minHeight: "100vh" }}>
+    <div id="sec-jelly-top" style={{ background: C.forest, minHeight: "100vh" }}>
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <section style={{
@@ -734,6 +734,45 @@ export default function JellyPage({ onAddToCart }) {
         </div>
       </section>
 
+      {/* ── Shaker Bottle Feature Section ─────────────────────────────────── */}
+      <section style={{ background: "rgba(192,136,48,.06)", borderBottom: "1px solid rgba(192,136,48,.15)", padding: "28px 2.5rem" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "center" }}>
+            {/* Icon + headline */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
+              <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(192,136,48,.15)", border: "1px solid rgba(192,136,48,.35)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.6rem" }}>🥤</div>
+              <div>
+                <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1rem", color: "white", marginBottom: 2 }}>Includes a Shaker Bottle</div>
+                <div style={{ fontSize: ".65rem", color: "rgba(192,136,48,.7)", letterSpacing: ".08em" }}>No blender · No electricity · Works anywhere</div>
+              </div>
+            </div>
+            {/* Features row */}
+            <div style={{ display: "flex", gap: 16, flexWrap: "wrap", flex: 1 }}>
+              {[
+                { icon: "🚫💧", title: "No-Leak Lid", desc: "Secure screw-on lid + flip-top spout. Toss it in your gym bag, commute, or jog with confidence." },
+                { icon: "⚡", title: "Smooth Mix", desc: "Stainless steel shaker ball breaks up powder fast — no clumps. Removable for easy rinsing in seconds." },
+                { icon: "📏", title: "20 oz / 16 oz Marks", desc: "Clear cup with measurement scale up to 16 oz. See exactly what you're mixing every time." },
+                { icon: "🧼", title: "Dishwasher Safe", desc: "Dishwasher safe for low-effort cleanup. Hand-wash tip: rinse right after, air-dry with lid open." },
+              ].map(f => (
+                <div key={f.title} style={{ background: "rgba(255,255,255,.04)", border: "1px solid rgba(192,136,48,.15)", borderRadius: 12, padding: "10px 14px", flex: "1 1 160px", minWidth: 140 }}>
+                  <div style={{ fontSize: ".6rem", letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(192,136,48,.7)", marginBottom: 4 }}>{f.icon} {f.title}</div>
+                  <div style={{ fontSize: ".72rem", color: "rgba(255,255,255,.5)", lineHeight: 1.6, fontWeight: 300 }}>{f.desc}</div>
+                </div>
+              ))}
+            </div>
+            {/* Add extra shaker button */}
+            <div style={{ flexShrink: 0, textAlign: "center" }}>
+              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.4)", marginBottom: 6 }}>Want a spare?</div>
+              <button
+                onClick={() => onAddToCart && onAddToCart({ id: "shaker_extra", name: "Extra Shaker Bottle", price: 8, emoji: "🥤" })}
+                style={{ background: "rgba(192,136,48,.15)", border: "1px solid rgba(192,136,48,.4)", color: "#deb96a", padding: "8px 18px", borderRadius: 50, fontSize: ".68rem", letterSpacing: ".08em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif", cursor: "pointer", whiteSpace: "nowrap" }}>
+                + Add Extra Bottle — $8
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Filters ───────────────────────────────────────────────────────── */}
       <div style={{
         background: "#0d1a11",
@@ -781,7 +820,7 @@ export default function JellyPage({ onAddToCart }) {
       </div>
 
       {/* ── Grid ──────────────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
+      <div id="sec-jelly-grid" style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,.4)" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>🌊</div>

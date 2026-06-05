@@ -612,7 +612,9 @@ export default function ChaiHolistic() {
     rings:   [["↩ Rings","home-page-rings"],["↑ Top","sec-rings-top"],["Collection","sec-rings-grid"],["How It Works","sec-rings-how"],["Frequency","sec-rings-meridian"]],
     faq:         [["↩ Home","home-page"],["↑ Top","sec-faq-top"],["FAQ","sec-faq-content"]],
     men:         [["↩ Home","home-page"],["↑ Top","sec-men-top"],["Blends","sec-men-blends"]],
-    mocktails: [["↩ Home","home-page"],["↑ Top","sec-mkt-top"],["Wellness","sec-mkt-wellness"],["Social","sec-mkt-social"]],
+    mocktails:   [["↩ Home","home-page"],["↑ Top","sec-mkt-top"],["Wellness","sec-mkt-wellness"],["Social","sec-mkt-social"]],
+    jelly:       [["↩ Home","home-page"],["↑ Top","sec-jelly-top"],["Kits","sec-jelly-grid"]],
+    seamoss:     [["↩ Home","home-page"],["↑ Top","sec-seamoss-top"],["Why Sea Moss","sec-seamoss-why"],["Recipes","sec-seamoss-grid"]],
   };
 
   useEffect(() => {
@@ -860,7 +862,7 @@ export default function ChaiHolistic() {
     .h-card-body{padding:11px 13px;}
     .h-card-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);}
     .h-card-tag{font-size:.62rem;color:var(--sage);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
-    .h-badge{position:absolute;bottom:28px;right:0;background:var(--gold);color:white;padding:14px 18px;font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:5;border-radius:16px;transition:all .2s;}
+    .h-badge{position:absolute;bottom:8px;right:0;background:var(--gold);color:white;padding:10px 14px;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:2;border-radius:14px;transition:all .2s;}
     .h-badge:hover{background:var(--bark);box-shadow:0 8px 28px rgba(61,43,31,.4);transform:translateY(-2px);}
     .h-badge small{display:block;font-family:'Jost',sans-serif;font-size:.62rem;font-style:normal;letter-spacing:.1em;opacity:.85;margin-top:2px;}
 
@@ -2255,7 +2257,7 @@ export default function ChaiHolistic() {
           <div className="drw-foot">
             {/* Honey add-on — shows when kit is in cart */}
             {cart.some(i => i.id && i.id.includes('_kit')) && !cart.some(i => i.id === 'honey_jar') && (
-              <div style={{background:"rgba(192,136,48,.08)",border:"1px dashed rgba(192,136,48,.35)",borderRadius:12,padding:"10px 14px",marginBottom:10,display:"flex",alignItems:"center",gap:10}}>
+              <div style={{background:"rgba(192,136,48,.08)",border:"1px dashed rgba(192,136,48,.35)",borderRadius:12,padding:"10px 14px",marginBottom:8,display:"flex",alignItems:"center",gap:10}}>
                 <span style={{fontSize:"1.2rem",flexShrink:0}}>🍯</span>
                 <div style={{flex:1}}>
                   <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Raw Honey Jar — $7</div>
@@ -2263,6 +2265,20 @@ export default function ChaiHolistic() {
                 </div>
                 <button onClick={()=>addToCart({id:"honey_jar",name:"Raw Honey Jar",price:7,emoji:"🍯"})}
                   style={{background:"var(--gold)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
+                  + Add
+                </button>
+              </div>
+            )}
+            {/* Extra shaker bottle add-on */}
+            {cart.some(i => i.id && i.id.includes('_kit')) && !cart.some(i => i.id === 'shaker_extra') && (
+              <div style={{background:"rgba(74,114,80,.06)",border:"1px dashed rgba(74,114,80,.3)",borderRadius:12,padding:"10px 14px",marginBottom:10,display:"flex",alignItems:"center",gap:10}}>
+                <span style={{fontSize:"1.2rem",flexShrink:0}}>🥤</span>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:".72rem",color:"var(--bark)",fontWeight:600,fontFamily:"'Jost',sans-serif"}}>Add Extra Shaker Bottle — $8</div>
+                  <div style={{fontSize:".62rem",color:"#8A7A6A",marginTop:1}}>No-leak lid · stainless ball · 20 oz · dishwasher safe</div>
+                </div>
+                <button onClick={()=>addToCart({id:"shaker_extra",name:"Extra Shaker Bottle",price:8,emoji:"🥤"})}
+                  style={{background:"var(--sage-d)",color:"white",border:"none",padding:"6px 12px",borderRadius:50,fontSize:".62rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"'Jost',sans-serif",cursor:"pointer",flexShrink:0}}>
                   + Add
                 </button>
               </div>
@@ -2278,7 +2294,7 @@ export default function ChaiHolistic() {
   // --- HOME -----------------------------------------------------------------
 // ── Auto-rotating hero cards ──────────────────────────────────────────────────
 const HERO_NEW_SECTIONS = [
-  {page:"jelly",   emoji:"🌊", name:"Jelly Kits",      tag:"New · Kit Ships to You",  color:"#1a3a2a", desc:"13 all-natural agar & herb jelly recipes. Kit includes 6 packs + spring shaker."},
+  {page:"jelly",   emoji:"🌊", name:"Jelly Kits",      tag:"New · Kit Ships to You",  color:"#1a3a2a", desc:"13 all-natural agar & herb jelly recipes. Kit includes 6 packs + shaker bottle."},
   {page:"seamoss", emoji:"🌿", name:"Sea Moss Gel",     tag:"New · Grandmother's Recipe", color:"#0a3a2a", desc:"15 flavored sea moss gel kits. 92 of 102 minerals. Pure Caribbean tradition."},
   {page:"men",     emoji:"⚡", name:"Men's Wellness",   tag:"New · 20 Blends",         color:"#1a1a3a", desc:"20 blends built for the male body. Testosterone, heart, stress, prostate & more."},
 ];
@@ -2579,6 +2595,7 @@ function HeroCards({ onNav, onOpenRecipe }) {
               {icon:"💰",title:"Cost Per Cup",sub:"vs. a $5 coffee — always shown",action:()=>nav("shop"),btn:"Shop"},
               {icon:"✨",title:"Seasonal Picks",sub:"This month's best blends",action:()=>nav("shop"),btn:"See"},
               {icon:"🫖",title:"Brew Tools",sub:"Cups, teapots & ritual essentials",action:()=>{nav("shop");setTimeout(()=>{const el=document.getElementById("sec-shop-tools");if(el)el.scrollIntoView({behavior:"smooth"});},120);},btn:"Shop"},
+              {icon:"💊",title:"Supplements",sub:"Critical nutrients — coming soon",action:()=>{},btn:"Soon",disabled:true},
             ].map(f=>(
               <div key={f.title}
                 onClick={f.action}

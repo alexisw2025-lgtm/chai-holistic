@@ -667,7 +667,7 @@ function RecipeCard({ r, onOpen }) {
           letterSpacing: ".08em", textTransform: "uppercase",
           fontFamily: "'Jost', sans-serif", textAlign: "right",
         }}>View Recipe →</div>
-        <div style={{ marginTop: 8, background: "rgba(26,138,106,.15)", borderRadius: 8, padding: "6px 10px", fontSize: ".61rem", color: "#2aaa85", lineHeight: 1.5 }}>🧴 6 packs · 🥤 Shaker cup · 🍯 Honey · <strong style={{color:'#deb96a'}}>${SEAMOSS_KIT_PRICE}</strong></div>
+        <div style={{ marginTop: 8, background: "rgba(26,138,106,.15)", borderRadius: 8, padding: "6px 10px", fontSize: ".61rem", color: "#2aaa85", lineHeight: 1.5 }}>🧴 6 packs · 🥤 Shaker bottle · 🍯 Honey · <strong style={{color:'#deb96a'}}>${SEAMOSS_KIT_PRICE}</strong></div>
       </div>
     </div>
   );
@@ -865,7 +865,7 @@ function RecipeModal({ r, onClose, onAddToCart }) {
                 </div>
               ))}
               <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid rgba(26,138,106,.15)", fontSize: ".6rem", color: "rgba(255,255,255,.35)" }}>
-                Also included: spring shaker cup · instruction card · raw honey packet
+                Also included: shaker bottle · instruction card · raw honey packet
               </div>
             </div>
 
@@ -886,7 +886,7 @@ function RecipeModal({ r, onClose, onAddToCart }) {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                   <div>
                     <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", color: "white" }}>{r.name} Kit</div>
-                    <div style={{ fontSize: ".65rem", color: "rgba(255,255,255,.45)", marginTop: 2 }}>6 packs · spring shaker · honey packet · instruction card</div>
+                    <div style={{ fontSize: ".65rem", color: "rgba(255,255,255,.45)", marginTop: 2 }}>6 packs · shaker bottle · honey packet · instruction card</div>
                   </div>
                   <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.3rem", color: "#2aaa85", fontWeight: 600 }}>${SEAMOSS_KIT_PRICE}</div>
                 </div>
@@ -946,7 +946,7 @@ export default function SeaMossPage({ onAddToCart }) {
     }
   `}</style>
   return (
-    <div style={{ background: C.deep, minHeight: "100vh" }}>
+    <div id="sec-seamoss-top" style={{ background: C.deep, minHeight: "100vh" }}>
       <style>{`
         @keyframes floatUp {
           0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}
@@ -1147,7 +1147,7 @@ export default function SeaMossPage({ onAddToCart }) {
           WHY SEA MOSS — THE SCIENCE (expandable)
       ══════════════════════════════════════════════════════════════ */}
       {whyOpen && (
-        <section style={{
+        <section id="sec-seamoss-why" style={{
           background: `linear-gradient(135deg, #051209, #0a2418)`,
           borderBottom: `1px solid rgba(26,138,106,.2)`,
           padding: "48px 2.5rem",
@@ -1264,6 +1264,42 @@ export default function SeaMossPage({ onAddToCart }) {
         </section>
       )}
 
+      {/* ── Shaker Bottle Section ─────────────────────────────────────────── */}
+      <section style={{ background: "rgba(26,138,106,.06)", borderBottom: "1px solid rgba(26,138,106,.15)", padding: "28px 2.5rem" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 24, alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
+              <div style={{ width: 52, height: 52, borderRadius: "50%", background: "rgba(26,138,106,.15)", border: "1px solid rgba(26,138,106,.35)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.6rem" }}>🥤</div>
+              <div>
+                <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1rem", color: "white", marginBottom: 2 }}>Includes a Shaker Bottle</div>
+                <div style={{ fontSize: ".65rem", color: "#2aaa85", letterSpacing: ".08em" }}>No blender · No electricity · Works anywhere</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 16, flexWrap: "wrap", flex: 1 }}>
+              {[
+                { icon: "🚫💧", title: "No-Leak Lid", desc: "Secure screw-on lid + flip-top spout. Gym bag, commute, or jog — no messes." },
+                { icon: "⚡", title: "Smooth Mix", desc: "Stainless steel shaker ball. No clumps, removable for easy rinsing in seconds." },
+                { icon: "📏", title: "20 oz Capacity", desc: "Clear cup with measurement marks to 16 oz. See exactly what you're blending." },
+                { icon: "🧼", title: "Dishwasher Safe", desc: "Easy cleanup. Hand-wash tip: rinse right after use and air-dry with lid open." },
+              ].map(f => (
+                <div key={f.title} style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(26,138,106,.15)", borderRadius: 12, padding: "10px 14px", flex: "1 1 160px", minWidth: 140 }}>
+                  <div style={{ fontSize: ".6rem", letterSpacing: ".1em", textTransform: "uppercase", color: "#2aaa85", marginBottom: 4 }}>{f.icon} {f.title}</div>
+                  <div style={{ fontSize: ".72rem", color: "rgba(255,255,255,.45)", lineHeight: 1.6, fontWeight: 300 }}>{f.desc}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ flexShrink: 0, textAlign: "center" }}>
+              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.35)", marginBottom: 6 }}>Want a spare?</div>
+              <button
+                onClick={() => onAddToCart && onAddToCart({ id: "shaker_extra", name: "Extra Shaker Bottle", price: 8, emoji: "🥤" })}
+                style={{ background: "rgba(26,138,106,.15)", border: "1px solid rgba(26,138,106,.4)", color: "#2aaa85", padding: "8px 18px", borderRadius: 50, fontSize: ".68rem", letterSpacing: ".08em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif", cursor: "pointer", whiteSpace: "nowrap" }}>
+                + Add Extra Bottle — $8
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ══════════════════════════════════════════════════════════════
           FILTERS
       ══════════════════════════════════════════════════════════════ */}
@@ -1315,7 +1351,7 @@ export default function SeaMossPage({ onAddToCart }) {
       {/* ══════════════════════════════════════════════════════════════
           RECIPE GRID
       ══════════════════════════════════════════════════════════════ */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
+      <div id="sec-seamoss-grid" style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 2.5rem 80px" }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,.4)" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>🌊</div>
