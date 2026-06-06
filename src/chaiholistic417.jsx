@@ -3,6 +3,7 @@ import TeaLibrary from "./TeaLibrary";
 import PrayerSection from "./PrayerSection";
 import WellnessProfileModal from "./WellnessProfileModal";
 import MocktailsPage from "./MocktailsPage";
+import SupplementsPage from "./SupplementsPage";
 import JellyPage from "./JellyPage";
 import SeaMossPage from "./SeaMossPage";
 import imgSre1 from "./rings/scre1.jpg";
@@ -313,6 +314,111 @@ function LinkUrlInput({ onCommit }) {
 function MensWellness({ onNav }) {
   const [filter, setFilter] = useState("all");
   const [selected, setSelected] = useState(null);
+  const [prostateOpen, setProstateOpen] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+
+  const PROSTATE_RECIPES = [
+    {
+      id:"pr1", name:"Prostate Morning Ritual", sub:"Daily maintenance — start before symptoms appear",
+      why:"Saw palmetto is the most studied herb for prostate health, shown in multiple trials to reduce DHT binding at prostate tissue. Nettle root complements it by blocking the same hormonal pathway from a different angle. Green tea adds EGCG — a powerful antioxidant specifically linked to prostate cellular health.",
+      ingredients:["1 tsp Saw Palmetto berries (dried, crushed)","1 tsp Nettle Root (dried)","1 tsp Green Tea Leaf","½ tsp Ginger Root (dried)"],
+      temp:"Just Off the Boil — wait 60 seconds after boiling",
+      steep:"8–10 minutes", when:"First thing in the morning, before food",
+      protocol:"Daily, ongoing. Commit to 90 days before evaluating results.",
+      warning:"Saw palmetto may affect PSA test results. Always inform your doctor before any prostate screening. Not for use with finasteride without medical supervision.",
+      color:"#1a2a1a",
+    },
+    {
+      id:"pr2", name:"Urinary Flow Ease", sub:"For slow start, weak stream, or frequent night trips",
+      why:"Corn silk is one of the oldest diuretic and urinary-soothing herbs on record — it coats and calms the urinary tract lining while gently increasing flow. Saw palmetto addresses the prostate enlargement that is often the root cause. Marshmallow root soothes inflammation in the bladder neck and urethra.",
+      ingredients:["1 tsp Saw Palmetto berries (dried, crushed)","1 tsp Corn Silk (dried)","1 tsp Marshmallow Root","½ tsp Linden Flower"],
+      temp:"Gentle Heat — steam rising, not boiling",
+      steep:"10–12 minutes", when:"Mid-morning and early afternoon. Avoid after 6pm.",
+      protocol:"Daily for 30 days, then assess. Consult your doctor if symptoms persist.",
+      warning:"Saw palmetto may affect PSA test results. If you experience sudden inability to urinate, seek medical attention immediately.",
+      color:"#1a1a3a",
+    },
+    {
+      id:"pr3", name:"BPH Support Brew", sub:"Targeted at benign prostatic hyperplasia symptoms",
+      why:"This blend combines the four most clinically studied herbs for BPH. Saw palmetto and pygeum together show stronger results in trials than either alone. Pumpkin seed oil provides zinc and phytosterols that directly support prostate tissue. Nettle root adds dual-action: anti-inflammatory and DHT-pathway blocking.",
+      ingredients:["1 tsp Saw Palmetto berries (dried, crushed)","½ tsp Pygeum Bark (dried, powdered)","1 tsp Pumpkin Seed (ground)","1 tsp Nettle Root"],
+      temp:"Just Off the Boil — wait 60 seconds",
+      steep:"10 minutes — strain well", when:"Once daily, morning preferred.",
+      protocol:"Commit to 60–90 days. BPH herbs work slowly. Not a substitute for medical evaluation.",
+      warning:"Saw palmetto may affect PSA test results. Pygeum: cycle 6 weeks on, 2 weeks off. Not a substitute for BPH diagnosis.",
+      color:"#2a1a0a",
+    },
+    {
+      id:"pr4", name:"Prostate Anti-Inflammation", sub:"Addressing the inflammation component directly",
+      why:"Chronic prostate inflammation is increasingly recognized as a driver of both BPH and prostate cancer risk. Turmeric's curcumin and boswellia's boswellic acids are two of the most studied anti-inflammatory compounds. Black pepper increases curcumin absorption by up to 2000% — without it, most passes through unabsorbed.",
+      ingredients:["1 tsp Saw Palmetto berries (dried, crushed)","1 tsp Turmeric Root (dried)","½ tsp Boswellia Resin (powdered)","½ tsp Ginger Root","¼ tsp Black Pepper (coarsely ground)"],
+      temp:"Full Rolling Boil — pour immediately",
+      steep:"8 minutes — add a small amount of whole milk or coconut milk", when:"With a meal containing healthy fat.",
+      protocol:"Daily for 60 days. Anti-inflammatory effects are cumulative.",
+      warning:"Boswellia may thin blood slightly — consult your doctor if on anticoagulants. Turmeric at high doses may irritate the gallbladder.",
+      color:"#2a1a00",
+    },
+    {
+      id:"pr5", name:"Zinc & Saw Palmetto Tonic", sub:"Mineral-rich support for prostate tissue integrity",
+      why:"The prostate concentrates zinc at higher levels than any other organ — and zinc deficiency is consistently associated with prostate problems. Horsetail and nettle leaf are among the highest plant sources of silica and trace minerals. This is a nutritional foundation blend, less symptomatic and more structural.",
+      ingredients:["1 tsp Saw Palmetto berries (dried, crushed)","1 tsp Nettle Leaf (not root — for mineral content)","1 tsp Horsetail (dried)","1 tsp Oat Straw","½ tsp Pumpkin Seed (ground)"],
+      temp:"Just Off the Boil — wait 60 seconds",
+      steep:"10–12 minutes for maximum mineral extraction", when:"Morning or midday.",
+      protocol:"Daily, long-term. Think of this as a mineral supplement in tea form.",
+      warning:"Horsetail: no more than 6 weeks continuous use without a break. Not for use with kidney disease.",
+      color:"#0a2a1a",
+    },
+    {
+      id:"pr6", name:"PSA Defense Blend", sub:"Antioxidant-forward for long-term prostate cellular health",
+      why:"Green tea's EGCG is one of the most studied compounds for prostate cellular health — population studies show significantly lower prostate cancer rates in heavy green tea drinkers. Pomegranate contains ellagitannins converted to urolithins, which show selective activity against prostate cancer cells in lab studies.",
+      ingredients:["1 tsp Green Tea Leaf (high quality)","1 tsp Pomegranate Leaf or Rind (dried)","½ tsp Saw Palmetto berries (dried, crushed)","½ tsp Rosehip (dried)","¼ tsp Turmeric Root"],
+      temp:"Just Off the Boil — wait 90 seconds (green tea gets bitter above 85°C)",
+      steep:"5–6 minutes maximum", when:"Mid-morning, between meals for best absorption.",
+      protocol:"Daily. This is a lifetime prevention blend, not a treatment.",
+      warning:"Contains caffeine — not ideal for evening. Pomegranate may interact with statins and blood thinners.",
+      color:"#1a2a00",
+    },
+    {
+      id:"pr7", name:"Night Flow Reset", sub:"For nocturia — nighttime bathroom trips — plus sleep support",
+      why:"Nocturia is one of the most quality-of-life-destroying symptoms of prostate issues. This blend addresses both sides: saw palmetto and corn silk work on the urinary-prostate pathway, while valerian and linden flower promote genuine deep sleep. The sedative herbs also reduce bladder urgency signals from the nervous system.",
+      ingredients:["½ tsp Saw Palmetto berries (dried, crushed)","½ tsp Corn Silk","1 tsp Valerian Root","1 tsp Linden Flower","½ tsp Passionflower"],
+      temp:"Gentle Heat — steam rising, not boiling",
+      steep:"10 minutes, covered", when:"45–60 minutes before bed.",
+      protocol:"Nightly for 30 days. Stop fluids 2 hours before bed for best results.",
+      warning:"Contains Valerian Root — causes drowsiness. Do not drive after use. If nocturia exceeds 3× per night, see your doctor.",
+      color:"#0a0a2a",
+    },
+    {
+      id:"pr8", name:"Testosterone & Prostate Balance", sub:"Addressing the DHT-testosterone-prostate axis together",
+      why:"BPH and low testosterone are both driven partly by conversion of testosterone to DHT via 5-alpha-reductase. Saw palmetto and nettle root both inhibit this enzyme — protecting the prostate while helping preserve free testosterone. Ashwagandha supports the HPA axis and cortisol regulation that suppresses testosterone when chronically elevated.",
+      ingredients:["1 tsp Saw Palmetto berries (dried, crushed)","1 tsp Nettle Root","1 tsp Ashwagandha Root","½ tsp Ginger Root"],
+      temp:"Just Off the Boil — wait 60 seconds",
+      steep:"10 minutes", when:"Morning, with or without food.",
+      protocol:"Daily for 90 days minimum. Hormonal herbs require sustained use.",
+      warning:"Ashwagandha may interact with thyroid medications and sedatives. If on hormone therapy, consult your doctor before use.",
+      color:"#2a0a1a",
+    },
+    {
+      id:"pr9", name:"Post-50 Men's Foundation", sub:"A comprehensive daily blend for men over 50",
+      why:"After 50, men face a convergence: declining testosterone, rising DHT, increasing cardiovascular risk, cognitive changes, and chronic inflammation. This blend addresses all five pathways in a single daily cup. Reishi adds immune modulation. Ginkgo maintains cerebrovascular circulation that often begins to decline in this decade.",
+      ingredients:["½ tsp Saw Palmetto berries (dried, crushed)","½ tsp Nettle Root","½ tsp Ashwagandha Root","½ tsp Reishi Mushroom (powdered)","½ tsp Ginkgo Biloba (dried leaf)"],
+      temp:"Just Off the Boil — wait 60 seconds",
+      steep:"12 minutes — full extraction from root and mushroom", when:"Morning, every day.",
+      protocol:"Lifelong daily use. Cycle off 1 week every 3 months to avoid adaptogenic tolerance.",
+      warning:"Ginkgo biloba interacts with blood thinners, aspirin, and NSAIDs. Ashwagandha may affect thyroid medications. Not a substitute for regular screenings after 50.",
+      color:"#1a1a1a",
+    },
+    {
+      id:"pr10", name:"Prostate Cleanse Protocol", sub:"A 14-day detox targeting the prostate-urinary system",
+      why:"This is a periodic reset — use for 14 days, 2–3 times per year. Dandelion root and burdock support liver detoxification of prostate-related hormone metabolites. Uva ursi is a powerful urinary antibacterial, traditionally used for UTIs but also effective for mild prostatitis. Saw palmetto anchors the prostate action throughout.",
+      ingredients:["1 tsp Saw Palmetto berries (dried, crushed)","1 tsp Dandelion Root","½ tsp Burdock Root","½ tsp Uva Ursi Leaf","½ tsp Corn Silk"],
+      temp:"Just Off the Boil — wait 60 seconds",
+      steep:"10 minutes, drink while warm", when:"2 cups daily — morning and early afternoon only.",
+      protocol:"14 days on, minimum 6 weeks off before repeating. Eat clean: reduce alcohol, processed food, red meat.",
+      warning:"Uva ursi: do NOT use more than 14 days continuously. Not for kidney disease or pregnancy. Stop immediately and see a doctor if you experience burning urination, blood in urine, or fever. Burdock may lower blood sugar — monitor if diabetic.",
+      color:"#1a2a2a",
+    },
+  ];
 
   const CATEGORIES = [
     { key:"all",      label:"All 20 Blends",       emoji:"⚡" },
@@ -321,6 +427,7 @@ function MensWellness({ onNav }) {
     { key:"heart",    label:"Heart & Hormones",     emoji:"❤️" },
     { key:"recovery", label:"Recovery & Rest",      emoji:"🌙" },
     { key:"gut",      label:"Gut & Detox",          emoji:"🌿" },
+    { key:"prostate", label:"Prostate & Urinary",   emoji:"🛡" },
   ];
 
   const CAT_MAP = {
@@ -331,7 +438,8 @@ function MensWellness({ onNav }) {
     gut:      ["men7","men13","men16","men17","men20"],
   };
 
-  const visible = filter === "all" ? MEN_BLENDS : MEN_BLENDS.filter(b => (CAT_MAP[filter]||[]).includes(b.id));
+  const showProstate = filter === "prostate";
+  const visible = showProstate ? [] : (filter === "all" ? MEN_BLENDS : MEN_BLENDS.filter(b => (CAT_MAP[filter]||[]).includes(b.id)));
 
   return (
     <div id="sec-men-top" style={{minHeight:"100vh", background:"linear-gradient(180deg,#0D0D1A 0%,#1A1A2A 40%,#0D1A0D 100%)", paddingBottom:80}}>
@@ -420,6 +528,139 @@ function MensWellness({ onNav }) {
         </p>
       </div>
 
+      {/* PROSTATE & URINARY RECIPES SECTION */}
+      {showProstate && (
+        <div id="sec-men-prostate" style={{maxWidth:1100,margin:"0 auto",padding:"0 16px 40px"}}>
+          {/* Section header */}
+          <div style={{textAlign:"center",marginBottom:32,padding:"0 16px"}}>
+            <div style={{fontSize:".6rem",letterSpacing:".22em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:10,fontFamily:"Jost,sans-serif"}}>🛡 Evidence-Informed · Saw Palmetto Series</div>
+            <h2 style={{fontFamily:"Playfair Display,serif",fontSize:"clamp(1.4rem,4vw,2rem)",color:"#F7F2EA",fontWeight:400,margin:"0 0 12px",lineHeight:1.2}}>
+              Prostate &amp; Urinary<br/><em style={{color:"rgba(196,137,58,.85)"}}>Wellness Collection</em>
+            </h2>
+            <p style={{fontFamily:"Jost,sans-serif",fontSize:".82rem",color:"rgba(247,242,234,.5)",lineHeight:1.75,maxWidth:540,margin:"0 auto 20px"}}>
+              10 evidence-informed herbal recipes built specifically around prostate and urinary health. Rooted in herbs with clinical or traditional evidence — not marketing language. Caffeine-free except Recipe 6.
+            </p>
+            <div style={{background:"rgba(255,180,0,.07)",border:"1px solid rgba(255,180,0,.2)",borderRadius:12,padding:"12px 18px",maxWidth:560,margin:"0 auto",fontSize:".72rem",color:"rgba(255,220,100,.75)",lineHeight:1.65,fontFamily:"Jost,sans-serif"}}>
+              ⚠ <strong style={{color:"rgba(255,220,100,.9)"}}>Important:</strong> Saw palmetto appears in 9 of these 10 recipes and can affect PSA test results. Always tell your doctor you are taking it before any prostate screening.
+            </div>
+          </div>
+
+          {/* Recipe grid */}
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(min(320px,100%),1fr))",gap:16}}>
+            {PROSTATE_RECIPES.map((r,i)=>(
+              <div key={r.id} onClick={()=>setSelectedRecipe(r)}
+                style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.09)",borderRadius:16,overflow:"hidden",cursor:"pointer",transition:"transform .2s,box-shadow .2s"}}
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(0,0,0,.4)";}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow="";}}>
+                <div style={{height:5,background:`linear-gradient(90deg,rgba(196,137,58,.8),rgba(196,137,58,.3))`}}/>
+                <div style={{padding:"18px 20px 16px"}}>
+                  <div style={{display:"flex",alignItems:"flex-start",gap:12,marginBottom:10}}>
+                    <div style={{background:"rgba(196,137,58,.15)",border:"1px solid rgba(196,137,58,.3)",borderRadius:10,width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontFamily:"Jost,sans-serif",fontWeight:700,fontSize:".75rem",color:"rgba(196,137,58,.9)"}}>
+                      {String(i+1).padStart(2,"0")}
+                    </div>
+                    <div>
+                      <div style={{fontFamily:"Playfair Display,serif",fontSize:"1rem",fontWeight:600,color:"#F7F2EA",lineHeight:1.2,marginBottom:3}}>{r.name}</div>
+                      <div style={{fontFamily:"Jost,sans-serif",fontSize:".68rem",fontStyle:"italic",color:"rgba(247,242,234,.45)"}}>{r.sub}</div>
+                    </div>
+                  </div>
+                  <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:12}}>
+                    {r.ingredients.slice(0,3).map(ing=>(
+                      <span key={ing} style={{background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.08)",borderRadius:20,padding:"3px 9px",fontSize:".6rem",color:"rgba(247,242,234,.55)",fontFamily:"Jost,sans-serif"}}>{ing.split(" ").slice(1,3).join(" ")}</span>
+                    ))}
+                    {r.ingredients.length > 3 && <span style={{fontSize:".6rem",color:"rgba(196,137,58,.5)",fontFamily:"Jost,sans-serif",padding:"3px 6px"}}>+{r.ingredients.length-3} more</span>}
+                  </div>
+                  <div style={{display:"flex",gap:12,fontSize:".65rem",color:"rgba(247,242,234,.45)",fontFamily:"Jost,sans-serif",marginBottom:14}}>
+                    <span>⏱ {r.steep.split(" ").slice(0,2).join(" ")}</span>
+                    <span>·</span>
+                    <span>🌡 {r.temp.split(" ").slice(0,3).join(" ")}</span>
+                  </div>
+                  <button style={{background:"rgba(196,137,58,.12)",border:"1px solid rgba(196,137,58,.3)",color:"rgba(196,137,58,.85)",borderRadius:40,padding:"7px 16px",fontSize:".65rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",width:"100%",transition:"all .2s"}}
+                    onMouseEnter={e=>{e.currentTarget.style.background="rgba(196,137,58,.85)";e.currentTarget.style.color="#0D0D1A";}}
+                    onMouseLeave={e=>{e.currentTarget.style.background="rgba(196,137,58,.12)";e.currentTarget.style.color="rgba(196,137,58,.85)";}}>
+                    View Full Recipe →
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Disclaimer */}
+          <div style={{marginTop:28,padding:"16px 20px",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:12,maxWidth:760,margin:"28px auto 0"}}>
+            <p style={{fontSize:".65rem",color:"rgba(247,242,234,.3)",textAlign:"center",lineHeight:1.75,margin:0,fontFamily:"Jost,sans-serif"}}>
+              No herbal blend replaces regular medical screenings. Men over 50 (or over 40 with family history) should have annual PSA tests. If you take any saw palmetto blend, inform your doctor — it can lower PSA readings, affecting how results are interpreted. These recipes are designed to work alongside your medical care, not replace it.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* RECIPE DETAIL MODAL */}
+      {selectedRecipe && (
+        <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.88)",zIndex:900,display:"flex",alignItems:"center",justifyContent:"center",padding:16}} onClick={()=>setSelectedRecipe(null)}>
+          <div style={{background:"#14141E",border:"1px solid rgba(196,137,58,.25)",borderRadius:20,maxWidth:540,width:"100%",maxHeight:"92vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
+            <div style={{height:6,background:"linear-gradient(90deg,rgba(196,137,58,.9),rgba(196,137,58,.3))",borderRadius:"20px 20px 0 0"}}/>
+            <div style={{padding:"22px 24px 0"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:4}}>
+                <div style={{fontSize:".58rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(196,137,58,.6)",fontFamily:"Jost,sans-serif"}}>🛡 Prostate &amp; Urinary · Saw Palmetto Series</div>
+                <button onClick={()=>setSelectedRecipe(null)} style={{background:"rgba(255,255,255,.08)",border:"none",color:"rgba(247,242,234,.6)",borderRadius:"50%",width:32,height:32,fontSize:"1rem",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>✕</button>
+              </div>
+              <h3 style={{fontFamily:"Playfair Display,serif",fontSize:"1.3rem",fontWeight:600,color:"#F7F2EA",margin:"8px 0 4px"}}>{selectedRecipe.name}</h3>
+              <div style={{fontFamily:"Jost,sans-serif",fontSize:".75rem",fontStyle:"italic",color:"rgba(247,242,234,.45)",marginBottom:18}}>{selectedRecipe.sub}</div>
+
+              {/* Why this works */}
+              <div style={{background:"rgba(196,137,58,.06)",border:"1px solid rgba(196,137,58,.15)",borderRadius:12,padding:"14px 16px",marginBottom:16}}>
+                <div style={{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:8,fontFamily:"Jost,sans-serif",fontWeight:600}}>Why This Works</div>
+                <p style={{fontSize:".8rem",color:"rgba(247,242,234,.75)",lineHeight:1.75,margin:0,fontFamily:"Jost,sans-serif"}}>{selectedRecipe.why}</p>
+              </div>
+
+              {/* Ingredients */}
+              <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:12,padding:"14px 16px",marginBottom:16}}>
+                <div style={{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:10,fontFamily:"Jost,sans-serif",fontWeight:600}}>Ingredients</div>
+                {selectedRecipe.ingredients.map(ing=>(
+                  <div key={ing} style={{display:"flex",alignItems:"center",gap:8,padding:"5px 0",borderBottom:"1px solid rgba(255,255,255,.05)",fontSize:".8rem",color:"rgba(247,242,234,.8)",fontFamily:"Jost,sans-serif"}}>
+                    <span style={{color:"rgba(196,137,58,.6)",flexShrink:0}}>·</span>{ing}
+                  </div>
+                ))}
+              </div>
+
+              {/* Brew guide */}
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+                {[["⏱ Steep Time",selectedRecipe.steep],["🌡 Temperature",selectedRecipe.temp],["☀ When to Drink",selectedRecipe.when],["📅 Protocol",selectedRecipe.protocol]].map(([lbl,val])=>(
+                  <div key={lbl} style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.07)",borderRadius:10,padding:"12px 13px",gridColumn:lbl.includes("Protocol")||lbl.includes("Temperature")?"span 2":"auto"}}>
+                    <div style={{fontSize:".55rem",letterSpacing:".16em",textTransform:"uppercase",color:"rgba(196,137,58,.6)",marginBottom:5,fontFamily:"Jost,sans-serif"}}>{lbl}</div>
+                    <div style={{fontSize:".78rem",color:"rgba(247,242,234,.8)",lineHeight:1.5,fontFamily:"Jost,sans-serif"}}>{val}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Warning */}
+              <div style={{background:"rgba(255,180,0,.06)",border:"1px solid rgba(255,180,0,.18)",borderRadius:10,padding:"12px 14px",marginBottom:20}}>
+                <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,180,0,.7)",marginBottom:5,fontFamily:"Jost,sans-serif",fontWeight:600}}>⚠ Safety Note</div>
+                <p style={{fontSize:".75rem",color:"rgba(255,240,180,.7)",lineHeight:1.65,margin:0,fontFamily:"Jost,sans-serif"}}>{selectedRecipe.warning}</p>
+              </div>
+
+              {/* WHY ORDER OURS — prostate modal */}
+              <div style={{background:"rgba(196,137,58,.07)",border:"1px solid rgba(196,137,58,.2)",borderRadius:12,padding:"14px 16px",marginBottom:14}}>
+                <div style={{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"rgba(196,137,58,.75)",marginBottom:8,fontFamily:"Jost,sans-serif",fontWeight:600}}>✦ Why Order Ours?</div>
+                <p style={{fontSize:".76rem",color:"rgba(247,242,234,.6)",lineHeight:1.75,margin:"0 0 10px",fontFamily:"Jost,sans-serif"}}>Measurements are the easy part. What determines results is sourcing — where these herbs came from, how they were dried, and how fresh they are. A saw palmetto berry from an unknown supplier isn't delivering what this recipe promises.</p>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
+                  {[["🌿 Sourced to a Standard","Organic where possible, specific origins for key herbs"],["⚗️ Consistent Every Batch","No home-blending variability — same ratio, every time"],["💰 More Economical","Buying 5–8 herbs individually costs more and expires faster"],["⏱ Ready Immediately","No sourcing, measuring, or starting over when it doesn't work"]].map(([t,d])=>(
+                    <div key={t} style={{background:"rgba(255,255,255,.04)",borderRadius:8,padding:"8px 10px"}}>
+                      <div style={{fontSize:".65rem",color:"rgba(196,137,58,.85)",fontFamily:"Jost,sans-serif",marginBottom:2}}>{t}</div>
+                      <div style={{fontSize:".62rem",color:"rgba(247,242,234,.4)",fontFamily:"Jost,sans-serif",lineHeight:1.4}}>{d}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button onClick={()=>setSelectedRecipe(null)}
+                style={{width:"100%",background:"rgba(196,137,58,.15)",border:"1px solid rgba(196,137,58,.3)",color:"rgba(196,137,58,.9)",borderRadius:12,padding:"12px",fontFamily:"Jost,sans-serif",fontSize:".7rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",marginBottom:24}}>
+                Close Recipe
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* BLEND DETAIL MODAL */}
       {selected && (
         <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:800,display:"flex",alignItems:"center",justifyContent:"center",padding:16}} onClick={()=>setSelected(null)}>
@@ -476,6 +717,17 @@ function MensWellness({ onNav }) {
                   <p style={{fontSize:".75rem",color:"rgba(255,242,200,.75)",lineHeight:1.65,margin:0,fontFamily:"Jost,sans-serif"}}>{selected.warning}</p>
                 </div>
               )}
+
+              {/* WHY ORDER OURS — men's blend modal */}
+              <div style={{background:"rgba(196,137,58,.07)",border:"1px solid rgba(196,137,58,.2)",borderRadius:12,padding:"13px 15px",marginBottom:16}}>
+                <div style={{fontSize:".55rem",letterSpacing:".18em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:7,fontFamily:"Jost,sans-serif",fontWeight:600}}>✦ Why Order Ours?</div>
+                <p style={{fontSize:".74rem",color:"rgba(247,242,234,.55)",lineHeight:1.7,margin:"0 0 8px",fontFamily:"Jost,sans-serif"}}>These ingredients are easy to list. Getting the right ones — the right grade, origin, and freshness — is where most home blends fall short. Ours are sourced to a specific standard so the blend actually does what it says.</p>
+                <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+                  {["🌿 Sourced to standard","⚗️ Consistent ratio every batch","💰 More economical than buying separate","⏱ Ready, no guesswork"].map(t=>(
+                    <span key={t} style={{background:"rgba(255,255,255,.05)",border:"1px solid rgba(196,137,58,.15)",borderRadius:20,padding:"3px 10px",fontSize:".62rem",color:"rgba(196,137,58,.75)",fontFamily:"Jost,sans-serif"}}>{t}</span>
+                  ))}
+                </div>
+              </div>
 
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:4}}>
                 <div>
@@ -772,7 +1024,8 @@ export default function ChaiHolistic() {
     recipes: [["↩ Home","home-page"],["↑ Top","sec-rec-top"],["Wellness","sec-rec-wellness"],["Cleansing","sec-rec-cleanse"]],
     rings:   [["↩ Rings","home-page-rings"],["↑ Top","sec-rings-top"],["Collection","sec-rings-grid"],["How It Works","sec-rings-how"],["Frequency","sec-rings-meridian"]],
     faq:         [["↩ Home","home-page"],["↑ Top","sec-faq-top"],["FAQ","sec-faq-content"]],
-    men:         [["↩ Home","home-page"],["↑ Top","sec-men-top"],["Blends","sec-men-blends"]],
+    men:         [["↩ Home","home-page"],["↑ Top","sec-men-top"],["Blends","sec-men-blends"],["🛡 Prostate","sec-men-prostate"]],
+    supplements: [["↩ Home","home-page"],["↑ Top","sec-supp-top"],["All","sec-supp-grid"]],
     mocktails:   [["↩ Home","home-page"],["↑ Top","sec-mkt-top"],["Wellness","sec-mkt-wellness"],["Social","sec-mkt-social"]],
     jelly:       [["↩ Home","home-page"],["↑ Top","sec-jelly-top"],["Kits","sec-jelly-grid"]],
     seamoss:     [["↩ Home","home-page"],["↑ Top","sec-seamoss-top"],["Why Sea Moss","sec-seamoss-why"],["Recipes","sec-seamoss-grid"]],
@@ -1891,6 +2144,16 @@ export default function ChaiHolistic() {
                       onClick={()=>{ setFinderOpen(false); resetFinder(); nav("tea-library",{blend:r.name}); }}>
                       See Your Full Recipe in the Tea Library →
                     </button>
+                    {/* WHY ORDER OURS — tea finder */}
+                    <div style={{marginTop:10,background:"linear-gradient(135deg,#F5F0E4,#FAF7F0)",border:"1px solid rgba(196,137,58,.2)",borderRadius:12,padding:"11px 13px"}}>
+                      <div style={{fontSize:".54rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:6,fontWeight:600}}>✦ Why Order Ours?</div>
+                      <p style={{fontSize:".72rem",color:"#6A5A48",lineHeight:1.65,margin:"0 0 7px",fontWeight:300}}>Measurements are the easy part. Results depend on sourcing — the right grade, origin, and freshness. Ours are held to a specific standard so this blend actually delivers.</p>
+                      <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+                        {["🌿 Sourced to standard","⚗️ Same ratio every bag","💰 More economical than DIY","⏱ No sourcing required"].map(t=>(
+                          <span key={t} style={{background:"rgba(196,137,58,.08)",border:"1px solid rgba(196,137,58,.18)",borderRadius:20,padding:"3px 9px",fontSize:".6rem",color:"var(--gold)"}}>{t}</span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -2948,6 +3211,14 @@ export default function ChaiHolistic() {
               <button className="btn-men-main" onClick={()=>nav("men")}>⚡ Explore Men's Collection</button>
               <button className="btn-men-ghost" onClick={()=>nav("men")}>View All 20 Blends →</button>
             </div>
+            <div style={{marginTop:16,padding:"12px 16px",background:"rgba(196,137,58,.08)",border:"1px solid rgba(196,137,58,.2)",borderRadius:12,display:"flex",alignItems:"center",gap:12,cursor:"pointer"}} onClick={()=>nav("men")}>
+              <span style={{fontSize:"1.4rem",flexShrink:0}}>🛡</span>
+              <div>
+                <div style={{fontSize:".65rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.8)",marginBottom:2,fontFamily:"Jost,sans-serif",fontWeight:600}}>New · Prostate &amp; Urinary Collection</div>
+                <div style={{fontSize:".75rem",color:"rgba(255,255,255,.5)",fontFamily:"Jost,sans-serif",lineHeight:1.4}}>10 evidence-informed Saw Palmetto recipes — from daily maintenance to 14-day cleanse protocols</div>
+              </div>
+              <span style={{color:"rgba(196,137,58,.6)",fontSize:"1rem",flexShrink:0}}>→</span>
+            </div>
           </div>
           <div>
             <div style={{fontSize:".58rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(196,137,58,.6)",marginBottom:12}}>Featured Blends</div>
@@ -3571,6 +3842,19 @@ export default function ChaiHolistic() {
               </div>
             )}
 
+            {/* WHY ORDER OURS — main blend modal */}
+            <div style={{background:"linear-gradient(135deg,#F5F0E4,#FAF7F0)",border:"1px solid rgba(196,137,58,.2)",borderRadius:14,padding:"14px 16px",marginBottom:16}}>
+              <div style={{fontSize:".56rem",letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:8,fontWeight:600}}>✦ Why Order Ours?</div>
+              <p style={{fontSize:".76rem",color:"#6A5A48",lineHeight:1.75,margin:"0 0 10px",fontWeight:300}}>
+                Measurements are the easy part. What actually determines results is sourcing — where the herbs came from, how they were dried, and how fresh they are. We source every herb in this blend to a specific standard so you don't have to guess.
+              </p>
+              <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                {["🌿 Sourced to a standard","⚗️ Same ratio every bag","💰 More economical than DIY","⏱ No measuring or sourcing"].map(t=>(
+                  <span key={t} style={{background:"rgba(196,137,58,.08)",border:"1px solid rgba(196,137,58,.18)",borderRadius:20,padding:"4px 11px",fontSize:".63rem",color:"var(--gold)",fontFamily:"Jost,sans-serif"}}>{t}</span>
+                ))}
+              </div>
+            </div>
+
             {/* FOOT */}
             <div className="bm-foot">
               <div>
@@ -3911,6 +4195,17 @@ export default function ChaiHolistic() {
             <button className="btn-add" style={{width:"100%"}} onClick={()=>{addToCart({...r,emoji:"🍵"});setActiveRecipe(null);}}>
               Add to Cart — ${r.price}
             </button>
+
+            {/* WHY ORDER OURS — recipe modal */}
+            <div style={{marginTop:12,background:"linear-gradient(135deg,#F5F0E4,#FAF7F0)",border:"1px solid rgba(196,137,58,.2)",borderRadius:14,padding:"13px 15px"}}>
+              <div style={{fontSize:".55rem",letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:7,fontWeight:600}}>✦ Why Order Ours?</div>
+              <p style={{fontSize:".74rem",color:"#6A5A48",lineHeight:1.7,margin:"0 0 9px",fontWeight:300}}>Measurements are the easy part. Results depend on sourcing — the grade, origin, and freshness of every herb. We source each one to a specific standard so the recipe works the way it should.</p>
+              <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+                {["🌿 Sourced to standard","⚗️ Consistent every batch","💰 More economical than DIY","⏱ No measuring or sourcing"].map(t=>(
+                  <span key={t} style={{background:"rgba(196,137,58,.08)",border:"1px solid rgba(196,137,58,.18)",borderRadius:20,padding:"3px 10px",fontSize:".62rem",color:"var(--gold)"}}>{t}</span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -4144,7 +4439,18 @@ export default function ChaiHolistic() {
               </div>
 
               {/* ACTIONS */}
-              <div style={{padding:"20px 28px",display:"flex",gap:10,flexWrap:"wrap",justifyContent:"center",background:"#FAF7F0",borderRadius:"0 0 24px 24px"}}>
+              <div style={{padding:"20px 28px",background:"#FAF7F0",borderRadius:"0 0 24px 24px"}}>
+                {/* Why Order Ours — intention engine */}
+                <div style={{background:"linear-gradient(135deg,#F5F0E4,#FAF7F0)",border:"1px solid rgba(196,137,58,.2)",borderRadius:14,padding:"13px 15px",marginBottom:14}}>
+                  <div style={{fontSize:".55rem",letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:7,fontWeight:600}}>✦ Why Order Ours?</div>
+                  <p style={{fontSize:".74rem",color:"#6A5A48",lineHeight:1.7,margin:"0 0 9px",fontWeight:300}}>We matched you to this blend for a reason. The results it promises depend on the quality of what goes into it — the sourcing, the freshness, the ratio. Ours are held to a specific standard so your ritual works the way it's meant to.</p>
+                  <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+                    {["🌿 Sourced to standard","⚗️ Consistent every batch","💰 More economical than DIY","⏱ Ready immediately"].map(t=>(
+                      <span key={t} style={{background:"rgba(196,137,58,.08)",border:"1px solid rgba(196,137,58,.18)",borderRadius:20,padding:"3px 10px",fontSize:".62rem",color:"var(--gold)"}}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+                <div style={{display:"flex",gap:10,flexWrap:"wrap",justifyContent:"center"}}>
                 <button className="btn-main" onClick={()=>{ addToCart({...blend,emoji:"🍵"}); setIntentionOpen(false); setIntentionStep(0); setIntentionData({}); setIntentionResult(null); }}>
                   Add {blend.name} to Cart
                 </button>
@@ -4154,6 +4460,7 @@ export default function ChaiHolistic() {
                 <button className="btn-ghost" style={{fontSize:".72rem",padding:"10px 20px"}} onClick={()=>{ setIntentionOpen(false); setIntentionStep(0); setIntentionData({}); setIntentionResult(null); window.open("https://2amcompanion.com","_blank"); }}>
                   🌙 2AM Companion
                 </button>
+                </div>
               </div>
 
               {/* FLOATING PRINT BUTTON */}
@@ -5904,10 +6211,11 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {[["home","🏠 Home"],["shop","Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+          {[["home","🏠 Home"],["shop","Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's"],["supplements","💊 Supplements"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>
               {l}
               {p==="men" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"var(--gold)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
+              {p==="supplements" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"var(--sage-d)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
             </span>
           ))}
           <span className="nav-lnk" onClick={()=>setProfileOpen(true)}
@@ -5934,9 +6242,9 @@ Thank you!`);
 
       {/* ── Mobile slide-down menu ── */}
       <div className={`mob-menu${mobMenuOpen?" open":""}`}>
-        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's Wellness"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's Wellness"],["supplements","💊 Vitamins & Minerals"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
           <div key={p} className="mob-lnk" onClick={()=>{nav(p);setMobMenuOpen(false);}}>
-            <span>{l}{p==="men"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--gold)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}</span>
+            <span>{l}{p==="men"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--gold)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="supplements"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--sage-d)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}</span>
             <span style={{color:"var(--dust)"}}>›</span>
           </div>
         ))}
@@ -5978,6 +6286,7 @@ Thank you!`);
       )}
         {page==="faq"&&<FAQPage/>}
         {page==="men"&&<MensWellness onNav={nav}/>}
+        {page==="supplements"&&<SupplementsPage onNav={nav}/>}
         {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart}/>}
       </div>
 
@@ -6093,7 +6402,7 @@ Thank you!`);
             <div>
               <div className="ft-col-h">Shop</div>
               <span className="ft-lnk" style={{color:"var(--gold)",fontWeight:500}} onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}>📖 Sip &amp; Heal Book -- $24.99</span>
-              {[["Tea Blends","shop"],["Cleansing Blends","shop"],["Individual Herbs","shop"],["Bundle & Save","shop"],["⚡ Men's Wellness","men"],["Vibe Shift Rings","rings"]].map(([l,p])=><span key={l} className="ft-lnk" onClick={()=>nav(p)}>{l}</span>)}
+              {[["Tea Blends","shop"],["Cleansing Blends","shop"],["Individual Herbs","shop"],["Bundle & Save","shop"],["⚡ Men's Wellness","men"],["💊 Vitamins & Minerals","supplements"],["Vibe Shift Rings","rings"]].map(([l,p])=><span key={l} className="ft-lnk" onClick={()=>nav(p)}>{l}</span>)}
             </div>
             <div>
               <div className="ft-col-h">Features</div>
