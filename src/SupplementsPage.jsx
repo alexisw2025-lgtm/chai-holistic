@@ -124,6 +124,7 @@ const SUPPLEMENTS = [
     category: "specialty",
     price: "~$50/month",
     asin: "B0CMJR4XGR",
+    linkBroken: true,
     teaPairing: ["Gut Reset", "Gut & Digestion Restore", "Liver & Love", "Slippery Elm blend"],
     teaNote: "Your gut-healing tea blends soothe and repair the gut lining — slippery elm and marshmallow root coat inflamed tissue. Seed DS-01 repopulates the microbiome with clinically studied strains. One prepares the terrain, the other plants the seeds. They are meant to work together.",
     whyThisBrand: "Most probiotics are dead before they reach your gut. Stomach acid, heat, and shelf time destroy fragile bacterial strains — a University of California study found that only 15% of probiotic supplements contained viable organisms at levels claimed on the label. Seed uses a ViaCap nested capsule: an outer prebiotic capsule that protects the inner probiotic capsule through stomach acid. 24 strains, all with published human clinical evidence. Refrigeration not required.",
@@ -166,6 +167,7 @@ const SUPPLEMENTS = [
     category: "mineral",
     price: "~$16–$22",
     asin: "B08BTK4494",
+    linkBroken: true,
     teaPairing: ["Prostate Shield", "Volcanic Vitality", "Testosterone Harmony", "Zinc & Saw Palmetto Tonic"],
     teaNote: "The prostate concentrates zinc at higher levels than any other organ. Your Prostate Shield and Zinc & Saw Palmetto Tonic blends provide herbal support for that pathway — but herbal zinc sources alone can't replace the mineral itself. They work in concert.",
     whyThisBrand: "Thorne's zinc uses bisglycinate chelation — zinc bonded to two glycine molecules for superior absorption and gentler digestion. Zinc picolinate is another well-absorbed form. Zinc oxide and zinc sulfate (common in cheap supplements) have poor bioavailability and frequently cause nausea. Thorne manufactures under NSF Sport certification.",
@@ -240,39 +242,19 @@ function NotifyModal({ supp, onClose }) {
     if (!email || !email.includes("@")) { setErr("Please enter a valid email address."); return; }
     setSending(true); setErr("");
     try {
-      const RESEND_KEY = import.meta.env.VITE_RESEND_KEY;
-      if (RESEND_KEY) {
-        // Confirmation to customer
-        await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_KEY}` },
-          body: JSON.stringify({
-            from: "Chai Holistic <hello@chaiholistic.com>",
-            to: [email],
-            subject: `✦ You're on the list — ${supp.name}`,
-            html: `<div style="font-family:Georgia,serif;max-width:520px;margin:0 auto;color:#2A1A0A;padding:32px 24px">
-              <h2 style="font-size:1.4rem;margin-bottom:8px">You're on the list ✦</h2>
-              <p style="font-size:.95rem;line-height:1.8;margin-bottom:16px">Thank you for your interest in <strong>${supp.name}</strong> — ${supp.subtitle}.</p>
-              <p style="font-size:.9rem;line-height:1.8;color:#5A4030">We source only the highest quality supplements, which means availability can be limited. We'll reach out the moment we have a confirmed link or an equal-or-better alternative — often from the same brand at the same standard.</p>
-              <p style="font-size:.85rem;color:#9A7A5A;margin-top:24px">With warmth,<br/><strong>Chai Holistic</strong></p>
-            </div>`,
-          }),
-        });
-        // Internal alert to you
-        await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_KEY}` },
-          body: JSON.stringify({
-            from: "Chai Holistic Alerts <hello@chaiholistic.com>",
-            to: ["alexisw2025@gmail.com"],
-            subject: `🔔 Supplement Notify Request — ${supp.name}`,
-            html: `<p><strong>Customer email:</strong> ${email}</p>
-                   <p><strong>Supplement:</strong> ${supp.name} (${supp.brand})</p>
-                   <p><strong>ASIN on file:</strong> ${supp.asin || "none"}</p>
-                   <p><strong>Action needed:</strong> Verify Amazon link, fix ASIN in SupplementsPage.jsx, or reply to customer with equal-or-better suggestion.</p>`,
-          }),
-        });
-      }
+      const res = await fetch("/.netlify/functions/notify-supplement", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          supplementName: supp.name,
+          supplementBrand: supp.brand,
+          supplementSubtitle: supp.subtitle,
+          supplementAsin: supp.asin || "none",
+          supplementEmoji: supp.emoji,
+        }),
+      });
+      if (!res.ok) throw new Error("Function error");
       setDone(true);
     } catch(e) {
       setErr("Something went wrong — please try again.");
