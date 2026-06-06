@@ -311,7 +311,7 @@ function LinkUrlInput({ onCommit }) {
 }
 
 
-function MensWellness({ onNav }) {
+function MensWellness({ onNav, onAddToCart }) {
   const [filter, setFilter] = useState("all");
   const [selected, setSelected] = useState(null);
   const [prostateOpen, setProstateOpen] = useState(false);
@@ -719,7 +719,7 @@ function MensWellness({ onNav }) {
               )}
 
               {/* WHY ORDER OURS — men's blend modal */}
-              <div style={{background:"rgba(196,137,58,.07)",border:"1px solid rgba(196,137,58,.2)",borderRadius:12,padding:"13px 15px",marginBottom:16}}>
+              <div style={{background:"rgba(196,137,58,.07)",border:"1px solid rgba(196,137,58,.2)",borderRadius:12,padding:"13px 15px",marginBottom:12}}>
                 <div style={{fontSize:".55rem",letterSpacing:".18em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:7,fontFamily:"Jost,sans-serif",fontWeight:600}}>✦ Why Order Ours?</div>
                 <p style={{fontSize:".74rem",color:"rgba(247,242,234,.55)",lineHeight:1.7,margin:"0 0 8px",fontFamily:"Jost,sans-serif"}}>These ingredients are easy to list. Getting the right ones — the right grade, origin, and freshness — is where most home blends fall short. Ours are sourced to a specific standard so the blend actually does what it says.</p>
                 <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
@@ -729,14 +729,39 @@ function MensWellness({ onNav }) {
                 </div>
               </div>
 
+              {/* SUPPLEMENT PAIRING — men's blend modal */}
+              {(()=>{
+                const pairings = getSuppPairing(selected);
+                return pairings.length > 0 ? (
+                  <div style={{background:"rgba(74,114,80,.07)",border:"1px solid rgba(74,114,80,.2)",borderRadius:12,padding:"13px 15px",marginBottom:16}}>
+                    <div style={{fontSize:".55rem",letterSpacing:".18em",textTransform:"uppercase",color:"rgba(74,114,80,.85)",marginBottom:9,fontFamily:"Jost,sans-serif",fontWeight:600}}>💊 Complete Your Protocol</div>
+                    {pairings.map(s=>(
+                      <div key={s.name} style={{display:"flex",alignItems:"flex-start",gap:9,marginBottom:8,paddingBottom:8,borderBottom:"1px solid rgba(74,114,80,.1)"}}>
+                        <span style={{fontSize:"1rem",flexShrink:0}}>{s.emoji}</span>
+                        <div style={{flex:1}}>
+                          <div style={{fontSize:".7rem",color:"rgba(74,114,80,.9)",fontWeight:600,fontFamily:"Jost,sans-serif",marginBottom:2}}>{s.name}</div>
+                          <div style={{fontSize:".66rem",color:"rgba(247,242,234,.45)",lineHeight:1.5,fontFamily:"Jost,sans-serif",fontWeight:300}}>{s.why}</div>
+                        </div>
+                        <button onClick={()=>onNav("supplements")} style={{flexShrink:0,background:"rgba(74,114,80,.12)",border:"1px solid rgba(74,114,80,.3)",color:"rgba(74,114,80,.9)",borderRadius:20,padding:"4px 10px",fontSize:".6rem",letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",whiteSpace:"nowrap"}}>
+                          See →
+                        </button>
+                      </div>
+                    ))}
+                    <div style={{fontSize:".62rem",color:"rgba(247,242,234,.25)",fontStyle:"italic",fontFamily:"Jost,sans-serif"}}>
+                      Tea and supplements work together — neither replaces the other.
+                    </div>
+                  </div>
+                ) : null;
+              })()}
+
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:4}}>
                 <div>
                   <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.4rem",color:"rgba(196,137,58,.9)",fontWeight:700}}>${selected.price.toFixed(2)}</div>
                   {selected.oz&&<div style={{fontSize:".65rem",color:"rgba(255,255,255,.4)",marginTop:2}}>~{selected.oz*selected.cupsPerOz} cups · {selected.servingSize}/cup</div>}
                 </div>
-                <button onClick={()=>{addToCart({...selected,emoji:"🍵"});setSelected(null);}}
+                <button onClick={()=>{onAddToCart({...selected,emoji:"🍵"});setSelected(null);}}
                   style={{background:"linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,110,40,.9))",border:"none",color:"#0D0D1A",borderRadius:40,padding:"10px 28px",fontSize:".72rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700}}>
-                  🛒 Add to Cart — ${selected.price.toFixed(2)}
+                  🛒 Add to Basket — ${selected.price.toFixed(2)}
                 </button>
               </div>
             </div>
@@ -1127,7 +1152,7 @@ export default function ChaiHolistic() {
   }, []);
   const addToCart = (item, type="blend") => {
     setCart(p => { const ex = p.find(i=>i.id===item.id); return ex ? p.map(i=>i.id===item.id?{...i,qty:i.qty+1}:i) : [...p,{...item,qty:1,type}]; });
-    toast(`✦ ${item.name} added to cart`);
+    toast(`✦ ${item.name} added to your Ritual Basket`);
   };
   useEffect(() => { if (typeof window !== "undefined") { window._chaiNav = (p) => nav(p); } });
   const removeItem = id => setCart(p => p.filter(i => i.id !== id));
@@ -2069,7 +2094,7 @@ export default function ChaiHolistic() {
             )}
           </div>
           <div className="twoam-actions">
-            <button className="btn-twoam gold" onClick={() => { addToCart({...blend,emoji:"🍵"}); close2AM(); }}>Add to Cart -- ${(blend ? blend.price : "")}</button>
+            <button className="btn-twoam gold" onClick={() => { addToCart({...blend,emoji:"🍵"}); close2AM(); }}>Add to Basket -- ${(blend ? blend.price : "")}</button>
             <button className="btn-twoam" onClick={() => { close2AM(); window.open("https://2amcompanion.com","_blank"); }}>2amcompanion.com ↗</button>
             <button className="btn-twoam" onClick={close2AM}>Close</button>
           </div>
@@ -2119,7 +2144,7 @@ export default function ChaiHolistic() {
                     <div className="finder-result-desc">{r.desc}</div>
                     {r && r.warning ? <div className="warn-block" style={{marginTop:8}}><strong>⚠ Safety Note</strong>{r.warning}</div> : null}
                     <div style={{display:"flex",gap:"8px",marginTop:"10px",flexWrap:"wrap"}}>
-                      <button className="btn-add" onClick={() => { addToCart({...r,emoji:"🍵"}); setFinderOpen(false); resetFinder(); }}>Add to Cart -- ${r.price.toFixed(2)}</button>
+                      <button className="btn-add" onClick={() => { addToCart({...r,emoji:"🍵"}); setFinderOpen(false); resetFinder(); }}>Add to Basket -- ${r.price.toFixed(2)}</button>
                       <button className="btn-ghost" style={{fontSize:".65rem",padding:"7px 14px"}} onClick={() => {
                         const blendIdx = BLENDS.findIndex(b => b.id === r.id);
                         const cleanseIdx = CLEANSING.findIndex(c => c.id === r.id);
@@ -2399,7 +2424,7 @@ export default function ChaiHolistic() {
                       <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"var(--bark)"}}>${tracker.price}</div>
                     </div>
                     <button className="btn-add-c" style={{width:"100%",padding:"12px",fontSize:".74rem"}} onClick={() => addToCart({...tracker,emoji:"✦"})}>
-                      Add to Cart — ${tracker.price} · Start Your {tracker.days}-Day Cleanse
+                      Add to Basket — ${tracker.price} · Start Your {tracker.days}-Day Cleanse
                     </button>
                   </div>
                 ) : (
@@ -2511,7 +2536,7 @@ export default function ChaiHolistic() {
               </div>
               <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
                 <button className="btn-book" onClick={()=>{addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"});setBookPreview(false);}}>
-                  Add to Cart -- $24.99
+                  Add to Basket -- $24.99
                 </button>
                 <button style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.2)",color:"white",padding:"13px 24px",borderRadius:50,fontSize:".73rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif"}} onClick={()=>{setBookPreview(false);nav("recipes");}}>
                   Browse All Recipes Free
@@ -2689,14 +2714,14 @@ export default function ChaiHolistic() {
         <div className="overlay" onClick={()=>setCartOpen(false)}/>
         <div className="drawer">
           <div className="drw-head">
-            <span className="drw-title">Your Cart {cartCount>0&&`(${cartCount})`}</span>
+            <span className="drw-title">Your Ritual Basket {cartCount>0&&`(${cartCount})`}</span>
             <button className="drw-close" onClick={()=>setCartOpen(false)}>✕</button>
           </div>
           <div className="drw-items">
             {/* Cart items — always at top */}
             <div className="drw-cart-list">
               {cart.length===0?(
-                <div className="empty"><div className="empty-icon">🍵</div><div className="empty-msg">Your cart is quiet</div><div className="empty-sub">Add some blends to begin.</div></div>
+                <div className="empty"><div className="empty-icon">🍵</div><div className="empty-msg">Your Ritual Basket is empty</div><div className="empty-sub">Add some blends to begin your ritual.</div></div>
               ):cart.map(item=>(
                 <div key={item.id} className="ditem">
                   <div className="ditem-icon">{item.emoji||"✦"}</div>
@@ -3009,7 +3034,7 @@ export default function ChaiHolistic() {
           {seasonalBlends.map(b=>(
             <span key={b.id}>
               <span className="season-banner-name">{b.name}</span>
-              <button className="btn-season" style={{marginLeft:8}} onClick={()=>addToCart({...b,emoji:"🍵"})}>Add to Cart</button>
+              <button className="btn-season" style={{marginLeft:8}} onClick={()=>addToCart({...b,emoji:"🍵"})}>Add to Basket</button>
             </span>
           ))}
         </div>
@@ -3285,7 +3310,7 @@ export default function ChaiHolistic() {
           <p className="feat-desc" style={{marginBottom:"1rem"}}>40 hand-crafted tea recipes -- 30 wellness blends and 10 cleansing protocols. Organized by occasion, designed for your life. The complete home apothecary guide.</p>
           <div className="feat-price">$24.99</div>
           <div style={{marginTop:"1rem"}}>
-            <button className="btn-feat" onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}>Add to Cart</button>
+            <button className="btn-feat" onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}>Add to Basket</button>
             <button className="btn-feat-ghost" onClick={()=>setBookPreview(true)}>Preview ↗</button>
           </div>
         </div>
@@ -3724,6 +3749,42 @@ export default function ChaiHolistic() {
   );
   }
 
+  // --- SUPPLEMENT PAIRINGS MAP -----------------------------------------------
+  // Maps tea blend keywords to relevant supplement recommendations
+  const SUPP_PAIRINGS = {
+    sleep:    [{name:"Magnesium Glycinate",emoji:"🌙",why:"Magnesium activates the same calm pathways your sleep blend targets — from two directions."}],
+    stress:   [{name:"Magnesium Glycinate",emoji:"🌙",why:"Chronic stress depletes magnesium. Replenish the mineral while the herbs do their work."},{name:"Ashwagandha KSM-66",emoji:"⚡",why:"KSM-66 works on the cortisol-testosterone axis alongside your adaptogenic blend."}],
+    brain:    [{name:"Omega-3 (Nordic Naturals)",emoji:"🐟",why:"DHA is the structural fat your brain runs on. Lion's mane and ginkgo need it to work with."},{name:"B12 Methylcobalamin",emoji:"⚡",why:"B12 is the raw material for myelin — the insulation every nerve signal travels through."}],
+    heart:    [{name:"Omega-3 (Nordic Naturals)",emoji:"🐟",why:"EPA+DHA lower triglycerides and reduce inflammation that hawthorn and hibiscus can't reach alone."},{name:"CoQ10 Ubiquinol",emoji:"❤️",why:"The heart beats 100,000x daily. CoQ10 is the cellular fuel it runs on."}],
+    joint:    [{name:"Collagen Peptides",emoji:"💪",why:"Collagen is the structural matrix of cartilage. Your anti-inflammatory herbs reduce breakdown — collagen rebuilds it."},{name:"Vitamin D3+K2",emoji:"☀️",why:"D3+K2 directs calcium into bone rather than soft tissue — the foundation your joint blend supports."}],
+    immune:   [{name:"Liposomal Vitamin C",emoji:"🍊",why:"Liposomal C achieves tissue levels standard supplements can't. Pairs with your immune herbs for a complete protocol."},{name:"Vitamin D3+K2",emoji:"☀️",why:"Vitamin D is central to immune regulation — 42% of adults are deficient."}],
+    liver:    [{name:"Liposomal Vitamin C",emoji:"🍊",why:"Vitamin C is a cofactor in your liver's detox pathways. Supports the work your cleanse blend starts."},{name:"Omega-3 (Nordic Naturals)",emoji:"🐟",why:"Omega-3s reduce liver inflammation and support healthy fat metabolism."}],
+    prostate: [{name:"Zinc Bisglycinate",emoji:"🛡",why:"The prostate concentrates zinc higher than any other organ. Herbal support alone can't replace the mineral."},{name:"Vitamin D3+K2",emoji:"☀️",why:"Low vitamin D is consistently associated with poorer prostate outcomes in population studies."}],
+    energy:   [{name:"B12 Methylcobalamin",emoji:"⚡",why:"B12 deficiency is one of the most underdiagnosed causes of fatigue. Your adaptogens work better when B12 isn't the bottleneck."},{name:"CoQ10 Ubiquinol",emoji:"❤️",why:"CoQ10 is the cellular energy currency. Adaptogens can't compensate for mitochondrial fuel shortage."}],
+    gut:      [{name:"Probiotics (Seed DS-01)",emoji:"🌿",why:"Your gut-healing blend soothes the lining. Probiotics repopulate the microbiome. One prepares the terrain, one plants the seeds."}],
+    hormone:  [{name:"Ashwagandha KSM-66",emoji:"⚡",why:"KSM-66 reduces cortisol which directly suppresses testosterone — the same axis your hormone blend targets."},{name:"Zinc Bisglycinate",emoji:"🛡",why:"Zinc is essential for testosterone synthesis. Deficiency directly impairs hormone production."}],
+  };
+
+  const getSuppPairing = (blend) => {
+    if (!blend) return [];
+    const name = (blend.name||"").toLowerCase();
+    const benefit = (blend.benefit||"").toLowerCase();
+    const combined = name + " " + benefit + " " + (blend.desc||"").toLowerCase();
+    const found = new Map();
+    if (/sleep|valerian|passionflower|night|rest|insomn/.test(combined)) SUPP_PAIRINGS.sleep.forEach(s=>found.set(s.name,s));
+    if (/stress|cortisol|anxiety|calm|adaptogen|rhodiola|ashwagandha/.test(combined)) SUPP_PAIRINGS.stress.forEach(s=>found.set(s.name,s));
+    if (/brain|focus|memory|cognitive|ginkgo|lion|clarity|mental/.test(combined)) SUPP_PAIRINGS.brain.forEach(s=>found.set(s.name,s));
+    if (/heart|cardio|blood pressure|hibiscus|hawthorn|circulation/.test(combined)) SUPP_PAIRINGS.heart.forEach(s=>found.set(s.name,s));
+    if (/joint|bone|cartilage|boswellia|turmeric|muscle|recovery|inflammation/.test(combined)) SUPP_PAIRINGS.joint.forEach(s=>found.set(s.name,s));
+    if (/immune|immunity|vitamin c|echinacea|elderberry/.test(combined)) SUPP_PAIRINGS.immune.forEach(s=>found.set(s.name,s));
+    if (/liver|detox|cleanse|milk thistle|dandelion|burdock/.test(combined)) SUPP_PAIRINGS.liver.forEach(s=>found.set(s.name,s));
+    if (/prostate|urinary|saw palmetto|pumpkin seed/.test(combined)) SUPP_PAIRINGS.prostate.forEach(s=>found.set(s.name,s));
+    if (/energy|drive|performance|fatigue|iron will|pre.game/.test(combined)) SUPP_PAIRINGS.energy.forEach(s=>found.set(s.name,s));
+    if (/gut|digest|marshmallow|slippery elm|microbiome/.test(combined)) SUPP_PAIRINGS.gut.forEach(s=>found.set(s.name,s));
+    if (/testosterone|hormone|libido|vitality|hormonal/.test(combined)) SUPP_PAIRINGS.hormone.forEach(s=>found.set(s.name,s));
+    return [...found.values()].slice(0,2); // max 2 per blend
+  };
+
   // --- BLEND DETAIL MODAL ---------------------------------------------------
   const BlendModal = ({ blend, onClose }) => {
     if (!blend) return null;
@@ -3855,6 +3916,30 @@ export default function ChaiHolistic() {
               </div>
             </div>
 
+            {/* SUPPLEMENT PAIRING */}
+            {getSuppPairing(blend).length > 0 && (
+              <div style={{background:"linear-gradient(135deg,#F0F7F0,#FAF8F3)",border:"1px solid rgba(74,114,80,.2)",borderRadius:14,padding:"13px 15px",marginBottom:16}}>
+                <div style={{fontSize:".55rem",letterSpacing:".2em",textTransform:"uppercase",color:"var(--sage-d)",marginBottom:9,fontWeight:600}}>
+                  💊 Complete Your Protocol
+                </div>
+                {getSuppPairing(blend).map(s=>(
+                  <div key={s.name} style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:8,paddingBottom:8,borderBottom:"1px solid rgba(74,114,80,.1)"}}>
+                    <span style={{fontSize:"1.1rem",flexShrink:0}}>{s.emoji}</span>
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:".72rem",color:"var(--sage-d)",fontWeight:600,marginBottom:2}}>{s.name}</div>
+                      <div style={{fontSize:".68rem",color:"#6A7A6A",lineHeight:1.5,fontWeight:300}}>{s.why}</div>
+                    </div>
+                    <button onClick={()=>nav("supplements")} style={{flexShrink:0,background:"rgba(74,114,80,.1)",border:"1px solid rgba(74,114,80,.25)",color:"var(--sage-d)",borderRadius:20,padding:"4px 10px",fontSize:".6rem",letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer",whiteSpace:"nowrap"}}>
+                      Learn More →
+                    </button>
+                  </div>
+                ))}
+                <div style={{fontSize:".62rem",color:"#9AAA9A",fontStyle:"italic",marginTop:4}}>
+                  Tea and supplements work together — neither replaces the other.
+                </div>
+              </div>
+            )}
+
             {/* FOOT */}
             <div className="bm-foot">
               <div>
@@ -3874,7 +3959,7 @@ export default function ChaiHolistic() {
                     addToCart({...blend, emoji:"🍵"});
                     onClose();
                   }}>
-                  Add to Cart
+                  Add to Basket
                 </button>
               </div>
             </div>
@@ -3923,7 +4008,7 @@ export default function ChaiHolistic() {
                   </div>
                   <div className="pcard-foot">
                     <span className="pcard-price">${b.price}</span>
-                    <button className="btn-add" onClick={e=>{e.stopPropagation();addToCart({...b,emoji:"🍵"});}}>Add to Cart</button>
+                    <button className="btn-add" onClick={e=>{e.stopPropagation();addToCart({...b,emoji:"🍵"});}}>Add to Basket</button>
                   </div>
                 </div>
               </div>
@@ -4042,7 +4127,7 @@ export default function ChaiHolistic() {
                   <div className="tcard-care">{t.care}</div>
                   <div className="tcard-foot">
                     <span className="tcard-price">${t.price.toFixed(2)}</span>
-                    <button className="btn-tool" onClick={()=>addToCart({...t,type:"tool"})}>Add to Cart</button>
+                    <button className="btn-tool" onClick={()=>addToCart({...t,type:"tool"})}>Add to Basket</button>
                   </div>
                 </div>
               </div>
@@ -4193,7 +4278,7 @@ export default function ChaiHolistic() {
               {timerFor===activeRecipe&&timerSec!==null&&<button className="btn-t rst" onClick={e=>{e.stopPropagation();stopTimer();}}>Reset</button>}
             </div>
             <button className="btn-add" style={{width:"100%"}} onClick={()=>{addToCart({...r,emoji:"🍵"});setActiveRecipe(null);}}>
-              Add to Cart — ${r.price}
+              Add to Basket — ${r.price}
             </button>
 
             {/* WHY ORDER OURS — recipe modal */}
@@ -4375,7 +4460,7 @@ export default function ChaiHolistic() {
                     <div style={{fontSize:".72rem",color:"var(--gold)",marginBottom:10}}>{blend.benefit}</div>
                     <CupValue item={blend}/>
                     <button className="btn-add" style={{marginTop:8}} onClick={()=>{ addToCart({...blend,emoji:"🍵"}); }}>
-                      Add to Cart -- ${blend.price}
+                      Add to Basket -- ${blend.price}
                     </button>
                   </div>
                 </div>
@@ -5407,7 +5492,7 @@ Thank you!`);
                 <div style={{fontSize:".72rem",color:"rgba(255,255,255,.28)",lineHeight:1.6,marginBottom:"1.2rem",textAlign:"center"}}>
                   Each ring is precision-engineered and Meridian Infused after printing.<br/>Allow 5-7 business days for production and shipping.
                 </div>
-                {/* Review confirmation — required before Add to Cart */}
+                {/* Review confirmation — required before Add to Basket */}
                 <div style={{display:"flex",alignItems:"flex-start",gap:14,cursor:"pointer",background:rcOrderConfirmed?"rgba(45,74,45,.35)":"rgba(255,255,255,.03)",border:rcOrderConfirmed?"1px solid rgba(196,137,58,.5)":"1px solid rgba(255,255,255,.1)",borderRadius:14,padding:"14px 16px",transition:"all .25s",marginBottom:"0.5rem"}} onClick={()=>setRcOrderConfirmed(v=>!v)}>
                   <div style={{
                       width:22,height:22,borderRadius:6,flexShrink:0,marginTop:1,
@@ -5492,7 +5577,7 @@ Thank you!`);
                   disabled={!rcOrderConfirmed}
                   onClick={handleAddToCart}
                   style={{background:rcOrderConfirmed?"var(--gold)":"rgba(255,255,255,.08)",color:"white",border:"none",padding:"13px 28px",borderRadius:50,fontSize:".76rem",fontFamily:"Jost,sans-serif",letterSpacing:".1em",textTransform:"uppercase",cursor:rcOrderConfirmed?"pointer":"default",transition:"all .2s",opacity:rcOrderConfirmed?1:.45,boxShadow:rcOrderConfirmed?"0 4px 20px rgba(196,137,58,.4)":"none"}}>
-                  Add to Cart — ${(ring.price + (rcPrayerLink&&rcPrayerLink.type==='custom'?6:0)).toFixed(2)}
+                  Add to Basket — ${(ring.price + (rcPrayerLink&&rcPrayerLink.type==='custom'?6:0)).toFixed(2)}
                 </button>
               ) : null}
             </div>
@@ -6230,7 +6315,7 @@ Thank you!`);
         </div>
         <div className="nav-right">
           <button className="cart-btn" onClick={()=>setCartOpen(true)}>
-            Cart {cartCount>0&&<span className="cart-badge">{cartCount}</span>}
+            Basket {cartCount>0&&<span className="cart-badge">{cartCount}</span>}
           </button>
           <button className="ham-btn" onClick={()=>setMobMenuOpen(o=>!o)} aria-label="Menu">
             <span style={{transform:mobMenuOpen?"rotate(45deg) translate(5px,5px)":"none"}}/>
@@ -6285,7 +6370,7 @@ Thank you!`);
         </div>
       )}
         {page==="faq"&&<FAQPage/>}
-        {page==="men"&&<MensWellness onNav={nav}/>}
+        {page==="men"&&<MensWellness onNav={nav} onAddToCart={addToCart}/>}
         {page==="supplements"&&<SupplementsPage onNav={nav}/>}
         {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart}/>}
       </div>
