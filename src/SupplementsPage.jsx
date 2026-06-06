@@ -167,7 +167,7 @@ const SUPPLEMENTS = [
     category: "mineral",
     price: "~$16–$22",
     asin: "B08BTK4494",
-    linkBroken: true,
+//    linkBroken: true,
     teaPairing: ["Prostate Shield", "Volcanic Vitality", "Testosterone Harmony", "Zinc & Saw Palmetto Tonic"],
     teaNote: "The prostate concentrates zinc at higher levels than any other organ. Your Prostate Shield and Zinc & Saw Palmetto Tonic blends provide herbal support for that pathway — but herbal zinc sources alone can't replace the mineral itself. They work in concert.",
     whyThisBrand: "Thorne's zinc uses bisglycinate chelation — zinc bonded to two glycine molecules for superior absorption and gentler digestion. Zinc picolinate is another well-absorbed form. Zinc oxide and zinc sulfate (common in cheap supplements) have poor bioavailability and frequently cause nausea. Thorne manufactures under NSF Sport certification.",
@@ -497,6 +497,7 @@ export default function SupplementsPage({ onNav }) {
       )}
       {notifySupp && (
         <NotifyModal supp={notifySupp} onClose={()=>setNotifySupp(null)}/>
+      )}
       )}
     </div>
   );
