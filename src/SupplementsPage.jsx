@@ -498,7 +498,6 @@ export default function SupplementsPage({ onNav }) {
       {notifySupp && (
         <NotifyModal supp={notifySupp} onClose={()=>setNotifySupp(null)}/>
       )}
-      )}
     </div>
   );
 }
