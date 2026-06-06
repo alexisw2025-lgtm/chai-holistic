@@ -644,6 +644,7 @@ export default function ChaiHolistic() {
   const [page, setPage] = useState("home");
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [saveRitualOpen, setSaveRitualOpen] = useState(false);
   const [blendFilter, setBlendFilter] = useState("All");
   const [organFilter, setOrganFilter] = useState("All");
   const [activeRecipe, setActiveRecipe] = useState(null);
@@ -844,6 +845,33 @@ export default function ChaiHolistic() {
   }, [timerOn]);
 
   const toast = msg => { setNotif(msg); setTimeout(() => setNotif(null), 3200); };
+
+  // --- RITUAL RESTORE FROM URL ----------------------------------------------
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const encoded = params.get("ritual");
+      if (!encoded) return;
+      const decoded = JSON.parse(atob(encoded));
+      if (!decoded || !Array.isArray(decoded.items) || decoded.items.length === 0) return;
+      const ageMs = Date.now() - (decoded.savedAt || 0);
+      const ageDays = Math.floor(ageMs / 86400000);
+      setCart(decoded.items);
+      setCartOpen(true);
+      setTimeout(() => {
+        if (ageDays > 14) {
+          toast(`✦ Your ritual has been restored · saved ${ageDays} days ago`);
+        } else {
+          toast("✦ Your ritual has been restored");
+        }
+      }, 600);
+      // Clean URL without reload
+      const clean = window.location.pathname;
+      window.history.replaceState({}, "", clean);
+    } catch (e) {
+      // malformed param — silently ignore
+    }
+  }, []);
   const addToCart = (item, type="blend") => {
     setCart(p => { const ex = p.find(i=>i.id===item.id); return ex ? p.map(i=>i.id===item.id?{...i,qty:i.qty+1}:i) : [...p,{...item,qty:1,type}]; });
     toast(`✦ ${item.name} added to cart`);
@@ -1539,6 +1567,38 @@ export default function ChaiHolistic() {
       .men-band{padding:40px 1.2rem;}
       .men-band-h{font-size:clamp(1.7rem,7vw,2.3rem);}
       .men-band-grid{grid-template-columns:1fr;}
+    }
+
+    /* SAVE MY RITUAL MODAL */
+    .sav-ov{position:fixed;inset:0;background:rgba(18,14,10,.75);z-index:950;display:flex;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(10px);}
+    .sav-box{background:var(--parch);max-width:480px;width:100%;border-radius:28px;box-shadow:0 32px 100px rgba(0,0,0,.35);overflow:hidden;}
+    .sav-head{background:linear-gradient(135deg,var(--bark),#3A2A18);padding:28px 28px 22px;position:relative;}
+    .sav-head-eye{font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;}
+    .sav-head-h{font-family:'Playfair Display',serif;font-size:1.6rem;color:white;font-weight:400;line-height:1.2;margin-bottom:4px;}
+    .sav-head-sub{font-size:.76rem;color:rgba(255,255,255,.5);font-weight:300;line-height:1.5;}
+    .sav-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+    .sav-close:hover{background:rgba(255,255,255,.22);}
+    .sav-items{padding:16px 24px;border-bottom:1px solid var(--dust);max-height:180px;overflow-y:auto;}
+    .sav-item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(0,0,0,.05);font-size:.75rem;color:var(--bark);}
+    .sav-item:last-child{border-bottom:none;}
+    .sav-item-name{font-weight:500;flex:1;}
+    .sav-item-qty{color:#9A8A7A;margin:0 10px;}
+    .sav-item-price{font-weight:600;color:var(--gold);}
+    .sav-body{padding:20px 24px 26px;}
+    .sav-lbl{font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sage-d);margin-bottom:8px;font-weight:600;}
+    .sav-input{width:100%;box-sizing:border-box;border:1.5px solid var(--dust);border-radius:12px;padding:12px 16px;font-family:'Jost',sans-serif;font-size:.88rem;color:var(--bark);background:white;outline:none;transition:border-color .2s;margin-bottom:14px;}
+    .sav-input:focus{border-color:var(--gold);}
+    .sav-note{font-size:.68rem;color:#9A8A7A;line-height:1.6;margin-bottom:18px;font-style:italic;}
+    .sav-btn{width:100%;background:linear-gradient(135deg,var(--bark),#3A2A18);color:white;border:none;padding:14px;border-radius:14px;font-family:'Jost',sans-serif;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .sav-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 28px rgba(28,26,23,.3);}
+    .sav-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+    .sav-success{padding:28px;text-align:center;}
+    .sav-success-icon{font-size:2.8rem;margin-bottom:14px;}
+    .sav-success-h{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--bark);margin-bottom:8px;}
+    .sav-success-p{font-size:.78rem;color:#8A7A6A;line-height:1.7;font-weight:300;}
+    @media(max-width:600px){
+      .sav-box{border-radius:24px 24px 0 0;position:fixed;bottom:0;left:0;right:0;max-width:100%;}
+      .sav-ov{align-items:flex-end;padding:0;}
     }
 
     /* FREQUENCY RIPPLE RINGS */
@@ -2512,10 +2572,166 @@ export default function ChaiHolistic() {
             )}
             <div className="d-sub"><span className="d-sub-l">Subtotal</span><span className="d-sub-r">${cartTotal.toFixed(2)}</span></div>
             <button className="btn-chk" disabled={cart.length===0}>Continue to Checkout</button>
+
+            {/* SAVE MY RITUAL */}
+            {cart.length > 0 && (
+              <div style={{display:"flex",gap:8,marginTop:8}}>
+                <button
+                  onClick={()=>{setCartOpen(false);setSaveRitualOpen(true);}}
+                  style={{flex:1,background:"transparent",border:"1.5px solid var(--dust)",color:"var(--bark)",padding:"10px 0",borderRadius:12,fontFamily:"'Jost',sans-serif",fontSize:".68rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",transition:"all .2s",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor="var(--gold)";e.currentTarget.style.color="var(--gold)";}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor="var(--dust)";e.currentTarget.style.color="var(--bark)";}}>
+                  🫖 Save My Ritual
+                </button>
+                <button
+                  onClick={()=>{setCartOpen(false);}}
+                  style={{flex:1,background:"transparent",border:"1.5px solid var(--dust)",color:"var(--bark)",padding:"10px 0",borderRadius:12,fontFamily:"'Jost',sans-serif",fontSize:".68rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",transition:"all .2s",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor="var(--sage)";e.currentTarget.style.color="var(--sage-d)";}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor="var(--dust)";e.currentTarget.style.color="var(--bark)";}}>
+                  ← Return to Apothecary
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </>
     ):null;
+  };
+
+  // --- SAVE MY RITUAL MODAL -------------------------------------------------
+  const SaveRitualModal = () => {
+    const [email, setEmail] = React.useState("");
+    const [sending, setSending] = React.useState(false);
+    const [sent, setSent] = React.useState(false);
+    const [err, setErr] = React.useState("");
+
+    const cartTotal = cart.reduce((s,i) => s + i.price * i.qty, 0);
+
+    const buildRitualUrl = () => {
+      const payload = { items: cart, savedAt: Date.now() };
+      const encoded = btoa(JSON.stringify(payload));
+      return `${window.location.origin}${window.location.pathname}?ritual=${encoded}`;
+    };
+
+    const handleSend = async () => {
+      if (!email || !email.includes("@")) { setErr("Please enter a valid email address."); return; }
+      setSending(true); setErr("");
+      const ritualUrl = buildRitualUrl();
+      const itemRows = cart.map(i =>
+        `<tr><td style="padding:8px 12px;font-size:14px;color:#5A5040;">${i.emoji||"🍵"} ${i.name}</td><td style="padding:8px 12px;font-size:14px;color:#9A8A7A;text-align:center;">×${i.qty}</td><td style="padding:8px 12px;font-size:14px;color:#C8893A;text-align:right;font-weight:600;">$${(i.price*i.qty).toFixed(2)}</td></tr>`
+      ).join("");
+
+      // Ask Claude for a personalized ritual note
+      let ritualNote = "";
+      try {
+        const aiRes = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: "claude-sonnet-4-20250514",
+            max_tokens: 180,
+            messages: [{
+              role: "user",
+              content: `You are the voice of Chai Holistic, a faith-rooted wellness brand whose message is "You are good enough the way you are." Write a warm, personal 2-sentence note about this person's saved ritual basket. Make it feel like it was written just for them, referencing the specific blends/products they chose. Keep it under 60 words, poetic but grounded, no generic wellness clichés. Cart items: ${cart.map(i=>`${i.name} (x${i.qty})`).join(", ")}. Respond with ONLY the note — no quotes, no preamble.`
+            }]
+          })
+        });
+        const aiData = await aiRes.json();
+        ritualNote = aiData?.content?.[0]?.text?.trim() || "";
+      } catch(e) { ritualNote = ""; }
+
+      // Send via Railway + Resend
+      try {
+        const res = await fetch("https://web-production-4c84.up.railway.app/save-ritual", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            to: email,
+            ritualUrl,
+            cartTotal: cartTotal.toFixed(2),
+            itemCount: cart.length,
+            ritualNote,
+            itemRows,
+            items: cart
+          })
+        });
+        if (!res.ok) throw new Error("send failed");
+        setSent(true);
+      } catch(e) {
+        // Fallback: copy link to clipboard if Railway not yet wired
+        try { await navigator.clipboard.writeText(ritualUrl); } catch(_) {}
+        setSent(true);
+      }
+      setSending(false);
+    };
+
+    return (
+      <div className="sav-ov" onClick={e=>{if(e.target===e.currentTarget)setSaveRitualOpen(false);}}>
+        <div className="sav-box">
+          {sent ? (
+            <div className="sav-success">
+              <div className="sav-success-icon">🫖</div>
+              <h3 className="sav-success-h">Your ritual is waiting for you</h3>
+              <p className="sav-success-p">
+                We sent a restore link to <strong>{email}</strong>.<br/>
+                When you're ready, click "Resume My Ritual →" in the email and everything comes right back.
+              </p>
+              <button className="sav-btn" style={{marginTop:20}} onClick={()=>setSaveRitualOpen(false)}>
+                Close
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="sav-head">
+                <div className="sav-head-eye">✦ Chai Holistic · Ritual Basket</div>
+                <h3 className="sav-head-h">Save My Ritual</h3>
+                <p className="sav-head-sub">We'll email you a link that restores your entire basket — one click, no account needed.</p>
+                <button className="sav-close" onClick={()=>setSaveRitualOpen(false)}>✕</button>
+              </div>
+
+              {/* Cart summary */}
+              <div className="sav-items">
+                {cart.map(i=>(
+                  <div key={i.id} className="sav-item">
+                    <span className="sav-item-name">{i.emoji||"🍵"} {i.name}</span>
+                    <span className="sav-item-qty">×{i.qty}</span>
+                    <span className="sav-item-price">${(i.price*i.qty).toFixed(2)}</span>
+                  </div>
+                ))}
+                <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",fontWeight:600}}>
+                  <span>Total</span>
+                  <span>${cartTotal.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <div className="sav-body">
+                <div className="sav-lbl">Your email address</div>
+                <input
+                  className="sav-input"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={e=>{setEmail(e.target.value);setErr("");}}
+                  onKeyDown={e=>{if(e.key==="Enter")handleSend();}}
+                  autoFocus
+                />
+                {err && <div style={{fontSize:".72rem",color:"#C04040",marginTop:-10,marginBottom:12}}>{err}</div>}
+                <p className="sav-note">
+                  We'll send you a personal ritual note along with a "Resume My Ritual →" link. No account, no spam — just your basket waiting for when you're ready.
+                </p>
+                <button className="sav-btn" onClick={handleSend} disabled={sending||!email}>
+                  {sending ? (
+                    <><span style={{display:"inline-block",animation:"spin 1s linear infinite",marginRight:6}}>◌</span> Preparing your ritual…</>
+                  ) : (
+                    <>✦ Send My Ritual Link</>
+                  )}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    );
   };
 
   // --- HOME -----------------------------------------------------------------
@@ -5782,6 +5998,8 @@ Thank you!`);
       {intentionOpen && <IntentionEngine/>}
       {finderOpen && <TeaFinderModal/>}
       {selectedBlend && <BlendModal blend={selectedBlend} onClose={()=>setSelectedBlend(null)}/>}
+
+      {saveRitualOpen && cart.length > 0 && <SaveRitualModal/>}
       {activeRecipe && <RecipeModal/>}
       {ritualOpen && <RitualBuilderModal/>}
       {trackerOpen && <CleanseTrackerModal/>}
