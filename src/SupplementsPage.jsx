@@ -123,8 +123,7 @@ const SUPPLEMENTS = [
     color: "#0A2A1A",
     category: "specialty",
     price: "~$50/month",
-    asin: null, // Seed sells direct — link to their site
-    seedUrl: "https://seed.com",
+    asin: "B0CMJR4XGR",
     teaPairing: ["Gut Reset", "Gut & Digestion Restore", "Liver & Love", "Slippery Elm blend"],
     teaNote: "Your gut-healing tea blends soothe and repair the gut lining — slippery elm and marshmallow root coat inflamed tissue. Seed DS-01 repopulates the microbiome with clinically studied strains. One prepares the terrain, the other plants the seeds. They are meant to work together.",
     whyThisBrand: "Most probiotics are dead before they reach your gut. Stomach acid, heat, and shelf time destroy fragile bacterial strains — a University of California study found that only 15% of probiotic supplements contained viable organisms at levels claimed on the label. Seed uses a ViaCap nested capsule: an outer prebiotic capsule that protects the inner probiotic capsule through stomach acid. 24 strains, all with published human clinical evidence. Refrigeration not required.",
@@ -166,7 +165,7 @@ const SUPPLEMENTS = [
     color: "#1A3A1A",
     category: "mineral",
     price: "~$16–$22",
-    asin: "B0797BWBGS",
+    asin: "B08BTK4494",
     teaPairing: ["Prostate Shield", "Volcanic Vitality", "Testosterone Harmony", "Zinc & Saw Palmetto Tonic"],
     teaNote: "The prostate concentrates zinc at higher levels than any other organ. Your Prostate Shield and Zinc & Saw Palmetto Tonic blends provide herbal support for that pathway — but herbal zinc sources alone can't replace the mineral itself. They work in concert.",
     whyThisBrand: "Thorne's zinc uses bisglycinate chelation — zinc bonded to two glycine molecules for superior absorption and gentler digestion. Zinc picolinate is another well-absorbed form. Zinc oxide and zinc sulfate (common in cheap supplements) have poor bioavailability and frequently cause nausea. Thorne manufactures under NSF Sport certification.",
@@ -230,22 +229,134 @@ const CATEGORIES = [
   { key: "herb",     label: "Herbal Extracts",   emoji: "🌿" },
 ];
 
+// ─── NOTIFY MODAL ─────────────────────────────────────────────────────────────
+function NotifyModal({ supp, onClose }) {
+  const [email, setEmail]     = useState("");
+  const [sending, setSending] = useState(false);
+  const [done, setDone]       = useState(false);
+  const [err, setErr]         = useState("");
+
+  const handleSubmit = async () => {
+    if (!email || !email.includes("@")) { setErr("Please enter a valid email address."); return; }
+    setSending(true); setErr("");
+    try {
+      const RESEND_KEY = import.meta.env.VITE_RESEND_KEY;
+      if (RESEND_KEY) {
+        // Confirmation to customer
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_KEY}` },
+          body: JSON.stringify({
+            from: "Chai Holistic <hello@chaiholistic.com>",
+            to: [email],
+            subject: `✦ You're on the list — ${supp.name}`,
+            html: `<div style="font-family:Georgia,serif;max-width:520px;margin:0 auto;color:#2A1A0A;padding:32px 24px">
+              <h2 style="font-size:1.4rem;margin-bottom:8px">You're on the list ✦</h2>
+              <p style="font-size:.95rem;line-height:1.8;margin-bottom:16px">Thank you for your interest in <strong>${supp.name}</strong> — ${supp.subtitle}.</p>
+              <p style="font-size:.9rem;line-height:1.8;color:#5A4030">We source only the highest quality supplements, which means availability can be limited. We'll reach out the moment we have a confirmed link or an equal-or-better alternative — often from the same brand at the same standard.</p>
+              <p style="font-size:.85rem;color:#9A7A5A;margin-top:24px">With warmth,<br/><strong>Chai Holistic</strong></p>
+            </div>`,
+          }),
+        });
+        // Internal alert to you
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_KEY}` },
+          body: JSON.stringify({
+            from: "Chai Holistic Alerts <hello@chaiholistic.com>",
+            to: ["alexisw2025@gmail.com"],
+            subject: `🔔 Supplement Notify Request — ${supp.name}`,
+            html: `<p><strong>Customer email:</strong> ${email}</p>
+                   <p><strong>Supplement:</strong> ${supp.name} (${supp.brand})</p>
+                   <p><strong>ASIN on file:</strong> ${supp.asin || "none"}</p>
+                   <p><strong>Action needed:</strong> Verify Amazon link, fix ASIN in SupplementsPage.jsx, or reply to customer with equal-or-better suggestion.</p>`,
+          }),
+        });
+      }
+      setDone(true);
+    } catch(e) {
+      setErr("Something went wrong — please try again.");
+    }
+    setSending(false);
+  };
+
+  return (
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:1100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}}
+      onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div style={{background:"#0F1A12",border:"1px solid rgba(196,137,58,.35)",borderRadius:22,maxWidth:460,width:"100%",padding:"32px 28px",position:"relative"}}>
+        <button onClick={onClose} style={{position:"absolute",top:16,right:16,background:"rgba(255,255,255,.08)",border:"none",color:"rgba(247,242,234,.5)",borderRadius:"50%",width:32,height:32,fontSize:"1rem",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+
+        {!done ? (
+          <>
+            <div style={{fontSize:"2.2rem",marginBottom:12,textAlign:"center"}}>🌿</div>
+            <h3 style={{fontFamily:"Playfair Display,serif",fontSize:"1.35rem",fontWeight:700,color:"#F7F2EA",textAlign:"center",margin:"0 0 8px"}}>
+              High Demand — Limited Availability
+            </h3>
+            <p style={{fontSize:".78rem",color:"rgba(196,137,58,.85)",textAlign:"center",letterSpacing:".06em",textTransform:"uppercase",fontWeight:600,marginBottom:16}}>
+              {supp.emoji} {supp.name}
+            </p>
+            <p style={{fontSize:".82rem",color:"rgba(247,242,234,.7)",lineHeight:1.85,textAlign:"center",marginBottom:8,fontWeight:300}}>
+              This supplement is temporarily unavailable through our curated link. We only recommend products that meet our exact standard for ingredient form, purity, and third-party testing — which means we won't point you somewhere we can't stand behind.
+            </p>
+            <p style={{fontSize:".8rem",color:"rgba(247,242,234,.5)",lineHeight:1.75,textAlign:"center",marginBottom:24,fontStyle:"italic",fontWeight:300}}>
+              Leave your email and we'll notify you when it's back — or send you an equal-or-better alternative personally curated for you.
+            </p>
+            <input
+              type="email"
+              placeholder="Your email address"
+              value={email}
+              onChange={e=>{setEmail(e.target.value);setErr("");}}
+              onKeyDown={e=>{if(e.key==="Enter")handleSubmit();}}
+              style={{width:"100%",padding:"12px 14px",background:"rgba(255,255,255,.06)",border:`1px solid ${err?"rgba(200,80,80,.6)":"rgba(196,137,58,.3)"}`,borderRadius:10,color:"#F7F2EA",fontFamily:"Jost,sans-serif",fontSize:".82rem",outline:"none",boxSizing:"border-box",marginBottom:err?6:14}}
+            />
+            {err && <p style={{fontSize:".7rem",color:"rgba(220,100,100,.9)",marginBottom:10,paddingLeft:2}}>{err}</p>}
+            <button
+              onClick={handleSubmit}
+              disabled={sending}
+              style={{width:"100%",background:sending?"rgba(196,137,58,.4)":"linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,110,40,.9))",border:"none",color:"#0D0D1A",borderRadius:12,padding:"13px",fontFamily:"Jost,sans-serif",fontSize:".75rem",letterSpacing:".14em",textTransform:"uppercase",cursor:sending?"not-allowed":"pointer",fontWeight:700,marginBottom:12}}>
+              {sending ? "Sending…" : "✦ Notify Me When Available"}
+            </button>
+            <p style={{fontSize:".6rem",color:"rgba(247,242,234,.25)",textAlign:"center",margin:0,lineHeight:1.6}}>
+              We'll never share your email. One notification only — no spam, ever.
+            </p>
+          </>
+        ) : (
+          <>
+            <div style={{fontSize:"2.5rem",textAlign:"center",marginBottom:16}}>✦</div>
+            <h3 style={{fontFamily:"Playfair Display,serif",fontSize:"1.3rem",color:"#F7F2EA",textAlign:"center",margin:"0 0 12px"}}>You're on the list</h3>
+            <p style={{fontSize:".82rem",color:"rgba(247,242,234,.65)",lineHeight:1.85,textAlign:"center",marginBottom:24,fontWeight:300}}>
+              We'll reach out the moment <strong style={{color:"rgba(196,137,58,.9)"}}>{supp.name}</strong> is available — or with something equal or better. Thank you for trusting us with your wellness.
+            </p>
+            <button onClick={onClose} style={{width:"100%",background:"rgba(255,255,255,.06)",border:"1px solid rgba(196,137,58,.3)",color:"rgba(196,137,58,.9)",borderRadius:12,padding:"12px",fontFamily:"Jost,sans-serif",fontSize:".75rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontWeight:600}}>
+              Continue Browsing
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── COMPONENT ────────────────────────────────────────────────────────────────
 export default function SupplementsPage({ onNav }) {
-  const [filter, setFilter]       = useState("all");
-  const [selected, setSelected]   = useState(null);
-  const [expanded, setExpanded]   = useState(null);
+  const [filter, setFilter]         = useState("all");
+  const [selected, setSelected]     = useState(null);
+  const [expanded, setExpanded]     = useState(null);
+  const [notifySupp, setNotifySupp] = useState(null);
 
   const visible = filter === "all"
     ? SUPPLEMENTS
     : SUPPLEMENTS.filter(s => s.category === filter);
 
   const handleBuy = (supp) => {
-    if (supp.seedUrl) {
-      window.open(supp.seedUrl, "_blank");
-    } else {
-      window.open(amz(supp.asin), "_blank");
+    // If ASIN is missing or supplement is flagged broken, show notify modal immediately
+    if (!supp.asin || supp.linkBroken) {
+      setNotifySupp(supp);
+      return;
     }
+    const win = window.open(amz(supp.asin), "_blank");
+    // If popup was blocked, fall back to notify modal
+    if (!win) setNotifySupp(supp);
   };
 
   return (
@@ -401,6 +512,10 @@ export default function SupplementsPage({ onNav }) {
       {/* ── DETAIL MODAL ─────────────────────────────────────────────────────── */}
       {selected && (
         <DetailModal supp={selected} onClose={()=>setSelected(null)} onBuy={()=>handleBuy(selected)}/>
+      )}
+      {notifySupp && (
+        <NotifyModal supp={notifySupp} onClose={()=>setNotifySupp(null)}/>
+      )}
       )}
     </div>
   );
@@ -668,7 +783,7 @@ function DetailModal({ supp, onClose, onBuy }) {
             }}
             onMouseEnter={e=>{e.currentTarget.style.opacity=".9";e.currentTarget.style.transform="translateY(-1px)";}}
             onMouseLeave={e=>{e.currentTarget.style.opacity="1";e.currentTarget.style.transform="";}}>
-            View on Amazon → {supp.asin ? "" : "seed.com"}
+            View on Amazon →
           </button>
           <p style={{fontSize:".6rem",color:"rgba(247,242,234,.25)",textAlign:"center",margin:0,lineHeight:1.6}}>
             Affiliate link — we earn a small commission at no cost to you.<br/>
