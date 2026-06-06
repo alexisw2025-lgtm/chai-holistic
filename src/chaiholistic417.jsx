@@ -311,6 +311,41 @@ function LinkUrlInput({ onCommit }) {
 }
 
 
+// --- SUPPLEMENT PAIRINGS MAP (top-level so MensWellness and ChaiHolistic can both access) -----
+const SUPP_PAIRINGS = {
+  sleep:    [{name:"Magnesium Glycinate",emoji:"🌙",why:"Magnesium activates the same calm pathways your sleep blend targets — from two directions."}],
+  stress:   [{name:"Magnesium Glycinate",emoji:"🌙",why:"Chronic stress depletes magnesium. Replenish the mineral while the herbs do their work."},{name:"Ashwagandha KSM-66",emoji:"⚡",why:"KSM-66 works on the cortisol-testosterone axis alongside your adaptogenic blend."}],
+  brain:    [{name:"Omega-3 (Nordic Naturals)",emoji:"🐟",why:"DHA is the structural fat your brain runs on. Lion's mane and ginkgo need it to work with."},{name:"B12 Methylcobalamin",emoji:"⚡",why:"B12 is the raw material for myelin — the insulation every nerve signal travels through."}],
+  heart:    [{name:"Omega-3 (Nordic Naturals)",emoji:"🐟",why:"EPA+DHA lower triglycerides and reduce inflammation that hawthorn and hibiscus can't reach alone."},{name:"CoQ10 Ubiquinol",emoji:"❤️",why:"The heart beats 100,000x daily. CoQ10 is the cellular fuel it runs on."}],
+  joint:    [{name:"Collagen Peptides",emoji:"💪",why:"Collagen is the structural matrix of cartilage. Your anti-inflammatory herbs reduce breakdown — collagen rebuilds it."},{name:"Vitamin D3+K2",emoji:"☀️",why:"D3+K2 directs calcium into bone rather than soft tissue — the foundation your joint blend supports."}],
+  immune:   [{name:"Liposomal Vitamin C",emoji:"🍊",why:"Liposomal C achieves tissue levels standard supplements can't. Pairs with your immune herbs for a complete protocol."},{name:"Vitamin D3+K2",emoji:"☀️",why:"Vitamin D is central to immune regulation — 42% of adults are deficient."}],
+  liver:    [{name:"Liposomal Vitamin C",emoji:"🍊",why:"Vitamin C is a cofactor in your liver's detox pathways. Supports the work your cleanse blend starts."},{name:"Omega-3 (Nordic Naturals)",emoji:"🐟",why:"Omega-3s reduce liver inflammation and support healthy fat metabolism."}],
+  prostate: [{name:"Zinc Bisglycinate",emoji:"🛡",why:"The prostate concentrates zinc higher than any other organ. Herbal support alone can't replace the mineral."},{name:"Vitamin D3+K2",emoji:"☀️",why:"Low vitamin D is consistently associated with poorer prostate outcomes in population studies."}],
+  energy:   [{name:"B12 Methylcobalamin",emoji:"⚡",why:"B12 deficiency is one of the most underdiagnosed causes of fatigue. Your adaptogens work better when B12 isn't the bottleneck."},{name:"CoQ10 Ubiquinol",emoji:"❤️",why:"CoQ10 is the cellular energy currency. Adaptogens can't compensate for mitochondrial fuel shortage."}],
+  gut:      [{name:"Probiotics (Seed DS-01)",emoji:"🌿",why:"Your gut-healing blend soothes the lining. Probiotics repopulate the microbiome. One prepares the terrain, one plants the seeds."}],
+  hormone:  [{name:"Ashwagandha KSM-66",emoji:"⚡",why:"KSM-66 reduces cortisol which directly suppresses testosterone — the same axis your hormone blend targets."},{name:"Zinc Bisglycinate",emoji:"🛡",why:"Zinc is essential for testosterone synthesis. Deficiency directly impairs hormone production."}],
+};
+
+const getSuppPairing = (blend) => {
+  if (!blend) return [];
+  const name = (blend.name||"").toLowerCase();
+  const benefit = (blend.benefit||"").toLowerCase();
+  const combined = name + " " + benefit + " " + (blend.desc||"").toLowerCase();
+  const found = new Map();
+  if (/sleep|valerian|passionflower|night|rest|insomn/.test(combined)) SUPP_PAIRINGS.sleep.forEach(s=>found.set(s.name,s));
+  if (/stress|cortisol|anxiety|calm|adaptogen|rhodiola|ashwagandha/.test(combined)) SUPP_PAIRINGS.stress.forEach(s=>found.set(s.name,s));
+  if (/brain|focus|memory|cognitive|ginkgo|lion|clarity|mental/.test(combined)) SUPP_PAIRINGS.brain.forEach(s=>found.set(s.name,s));
+  if (/heart|cardio|blood pressure|hibiscus|hawthorn|circulation/.test(combined)) SUPP_PAIRINGS.heart.forEach(s=>found.set(s.name,s));
+  if (/joint|bone|cartilage|boswellia|turmeric|muscle|recovery|inflammation/.test(combined)) SUPP_PAIRINGS.joint.forEach(s=>found.set(s.name,s));
+  if (/immune|immunity|vitamin c|echinacea|elderberry/.test(combined)) SUPP_PAIRINGS.immune.forEach(s=>found.set(s.name,s));
+  if (/liver|detox|cleanse|milk thistle|dandelion|burdock/.test(combined)) SUPP_PAIRINGS.liver.forEach(s=>found.set(s.name,s));
+  if (/prostate|urinary|saw palmetto|pumpkin seed/.test(combined)) SUPP_PAIRINGS.prostate.forEach(s=>found.set(s.name,s));
+  if (/energy|drive|performance|fatigue|iron will|pre.game/.test(combined)) SUPP_PAIRINGS.energy.forEach(s=>found.set(s.name,s));
+  if (/gut|digest|marshmallow|slippery elm|microbiome/.test(combined)) SUPP_PAIRINGS.gut.forEach(s=>found.set(s.name,s));
+  if (/testosterone|hormone|libido|vitality|hormonal/.test(combined)) SUPP_PAIRINGS.hormone.forEach(s=>found.set(s.name,s));
+  return [...found.values()].slice(0,2);
+};
+
 function MensWellness({ onNav, onAddToCart }) {
   const [filter, setFilter] = useState("all");
   const [selected, setSelected] = useState(null);
@@ -1130,7 +1165,7 @@ export default function ChaiHolistic() {
       const params = new URLSearchParams(window.location.search);
       const encoded = params.get("ritual");
       if (!encoded) return;
-      const decoded = JSON.parse(atob(encoded));
+      const decoded = JSON.parse(decodeURIComponent(escape(atob(encoded))));
       if (!decoded || !Array.isArray(decoded.items) || decoded.items.length === 0) return;
       const ageMs = Date.now() - (decoded.savedAt || 0);
       const ageDays = Math.floor(ageMs / 86400000);
@@ -2897,7 +2932,7 @@ export default function ChaiHolistic() {
 
     const buildRitualUrl = () => {
       const payload = { items: cart, savedAt: Date.now() };
-      const encoded = btoa(JSON.stringify(payload));
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
       return `${window.location.origin}${window.location.pathname}?ritual=${encoded}`;
     };
 
@@ -3749,41 +3784,7 @@ export default function ChaiHolistic() {
   );
   }
 
-  // --- SUPPLEMENT PAIRINGS MAP -----------------------------------------------
-  // Maps tea blend keywords to relevant supplement recommendations
-  const SUPP_PAIRINGS = {
-    sleep:    [{name:"Magnesium Glycinate",emoji:"🌙",why:"Magnesium activates the same calm pathways your sleep blend targets — from two directions."}],
-    stress:   [{name:"Magnesium Glycinate",emoji:"🌙",why:"Chronic stress depletes magnesium. Replenish the mineral while the herbs do their work."},{name:"Ashwagandha KSM-66",emoji:"⚡",why:"KSM-66 works on the cortisol-testosterone axis alongside your adaptogenic blend."}],
-    brain:    [{name:"Omega-3 (Nordic Naturals)",emoji:"🐟",why:"DHA is the structural fat your brain runs on. Lion's mane and ginkgo need it to work with."},{name:"B12 Methylcobalamin",emoji:"⚡",why:"B12 is the raw material for myelin — the insulation every nerve signal travels through."}],
-    heart:    [{name:"Omega-3 (Nordic Naturals)",emoji:"🐟",why:"EPA+DHA lower triglycerides and reduce inflammation that hawthorn and hibiscus can't reach alone."},{name:"CoQ10 Ubiquinol",emoji:"❤️",why:"The heart beats 100,000x daily. CoQ10 is the cellular fuel it runs on."}],
-    joint:    [{name:"Collagen Peptides",emoji:"💪",why:"Collagen is the structural matrix of cartilage. Your anti-inflammatory herbs reduce breakdown — collagen rebuilds it."},{name:"Vitamin D3+K2",emoji:"☀️",why:"D3+K2 directs calcium into bone rather than soft tissue — the foundation your joint blend supports."}],
-    immune:   [{name:"Liposomal Vitamin C",emoji:"🍊",why:"Liposomal C achieves tissue levels standard supplements can't. Pairs with your immune herbs for a complete protocol."},{name:"Vitamin D3+K2",emoji:"☀️",why:"Vitamin D is central to immune regulation — 42% of adults are deficient."}],
-    liver:    [{name:"Liposomal Vitamin C",emoji:"🍊",why:"Vitamin C is a cofactor in your liver's detox pathways. Supports the work your cleanse blend starts."},{name:"Omega-3 (Nordic Naturals)",emoji:"🐟",why:"Omega-3s reduce liver inflammation and support healthy fat metabolism."}],
-    prostate: [{name:"Zinc Bisglycinate",emoji:"🛡",why:"The prostate concentrates zinc higher than any other organ. Herbal support alone can't replace the mineral."},{name:"Vitamin D3+K2",emoji:"☀️",why:"Low vitamin D is consistently associated with poorer prostate outcomes in population studies."}],
-    energy:   [{name:"B12 Methylcobalamin",emoji:"⚡",why:"B12 deficiency is one of the most underdiagnosed causes of fatigue. Your adaptogens work better when B12 isn't the bottleneck."},{name:"CoQ10 Ubiquinol",emoji:"❤️",why:"CoQ10 is the cellular energy currency. Adaptogens can't compensate for mitochondrial fuel shortage."}],
-    gut:      [{name:"Probiotics (Seed DS-01)",emoji:"🌿",why:"Your gut-healing blend soothes the lining. Probiotics repopulate the microbiome. One prepares the terrain, one plants the seeds."}],
-    hormone:  [{name:"Ashwagandha KSM-66",emoji:"⚡",why:"KSM-66 reduces cortisol which directly suppresses testosterone — the same axis your hormone blend targets."},{name:"Zinc Bisglycinate",emoji:"🛡",why:"Zinc is essential for testosterone synthesis. Deficiency directly impairs hormone production."}],
-  };
 
-  const getSuppPairing = (blend) => {
-    if (!blend) return [];
-    const name = (blend.name||"").toLowerCase();
-    const benefit = (blend.benefit||"").toLowerCase();
-    const combined = name + " " + benefit + " " + (blend.desc||"").toLowerCase();
-    const found = new Map();
-    if (/sleep|valerian|passionflower|night|rest|insomn/.test(combined)) SUPP_PAIRINGS.sleep.forEach(s=>found.set(s.name,s));
-    if (/stress|cortisol|anxiety|calm|adaptogen|rhodiola|ashwagandha/.test(combined)) SUPP_PAIRINGS.stress.forEach(s=>found.set(s.name,s));
-    if (/brain|focus|memory|cognitive|ginkgo|lion|clarity|mental/.test(combined)) SUPP_PAIRINGS.brain.forEach(s=>found.set(s.name,s));
-    if (/heart|cardio|blood pressure|hibiscus|hawthorn|circulation/.test(combined)) SUPP_PAIRINGS.heart.forEach(s=>found.set(s.name,s));
-    if (/joint|bone|cartilage|boswellia|turmeric|muscle|recovery|inflammation/.test(combined)) SUPP_PAIRINGS.joint.forEach(s=>found.set(s.name,s));
-    if (/immune|immunity|vitamin c|echinacea|elderberry/.test(combined)) SUPP_PAIRINGS.immune.forEach(s=>found.set(s.name,s));
-    if (/liver|detox|cleanse|milk thistle|dandelion|burdock/.test(combined)) SUPP_PAIRINGS.liver.forEach(s=>found.set(s.name,s));
-    if (/prostate|urinary|saw palmetto|pumpkin seed/.test(combined)) SUPP_PAIRINGS.prostate.forEach(s=>found.set(s.name,s));
-    if (/energy|drive|performance|fatigue|iron will|pre.game/.test(combined)) SUPP_PAIRINGS.energy.forEach(s=>found.set(s.name,s));
-    if (/gut|digest|marshmallow|slippery elm|microbiome/.test(combined)) SUPP_PAIRINGS.gut.forEach(s=>found.set(s.name,s));
-    if (/testosterone|hormone|libido|vitality|hormonal/.test(combined)) SUPP_PAIRINGS.hormone.forEach(s=>found.set(s.name,s));
-    return [...found.values()].slice(0,2); // max 2 per blend
-  };
 
   // --- BLEND DETAIL MODAL ---------------------------------------------------
   const BlendModal = ({ blend, onClose }) => {
