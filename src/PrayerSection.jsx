@@ -87,20 +87,38 @@ function playBowl(soft = false) {
   } catch (_) {}
 }
 
-function speakIntention(text) {
-  const synth = window.speechSynthesis;
-  if (!synth) return;
-  synth.cancel();
-  // iOS requires speech to be called synchronously within user gesture — no setTimeout wrapper
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.rate = 0.78; utt.pitch = 0.92; utt.volume = 0.88;
-  const voices = synth.getVoices();
-  const preferred = ["Samantha","Karen","Moira","Fiona","Victoria","Google UK English Female","Microsoft Zira"];
-  for (const name of preferred) {
-    const v = voices.find(v => v.name.includes(name));
-    if (v) { utt.voice = v; break; }
+const RAILWAY_URL = "https://web-production-4c84.up.railway.app";
+
+async function speakIntention(text) {
+  try {
+    const res = await fetch(`${RAILWAY_URL}/speak-intention`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, voice: "nova" }),
+    });
+    if (!res.ok) throw new Error("TTS fetch failed");
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.onended = () => URL.revokeObjectURL(url);
+    // iOS requires play() inside a user gesture — we're inside onRingTap so this is safe
+    await audio.play();
+  } catch (err) {
+    // Graceful fallback to browser TTS if Railway is unavailable
+    console.warn("OpenAI TTS unavailable, falling back to browser voice:", err);
+    const synth = window.speechSynthesis;
+    if (!synth) return;
+    synth.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.rate = 0.78; utt.pitch = 0.92; utt.volume = 0.88;
+    const voices = synth.getVoices();
+    const preferred = ["Samantha","Karen","Moira","Fiona","Victoria","Google UK English Female","Microsoft Zira"];
+    for (const name of preferred) {
+      const v = voices.find(v => v.name.includes(name));
+      if (v) { utt.voice = v; break; }
+    }
+    synth.speak(utt);
   }
-  synth.speak(utt);
 }
 
 export default function PrayerSection({ onNavigate }) {
@@ -164,16 +182,19 @@ export default function PrayerSection({ onNavigate }) {
     after(2600, () => setPhase(1.5));
   }
 
+  const [speakLoading, setSpeakLoading] = useState(false);
+
   function onRingTap() {
     if (phase !== 1.5) return;
     setPhase(2);
     setRingFired(true);
+    setSpeakLoading(true);
     spawnParticles(["#f5d080","#c08830","#deb96a","#fff8e0"], 18, 70);
     playBowl(true);
-    // iOS fix: speechSynthesis must be called synchronously within the user gesture.
-    // We call it immediately here, then also try again at 900ms as fallback for Android.
-    if (chosen) speakIntention(chosen.voice);
-    after(900,  () => { /* voice already spoken — no-op for iOS, retry for slow Android */ });
+    // Call async TTS — must be triggered here inside the user gesture for iOS audio policy
+    if (chosen) {
+      speakIntention(chosen.voice).finally(() => setSpeakLoading(false));
+    }
     after(2000, () => { playBowl(true); setShowTone(true); });
     after(2200, () => { setTodayBlend(getDailyBlend()); setShowBlend(true); });
     after(4200, () => setShowReset(true));
@@ -185,7 +206,7 @@ export default function PrayerSection({ onNavigate }) {
     if (window.speechSynthesis) window.speechSynthesis.cancel();
     setPhase(0); setChosen(null); setFiring(false); setRingFired(false);
     setShowBlend(false); setShowTone(false); setShowReset(false); setTodayBlend(null);
-    setActivated(false);
+    setActivated(false); setSpeakLoading(false);
     if (particlesRef.current) particlesRef.current.innerHTML = "";
   }
 
@@ -735,10 +756,13 @@ export default function PrayerSection({ onNavigate }) {
           {/* Left ambient cards */}
           <div className="rs-side-cards">
             {SIDE_LEFT.map(c=>(
-              <div key={c.name} className="rs-side-card">
+              <div key={c.name} className="rs-side-card"
+                onClick={() => onNavigate && onNavigate(c.name)}
+                style={{cursor:"pointer"}}>
                 <div className="rs-side-card-emoji">{c.emoji}</div>
                 <div className="rs-side-card-name">{c.name}</div>
                 <div className="rs-side-card-benefit">{c.benefit}</div>
+                <div style={{marginTop:8,fontSize:"9px",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(192,136,48,.5)",fontFamily:"'Cinzel',serif"}}>See Recipe →</div>
               </div>
             ))}
           </div>
@@ -851,7 +875,11 @@ export default function PrayerSection({ onNavigate }) {
                 </div>
 
                 <div className={`rs-voice${voiceShow ? " show" : ""}`}>
-                  {chosen && voiceShow ? `"${chosen.voice}"` : ""}
+                  {chosen && voiceShow ? (
+                    speakLoading
+                      ? <span style={{fontSize:"12px",color:"rgba(255,255,255,.35)",fontStyle:"normal",letterSpacing:".08em"}}>✦ &nbsp; Preparing your intention…</span>
+                      : `"${chosen.voice}"`
+                  ) : ""}
                 </div>
 
                 {todayBlend && (
@@ -892,10 +920,13 @@ export default function PrayerSection({ onNavigate }) {
           {/* Right ambient cards */}
           <div className="rs-side-cards rs-side-right">
             {SIDE_RIGHT.map(c=>(
-              <div key={c.name} className="rs-side-card">
+              <div key={c.name} className="rs-side-card"
+                onClick={() => onNavigate && onNavigate(c.name)}
+                style={{cursor:"pointer"}}>
                 <div className="rs-side-card-emoji">{c.emoji}</div>
                 <div className="rs-side-card-name">{c.name}</div>
                 <div className="rs-side-card-benefit">{c.benefit}</div>
+                <div style={{marginTop:8,fontSize:"9px",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(192,136,48,.5)",fontFamily:"'Cinzel',serif"}}>See Recipe →</div>
               </div>
             ))}
           </div>
