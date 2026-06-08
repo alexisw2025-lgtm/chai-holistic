@@ -1403,12 +1403,12 @@ export default function ChaiHolistic() {
     .sh-p.lt{color:rgba(255,255,255,.58);}
 
     /* BLEND TILES */
-    .b-showcase{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
-    .b-tile{position:relative;overflow:hidden;cursor:pointer;background:#2A1F15;transition:all .4s;display:flex;flex-direction:column;}
-    .b-tile:hover{transform:scale(1.02);z-index:2;}
-    .b-tile-exp{grid-column:span 2;transform:none !important;z-index:3;}
-    .b-tile-close{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:white;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);z-index:4;transition:background .2s;}
-    .b-tile-close:hover{background:rgba(0,0,0,.8);}
+    .b-showcase{display:flex;gap:18px;overflow-x:auto;padding-bottom:12px;padding-right:24px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+    .b-showcase::-webkit-scrollbar{display:none;}
+    .b-tile{position:relative;flex-shrink:0;width:220px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;overflow:hidden;cursor:pointer;transition:transform .3s,box-shadow .3s,border-color .3s;display:flex;flex-direction:column;}
+    .b-tile:hover{transform:translateY(-5px);box-shadow:0 18px 48px rgba(0,0,0,.45);border-color:rgba(196,137,58,.4);}
+    .b-tile-exp{width:340px;}
+    .b-tile-close{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:white;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;z-index:4;}
     .b-tile-recipe{border-top:1px solid rgba(255,255,255,.1);margin-top:10px;padding-top:10px;}
     .b-recipe-desc{font-size:.76rem;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:10px;font-style:italic;}
     .b-recipe-label{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:500;}
@@ -1417,20 +1417,21 @@ export default function ChaiHolistic() {
     .b-recipe-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
     .b-recipe-meta{font-size:.64rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.65);padding:3px 8px;border-radius:50px;}
     .b-recipe-warn{font-size:.66rem;color:#E8A87C;background:rgba(232,168,124,.08);border:1px solid rgba(232,168,124,.2);border-radius:8px;padding:7px 10px;line-height:1.5;}
-    .b-tile-visual{width:100%;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;transition:all .4s;}
-    .b-tile:hover .b-tile-visual{filter:brightness(1.1);}
+    .b-tile-visual{width:100%;height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;}
     .b-tile-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s;}
     .b-tile:hover .b-tile-photo{transform:scale(1.08);}
-    .b-tile-occ-badge{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:3px 12px;border-radius:50px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);position:relative;z-index:1;}
-    .b-tile-body{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1;background:linear-gradient(175deg,#1C1A17 0%,#2A1F15 100%);}
-    .b-occ{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:4px;}
-    .b-name{font-family:'Playfair Display',serif;font-size:clamp(.88rem,1.4vw,1.1rem);color:white;margin-bottom:3px;line-height:1.2;}
-    .b-tag{font-size:.7rem;color:rgba(255,255,255,.42);font-style:italic;margin-bottom:5px;font-weight:300;}
-    .b-ben{font-size:.66rem;color:var(--gold);letter-spacing:.07em;margin-bottom:8px;flex:1;}
-    .b-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;}
-    .b-price{font-family:'Playfair Display',serif;font-size:1.05rem;color:white;}
-    .btn-tile{background:var(--gold);color:white;border:none;padding:7px 15px;font-family:'Jost',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;white-space:nowrap;}
-    .btn-tile:hover{background:white;color:var(--bark);}
+    .b-tile-visual-grad{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.6) 100%);}
+    .b-tile-occ-badge{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.92);background:rgba(0,0,0,.45);padding:3px 10px;border-radius:50px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.15);position:absolute;bottom:10px;left:12px;z-index:1;}
+    .b-tile-body{padding:14px 15px 15px;display:flex;flex-direction:column;flex:1;}
+    .b-name{font-family:'Playfair Display',serif;font-size:1rem;color:white;margin-bottom:3px;line-height:1.25;}
+    .b-tag{font-size:.7rem;color:rgba(255,255,255,.45);font-style:italic;margin-bottom:6px;font-weight:300;line-height:1.4;}
+    .b-ben{font-size:.64rem;color:rgba(196,137,58,.85);letter-spacing:.06em;margin-bottom:10px;flex:1;}
+    .b-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;padding-top:10px;border-top:1px solid rgba(255,255,255,.07);}
+    .b-price{font-family:'Playfair Display',serif;font-size:1rem;color:white;}
+    .btn-tile{background:rgba(196,137,58,.85);color:white;border:none;padding:7px 14px;font-family:'Jost',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;white-space:nowrap;}
+    .btn-tile:hover{background:var(--gold-l,#E8C87A);color:var(--bark);}
+    .b-showcase-see-all{flex-shrink:0;width:160px;background:rgba(196,137,58,.06);border:1.5px dashed rgba(196,137,58,.3);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:all .25s;padding:20px;}
+    .b-showcase-see-all:hover{background:rgba(196,137,58,.12);border-color:rgba(196,137,58,.6);}
     /* PRODUCT CARD VISUAL HEADER */
     .pcard-visual{width:100%;height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:20px 20px 0 0;position:relative;overflow:hidden;transition:all .3s;}
     .pcard:hover .pcard-visual{filter:brightness(1.08);}
@@ -2000,7 +2001,7 @@ export default function ChaiHolistic() {
       .philo-vis{min-height:220px;padding:40px;}
       .featured-band{grid-template-columns:1fr;}
       .feat-book,.feat-rings{padding:36px 28px;}
-      .b-showcase{grid-template-columns:repeat(2,1fr);}
+      /* b-showcase is now flex scroll — no grid override needed */
       .ft-grid{grid-template-columns:1fr 1fr;gap:2rem;}
       .sec{padding:50px 1.5rem;}
       .pgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
@@ -2037,7 +2038,7 @@ export default function ChaiHolistic() {
       .sh{margin-bottom:1.8rem;}
 
       /* Grids → single column */
-      .b-showcase{grid-template-columns:1fr;}
+      /* b-showcase flex scroll works on mobile natively */
       .pgrid{grid-template-columns:1fr;}
       .cgrid{grid-template-columns:1fr;}
       .rgrid{grid-template-columns:1fr;}
@@ -3418,18 +3419,24 @@ export default function ChaiHolistic() {
       {/* BLEND SHOWCASE */}
       <section id="sec-blends" className="sec sec-dark">
         <div className="sec-in">
-          <div className="sh">
-            <div className="sh-eye">From the Book</div>
-            <h2 className="sh-h lt">The <em>Sip &amp; Heal</em> Blends</h2>
-            <p className="sh-p lt">Click any blend to see the recipe. {BLENDS.length} wellness blends + {CLEANSING.length} cleansing protocols.</p>
+          <div className="sh" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:12,marginBottom:"1.8rem"}}>
+            <div>
+              <div className="sh-eye lt">From the Book</div>
+              <h2 className="sh-h lt">The <em>Sip &amp; Heal</em> Blends</h2>
+              <p className="sh-p lt" style={{margin:0}}>Tap any blend to see the recipe. Scroll to explore.</p>
+            </div>
+            <button className="btn-ghost" style={{borderColor:"rgba(255,255,255,.25)",color:"rgba(255,255,255,.78)",flexShrink:0}} onClick={()=>nav("shop")}>
+              View All {BLENDS.length} →
+            </button>
           </div>
           <div className="b-showcase">
-            {BLENDS.slice(0,8).map(b=>{
+            {BLENDS.slice(0,9).map(b=>{
               const isExp = blendExpanded===b.id;
               return (
               <div key={b.id} className={`b-tile ${isExp?"b-tile-exp":""}`} onClick={()=>setBlendExpanded(isExp?null:b.id)}>
                 <div className="b-tile-visual" style={{background:`linear-gradient(155deg,${b.color} 0%,${b.color}99 55%,#1C1A17 100%)`}}>
                   <img src={b.photo} alt={b.name} className="b-tile-photo"/>
+                  <div className="b-tile-visual-grad"/>
                   <div className="b-tile-occ-badge">{b.occasion}</div>
                   {isExp && <button className="b-tile-close" onClick={e=>{e.stopPropagation();setBlendExpanded(null);}}>✕</button>}
                 </div>
@@ -3445,7 +3452,7 @@ export default function ChaiHolistic() {
                         {b.ingredients.map(i=><li key={i}>{i}</li>)}
                       </ul>
                       <div className="b-recipe-row">
-                        <span className="b-recipe-meta">Steep {b.steepMin} min</span>
+                        <span className="b-recipe-meta">⏱ {b.steepMin} min</span>
                         <span className="b-recipe-meta">{b.steepTemp.split("--")[0].trim()}</span>
                         <span className="b-recipe-meta">{b.servingSize} per cup</span>
                       </div>
@@ -3454,16 +3461,16 @@ export default function ChaiHolistic() {
                   )}
                   <div className="b-foot">
                     <span className="b-price">${b.price}</span>
-                    <button className="btn-tile" onClick={e=>{e.stopPropagation();addToCart({...b,emoji:BLEND_EMOJIS[b.id]||"🍵"});}}>+ Cart</button>
+                    <button className="btn-tile" onClick={e=>{e.stopPropagation();addToCart({...b,emoji:BLEND_EMOJIS[b.id]||"🍵"});}}>Add to Basket</button>
                   </div>
                 </div>
               </div>
             );})}
-          </div>
-          <div style={{textAlign:"center",marginTop:"1.5rem"}}>
-            <button className="btn-ghost" style={{borderColor:"rgba(255,255,255,.25)",color:"rgba(255,255,255,.78)"}} onClick={()=>nav("shop")}>
-              View All {BLENDS.length} Blends + {CLEANSING.length} Cleansing Protocols →
-            </button>
+            <div className="b-showcase-see-all" onClick={()=>nav("shop")}>
+              <span style={{fontSize:"2rem"}}>🫖</span>
+              <span style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"rgba(196,137,58,.85)",textAlign:"center",lineHeight:1.4}}>See All {BLENDS.length} Blends</span>
+              <span style={{fontSize:".68rem",color:"rgba(255,255,255,.3)",textAlign:"center"}}>+ {CLEANSING.length} cleansing protocols</span>
+            </div>
           </div>
         </div>
       </section>
