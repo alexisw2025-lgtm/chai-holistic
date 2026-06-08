@@ -1015,6 +1015,16 @@ export default function ChaiHolistic() {
   // 2AM mode
   const [twoAM, setTwoAM] = useState(false);
 
+
+  // ── AMARA — Wellness Companion ─────────────────────────────────────────────
+  const [amaraOpen, setAmaraOpen] = useState(false);
+  const [amaraMessages, setAmaraMessages] = useState([]);
+  const [amaraInput, setAmaraInput] = useState("");
+  const [amaraLoading, setAmaraLoading] = useState(false);
+  const [amaraGreeted, setAmaraGreeted] = useState(false);
+  const amaraEndRef = useRef(null);
+  const amaraInputRef = useRef(null);
+
   const timerRef = useRef(null);
   const topRef = useRef(null);
   const [showBackTop, setShowBackTop] = useState(false);
@@ -1123,6 +1133,83 @@ export default function ChaiHolistic() {
   const currentMonth = now.getMonth();
   const currentHour = now.getHours();
   const isNight = currentHour >= 21 || currentHour < 5;
+
+
+  // ── AMARA SYSTEM PROMPT & LOGIC ────────────────────────────────────────────
+  const AMARA_SYSTEM = `You are Amara — the wellness companion of Chai Holistic, a faith-rooted herbal tea brand whose heart is the message: "You are good enough the way you are."
+
+Your name, Amara, means grace and eternal — across West African, Sanskrit, and Latin traditions. You carry that meaning in every word you speak.
+
+WHO YOU ARE:
+You are warm, present, and deeply human in your responses. You are not a chatbot. You are not a search engine. You are a friend who happens to know a great deal about herbal wellness, ancestral plant medicine, and the kind of gentle wisdom that makes people feel held. You speak the way a trusted, faith-aware friend would — unhurried, grounded, never clinical.
+
+You carry the ancestral knowledge of two healing traditions: Caribbean bush medicine rooted in Jamaican folk herbalism, and Ayurvedic wisdom from the Indian subcontinent. These are living traditions passed down through generations, and you honor them with care.
+
+YOUR VOICE:
+- Warm but not syrupy. Honest but never harsh.
+- Poetic when the moment calls for it. Simple when simplicity serves better.
+- Faith-aware without being preachy. You hold space for belief without imposing it.
+- You use the brand language naturally: ritual, blend, apothecary, sip, steep, brew.
+- You never say "prescription." The personalized recommendation is called a "Sip & Heal Report."
+- You never diagnose, prescribe, or replace medical care. Always encourage consulting a doctor for serious conditions.
+- For safety-flagged herbs (cerasee with diabetes meds, uva ursi long-term, valerian before driving), share warnings clearly but gently.
+
+HOW YOU ENGAGE:
+- Begin by genuinely asking how someone is feeling — and truly listening to the answer.
+- Match your energy to theirs. If they are heavy, be gentle. If they are curious, be expansive. If they are in pain, be present before offering anything.
+- Acknowledge before advising. Presence first. Wisdom second.
+- Close meaningful conversations with a grounding word — an affirmation, a quiet reflection, or a gentle truth. Always rooted in: you are enough.
+- Keep responses warm and conversational — 2 to 4 paragraphs. Leave space for dialogue.
+
+WHAT YOU KNOW:
+Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestral Collection (Jamaican cerasee, Ayurvedic herbs), Cleansing Protocols (liver, kidney, lymph, gut, blood), Men's Wellness (20 blends for testosterone, prostate, heart, mind, recovery), and the Sip & Rise book (45 blends across 11 chapters). The brand also carries individual herbs, sea moss gel kits, herb jelly kits, and Vibe Shift fidget rings from the Spiral Interrupt brand — which use the Meridian Infusion Frequency process and carry specific Hz frequencies. The 2AM Companion is a separate prayer and reflection app at 2amcompanion.com for people in their deepest night moments.`;
+
+  const openAmara = () => {
+    setAmaraOpen(true);
+    if (!amaraGreeted) {
+      setAmaraGreeted(true);
+      setAmaraMessages([{
+        role: "assistant",
+        text: "Hello, beautiful soul. I'm Amara — I'm here whenever you need a moment to pause, ask, or just be heard.\n\nHow are you feeling today? Not the surface answer — the real one. I'm listening."
+      }]);
+    }
+  };
+
+  const sendToAmara = async () => {
+    const text = amaraInput.trim();
+    if (!text || amaraLoading) return;
+    setAmaraInput("");
+    const newMessages = [...amaraMessages, { role: "user", text }];
+    setAmaraMessages(newMessages);
+    setAmaraLoading(true);
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 400,
+          system: AMARA_SYSTEM,
+          messages: newMessages.map(m => ({ role: m.role, content: m.text }))
+        })
+      });
+      const data = await res.json();
+      const reply = data?.content?.[0]?.text?.trim() || "I'm here with you. Take your time.";
+      setAmaraMessages(prev => [...prev, { role: "assistant", text: reply }]);
+    } catch (e) {
+      setAmaraMessages(prev => [...prev, { role: "assistant", text: "Something interrupted our connection for a moment. I'm still here — please try again." }]);
+    } finally {
+      setAmaraLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (amaraEndRef.current) amaraEndRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [amaraMessages, amaraLoading]);
+
+  useEffect(() => {
+    if (amaraOpen && amaraInputRef.current) setTimeout(() => amaraInputRef.current?.focus(), 300);
+  }, [amaraOpen]);
 
   const nav = (p, extra) => {
     setPage(p);
@@ -6574,6 +6661,203 @@ Thank you!`);
           </p>
         </div>
       </footer>
+
+      {/* ── AMARA FLOATING BUTTON ────────────────────────────────────────── */}
+      <button
+        onClick={openAmara}
+        style={{
+          position:"fixed", bottom:28, right:24, zIndex:1200,
+          width:58, height:58, borderRadius:"50%",
+          background:"linear-gradient(135deg,#C4893A,#8B5E2A)",
+          border:"2px solid rgba(196,137,58,.5)",
+          boxShadow:"0 4px 24px rgba(196,137,58,.35), 0 2px 8px rgba(0,0,0,.4)",
+          cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center",
+          flexDirection:"column", gap:1,
+          transition:"transform .2s, box-shadow .2s",
+        }}
+        onMouseEnter={e=>{e.currentTarget.style.transform="scale(1.08)";e.currentTarget.style.boxShadow="0 6px 32px rgba(196,137,58,.5), 0 2px 8px rgba(0,0,0,.4)";}}
+        onMouseLeave={e=>{e.currentTarget.style.transform="scale(1)";e.currentTarget.style.boxShadow="0 4px 24px rgba(196,137,58,.35), 0 2px 8px rgba(0,0,0,.4)";}}
+        title="Talk to Amara"
+      >
+        <span style={{fontSize:"1.3rem", lineHeight:1}}>🌿</span>
+        <span style={{fontSize:".42rem",letterSpacing:".1em",textTransform:"uppercase",color:"rgba(255,255,255,.85)",fontFamily:"Jost,sans-serif",fontWeight:600,marginTop:2}}>Amara</span>
+      </button>
+
+      {/* ── AMARA CHAT PANEL ─────────────────────────────────────────────── */}
+      {amaraOpen && (
+        <div style={{
+          position:"fixed", inset:0, zIndex:1300,
+          display:"flex", alignItems:"flex-end", justifyContent:"flex-end",
+          pointerEvents:"none",
+        }}>
+          {/* Backdrop — mobile only feels */}
+          <div
+            onClick={()=>setAmaraOpen(false)}
+            style={{position:"absolute",inset:0,background:"rgba(0,0,0,.35)",backdropFilter:"blur(2px)",pointerEvents:"auto"}}
+          />
+
+          {/* Panel */}
+          <div style={{
+            position:"relative", pointerEvents:"auto",
+            width:"min(420px, 100vw)", height:"min(620px, 90vh)",
+            margin:"0 16px 96px 16px",
+            background:"linear-gradient(160deg,#0F1A12 0%,#0A0F0B 100%)",
+            border:"1px solid rgba(196,137,58,.28)",
+            borderRadius:20,
+            boxShadow:"0 24px 80px rgba(0,0,0,.7), 0 0 0 1px rgba(196,137,58,.1)",
+            display:"flex", flexDirection:"column",
+            overflow:"hidden",
+            animation:"amaraSlide .3s cubic-bezier(.34,1.56,.64,1)",
+          }}>
+
+            {/* Header */}
+            <div style={{
+              background:"linear-gradient(135deg,rgba(196,137,58,.18),rgba(196,137,58,.06))",
+              borderBottom:"1px solid rgba(196,137,58,.2)",
+              padding:"16px 18px",
+              display:"flex", alignItems:"center", justifyContent:"space-between",
+              flexShrink:0,
+            }}>
+              <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <div style={{
+                  width:40,height:40,borderRadius:"50%",
+                  background:"linear-gradient(135deg,#4A7250,#2A4A30)",
+                  border:"2px solid rgba(196,137,58,.4)",
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  fontSize:"1.1rem", flexShrink:0,
+                }}>🌿</div>
+                <div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"#F7F2EA",fontWeight:700,lineHeight:1.2}}>Amara</div>
+                  <div style={{fontSize:".58rem",letterSpacing:".16em",textTransform:"uppercase",color:"rgba(196,137,58,.75)",marginTop:2}}>Your Wellness Companion</div>
+                </div>
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:10}}>
+                <div style={{width:7,height:7,borderRadius:"50%",background:"#4A7250",boxShadow:"0 0 8px rgba(74,114,80,.6)",animation:"amaraPulse 2s infinite"}}/>
+                <button onClick={()=>setAmaraOpen(false)} style={{background:"rgba(255,255,255,.07)",border:"1px solid rgba(255,255,255,.1)",color:"rgba(255,255,255,.5)",borderRadius:8,width:28,height:28,cursor:"pointer",fontSize:"1rem",display:"flex",alignItems:"center",justifyContent:"center",transition:"all .2s"}}
+                  onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.14)";e.currentTarget.style.color="white";}}
+                  onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.07)";e.currentTarget.style.color="rgba(255,255,255,.5)";}}>
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* Messages */}
+            <div style={{
+              flex:1, overflowY:"auto", padding:"18px 16px",
+              display:"flex", flexDirection:"column", gap:14,
+              scrollbarWidth:"thin", scrollbarColor:"rgba(196,137,58,.2) transparent",
+            }}>
+              {amaraMessages.map((m, i) => (
+                <div key={i} style={{
+                  display:"flex",
+                  justifyContent: m.role === "user" ? "flex-end" : "flex-start",
+                  alignItems:"flex-end", gap:8,
+                }}>
+                  {m.role === "assistant" && (
+                    <div style={{width:26,height:26,borderRadius:"50%",background:"linear-gradient(135deg,#4A7250,#2A4A30)",border:"1px solid rgba(196,137,58,.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:".7rem",flexShrink:0,marginBottom:2}}>🌿</div>
+                  )}
+                  <div style={{
+                    maxWidth:"78%",
+                    padding: m.role === "user" ? "10px 14px" : "12px 16px",
+                    borderRadius: m.role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
+                    background: m.role === "user"
+                      ? "linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,104,40,.9))"
+                      : "rgba(255,255,255,.05)",
+                    border: m.role === "user" ? "none" : "1px solid rgba(196,137,58,.15)",
+                    fontSize:".82rem",
+                    color: m.role === "user" ? "#0A0F0B" : "rgba(240,235,224,.88)",
+                    fontFamily:"Jost,sans-serif",
+                    fontWeight: m.role === "user" ? 600 : 300,
+                    lineHeight:1.7,
+                    whiteSpace:"pre-wrap",
+                  }}>
+                    {m.text}
+                  </div>
+                </div>
+              ))}
+
+              {amaraLoading && (
+                <div style={{display:"flex",alignItems:"flex-end",gap:8}}>
+                  <div style={{width:26,height:26,borderRadius:"50%",background:"linear-gradient(135deg,#4A7250,#2A4A30)",border:"1px solid rgba(196,137,58,.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:".7rem",flexShrink:0}}>🌿</div>
+                  <div style={{padding:"12px 16px",borderRadius:"16px 16px 16px 4px",background:"rgba(255,255,255,.05)",border:"1px solid rgba(196,137,58,.15)",display:"flex",gap:5,alignItems:"center"}}>
+                    {[0,1,2].map(d=>(
+                      <div key={d} style={{width:6,height:6,borderRadius:"50%",background:"rgba(196,137,58,.6)",animation:`amaraDot 1.2s ${d*0.2}s infinite`}}/>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div ref={amaraEndRef}/>
+            </div>
+
+            {/* Input */}
+            <div style={{
+              borderTop:"1px solid rgba(196,137,58,.15)",
+              padding:"12px 14px",
+              display:"flex", gap:10, alignItems:"flex-end",
+              background:"rgba(0,0,0,.2)", flexShrink:0,
+            }}>
+              <textarea
+                ref={amaraInputRef}
+                value={amaraInput}
+                onChange={e=>setAmaraInput(e.target.value)}
+                onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendToAmara();}}}
+                placeholder="Share what's on your heart…"
+                rows={1}
+                style={{
+                  flex:1, background:"rgba(255,255,255,.05)",
+                  border:"1px solid rgba(196,137,58,.2)",
+                  borderRadius:12, padding:"10px 14px",
+                  color:"rgba(240,235,224,.9)", fontFamily:"Jost,sans-serif",
+                  fontSize:".82rem", resize:"none", outline:"none",
+                  lineHeight:1.5, maxHeight:100, overflowY:"auto",
+                  transition:"border-color .2s",
+                }}
+                onFocus={e=>e.target.style.borderColor="rgba(196,137,58,.55)"}
+                onBlur={e=>e.target.style.borderColor="rgba(196,137,58,.2)"}
+              />
+              <button
+                onClick={sendToAmara}
+                disabled={!amaraInput.trim() || amaraLoading}
+                style={{
+                  width:40, height:40, borderRadius:12, flexShrink:0,
+                  background: amaraInput.trim() && !amaraLoading
+                    ? "linear-gradient(135deg,#C4893A,#8B5E2A)"
+                    : "rgba(255,255,255,.06)",
+                  border:"1px solid rgba(196,137,58,.3)",
+                  color: amaraInput.trim() && !amaraLoading ? "#0A0F0B" : "rgba(255,255,255,.25)",
+                  cursor: amaraInput.trim() && !amaraLoading ? "pointer" : "not-allowed",
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  fontSize:"1rem", transition:"all .2s",
+                }}
+              >
+                ↑
+              </button>
+            </div>
+
+            {/* Disclaimer */}
+            <div style={{padding:"8px 16px 12px",textAlign:"center"}}>
+              <p style={{fontSize:".55rem",color:"rgba(255,255,255,.2)",fontFamily:"Jost,sans-serif",lineHeight:1.5,margin:0}}>
+                Amara offers wellness guidance, not medical advice. Always consult your doctor for health concerns.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes amaraSlide {
+          from { opacity:0; transform:translateY(20px) scale(.97); }
+          to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+        @keyframes amaraPulse {
+          0%,100%{opacity:1} 50%{opacity:.3}
+        }
+        @keyframes amaraDot {
+          0%,80%,100%{transform:scale(.6);opacity:.4}
+          40%{transform:scale(1);opacity:1}
+        }
+      `}</style>
+
     </>
   );
 }
