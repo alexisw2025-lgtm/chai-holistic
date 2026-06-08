@@ -1301,7 +1301,7 @@ export default function ChaiHolistic() {
       --sage:#7A9E7E;--sage-d:#4A7250;--sage-p:#EBF2EC;
       --gold:#C4893A;--gold-p:#F5E6CE;--dust:#D4C9B8;
     }
-    html{scroll-behavior:smooth;}
+    html{scroll-behavior:smooth;font-size:17px;}
     body{font-family:'Jost',sans-serif;background:var(--parch);color:var(--ink);overflow-x:hidden;}
     ::selection{background:var(--sage-p);}
     body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:.38;}
@@ -1311,13 +1311,13 @@ export default function ChaiHolistic() {
     .nav-logo-img{width:46px;height:46px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.12);flex-shrink:0;}
     .nav-logo-text{display:flex;flex-direction:column;line-height:1.1;}
     .nav-logo-text span:first-child{font-size:1.35rem;}
-    .nav-logo-text span:last-child{font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-family:'Jost',sans-serif;font-weight:400;}
+    .nav-logo-text span:last-child{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-family:'Jost',sans-serif;font-weight:400;}
     @keyframes spin{to{transform:rotate(360deg);}}
     .nav-links{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;}
-    .nav-lnk{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;}
+    .nav-lnk{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;}
     .nav-lnk:hover,.nav-lnk.on{opacity:1;border-bottom-color:var(--gold);}
     .nav-right{display:flex;align-items:center;gap:10px;}
-    .cart-btn{background:var(--bark);color:var(--parch);border:none;padding:8px 18px;font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;display:flex;align-items:center;gap:7px;}
+    .cart-btn{background:var(--bark);color:var(--parch);border:none;padding:8px 18px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;display:flex;align-items:center;gap:7px;}
     .cart-btn:hover{background:var(--sage-d);}
     .cart-badge{background:var(--gold);color:white;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.56rem;font-weight:500;}
 
@@ -1348,7 +1348,7 @@ export default function ChaiHolistic() {
     .hero-h{font-family:'Playfair Display',serif;font-size:clamp(3rem,5.5vw,5.5rem);font-weight:400;line-height:1.18;color:var(--bark);margin-bottom:1.6rem;letter-spacing:.01em;}
     .hero-h em{font-style:italic;color:var(--sage-d);}
     .hero-h .g{color:var(--gold);}
-    .hero-p{font-size:.96rem;font-weight:300;color:#5A5040;line-height:1.8;max-width:420px;margin-bottom:2rem;}
+    .hero-p{font-size:1.02rem;font-weight:300;color:#5A5040;line-height:1.8;max-width:420px;margin-bottom:2rem;}
     .hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.5rem;}
     .btn-main{background:var(--bark);color:var(--parch);border:none;padding:12px 30px;font-family:'Jost',sans-serif;font-size:.72rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:50px;}
     .btn-main:hover{background:var(--sage-d);transform:translateY(-2px);box-shadow:0 8px 22px rgba(74,114,80,.3);}
@@ -1366,8 +1366,8 @@ export default function ChaiHolistic() {
     .h-card.c4{width:160px;height:210px;top:240px;left:220px;transform:rotate(2deg);z-index:1;}
     .h-card-inner{width:100%;height:65%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-radius:20px 20px 0 0;}
     .h-card-body{padding:11px 13px;}
-    .h-card-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);}
-    .h-card-tag{font-size:.62rem;color:var(--sage);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+    .h-card-name{font-family:'Playfair Display',serif;font-size:.94rem;color:var(--bark);}
+    .h-card-tag{font-size:.66rem;color:var(--sage);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
     .h-badge{position:absolute;bottom:-48px;right:0;background:var(--gold);color:white;padding:10px 14px;font-family:'Playfair Display',serif;font-size:.88rem;font-style:italic;box-shadow:0 6px 22px rgba(196,137,58,.35);z-index:2;border-radius:14px;transition:all .2s;}
     .h-badge:hover{background:var(--bark);box-shadow:0 8px 28px rgba(61,43,31,.4);transform:translateY(-2px);}
     .h-badge small{display:block;font-family:'Jost',sans-serif;font-size:.62rem;font-style:normal;letter-spacing:.1em;opacity:.85;margin-top:2px;}
@@ -1387,14 +1387,14 @@ export default function ChaiHolistic() {
     .sec-in{max-width:1280px;margin:0 auto;}
     .sh{margin-bottom:2.8rem;}
     .sh.c{text-align:center;}
-    .sh-eye{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;display:flex;align-items:center;gap:8px;}
+    .sh-eye{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;display:flex;align-items:center;gap:8px;}
     .sh.c .sh-eye{justify-content:center;}
     .sh-eye::before,.sh-eye::after{content:'';height:1px;background:var(--gold);flex:1;max-width:32px;}
     .sh.c .sh-eye::before,.sh.c .sh-eye::after{display:inline-block;}
     .sh-h{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.9rem);font-weight:400;color:var(--bark);line-height:1.15;}
     .sh-h.lt{color:white;}
     .sh-h em{font-style:italic;color:var(--sage-d);}
-    .sh-p{font-size:.88rem;font-weight:300;color:#6A5F50;line-height:1.75;margin-top:.65rem;max-width:500px;}
+    .sh-p{font-size:.94rem;font-weight:300;color:#6A5F50;line-height:1.75;margin-top:.65rem;max-width:500px;}
     .sh.c .sh-p{margin:auto;margin-top:.65rem;}
     .sh-p.lt{color:rgba(255,255,255,.58);}
 
@@ -1406,33 +1406,33 @@ export default function ChaiHolistic() {
     .b-tile-close{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:white;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);z-index:4;transition:background .2s;}
     .b-tile-close:hover{background:rgba(0,0,0,.8);}
     .b-tile-recipe{border-top:1px solid rgba(255,255,255,.1);margin-top:10px;padding-top:10px;}
-    .b-recipe-desc{font-size:.72rem;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:10px;font-style:italic;}
-    .b-recipe-label{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:500;}
+    .b-recipe-desc{font-size:.76rem;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:10px;font-style:italic;}
+    .b-recipe-label{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:500;}
     .b-recipe-list{margin:0 0 10px 0;padding-left:14px;list-style:disc;}
-    .b-recipe-list li{font-size:.72rem;color:rgba(255,255,255,.8);margin-bottom:3px;line-height:1.4;}
+    .b-recipe-list li{font-size:.76rem;color:rgba(255,255,255,.8);margin-bottom:3px;line-height:1.4;}
     .b-recipe-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
-    .b-recipe-meta{font-size:.6rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.65);padding:3px 8px;border-radius:50px;}
-    .b-recipe-warn{font-size:.62rem;color:#E8A87C;background:rgba(232,168,124,.08);border:1px solid rgba(232,168,124,.2);border-radius:8px;padding:7px 10px;line-height:1.5;}
+    .b-recipe-meta{font-size:.64rem;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.65);padding:3px 8px;border-radius:50px;}
+    .b-recipe-warn{font-size:.66rem;color:#E8A87C;background:rgba(232,168,124,.08);border:1px solid rgba(232,168,124,.2);border-radius:8px;padding:7px 10px;line-height:1.5;}
     .b-tile-visual{width:100%;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;transition:all .4s;}
     .b-tile:hover .b-tile-visual{filter:brightness(1.1);}
     .b-tile-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s;}
     .b-tile:hover .b-tile-photo{transform:scale(1.08);}
-    .b-tile-occ-badge{font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:3px 12px;border-radius:50px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);position:relative;z-index:1;}
+    .b-tile-occ-badge{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:3px 12px;border-radius:50px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);position:relative;z-index:1;}
     .b-tile-body{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1;background:linear-gradient(175deg,#1C1A17 0%,#2A1F15 100%);}
-    .b-occ{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:4px;}
+    .b-occ{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:4px;}
     .b-name{font-family:'Playfair Display',serif;font-size:clamp(.88rem,1.4vw,1.1rem);color:white;margin-bottom:3px;line-height:1.2;}
-    .b-tag{font-size:.66rem;color:rgba(255,255,255,.42);font-style:italic;margin-bottom:5px;font-weight:300;}
-    .b-ben{font-size:.62rem;color:var(--gold);letter-spacing:.07em;margin-bottom:8px;flex:1;}
+    .b-tag{font-size:.7rem;color:rgba(255,255,255,.42);font-style:italic;margin-bottom:5px;font-weight:300;}
+    .b-ben{font-size:.66rem;color:var(--gold);letter-spacing:.07em;margin-bottom:8px;flex:1;}
     .b-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;}
     .b-price{font-family:'Playfair Display',serif;font-size:1.05rem;color:white;}
-    .btn-tile{background:var(--gold);color:white;border:none;padding:7px 15px;font-family:'Jost',sans-serif;font-size:.64rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;white-space:nowrap;}
+    .btn-tile{background:var(--gold);color:white;border:none;padding:7px 15px;font-family:'Jost',sans-serif;font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;white-space:nowrap;}
     .btn-tile:hover{background:white;color:var(--bark);}
     /* PRODUCT CARD VISUAL HEADER */
     .pcard-visual{width:100%;height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:20px 20px 0 0;position:relative;overflow:hidden;transition:all .3s;}
     .pcard:hover .pcard-visual{filter:brightness(1.08);}
     .pcard-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s;}
     .pcard:hover .pcard-photo{transform:scale(1.08);}
-    .pcard-visual-occ{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:2px 10px;border-radius:50px;white-space:nowrap;backdrop-filter:blur(4px);z-index:1;}
+    .pcard-visual-occ{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:2px 10px;border-radius:50px;white-space:nowrap;backdrop-filter:blur(4px);z-index:1;}
 
     /* PILLS */
     .pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:2.2rem;}
@@ -1447,16 +1447,16 @@ export default function ChaiHolistic() {
     .pcard:hover{box-shadow:0 14px 44px rgba(28,26,23,.1);transform:translateY(-4px);}
     .pcard-stripe{height:5px;border-radius:20px 20px 0 0;}
     .pcard-body{padding:18px;}
-    .pcard-occ{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage);margin-bottom:4px;}
-    .pcard-name{font-family:'Playfair Display',serif;font-size:1.12rem;color:var(--bark);margin-bottom:3px;}
-    .pcard-tag{font-size:.74rem;font-style:italic;color:#8A7A6A;margin-bottom:8px;font-weight:300;}
-    .pcard-desc{font-size:.78rem;color:#6A5F50;line-height:1.6;margin-bottom:10px;font-weight:300;}
-    .pcard-ingr{font-size:.66rem;color:#8A7A6A;margin-bottom:10px;line-height:1.5;}
-    .pcard-ingr strong{font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-size:.58rem;color:#5A5040;display:block;margin-bottom:2px;}
-    .pcard-benefit{font-size:.66rem;color:var(--gold);letter-spacing:.07em;margin-bottom:10px;}
+    .pcard-occ{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage);margin-bottom:4px;}
+    .pcard-name{font-family:'Playfair Display',serif;font-size:1.18rem;color:var(--bark);margin-bottom:3px;}
+    .pcard-tag{font-size:.8rem;font-style:italic;color:#8A7A6A;margin-bottom:8px;font-weight:300;}
+    .pcard-desc{font-size:.84rem;color:#6A5F50;line-height:1.65;margin-bottom:10px;font-weight:300;}
+    .pcard-ingr{font-size:.7rem;color:#8A7A6A;margin-bottom:10px;line-height:1.5;}
+    .pcard-ingr strong{font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-size:.62rem;color:#5A5040;display:block;margin-bottom:2px;}
+    .pcard-benefit{font-size:.7rem;color:var(--gold);letter-spacing:.07em;margin-bottom:10px;}
     .pcard-foot{display:flex;justify-content:space-between;align-items:center;}
     .pcard-price{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--bark);}
-    .btn-add{background:var(--bark);color:white;border:none;padding:8px 15px;font-family:'Jost',sans-serif;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
+    .btn-add{background:var(--bark);color:white;border:none;padding:9px 17px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:50px;}
     .btn-add:hover{background:var(--sage-d);}
     .pcard{cursor:pointer;}
 
@@ -1466,21 +1466,21 @@ export default function ChaiHolistic() {
     .bm-hero{width:100%;height:200px;position:relative;overflow:hidden;border-radius:28px 28px 0 0;flex-shrink:0;}
     .bm-hero-img{width:100%;height:100%;object-fit:cover;}
     .bm-hero-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1) 0%,rgba(0,0,0,.55) 100%);}
-    .bm-hero-occ{position:absolute;top:16px;left:18px;font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:3px 12px;border-radius:50px;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);}
+    .bm-hero-occ{position:absolute;top:16px;left:18px;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.9);background:rgba(0,0,0,.45);padding:3px 12px;border-radius:50px;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.15);}
     .bm-close{position:absolute;top:14px;right:14px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.25);color:white;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);transition:all .2s;z-index:2;}
     .bm-close:hover{background:rgba(0,0,0,.75);}
     .bm-stripe{height:5px;}
     .bm-body{padding:22px 26px 28px;}
     .bm-name{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--bark);margin-bottom:4px;line-height:1.2;}
-    .bm-tagline{font-size:.82rem;font-style:italic;color:#8A7A6A;margin-bottom:14px;font-weight:300;}
-    .bm-desc{font-size:.84rem;color:#5A5040;line-height:1.75;margin-bottom:18px;font-weight:300;}
-    .bm-section-lbl{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--sage-d);margin-bottom:7px;}
+    .bm-tagline{font-size:.88rem;font-style:italic;color:#8A7A6A;margin-bottom:14px;font-weight:300;}
+    .bm-desc{font-size:.9rem;color:#5A5040;line-height:1.8;margin-bottom:18px;font-weight:300;}
+    .bm-section-lbl{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--sage-d);margin-bottom:7px;}
     .bm-ingr-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;}
-    .bm-ingr-chip{font-size:.7rem;background:var(--sage-p);color:var(--sage-d);padding:5px 12px;border-radius:50px;border:1px solid rgba(74,114,80,.18);}
-    .bm-benefit{font-size:.74rem;color:var(--gold);letter-spacing:.08em;margin-bottom:18px;}
+    .bm-ingr-chip{font-size:.74rem;background:var(--sage-p);color:var(--sage-d);padding:5px 12px;border-radius:50px;border:1px solid rgba(74,114,80,.18);}
+    .bm-benefit{font-size:.78rem;color:var(--gold);letter-spacing:.08em;margin-bottom:18px;}
     .bm-brew{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
     .bm-brew-tile{background:white;border:1px solid var(--dust);border-radius:14px;padding:12px 14px;}
-    .bm-brew-lbl{font-size:.55rem;letter-spacing:.16em;text-transform:uppercase;color:#9A8A7A;margin-bottom:4px;}
+    .bm-brew-lbl{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:#9A8A7A;margin-bottom:4px;}
     .bm-brew-val{font-size:.82rem;color:var(--bark);font-weight:500;}
     .bm-value{background:var(--sage-p);border:1px solid rgba(74,114,80,.15);border-radius:14px;padding:10px 14px;font-size:.72rem;color:var(--sage-d);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
     .bm-warn{background:#FFF8F6;border:1px solid #F0C0B0;border-radius:14px;padding:12px 14px;font-size:.74rem;color:#7A3020;line-height:1.6;margin-bottom:18px;font-weight:300;}
@@ -1501,7 +1501,7 @@ export default function ChaiHolistic() {
     .ccard{background:white;border:1px solid var(--dust);border-radius:20px;overflow:hidden;transition:all .3s;}
     .ccard:hover{box-shadow:0 14px 44px rgba(28,26,23,.1);transform:translateY(-3px);}
     .ccard-top{padding:16px 18px 12px;background:linear-gradient(135deg,#3D2B1F,#2A1F15);border-radius:20px 20px 0 0;}
-    .ccard-organ{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;opacity:.85;}
+    .ccard-organ{font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;opacity:.85;}
     .ccard-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:white;margin-bottom:2px;}
     .ccard-tag{font-size:.72rem;font-style:italic;color:rgba(255,255,255,.52);font-weight:300;}
     .ccard-body{padding:16px 18px;}
@@ -1545,11 +1545,11 @@ export default function ChaiHolistic() {
     .bcard:hover{box-shadow:0 18px 55px rgba(28,26,23,.1);transform:translateY(-4px);}
     .bcard-top{background:linear-gradient(135deg,var(--bark) 0%,#2A1F15 100%);padding:24px;border-radius:20px 20px 0 0;position:relative;overflow:hidden;}
     .bcard-top::after{content:'✦';position:absolute;right:-8px;top:-18px;font-size:7rem;color:rgba(255,255,255,.03);pointer-events:none;}
-    .bcard-badge{display:inline-block;background:var(--gold);color:white;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 12px;margin-bottom:10px;border-radius:50px;}
+    .bcard-badge{display:inline-block;background:var(--gold);color:white;font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 12px;margin-bottom:10px;border-radius:50px;}
     .bcard-name{font-family:'Playfair Display',serif;font-size:1.25rem;color:white;margin-bottom:4px;}
     .bcard-desc{font-size:.78rem;color:rgba(255,255,255,.55);font-weight:300;line-height:1.6;}
     .bcard-body{padding:20px;}
-    .bcard-lbl{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:#8A7A6A;margin-bottom:7px;}
+    .bcard-lbl{font-size:.64rem;letter-spacing:.15em;text-transform:uppercase;color:#8A7A6A;margin-bottom:7px;}
     .bcard-list{list-style:none;margin-bottom:16px;}
     .bcard-list li{font-size:.78rem;color:#5A5040;padding:3px 0;border-bottom:1px solid var(--dust);display:flex;align-items:center;gap:7px;font-weight:300;}
     .bcard-list li::before{content:'--';color:var(--sage);font-size:.66rem;}
@@ -1566,10 +1566,10 @@ export default function ChaiHolistic() {
     .tcard-visual{width:100%;height:180px;position:relative;overflow:hidden;border-radius:20px 20px 0 0;}
     .tcard-photo{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
     .tcard:hover .tcard-photo{transform:scale(1.07);}
-    .tcard-badge{position:absolute;top:12px;left:12px;background:rgba(28,26,23,.72);color:rgba(255,255,255,.92);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;padding:3px 11px;border-radius:50px;backdrop-filter:blur(6px);}
+    .tcard-badge{position:absolute;top:12px;left:12px;background:rgba(28,26,23,.72);color:rgba(255,255,255,.92);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;padding:3px 11px;border-radius:50px;backdrop-filter:blur(6px);}
     .tcard-emoji{position:absolute;bottom:10px;right:12px;font-size:1.4rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));}
     .tcard-body{padding:18px;flex:1;display:flex;flex-direction:column;}
-    .tcard-material{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sage-d);margin-bottom:5px;}
+    .tcard-material{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sage-d);margin-bottom:5px;}
     .tcard-name{font-family:'Playfair Display',serif;font-size:1.08rem;color:var(--bark);margin-bottom:3px;line-height:1.25;}
     .tcard-tagline{font-size:.74rem;font-style:italic;color:#8A7A6A;margin-bottom:10px;font-weight:300;}
     .tcard-desc{font-size:.78rem;color:#6A5F50;line-height:1.65;margin-bottom:12px;font-weight:300;flex:1;}
@@ -1602,7 +1602,7 @@ export default function ChaiHolistic() {
     .rcard-head{padding:14px 14px 10px;display:flex;gap:10px;align-items:flex-start;}
     .rcard-icon{width:36px;height:36px;border-radius:10px;background:var(--sage-p);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
     .rcard-name{font-family:'Playfair Display',serif;font-size:.88rem;color:var(--bark);line-height:1.25;}
-    .rcard-tag-sm{font-size:.58rem;color:var(--sage);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+    .rcard-tag-sm{font-size:.64rem;color:var(--sage);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
     .rcard-meta{display:flex;gap:5px;flex-wrap:wrap;padding:0 14px 10px;}
     .rcard-hover-desc{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#1C1A17;color:rgba(255,255,255,.85);font-size:.72rem;line-height:1.6;padding:10px 14px;border-radius:12px;pointer-events:none;z-index:200;font-family:'Jost',sans-serif;border:1px solid rgba(196,137,58,.3);font-weight:300;box-shadow:0 8px 28px rgba(0,0,0,.4);}
     .rcard-hover-desc::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1C1A17;}
@@ -1803,7 +1803,7 @@ export default function ChaiHolistic() {
     .twoam-blend-name{font-family:'Playfair Display',serif;font-size:1.4rem;color:white;margin-bottom:8px;}
     .twoam-steps{list-style:none;margin-bottom:16px;}
     .twoam-steps li{font-size:.82rem;color:rgba(255,255,255,.6);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:flex-start;gap:10px;}
-    .twoam-steps li::before{content:'✦';color:var(--gold);font-size:.55rem;margin-top:4px;flex-shrink:0;}
+    .twoam-steps li::before{content:'✦';color:var(--gold);font-size:.62rem;margin-top:4px;flex-shrink:0;}
     .twoam-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
     .btn-twoam{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);padding:10px 24px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:50px;transition:all .2s;}
     .btn-twoam:hover{background:rgba(255,255,255,.15);}
@@ -1888,7 +1888,7 @@ export default function ChaiHolistic() {
     .sav-ov{position:fixed;inset:0;background:rgba(18,14,10,.75);z-index:950;display:flex;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(10px);}
     .sav-box{background:var(--parch);max-width:480px;width:100%;border-radius:28px;box-shadow:0 32px 100px rgba(0,0,0,.35);overflow:hidden;}
     .sav-head{background:linear-gradient(135deg,var(--bark),#3A2A18);padding:28px 28px 22px;position:relative;}
-    .sav-head-eye{font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;}
+    .sav-head-eye{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;}
     .sav-head-h{font-family:'Playfair Display',serif;font-size:1.6rem;color:white;font-weight:400;line-height:1.2;margin-bottom:4px;}
     .sav-head-sub{font-size:.76rem;color:rgba(255,255,255,.5);font-weight:300;line-height:1.5;}
     .sav-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .2s;}
