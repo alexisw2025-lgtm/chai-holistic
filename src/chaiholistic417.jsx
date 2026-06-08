@@ -18,6 +18,10 @@ import imgSre7 from "./rings/sre7.jpg";
 // --- DATA -------------------------------------------------------------------
 const BLENDS = [
   { id:"m1", photo:"https://images.pexels.com/photos/906150/pexels-photo-906150.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Morning Rise", occasion:"Morning", tagline:"Greet the day with intention", desc:"Tulsi, ginger & lemon peel awaken your senses and spark clarity for the day ahead.", ingredients:["Tulsi (Holy Basil)","Ginger Root","Lemon Peel","Black Pepper"], price:17.99, benefit:"Energize · Focus · Uplift", color:"#5C7A3E", steepMin:5, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Full Rolling Boil -- pour immediately", mood:"Foggy · Unmotivated", oz:2, cupsPerOz:12, servingSize:"1 tsp", energy:"high", time:"morning", feeling:"foggy", caffeine:false },
+  // ANCESTRAL COLLECTION
+  { id:"cerasee", photo:"https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Grandmother's Cerasee", occasion:"Ancestral", tagline:"Blood cleanser. Sugar balancer. A grandmother's remedy.", desc:"Pure dried cerasee leaf and vine — the traditional Jamaican blood cleansing herb, now available as a ready-to-brew blend. Intensely bitter, deeply effective. Consult your doctor if diabetic.", ingredients:["Dried Cerasee Leaf","Dried Cerasee Vine"], price:16.99, benefit:"Blood Sugar · Blood Cleanse · Detox", color:"#1A3A1A", steepMin:18, oz:1.5, cupsPerOz:8, servingSize:"1 tsp", steepTemp:"Full Rolling Boil -- simmer 15-20 min", mood:"Blood sugar · Detox · Weekly cleanse", energy:"medium", time:"morning", feeling:"heavy", caffeine:false, warning:"⚠ Can lower blood glucose rapidly. Do NOT use with diabetes medication without medical supervision. Not for pregnancy. Not for children. Consult your doctor before use." },
+  { id:"cerasee-ginger", photo:"https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Cerasee & Ginger Blend", occasion:"Ancestral", tagline:"The bitterness softened. The medicine intact.", desc:"Cerasee with warming ginger root — the ginger tempers the bitterness and adds digestive support while preserving cerasee's full blood-cleansing properties.", ingredients:["Dried Cerasee Leaf","Dried Cerasee Vine","Ginger Root"], price:17.99, benefit:"Blood Sugar · Digestion · Cleanse", color:"#2A3A1A", steepMin:15, oz:1.5, cupsPerOz:8, servingSize:"1 tsp", steepTemp:"Full Rolling Boil -- simmer 12-15 min", mood:"Blood sugar · Cleanse · Gentle", energy:"medium", time:"morning", feeling:"heavy", caffeine:false, warning:"⚠ Can lower blood glucose rapidly. Do NOT use with diabetes medication without medical supervision. Not for pregnancy. Consult your doctor before use." },
+  { id:"cerasee-cleanse", photo:"https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Cerasee Blood Cleanse", occasion:"Ancestral", tagline:"The complete blood and liver protocol.", desc:"Cerasee with dandelion root and nettle leaf — a comprehensive blood, liver, and kidney cleansing blend. Three of the most respected cleansing herbs, combined with purpose.", ingredients:["Dried Cerasee Leaf","Dried Cerasee Vine","Dandelion Root","Nettle Leaf"], price:19.99, benefit:"Full Blood Cleanse · Liver · Kidney", color:"#1A4A1A", steepMin:15, oz:2, cupsPerOz:9, servingSize:"1 tsp", steepTemp:"Full Rolling Boil -- simmer 12-15 min", mood:"Full detox · Cleanse protocol", energy:"medium", time:"morning", feeling:"heavy", caffeine:false, warning:"⚠ Can lower blood glucose rapidly. Do NOT use with diabetes medication without medical supervision. Not for pregnancy. Dandelion may interact with diuretics. Consult your doctor before use." },
   { id:"m2", photo:"/herbs/2am-reset.jpg", name:"2AM Reset", occasion:"Morning", tagline:"For restless nights & racing minds", desc:"Cinnamon, cardamom, ginger & cloves -- a warming blend to soothe and restore after a hard night.", ingredients:["Ceylon Cinnamon","Cardamom","Ginger Root","Cloves"], price:18.99, benefit:"Calm · Restore · Ground", color:"#4A3728", steepMin:8, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil -- boil then wait 60 sec", mood:"Anxious · Restless", oz:2, cupsPerOz:10, servingSize:"1 heaping tsp", energy:"low", time:"night", feeling:"anxious", caffeine:false },
   { id:"m3", photo:"/herbs/cinnamon-cloves.jpg", name:"Cinnamon & Cloves", occasion:"Morning", tagline:"Warm spice, ancient remedy", desc:"A bold, comforting classic. Ceylon cinnamon and cloves work together for circulation and warmth.", ingredients:["Ceylon Cinnamon","Organic Cloves"], price:15.99, benefit:"Warmth · Circulation · Comfort", color:"#8B3A2A", steepMin:7, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil -- boil then wait 60 sec", mood:"Cold · Sluggish", oz:2, cupsPerOz:14, servingSize:"1 tsp", energy:"medium", time:"morning", feeling:"tired", caffeine:false },
   { id:"m4", photo:"https://images.pexels.com/photos/3850838/pexels-photo-3850838.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Ginger Lemon Sunrise", occasion:"Morning", tagline:"A sharp, bright awakening", desc:"Fresh ginger and lemon peel cut through morning fog with a clean, invigorating brightness.", ingredients:["Ginger Root","Lemon Peel","Lemongrass","Peppermint"], price:16.99, benefit:"Clarity · Digestion · Wake", color:"#C47A1A", steepMin:6, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Full Rolling Boil -- pour immediately", mood:"Tired · Heavy", oz:2, cupsPerOz:13, servingSize:"1 tsp", energy:"high", time:"morning", feeling:"tired", caffeine:false },
@@ -4244,6 +4248,27 @@ export default function ChaiHolistic() {
             <div style={{fontSize:".78rem",color:"rgba(255,255,255,.6)",fontStyle:"italic"}}>{r.tagline||r.benefit}</div>
           </div>
           <div style={{padding:"22px 24px"}}>
+
+            {/* PROMINENT GET THIS BLEND CTA — above the recipe */}
+            <div style={{
+              background:"linear-gradient(135deg,var(--bark),#3A2A18)",
+              borderRadius:16, padding:"16px 18px", marginBottom:18,
+              display:"flex", alignItems:"center", gap:14, flexWrap:"wrap",
+            }}>
+              <div style={{flex:1, minWidth:160}}>
+                <div style={{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"rgba(196,137,58,.85)",marginBottom:4,fontWeight:600}}>✦ Get This Blend Ready-Made</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",marginBottom:3}}>{r.name}</div>
+                <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",fontWeight:300}}>Sourced · Pre-blended · Ships to you</div>
+              </div>
+              <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:6,flexShrink:0}}>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.4rem",color:"rgba(196,137,58,.9)",fontWeight:600}}>${r.price}</div>
+                <button className="btn-add" style={{fontSize:".7rem",padding:"10px 22px",background:"rgba(196,137,58,.9)"}}
+                  onClick={()=>{addToCart({...r,emoji:"🍵"});setActiveRecipe(null);}}>
+                  Add to Basket
+                </button>
+              </div>
+            </div>
+
             <CupValue item={r}/>
             <p style={{fontSize:".86rem",color:"#4A3F30",lineHeight:1.8,marginBottom:18,fontWeight:300}}>{r.desc}</p>
             <div style={{marginBottom:16}}>
@@ -4280,9 +4305,12 @@ export default function ChaiHolistic() {
               </button>
               {timerFor===activeRecipe&&timerSec!==null&&<button className="btn-t rst" onClick={e=>{e.stopPropagation();stopTimer();}}>Reset</button>}
             </div>
-            <button className="btn-add" style={{width:"100%"}} onClick={()=>{addToCart({...r,emoji:"🍵"});setActiveRecipe(null);}}>
-              Add to Basket — ${r.price}
+            <button className="btn-add" style={{width:"100%",marginBottom:4}} onClick={()=>{addToCart({...r,emoji:"🍵"});setActiveRecipe(null);}}>
+              ✦ Add {r.name} to Basket — ${r.price}
             </button>
+            <div style={{fontSize:".65rem",color:"#9A8A7A",textAlign:"center",marginBottom:12}}>
+              Free from sourcing hassle · Same recipe · Ships ready to brew
+            </div>
 
             {/* WHY ORDER OURS — recipe modal */}
             <div style={{marginTop:12,background:"linear-gradient(135deg,#F5F0E4,#FAF7F0)",border:"1px solid rgba(196,137,58,.2)",borderRadius:14,padding:"13px 15px"}}>

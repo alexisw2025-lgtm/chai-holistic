@@ -38,29 +38,37 @@ const COLLECTIONS = [
         safety: "RED",
         safetyLabel: "⚠ Consult Your Doctor First",
         tagline: "The blood cleanser. The sugar balancer. The most important warning on this site.",
-        story: `My grandmother grew cerasee along the back fence and up the mango tree. She picked the fresh vine — stems and leaves both — and boiled them in a half pot of water down to a deep, bitter green concentrate. That concentrate was everything. She drank it for her blood and her sugar. She added it to bath water to wash us. She made soap from it to bathe the babies. She knew what she was doing. The science has spent decades catching up to her.`,
-        whyItWorks: `Cerasee contains over 228 identified bioactive compounds including charantin, polypeptide-p, and vicine — three substances that mimic insulin activity and improve cellular glucose uptake. A meta-analysis in the Journal of Ethnopharmacology confirmed significant fasting blood glucose reduction across nine controlled trials. Your grandmother was prescribing insulin-mimicking medicine. She just grew it in the yard.`,
+        story: `My grandmother grew cerasee along the back fence and up the mango tree. She picked the fresh vine — stems and leaves both — and boiled them in a half pot of water down to a deep, bitter green concentrate. She drank it for her blood and her sugar. She knew what she was doing. The science has spent decades catching up to her. That knowledge is what this blend is built on.`,
+        whyItWorks: `Cerasee contains over 228 identified bioactive compounds including charantin, polypeptide-p, and vicine — three substances that mimic insulin activity and improve cellular glucose uptake. A meta-analysis in the Journal of Ethnopharmacology confirmed significant fasting blood glucose reduction across nine controlled trials. The bitter compounds also support liver detoxification pathways and reduce systemic inflammation. Your grandmother was prescribing insulin-mimicking medicine. She just grew it in the yard.`,
+
+        // PRODUCT OFFERING — this is now a real Chai Holistic product
+        offerBlend: true,
+        offerNote: "We now offer Grandmother's Cerasee as a ready-to-brew dried blend — the same tradition, sourced to our quality standard. No fresh vine sourcing required.",
+        blendOptions: [
+          { label: "Pure Cerasee", desc: "Dried cerasee leaf and vine only. Pure, potent, traditional.", price: 16.99 },
+          { label: "Cerasee & Ginger", desc: "Cerasee with ginger root — the ginger tempers the bitterness and adds warming digestive support.", price: 17.99 },
+          { label: "Cerasee Blood Cleanse Blend", desc: "Cerasee with dandelion root and nettle leaf — a comprehensive blood and liver support protocol.", price: 19.99 },
+        ],
+        blendId: "cerasee-blend", // connects to BLENDS array
+
         ingredients: [
-          "1 good handful of fresh cerasee vine — stems and leaves both",
-          "Half pot of water (approximately 4–5 cups)",
+          "1 tsp dried cerasee leaf (our blend) — or 1 good handful of fresh vine if available",
+          "2 cups water",
           "Honey or maple syrup to taste (optional — the bitterness is the medicine)",
         ],
         method: [
-          "Rinse the fresh vine and leaves thoroughly under cold water.",
-          "Place the whole handful — stems and leaves — into half a pot of cold water.",
-          "Bring to a full boil, then reduce heat and simmer uncovered for 20–25 minutes.",
-          "The water will turn a deep greenish-brown. This is the concentrate.",
-          "Strain well. Press the vine against the strainer to extract everything.",
-          "For drinking: pour a small cup of concentrate (about 4oz). This is potent. Do not drink the full pot.",
-          "Sweeten with honey if needed. Drink slowly.",
-          "For bath use: dilute 1 part concentrate to 3–5 parts warm bath water.",
+          "Add dried cerasee to cold water and bring to a full boil.",
+          "Reduce heat and simmer uncovered for 15–20 minutes.",
+          "The water will turn a deep greenish-brown.",
+          "Strain well — press the herb against the strainer.",
+          "Pour a small cup (about 6oz). This is potent. Do not drink multiple cups.",
+          "Sweeten lightly with honey if needed. Drink slowly.",
         ],
         when: "Weekly for blood cleansing. Not daily unless under medical supervision.",
-        steepNote: "This is a decoction — boiled, not steeped. The boiling extracts compounds that hot water alone cannot reach.",
-        sensory: "Intensely bitter, dark green-brown, earthy. The bitterness does not mean something is wrong. It means the medicine is working.",
-        sourceNote: "Fresh cerasee vine is available at Caribbean grocery stores, Jamaican markets, and some South Asian grocers (sold as bitter melon vine or karela vine). Dried cerasee tea bags are available online — the fresh vine is more potent.",
+        steepNote: "This is a decoction — boiled, not steeped. The boiling extracts compounds that hot water alone cannot reach. The dried blend brews cleaner than fresh vine but is equally effective.",
+        sensory: "Intensely bitter, dark green-brown, earthy. The bitterness does not mean something is wrong. It means the medicine is working. Honey helps, but do not try to eliminate the bitterness entirely.",
+        sourceNote: "Our dried cerasee blend is available directly through Chai Holistic — sourced, dried, and prepared to a consistent standard. Fresh vine is also available at Caribbean and South Asian grocery stores for those who prefer the traditional method.",
 
-        // THE WARNING ALEX SPECIFICALLY REQUESTED — displayed prominently
         criticalWarning: {
           headline: "⚠ IMPORTANT SAFETY WARNING — Please Read Before Using",
           points: [
@@ -68,23 +76,38 @@ const COLLECTIONS = [
             "If you are taking ANY diabetes medication — metformin, insulin, glipizide, or any other blood sugar-lowering drug — cerasee can cause your blood sugar to drop dangerously low. This is a real medical risk, not a precaution.",
             "Dangerously low blood sugar (hypoglycemia) can cause dizziness, sweating, confusion, shaking, loss of consciousness, and in severe cases can be life-threatening.",
             "Do not use cerasee if you are pregnant. It contains compounds that can cause uterine contractions and has been associated with miscarriage.",
-            "Do not give cerasee tea to young children or infants internally. The topical bath use your grandmother used is different from drinking it.",
-            "Even without diabetes medication, the dose matters. A small cup of concentrate is very different from drinking a full pot.",
+            "Do not give cerasee tea to young children or infants.",
+            "Even without diabetes medication, the dose matters. A small cup is very different from drinking multiple cups.",
             "Tell your doctor you are using cerasee before any blood sugar test — it will affect your results.",
           ],
-          closing: "My grandmother used cerasee safely for decades because she understood the dose. She made a concentrate and used it carefully — not because she was being cautious, but because she respected the plant. Please do the same. Consult your doctor before adding cerasee to your routine, especially if you manage any blood sugar condition.",
+          closing: "My grandmother used cerasee safely for decades because she understood the dose and respected the plant. Please do the same. Consult your doctor before adding cerasee to your routine, especially if you manage any blood sugar condition.",
           closingCredit: "— Alex",
         },
 
         additionalUses: [
-          { use: "Herbal Bath", note: "Dilute concentrate 3:1 or 5:1 in warm bath water. Antimicrobial and anti-inflammatory for skin conditions, rashes, and general cleansing. Traditional Jamaican practice for all ages including infants (topical only)." },
-          { use: "Skin Compress", note: "Soak a cloth in diluted concentrate and apply to skin irritations, rashes, or fungal conditions. Antimicrobial properties are well-documented." },
+          {
+            use: "Blood Sugar Support",
+            note: "The most documented traditional use — weekly consumption for blood glucose management. Always monitor levels and consult your doctor, especially if diabetic.",
+          },
+          {
+            use: "Liver & Blood Cleanse",
+            note: "Cerasee's bitter compounds activate liver detoxification enzymes and support blood purification. Our Cerasee Blood Cleanse Blend adds dandelion and nettle for a more complete detox protocol.",
+          },
+          {
+            use: "Digestive Bitters",
+            note: "The intense bitterness stimulates bile production and digestive enzymes — traditional use before or after heavy meals for digestive support.",
+          },
         ],
 
-        notForSale: true,
-        notForSaleNote: "We do not sell fresh cerasee vine. This recipe is shared to preserve and honor the tradition. Find fresh vine at Caribbean or South Asian grocers.",
-        supplementPairing: null,
-        tags: ["Jamaican", "Bush Tea", "Blood Sugar", "Detox", "Ancestral", "External Use"],
+        notForSale: false,
+        chaiBlendMatch: {
+          name: "Grandmother's Cerasee",
+          id: "cerasee",
+          desc: "Available as a ready-to-brew dried blend — pure cerasee, cerasee & ginger, or the full blood cleanse blend.",
+          nav: "shop",
+        },
+        supplementPairing: { name: "Liposomal Vitamin C", why: "Vitamin C is a cofactor in the liver detoxification pathways cerasee activates. Together they support a more complete blood cleansing protocol." },
+        tags: ["Jamaican", "Bush Tea", "Blood Sugar", "Detox", "Ancestral", "Available Now"],
       },
 
       {
@@ -122,6 +145,12 @@ const COLLECTIONS = [
           { use: "Steam Inhalation", note: "Add stalks to a pot of boiling water, drape a towel over your head, and inhale the steam for sinus congestion and respiratory support." },
         ],
         notForSale: false,
+        chaiBlendMatch: {
+          name: "Lemongrass Lift",
+          id: "m7",
+          desc: "Our Lemongrass Lift blend captures the same bright citrus energy as fever grass — ready to brew.",
+          nav: "shop",
+        },
         supplementPairing: { name: "Magnesium Glycinate", why: "Magnesium works on the same nervous system pathways fever grass soothes. Together they address sleep and anxiety from two directions." },
         tags: ["Jamaican", "Bush Tea", "Fever", "Sleep", "Immune", "Child-Safe"],
       },
@@ -167,6 +196,12 @@ const COLLECTIONS = [
         },
         additionalUses: [],
         notForSale: false,
+        chaiBlendMatch: {
+          name: "Chamomile & Calm",
+          id: "e1",
+          desc: "Our Chamomile & Calm evening blend shares soursop's calming, blood-pressure-friendly intention — available now.",
+          nav: "shop",
+        },
         supplementPairing: { name: "Omega-3 (Nordic Naturals)", why: "Omega-3s work on cardiovascular inflammation that soursop leaf's vasodilatory compounds address from the nervous system side." },
         tags: ["Jamaican", "Bush Tea", "Blood Pressure", "Pain", "Sleep", "Ancestral"],
       },
@@ -212,6 +247,12 @@ const COLLECTIONS = [
         },
         additionalUses: [],
         notForSale: false,
+        chaiBlendMatch: {
+          name: "Gut Reset",
+          id: "c5",
+          desc: "Our Gut Reset cleansing blend targets the digestive system with a similar philosophy — available now.",
+          nav: "shop",
+        },
         supplementPairing: null,
         tags: ["Jamaican", "Bush Tea", "African Heritage", "Digestive", "Detox", "Ancestral"],
       },
@@ -250,6 +291,12 @@ const COLLECTIONS = [
           { use: "Nutritional Addition", note: "Moringa powder can be added to smoothies, soups, and other teas as a nutritional booster without changing the flavor significantly." },
         ],
         notForSale: false,
+        chaiBlendMatch: {
+          name: "Adaptogen Blend",
+          id: "s7",
+          desc: "Our Adaptogen Blend shares moringa's nutritional foundation philosophy — ashwagandha, reishi, and tulsi working together.",
+          nav: "shop",
+        },
         supplementPairing: { name: "Vitamin D3+K2", why: "Moringa provides exceptional plant-based nutrition. Vitamin D3+K2 adds what plants cannot provide — the fat-soluble vitamins that govern calcium and immune regulation." },
         tags: ["Jamaican", "Indian", "Bush Tea", "Ayurvedic", "Nutritional", "Daily", "Bridge"],
       },
@@ -292,6 +339,12 @@ const COLLECTIONS = [
           { use: "Steam Inhalation", note: "Add extra cloves to a pot of boiling water and inhale steam under a towel for chest congestion and sinus pressure." },
         ],
         notForSale: false,
+        chaiBlendMatch: {
+          name: "Cinnamon & Cloves",
+          id: "m3",
+          desc: "Our Cinnamon & Cloves blend is built on the same warming, immune tradition — ready to brew.",
+          nav: "shop",
+        },
         supplementPairing: { name: "Liposomal Vitamin C", why: "Cloves support immune response from within. Liposomal C provides the antioxidant capacity at the cellular level that immune herbs cannot match on their own." },
         tags: ["Jamaican", "Bush Tea", "Cold & Flu", "Immune", "Pain", "Digestive", "Both Traditions"],
       },
@@ -346,6 +399,12 @@ const COLLECTIONS = [
         criticalWarning: null,
         additionalUses: [],
         notForSale: false,
+        chaiBlendMatch: {
+          name: "Adaptogen Blend",
+          id: "s7",
+          desc: "Our Adaptogen Blend shares the kadha's core philosophy — ashwagandha, reishi, and tulsi for daily resilience.",
+          nav: "shop",
+        },
         supplementPairing: { name: "Vitamin D3+K2", why: "Kadha activates the immune system from within. Vitamin D3 is the master regulator of immune response — deficiency blunts the effect of everything else." },
         tags: ["Indian", "Ayurvedic", "Immune", "Cold & Flu", "Ancestral", "Daily"],
       },
@@ -383,6 +442,7 @@ const COLLECTIONS = [
         criticalWarning: null,
         additionalUses: [],
         notForSale: false,
+        chaiBlendMatch: { name: "Tulsi Awakening", id: "m5", desc: "Our Tulsi Awakening blend — pure tulsi with cardamom and cinnamon, ready to brew.", nav: "shop" },
         supplementPairing: { name: "Ashwagandha KSM-66", why: "Tulsi and ashwagandha are the two most studied Ayurvedic adaptogens. Tulsi in the cup, ashwagandha as a supplement — the HPA axis addressed from two angles simultaneously." },
         tags: ["Indian", "Ayurvedic", "Stress", "Immune", "Adaptogen", "Daily", "Spiritual"],
       },
@@ -423,6 +483,7 @@ const COLLECTIONS = [
         criticalWarning: null,
         additionalUses: [],
         notForSale: false,
+        chaiBlendMatch: { name: "Turmeric Tonic", id: "s1", desc: "Our Turmeric Tonic captures haldi doodh's golden anti-inflammatory power in a ready-to-brew blend.", nav: "shop" },
         supplementPairing: { name: "Collagen Peptides", why: "Collagen requires vitamin C and anti-inflammatory conditions to synthesize properly. Haldi doodh reduces the inflammation that breaks down collagen. Add collagen powder directly to your golden milk." },
         tags: ["Indian", "Ayurvedic", "Anti-Inflammatory", "Sleep", "Joint Health", "Daily", "Child-Safe"],
       },
@@ -473,6 +534,7 @@ const COLLECTIONS = [
           { use: "Topical Skin Wash", note: "Cooled neem tea applied to skin conditions, rashes, or fungal issues delivers its antifungal properties topically." },
         ],
         notForSale: false,
+        chaiBlendMatch: { name: "Liver & Love", id: "c2", desc: "Our Liver & Love cleansing blend shares neem's detox philosophy — milk thistle, dandelion, and burdock, ready to brew.", nav: "shop" },
         supplementPairing: { name: "Probiotics (Seed DS-01)", why: "Neem's antimicrobial activity clears harmful bacteria broadly. Probiotics repopulate beneficial bacteria afterward. Use neem tea, then follow with probiotics to restore balance." },
         tags: ["Indian", "Ayurvedic", "Blood Sugar", "Skin", "Detox", "Dental", "Ancestral"],
       },
@@ -516,6 +578,7 @@ const COLLECTIONS = [
         criticalWarning: null,
         additionalUses: [],
         notForSale: false,
+        chaiBlendMatch: { name: "Ginger Lemon Sunrise", id: "m4", desc: "Our Ginger Lemon Sunrise brings both grandmothers' ginger wisdom together in one bright, invigorating blend.", nav: "shop" },
         supplementPairing: { name: "Omega-3 (Nordic Naturals)", why: "Ginger and omega-3s both inhibit inflammatory pathways — ginger from the cyclooxygenase pathway, omega-3s from the lipoxygenase pathway. Together they address systemic inflammation more completely than either alone." },
         tags: ["Both Traditions", "Jamaican", "Indian", "Ayurvedic", "Anti-Inflammatory", "Digestive", "Daily", "Bridge"],
       },
@@ -555,6 +618,7 @@ const COLLECTIONS = [
         criticalWarning: null,
         additionalUses: [],
         notForSale: false,
+        chaiBlendMatch: { name: "Black Pepper Chai", id: "m6", desc: "Our Black Pepper Chai is where both grandmothers' clove tradition lives — bold, warming, and true to both lineages.", nav: "shop" },
         supplementPairing: { name: "Liposomal Vitamin C", why: "Cloves activate the immune system directly with eugenol. Liposomal C provides the antioxidant infrastructure the immune system runs on. Both grandmothers would approve." },
         tags: ["Both Traditions", "Jamaican", "Indian", "Bridge", "Immune", "Cold & Flu", "Heritage"],
       },
@@ -825,6 +889,16 @@ function TeaCard({ tea, accentColor, onSelect }) {
           ))}
         </div>
 
+        {/* Blend match chip */}
+        {(tea.chaiBlendMatch || tea.offerBlend) && (
+          <div style={{ marginBottom:10, display:"flex", alignItems:"center", gap:6, background:"rgba(196,137,58,.08)", border:"1px solid rgba(196,137,58,.2)", borderRadius:8, padding:"6px 10px" }}>
+            <span style={{ fontSize:".62rem", color:"rgba(196,137,58,.85)", flex:1 }}>
+              {tea.offerBlend ? "✦ Available from Chai Holistic" : `🫖 Try: ${tea.chaiBlendMatch.name}`}
+            </span>
+            <span style={{ fontSize:".58rem", color:"rgba(196,137,58,.6)" }}>→</span>
+          </div>
+        )}
+
         {/* CTA */}
         <button style={{
           width: "100%",
@@ -1069,6 +1143,53 @@ function TeaDetailModal({ tea, collection, onClose, onNav }) {
               fontSize: ".74rem", color: sc.text, lineHeight: 1.65,
             }}>
               ⚠ {tea.safetyLabel} — consult your healthcare provider before use, especially if on any medications.
+            </div>
+          )}
+
+          {/* CHAI HOLISTIC BLEND MATCH CTA */}
+          {tea.offerBlend && (
+            <div style={{ background:"linear-gradient(135deg,rgba(196,137,58,.1),rgba(196,137,58,.05))", border:"2px solid rgba(196,137,58,.35)", borderRadius:16, padding:"18px 18px 14px", marginBottom:14 }}>
+              <div style={{ fontSize:".58rem", letterSpacing:".2em", textTransform:"uppercase", color:"rgba(196,137,58,.9)", marginBottom:8, fontWeight:700 }}>
+                ✦ Now Available from Chai Holistic
+              </div>
+              <p style={{ fontSize:".8rem", color:"rgba(247,242,234,.75)", lineHeight:1.7, margin:"0 0 14px", fontWeight:300 }}>
+                {tea.offerNote}
+              </p>
+              <div style={{ display:"flex", flexDirection:"column", gap:8, marginBottom:12 }}>
+                {(tea.blendOptions||[]).map(opt=>(
+                  <div key={opt.label} style={{ background:"rgba(0,0,0,.25)", border:"1px solid rgba(196,137,58,.2)", borderRadius:10, padding:"10px 14px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:10 }}>
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontSize:".76rem", color:"#F7F2EA", fontWeight:600, marginBottom:2 }}>{opt.label}</div>
+                      <div style={{ fontSize:".68rem", color:"rgba(247,242,234,.45)", lineHeight:1.4 }}>{opt.desc}</div>
+                    </div>
+                    <div style={{ fontFamily:"Playfair Display,serif", fontSize:".95rem", color:"rgba(196,137,58,.9)", fontWeight:600, flexShrink:0 }}>${opt.price}</div>
+                  </div>
+                ))}
+              </div>
+              <button onClick={()=>{ onNav("shop"); onClose(); }}
+                style={{ width:"100%", background:"linear-gradient(135deg,#C8893A,#A06828)", border:"none", color:"white", borderRadius:12, padding:"13px", fontFamily:"Jost,sans-serif", fontSize:".72rem", letterSpacing:".14em", textTransform:"uppercase", cursor:"pointer", fontWeight:600, marginBottom:4 }}>
+                ✦ Shop Cerasee Blends →
+              </button>
+              <div style={{ fontSize:".6rem", color:"rgba(247,242,234,.2)", textAlign:"center" }}>Available in the Chai Holistic shop</div>
+            </div>
+          )}
+
+          {/* CHAI BLEND MATCH — for non-cerasee teas */}
+          {!tea.offerBlend && tea.chaiBlendMatch && (
+            <div style={{ background:"rgba(196,137,58,.07)", border:"1px solid rgba(196,137,58,.2)", borderRadius:12, padding:"14px 16px", marginBottom:14 }}>
+              <div style={{ fontSize:".56rem", letterSpacing:".2em", textTransform:"uppercase", color:"rgba(196,137,58,.75)", marginBottom:8, fontWeight:600 }}>
+                🫖 Try Our Ready-Made Blend
+              </div>
+              <div style={{ display:"flex", alignItems:"flex-start", gap:12 }}>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontFamily:"Playfair Display,serif", fontSize:".95rem", color:"#F7F2EA", marginBottom:4 }}>{tea.chaiBlendMatch.name}</div>
+                  <div style={{ fontSize:".72rem", color:"rgba(247,242,234,.5)", lineHeight:1.55, fontWeight:300 }}>{tea.chaiBlendMatch.desc}</div>
+                </div>
+                <button onClick={()=>{ onNav(tea.chaiBlendMatch.nav||"shop"); onClose(); }}
+                  style={{ flexShrink:0, background:"rgba(196,137,58,.85)", border:"none", color:"white", borderRadius:40, padding:"8px 16px", fontFamily:"Jost,sans-serif", fontSize:".64rem", letterSpacing:".1em", textTransform:"uppercase", cursor:"pointer", fontWeight:600, whiteSpace:"nowrap" }}>
+                  Shop →
+                </button>
+              </div>
             </div>
           )}
 
