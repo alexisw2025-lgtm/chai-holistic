@@ -18,7 +18,7 @@ const SUPPLEMENTS = [
     color: "#2A3A5A",
     category: "mineral",
     price: "~$28–$35",
-    asin: "B0CG16LPMD",
+    asin: "B0797HBLL3",
     teaPairing: ["Sleepy Spice", "Stress Less", "Father's Calm Evening", "Deep Recharge Sleep"],
     teaNote: "Magnesium activates the same calm pathways your valerian and passionflower blends target. Together they work from two directions — the herb calms the nervous system signal, magnesium provides the cellular fuel to sustain it.",
     whyThisBrand: "Thorne uses bisglycinate chelate — magnesium bonded to two glycine molecules, not oxide dust. Independent testing in 2025 found that many brands selling 'magnesium glycinate' actually contained magnesium oxide mixed with loose glycine powder. Thorne's manufacturing is NSF Certified for Sport, one of the highest third-party standards in the industry.",

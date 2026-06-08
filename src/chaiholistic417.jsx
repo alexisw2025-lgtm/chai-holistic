@@ -19,9 +19,9 @@ import imgSre7 from "./rings/sre7.jpg";
 const BLENDS = [
   { id:"m1", photo:"https://images.pexels.com/photos/906150/pexels-photo-906150.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Morning Rise", occasion:"Morning", tagline:"Greet the day with intention", desc:"Tulsi, ginger & lemon peel awaken your senses and spark clarity for the day ahead.", ingredients:["Tulsi (Holy Basil)","Ginger Root","Lemon Peel","Black Pepper"], price:17.99, benefit:"Energize · Focus · Uplift", color:"#5C7A3E", steepMin:5, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Full Rolling Boil -- pour immediately", mood:"Foggy · Unmotivated", oz:2, cupsPerOz:12, servingSize:"1 tsp", energy:"high", time:"morning", feeling:"foggy", caffeine:false },
   // ANCESTRAL COLLECTION
-  { id:"cerasee", photo:"https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Grandmother's Cerasee", occasion:"Ancestral", tagline:"Blood cleanser. Sugar balancer. A grandmother's remedy.", desc:"Pure dried cerasee leaf and vine — the traditional Jamaican blood cleansing herb, now available as a ready-to-brew blend. Intensely bitter, deeply effective. Consult your doctor if diabetic.", ingredients:["Dried Cerasee Leaf","Dried Cerasee Vine"], price:16.99, benefit:"Blood Sugar · Blood Cleanse · Detox", color:"#1A3A1A", steepMin:18, oz:1.5, cupsPerOz:8, servingSize:"1 tsp", steepTemp:"Full Rolling Boil -- simmer 15-20 min", mood:"Blood sugar · Detox · Weekly cleanse", energy:"medium", time:"morning", feeling:"heavy", caffeine:false, warning:"⚠ Can lower blood glucose rapidly. Do NOT use with diabetes medication without medical supervision. Not for pregnancy. Not for children. Consult your doctor before use." },
-  { id:"cerasee-ginger", photo:"https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Cerasee & Ginger Blend", occasion:"Ancestral", tagline:"The bitterness softened. The medicine intact.", desc:"Cerasee with warming ginger root — the ginger tempers the bitterness and adds digestive support while preserving cerasee's full blood-cleansing properties.", ingredients:["Dried Cerasee Leaf","Dried Cerasee Vine","Ginger Root"], price:17.99, benefit:"Blood Sugar · Digestion · Cleanse", color:"#2A3A1A", steepMin:15, oz:1.5, cupsPerOz:8, servingSize:"1 tsp", steepTemp:"Full Rolling Boil -- simmer 12-15 min", mood:"Blood sugar · Cleanse · Gentle", energy:"medium", time:"morning", feeling:"heavy", caffeine:false, warning:"⚠ Can lower blood glucose rapidly. Do NOT use with diabetes medication without medical supervision. Not for pregnancy. Consult your doctor before use." },
-  { id:"cerasee-cleanse", photo:"https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Cerasee Blood Cleanse", occasion:"Ancestral", tagline:"The complete blood and liver protocol.", desc:"Cerasee with dandelion root and nettle leaf — a comprehensive blood, liver, and kidney cleansing blend. Three of the most respected cleansing herbs, combined with purpose.", ingredients:["Dried Cerasee Leaf","Dried Cerasee Vine","Dandelion Root","Nettle Leaf"], price:19.99, benefit:"Full Blood Cleanse · Liver · Kidney", color:"#1A4A1A", steepMin:15, oz:2, cupsPerOz:9, servingSize:"1 tsp", steepTemp:"Full Rolling Boil -- simmer 12-15 min", mood:"Full detox · Cleanse protocol", energy:"medium", time:"morning", feeling:"heavy", caffeine:false, warning:"⚠ Can lower blood glucose rapidly. Do NOT use with diabetes medication without medical supervision. Not for pregnancy. Dandelion may interact with diuretics. Consult your doctor before use." },
+  { id:"cerasee", photo:"https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Grandmother's Cerasee", occasion:"Ancestral", tagline:"Blood cleanser. Sugar balancer. A grandmother's remedy.", desc:"Pure dried cerasee leaf and vine — the traditional Jamaican blood cleansing herb, now available as a ready-to-brew blend. Intensely bitter, deeply effective. Consult your doctor if diabetic.", ingredients:["Dried Cerasee Leaf","Dried Cerasee Vine"], price:16.99, benefit:"Blood Sugar · Blood Cleanse · Detox", color:"#1A3A1A", steepMin:12, oz:1.5, cupsPerOz:10, servingSize:"1–2 tsp per cup", steepTemp:"Full Rolling Boil — simmer 10–15 min", mood:"Blood sugar · Detox · Weekly cleanse", energy:"medium", time:"morning", feeling:"heavy", caffeine:false, warning:"⚠ Can lower blood glucose rapidly. Do NOT use with diabetes medication without medical supervision. Not for pregnancy. Not for children. Consult your doctor before use." },
+  { id:"cerasee-ginger", photo:"https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Cerasee & Ginger Blend", occasion:"Ancestral", tagline:"The bitterness softened. The medicine intact.", desc:"Cerasee with warming ginger root — the ginger tempers the bitterness and adds digestive support while preserving cerasee's full blood-cleansing properties.", ingredients:["Dried Cerasee Leaf","Dried Cerasee Vine","Ginger Root"], price:17.99, benefit:"Blood Sugar · Digestion · Cleanse", color:"#2A3A1A", steepMin:12, oz:1.5, cupsPerOz:10, servingSize:"1–2 tsp per cup", steepTemp:"Full Rolling Boil — simmer 10–15 min", mood:"Blood sugar · Cleanse · Gentle", energy:"medium", time:"morning", feeling:"heavy", caffeine:false, warning:"⚠ Can lower blood glucose rapidly. Do NOT use with diabetes medication without medical supervision. Not for pregnancy. Consult your doctor before use." },
+  { id:"cerasee-cleanse", photo:"https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Cerasee Blood Cleanse", occasion:"Ancestral", tagline:"The complete blood and liver protocol.", desc:"Cerasee with dandelion root and nettle leaf — a comprehensive blood, liver, and kidney cleansing blend. Three of the most respected cleansing herbs, combined with purpose.", ingredients:["Dried Cerasee Leaf","Dried Cerasee Vine","Dandelion Root","Nettle Leaf"], price:19.99, benefit:"Full Blood Cleanse · Liver · Kidney", color:"#1A4A1A", steepMin:15, oz:2, cupsPerOz:9, servingSize:"1½–2 tsp per cup", steepTemp:"Full Rolling Boil — simmer 12–15 min", mood:"Full detox · Cleanse protocol", energy:"medium", time:"morning", feeling:"heavy", caffeine:false, warning:"⚠ Can lower blood glucose rapidly. Do NOT use with diabetes medication without medical supervision. Not for pregnancy. Dandelion may interact with diuretics. Consult your doctor before use." },
   { id:"m2", photo:"/herbs/2am-reset.jpg", name:"2AM Reset", occasion:"Morning", tagline:"For restless nights & racing minds", desc:"Cinnamon, cardamom, ginger & cloves -- a warming blend to soothe and restore after a hard night.", ingredients:["Ceylon Cinnamon","Cardamom","Ginger Root","Cloves"], price:18.99, benefit:"Calm · Restore · Ground", color:"#4A3728", steepMin:8, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil -- boil then wait 60 sec", mood:"Anxious · Restless", oz:2, cupsPerOz:10, servingSize:"1 heaping tsp", energy:"low", time:"night", feeling:"anxious", caffeine:false },
   { id:"m3", photo:"/herbs/cinnamon-cloves.jpg", name:"Cinnamon & Cloves", occasion:"Morning", tagline:"Warm spice, ancient remedy", desc:"A bold, comforting classic. Ceylon cinnamon and cloves work together for circulation and warmth.", ingredients:["Ceylon Cinnamon","Organic Cloves"], price:15.99, benefit:"Warmth · Circulation · Comfort", color:"#8B3A2A", steepMin:7, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil -- boil then wait 60 sec", mood:"Cold · Sluggish", oz:2, cupsPerOz:14, servingSize:"1 tsp", energy:"medium", time:"morning", feeling:"tired", caffeine:false },
   { id:"m4", photo:"https://images.pexels.com/photos/3850838/pexels-photo-3850838.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Ginger Lemon Sunrise", occasion:"Morning", tagline:"A sharp, bright awakening", desc:"Fresh ginger and lemon peel cut through morning fog with a clean, invigorating brightness.", ingredients:["Ginger Root","Lemon Peel","Lemongrass","Peppermint"], price:16.99, benefit:"Clarity · Digestion · Wake", color:"#C47A1A", steepMin:6, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Full Rolling Boil -- pour immediately", mood:"Tired · Heavy", oz:2, cupsPerOz:13, servingSize:"1 tsp", energy:"high", time:"morning", feeling:"tired", caffeine:false },
@@ -1945,7 +1945,7 @@ export default function ChaiHolistic() {
     /* HOME PAGE CHAI HOLISTIC SPINNING BADGE */
     .chai-spin{position:relative;width:160px;height:160px;cursor:pointer;flex-shrink:0;}
     .chai-spin-outer{position:absolute;inset:0;border-radius:50%;animation:spinRingCCW 16s linear infinite;}
-    .chai-spin-char{position:absolute;top:0;left:50%;font-size:9px;font-family:'Jost',sans-serif;font-weight:500;color:var(--bark);letter-spacing:.04em;transform-origin:0 80px;width:11px;text-align:center;margin-left:-5.5px;}
+    .chai-spin-char{position:absolute;top:0;left:50%;font-size:9px;font-family:'Jost',sans-serif;font-weight:500;color:var(--bark);letter-spacing:.04em;transform-origin:0 73px;width:11px;text-align:center;margin-left:-5.5px;}
     .chai-spin-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:98px;height:98px;background:var(--bark);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 28px rgba(61,43,31,.28);transition:all .35s;border:2px solid var(--dust);}
     .chai-spin:hover .chai-spin-center{background:var(--sage-d);transform:translate(-50%,-50%) scale(1.08);box-shadow:0 10px 36px rgba(74,114,80,.35);}
     .chai-spin-arrow{font-size:1.5rem;color:var(--parch);transform:rotate(-30deg);display:inline-block;line-height:1;}
@@ -2009,7 +2009,7 @@ export default function ChaiHolistic() {
       .ringsgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
       .chai-spin{width:120px;height:120px;}
       .chai-spin-center{width:74px;height:74px;}
-      .chai-spin-char{transform-origin:0 60px;}
+      .chai-spin-char{transform-origin:0 54px;}
     }
 
     /* ── MOBILE (≤600px) ── */
@@ -2045,6 +2045,14 @@ export default function ChaiHolistic() {
       .hgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
       .ft-grid{grid-template-columns:1fr;gap:1.5rem;}
       footer{padding:40px 1.2rem 24px;border-radius:0;}
+
+      /* Mobile card improvements */
+      .pcard-visual{height:160px;}
+      .pcard-body{padding:14px;}
+      .pcard-desc{-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;}
+      .pcard-ingr{display:none;}
+      .bm{border-radius:24px 24px 0 0!important;position:fixed!important;bottom:0!important;left:0!important;right:0!important;width:100%!important;max-width:100%!important;}
+      .bm-ov{align-items:flex-end!important;padding:0!important;}
 
       /* Pills/filters */
       .pills{gap:6px;}
@@ -2385,11 +2393,11 @@ export default function ChaiHolistic() {
     const pct = tracker ? Math.round(checkedCount/tracker.days*100) : 0;
     const alreadyInCart = !!(tracker && cart.find(i=>i.id===tracker.id));
     return (
-      <div className="modal-ov" onClick={() => setTrackerOpen(false)} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <div className="modal-ov" onClick={() => { setTrackerOpen(false); setActiveTracker(null); }} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
         <div className="modal" onClick={e=>e.stopPropagation()}>
           <div className="modal-head">
             <span className="modal-title">🌿 Cleanse Tracker</span>
-            <button className="modal-close" onClick={() => setTrackerOpen(false)}>✕</button>
+            <button className="modal-close" onClick={() => { setTrackerOpen(false); setActiveTracker(null); }}>✕</button>
           </div>
           {tracker && (
             <div style={{position:"sticky",top:74,zIndex:3,background:"white",borderBottom:"1px solid var(--dust)",padding:"9px 28px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
@@ -3089,40 +3097,40 @@ export default function ChaiHolistic() {
             <h1 className="hero-h"><em>Sip what heals you.</em><br/><span className="g">Bloom</span> where you are.</h1>
             <p className="hero-p">Handcrafted herbal blends from the Sip &amp; Heal tradition. 40 recipes. Every occasion. Every body. Every season.</p>
 
-            {/* PRIMARY ACTIONS */}
+            {/* PRIMARY ACTIONS — three clear paths */}
             <div className="hero-btns">
               <button className="btn-main" onClick={()=>nav("shop")}>Explore the Collection</button>
               <button className="btn-ghost" onClick={()=>nav("recipes")}>Browse Recipes</button>
-              <button className="btn-main" style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",border:"1px solid rgba(196,137,58,.5)",color:"var(--gold)"}} onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}>🌿 Sip &amp; Seek</button>
             </div>
 
-            {/* FEATURE BUTTONS   clearly separated */}
-            <div style={{display:"flex",alignItems:"center",gap:28,flexWrap:"wrap",marginTop:4}}>
+            {/* FEATURE BUTTONS */}
+            <div style={{display:"flex",alignItems:"center",gap:28,flexWrap:"wrap",marginTop:16}}>
               <div style={{display:"flex",flexDirection:"column",gap:10,maxWidth:420,flex:1}}>
-              {/* Sip & Seek   the star feature */}
+              {/* Sip & Seek — the star feature */}
               <button
                 onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}
-                style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"white",border:"1.5px solid rgba(196,137,58,.4)",padding:"14px 24px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".78rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"all .3s",width:"100%",justifyContent:"center"}}
+                style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"white",border:"1.5px solid rgba(196,137,58,.4)",padding:"15px 24px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".82rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",display:"flex",alignItems:"center",gap:10,transition:"all .3s",width:"100%",justifyContent:"center"}}
                 onMouseEnter={e=>{e.currentTarget.style.borderColor="var(--gold)";e.currentTarget.style.boxShadow="0 6px 24px rgba(196,137,58,.3)";}}
                 onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,.4)";e.currentTarget.style.boxShadow="none";}}>
-                <span style={{fontSize:"1.1rem"}}>🌿</span>
-                <span><strong style={{color:"var(--gold)"}}>Sip &amp; Seek</strong> -- Find your blend · your ritual · your truth</span>
+                <span style={{fontSize:"1.2rem"}}>🌿</span>
+                <span><strong style={{color:"var(--gold)"}}>Sip &amp; Seek</strong> &nbsp;— Find your blend &amp; ritual</span>
               </button>
 
-              {/* Secondary feature buttons */}
+              {/* Secondary features */}
               <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
                 <button className="btn-finder" style={{flex:1}} onClick={()=>setFinderOpen(true)}>✦ Find My Tea</button>
                 <button className="btn-ghost" style={{flex:1}} onClick={()=>setRitualOpen(true)}>Build My Ritual</button>
-                <button
-                  onClick={()=>setProfileOpen(true)}
-                  style={{flex:"0 0 100%",background:"linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))",color:"var(--gold)",border:"1.5px solid rgba(196,137,58,.45)",padding:"11px 20px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",transition:"all .25s",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}
-                  onMouseEnter={e=>{e.currentTarget.style.background="rgba(192,136,48,.22)";e.currentTarget.style.borderColor="var(--gold)";e.currentTarget.style.boxShadow="0 4px 18px rgba(196,137,58,.25)";}}
-                  onMouseLeave={e=>{e.currentTarget.style.background="linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))";e.currentTarget.style.borderColor="rgba(196,137,58,.45)";e.currentTarget.style.boxShadow="none";}}>
-                  🌿 <strong>Get My Free Sip &amp; Heal Report</strong> &nbsp;— personalized to your wellness profile
-                </button>
               </div>
+
+              <button
+                onClick={()=>setProfileOpen(true)}
+                style={{background:"linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))",color:"var(--gold)",border:"1.5px solid rgba(196,137,58,.45)",padding:"12px 20px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".74rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",transition:"all .25s",display:"flex",alignItems:"center",justifyContent:"center",gap:8,width:"100%"}}
+                onMouseEnter={e=>{e.currentTarget.style.background="rgba(192,136,48,.22)";e.currentTarget.style.borderColor="var(--gold)";}}
+                onMouseLeave={e=>{e.currentTarget.style.background="linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))";e.currentTarget.style.borderColor="rgba(196,137,58,.45)";}}>
+                🌿 &nbsp;<strong>Free Sip &amp; Heal Report</strong> &nbsp;— personalized to you
+              </button>
             </div>
-              {/* SPINNING CHAI HOLISTIC BADGE — right of Sip & Seek */}
+              {/* SPINNING CHAI HOLISTIC BADGE */}
               <div className="chai-spin" onClick={()=>nav("shop")} title="Shop the Collection">
                 <div className="chai-spin-outer">
                   {"CHAI HOLISTIC · SHOP NOW · CHAI HOLISTIC · SHOP NOW · ".split("").map((ch,i)=>(
@@ -3155,7 +3163,7 @@ export default function ChaiHolistic() {
       <PrayerSection onNavigate={(blend) => nav("tea-library", { blend })} />
 
       {/* ── Tea Library Teaser ─────────────────────────────────────────── */}
-      <section style={{background:"#0d1a11",padding:"64px 0 72px",borderTop:"1px solid rgba(255,255,255,.05)",borderBottom:"1px solid rgba(255,255,255,.05)",overflow:"hidden",position:"relative"}}>
+      <section style={{background:"#0d1a11",padding:"64px 0 72px",borderTop:"1px solid rgba(255,255,255,.05)",borderBottom:"1px solid rgba(255,255,255,.05)",position:"relative",overflow:"hidden"}}>
         {/* ambient glow */}
         <div style={{position:"absolute",inset:0,pointerEvents:"none",background:"radial-gradient(ellipse 70% 80% at 12% 50%,rgba(82,184,130,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 88% 50%,rgba(192,136,48,.06) 0%,transparent 60%)"}}/>
         <div style={{maxWidth:1280,margin:"0 auto",padding:"0 36px",position:"relative",zIndex:1}}>
@@ -3176,7 +3184,7 @@ export default function ChaiHolistic() {
           </div>
 
           {/* horizontal scroll row */}
-          <div style={{display:"flex",gap:14,overflowX:"auto",paddingBottom:10,scrollbarWidth:"none",msOverflowStyle:"none",WebkitOverflowScrolling:"touch"}}>
+          <div style={{display:"flex",gap:14,overflowX:"auto",paddingBottom:10,paddingRight:36,scrollbarWidth:"none",msOverflowStyle:"none",WebkitOverflowScrolling:"touch"}}>
             {[
               {n:1, emoji:"🌙", name:"Deep Sleep & Calm Blend",       part:"I"},
               {n:9, emoji:"⚡", name:"Adaptogen Energy & Vitality",    part:"I"},

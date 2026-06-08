@@ -91,17 +91,16 @@ function speakIntention(text) {
   const synth = window.speechSynthesis;
   if (!synth) return;
   synth.cancel();
-  setTimeout(() => {
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.rate = 0.78; utt.pitch = 0.92; utt.volume = 0.88;
-    const voices = synth.getVoices();
-    const preferred = ["Samantha","Karen","Moira","Fiona","Victoria","Google UK English Female","Microsoft Zira"];
-    for (const name of preferred) {
-      const v = voices.find(v => v.name.includes(name));
-      if (v) { utt.voice = v; break; }
-    }
-    synth.speak(utt);
-  }, 400);
+  // iOS requires speech to be called synchronously within user gesture — no setTimeout wrapper
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate = 0.78; utt.pitch = 0.92; utt.volume = 0.88;
+  const voices = synth.getVoices();
+  const preferred = ["Samantha","Karen","Moira","Fiona","Victoria","Google UK English Female","Microsoft Zira"];
+  for (const name of preferred) {
+    const v = voices.find(v => v.name.includes(name));
+    if (v) { utt.voice = v; break; }
+  }
+  synth.speak(utt);
 }
 
 export default function PrayerSection({ onNavigate }) {
@@ -171,7 +170,10 @@ export default function PrayerSection({ onNavigate }) {
     setRingFired(true);
     spawnParticles(["#f5d080","#c08830","#deb96a","#fff8e0"], 18, 70);
     playBowl(true);
-    after(900,  () => chosen && speakIntention(chosen.voice));
+    // iOS fix: speechSynthesis must be called synchronously within the user gesture.
+    // We call it immediately here, then also try again at 900ms as fallback for Android.
+    if (chosen) speakIntention(chosen.voice);
+    after(900,  () => { /* voice already spoken — no-op for iOS, retry for slow Android */ });
     after(2000, () => { playBowl(true); setShowTone(true); });
     after(2200, () => { setTodayBlend(getDailyBlend()); setShowBlend(true); });
     after(4200, () => setShowReset(true));
@@ -192,6 +194,18 @@ export default function PrayerSection({ onNavigate }) {
   const showRingMoment  = phase >= 1.5;
   const voiceShow       = phase === 2;
 
+  const todayBlendPreview = getDailyBlend();
+  const SIDE_LEFT = [
+    { emoji:"🌙", name:"Deep Sleep & Calm", benefit:"Calms the nervous system for deep, restorative sleep" },
+    { emoji:"⚡", name:"Adaptogen Energy", benefit:"Builds stress resilience without stimulants" },
+    { emoji:"🌿", name:"Gut Healing Blend", benefit:"Repairs the gut lining — ideal for IBS" },
+  ];
+  const SIDE_RIGHT = [
+    { emoji:"❤️", name:"Heart & Circulation", benefit:"Strengthens the heart, lowers blood pressure naturally" },
+    { emoji:"🧠", name:"Focus & Clarity", benefit:"Sharpens concentration without caffeine jitters" },
+    { emoji:"🛡️", name:"Immune Defense", benefit:"Builds immune resilience from the inside out" },
+  ];
+
   return (
     <>
       <style>{`
@@ -201,18 +215,20 @@ export default function PrayerSection({ onNavigate }) {
           position: relative;
           width: 100%;
           overflow: hidden;
-          background: #0f2418;
-          border: 1px solid rgba(255,255,255,.06);
-          border-radius: 20px;
-          margin: 6px 0;
-          padding: 100px 0;
+          background: linear-gradient(180deg, #0a1e14 0%, #0f2418 40%, #0d1c10 100%);
+          border-top: 1px solid rgba(82,184,130,.1);
+          border-bottom: 1px solid rgba(82,184,130,.1);
+          margin: 0;
+          padding: 80px 0 72px;
         }
         .rs-section::before {
           content: '';
           position: absolute; inset: 0;
           background:
-            radial-gradient(ellipse 70% 55% at 50% 40%, rgba(82,184,130,.07) 0%, transparent 65%),
-            radial-gradient(ellipse 50% 40% at 50% 80%, rgba(192,136,48,.05) 0%, transparent 60%);
+            radial-gradient(ellipse 80% 60% at 50% 40%, rgba(82,184,130,.09) 0%, transparent 65%),
+            radial-gradient(ellipse 40% 40% at 15% 50%, rgba(192,136,48,.06) 0%, transparent 55%),
+            radial-gradient(ellipse 40% 40% at 85% 50%, rgba(192,136,48,.06) 0%, transparent 55%),
+            radial-gradient(ellipse 50% 40% at 50% 80%, rgba(192,136,48,.04) 0%, transparent 60%);
           pointer-events: none;
           animation: rs-ambientShift 8s ease-in-out infinite alternate;
         }
@@ -221,34 +237,85 @@ export default function PrayerSection({ onNavigate }) {
           to   { opacity:1;  transform:scale(1.06); }
         }
 
-        /* ── LAYOUT ROW ── */
-        .rs-row {
+        /* ── SECTION HEADER ── */
+        .rs-header {
+          text-align: center;
+          padding: 0 24px 48px;
           position: relative; z-index: 1;
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          gap: 28px;
-          width: 100%;
-          max-width: 720px;
-          margin: 0 auto;
+        }
+        .rs-header-eye {
+          font-family: 'Cinzel', serif;
+          font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+          color: rgba(82,184,130,.7); margin-bottom: 12px;
+        }
+        .rs-header-h {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(1.6rem, 4vw, 2.4rem);
+          font-weight: 300; color: #fff;
+          line-height: 1.25; margin: 0 0 10px;
+        }
+        .rs-header-sub {
+          font-size: 14px; color: rgba(255,255,255,.38);
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic; line-height: 1.6;
+          max-width: 420px; margin: 0 auto;
+        }
+
+        /* ── DAILY BLEND TEASER — visible always ── */
+        .rs-daily-teaser {
+          display: flex; align-items: center; gap: 10px;
+          background: rgba(192,136,48,.08);
+          border: 1px solid rgba(192,136,48,.2);
+          border-radius: 40px; padding: 8px 16px;
+          max-width: 360px; margin: 16px auto 0;
+          cursor: default;
+        }
+        .rs-daily-teaser-emoji { font-size: 1.1rem; }
+        .rs-daily-teaser-text {
+          font-size: 11px; color: rgba(192,136,48,.8);
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic; line-height: 1.4;
+        }
+        .rs-daily-teaser-text strong { color: rgba(192,136,48,.95); font-style: normal; font-size: 12px; }
+
+        /* ── FULL WIDTH INTERACTION AREA ── */
+        .rs-content-wrap {
+          position: relative; z-index: 1;
+          max-width: 1100px; margin: 0 auto;
           padding: 0 28px;
-          min-height: 180px;
-        }
-
-        /* ── LEFT: interactive column ── */
-        .rs-left {
-          flex-shrink: 0;
-          display: flex;
+          display: grid;
+          grid-template-columns: 1fr minmax(0,700px) 1fr;
+          gap: 24px;
           align-items: center;
-          justify-content: center;
-          position: relative;
-          padding-top: 4px;
         }
 
-        /* ── RIGHT: text column ── */
-        .rs-right {
-          flex: 1;
-          min-width: 0;
+        /* ── AMBIENT SIDE CARDS ── */
+        .rs-side-cards {
+          display: flex; flex-direction: column; gap: 10px;
+        }
+        .rs-side-card {
+          background: rgba(255,255,255,.03);
+          border: 1px solid rgba(255,255,255,.07);
+          border-radius: 14px; padding: 12px 14px;
+          transition: all .3s;
+        }
+        .rs-side-card:hover { background: rgba(255,255,255,.06); border-color: rgba(192,136,48,.2); }
+        .rs-side-card-emoji { font-size: 1.2rem; margin-bottom: 5px; }
+        .rs-side-card-name {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 13px; color: rgba(255,255,255,.65);
+          line-height: 1.3; margin-bottom: 4px;
+        }
+        .rs-side-card-benefit {
+          font-size: 10px; color: rgba(255,255,255,.3);
+          line-height: 1.4;
+        }
+        .rs-side-right { text-align: right; }
+        .rs-side-right .rs-side-card { text-align: right; }
+
+        @media (max-width: 900px) {
+          .rs-side-cards { display: none; }
+          .rs-content-wrap { grid-template-columns: 1fr; }
         }
 
         /* ── PARTICLES ── */
@@ -649,7 +716,35 @@ export default function PrayerSection({ onNavigate }) {
           <div className="rs-wbar"/><div className="rs-wbar"/>
         </div>
 
-        <div className="rs-row">
+        {/* ── SECTION HEADER ── */}
+        <div className="rs-header">
+          <div className="rs-header-eye">✦ &nbsp; Chai Holistic · Daily Ritual &nbsp; ✦</div>
+          <h2 className="rs-header-h">A moment before you begin.<br/><em>Your intention. Your blend.</em></h2>
+          <p className="rs-header-sub">Touch the praying hands to receive your daily intention. Then touch your Vibe Shift ring to carry it with you.</p>
+          <div className="rs-daily-teaser">
+            <span className="rs-daily-teaser-emoji">{todayBlendPreview.emoji}</span>
+            <span className="rs-daily-teaser-text">
+              Today's blend — <strong>{todayBlendPreview.name}</strong>
+            </span>
+          </div>
+        </div>
+
+        {/* ── FULL CONTENT AREA ── */}
+        <div className="rs-content-wrap">
+
+          {/* Left ambient cards */}
+          <div className="rs-side-cards">
+            {SIDE_LEFT.map(c=>(
+              <div key={c.name} className="rs-side-card">
+                <div className="rs-side-card-emoji">{c.emoji}</div>
+                <div className="rs-side-card-name">{c.name}</div>
+                <div className="rs-side-card-benefit">{c.benefit}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Centre interaction */}
+          <div className="rs-row">
 
           {/* ── LEFT COLUMN ── */}
           <div className="rs-left">
@@ -793,6 +888,19 @@ export default function PrayerSection({ onNavigate }) {
             </div>
           </div>
         </div>
+
+          {/* Right ambient cards */}
+          <div className="rs-side-cards rs-side-right">
+            {SIDE_RIGHT.map(c=>(
+              <div key={c.name} className="rs-side-card">
+                <div className="rs-side-card-emoji">{c.emoji}</div>
+                <div className="rs-side-card-name">{c.name}</div>
+                <div className="rs-side-card-benefit">{c.benefit}</div>
+              </div>
+            ))}
+          </div>
+
+        </div>{/* end rs-content-wrap */}
       </section>
     </>
   );
