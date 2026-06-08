@@ -4,6 +4,7 @@ import PrayerSection from "./PrayerSection";
 import WellnessProfileModal from "./WellnessProfileModal";
 import MocktailsPage from "./MocktailsPage";
 import SupplementsPage from "./SupplementsPage";
+import AncestralTeas from "./AncestralTeas";
 import JellyPage from "./JellyPage";
 import SeaMossPage from "./SeaMossPage";
 import imgSre1 from "./rings/scre1.jpg";
@@ -1086,6 +1087,7 @@ export default function ChaiHolistic() {
     faq:         [["↩ Home","home-page"],["↑ Top","sec-faq-top"],["FAQ","sec-faq-content"]],
     men:         [["↩ Home","home-page"],["↑ Top","sec-men-top"],["Blends","sec-men-blends"],["🛡 Prostate","sec-men-prostate"]],
     supplements: [["↩ Home","home-page"],["↑ Top","sec-supp-top"],["All","sec-supp-grid"]],
+    ancestral:   [["↩ Home","home-page"],["↑ Top","sec-anc-top"],["Collections","sec-anc-collections"],["Recipes","sec-anc-grid"]],
     mocktails:   [["↩ Home","home-page"],["↑ Top","sec-mkt-top"],["Wellness","sec-mkt-wellness"],["Social","sec-mkt-social"]],
     jelly:       [["↩ Home","home-page"],["↑ Top","sec-jelly-top"],["Kits","sec-jelly-grid"]],
     seamoss:     [["↩ Home","home-page"],["↑ Top","sec-seamoss-top"],["Why Sea Moss","sec-seamoss-why"],["Recipes","sec-seamoss-grid"]],
@@ -6297,11 +6299,12 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {[["home","🏠 Home"],["shop","Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's"],["supplements","💊 Supplements"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+          {[["home","🏠 Home"],["shop","Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's"],["supplements","💊 Supplements"],["ancestral","🌿 Ancestral"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>
               {l}
               {p==="men" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"var(--gold)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
               {p==="supplements" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"var(--sage-d)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
+              {p==="ancestral" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"#6A4A2A",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
             </span>
           ))}
           <span className="nav-lnk" onClick={()=>setProfileOpen(true)}
@@ -6328,9 +6331,9 @@ Thank you!`);
 
       {/* ── Mobile slide-down menu ── */}
       <div className={`mob-menu${mobMenuOpen?" open":""}`}>
-        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's Wellness"],["supplements","💊 Vitamins & Minerals"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's Wellness"],["supplements","💊 Vitamins & Minerals"],["ancestral","🌿 Ancestral Teas"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
           <div key={p} className="mob-lnk" onClick={()=>{nav(p);setMobMenuOpen(false);}}>
-            <span>{l}{p==="men"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--gold)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="supplements"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--sage-d)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}</span>
+            <span>{l}{p==="men"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--gold)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="supplements"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--sage-d)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="ancestral"&&<span style={{marginLeft:8,fontSize:".48rem",background:"#6A4A2A",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}</span>
             <span style={{color:"var(--dust)"}}>›</span>
           </div>
         ))}
@@ -6373,6 +6376,7 @@ Thank you!`);
         {page==="faq"&&<FAQPage/>}
         {page==="men"&&<MensWellness onNav={nav} onAddToCart={addToCart}/>}
         {page==="supplements"&&<SupplementsPage onNav={nav}/>}
+        {page==="ancestral"&&<AncestralTeas onNav={nav}/>}
         {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart}/>}
       </div>
 
@@ -6488,7 +6492,7 @@ Thank you!`);
             <div>
               <div className="ft-col-h">Shop</div>
               <span className="ft-lnk" style={{color:"var(--gold)",fontWeight:500}} onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}>📖 Sip &amp; Heal Book -- $24.99</span>
-              {[["Tea Blends","shop"],["Cleansing Blends","shop"],["Individual Herbs","shop"],["Bundle & Save","shop"],["⚡ Men's Wellness","men"],["💊 Vitamins & Minerals","supplements"],["Vibe Shift Rings","rings"]].map(([l,p])=><span key={l} className="ft-lnk" onClick={()=>nav(p)}>{l}</span>)}
+              {[["Tea Blends","shop"],["Cleansing Blends","shop"],["Individual Herbs","shop"],["Bundle & Save","shop"],["⚡ Men's Wellness","men"],["💊 Vitamins & Minerals","supplements"],["🌿 Ancestral Teas","ancestral"],["Vibe Shift Rings","rings"]].map(([l,p])=><span key={l} className="ft-lnk" onClick={()=>nav(p)}>{l}</span>)}
             </div>
             <div>
               <div className="ft-col-h">Features</div>

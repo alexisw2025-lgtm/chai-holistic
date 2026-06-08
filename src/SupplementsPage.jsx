@@ -18,7 +18,7 @@ const SUPPLEMENTS = [
     color: "#2A3A5A",
     category: "mineral",
     price: "~$28–$35",
-    asin: "B000BD0RT0",
+    asin: "B0CG16LPMD",
     teaPairing: ["Sleepy Spice", "Stress Less", "Father's Calm Evening", "Deep Recharge Sleep"],
     teaNote: "Magnesium activates the same calm pathways your valerian and passionflower blends target. Together they work from two directions — the herb calms the nervous system signal, magnesium provides the cellular fuel to sustain it.",
     whyThisBrand: "Thorne uses bisglycinate chelate — magnesium bonded to two glycine molecules, not oxide dust. Independent testing in 2025 found that many brands selling 'magnesium glycinate' actually contained magnesium oxide mixed with loose glycine powder. Thorne's manufacturing is NSF Certified for Sport, one of the highest third-party standards in the industry.",
@@ -81,7 +81,7 @@ const SUPPLEMENTS = [
     color: "#2A1A0A",
     category: "herb",
     price: "~$25–$35",
-    asin: "B079K32QB6",
+    asin: "B09NQTJQCG",
     teaPairing: ["Stress Armour", "Testosterone Harmony", "Iron Will Morning", "Post-50 Men's Foundation", "Adaptogen Blend"],
     teaNote: "When you drink your Stress Armour blend, the rhodiola and holy basil are working on the HPA axis from the outside. KSM-66 ashwagandha taken as a supplement works on the same cortisol-testosterone axis from the inside. This pairing is one of the most studied adaptogenic stacks in functional medicine.",
     whyThisBrand: "Transparent Labs uses KSM-66 — the gold standard ashwagandha extract, made exclusively from the root (never the leaf), standardized to 5%+ withanolides. Generic ashwagandha powder typically contains 0.5–2% withanolides. The difference in clinical effect is significant. Transparent Labs is third-party tested and publishes full certificates of analysis.",
@@ -102,7 +102,7 @@ const SUPPLEMENTS = [
     color: "#3A1A2A",
     category: "specialty",
     price: "~$25–$40",
-    asin: "B0C86RVNPS",
+    asin: "B00XK6M9HG",
     teaPairing: ["Bone & Joint Fortress", "Muscle and Recovery", "Turmeric Tonic", "Liver & Love"],
     teaNote: "Collagen synthesis requires vitamin C as a cofactor — your Turmeric Tonic blend contains natural anti-inflammatory compounds that reduce the chronic inflammation that breaks down collagen. Take your collagen with vitamin C and drink your Turmeric Tonic. That combination is the full joint support protocol.",
     whyThisBrand: "Vital Proteins uses grass-fed, pasture-raised bovine hide — the source matters because grain-fed collagen has a different amino acid profile. Their peptides are hydrolyzed to under 5,000 daltons, small enough to be absorbed through the gut wall and reach target tissues. NSF Certified. Unflavored version dissolves completely in hot or cold liquid.",
@@ -123,8 +123,8 @@ const SUPPLEMENTS = [
     color: "#0A2A1A",
     category: "specialty",
     price: "~$50/month",
-    asin: "B0CMJR4XGR",
-    linkBroken: true,
+    asin: null, // Seed sells direct — link to their site
+    seedUrl: "https://seed.com",
     teaPairing: ["Gut Reset", "Gut & Digestion Restore", "Liver & Love", "Slippery Elm blend"],
     teaNote: "Your gut-healing tea blends soothe and repair the gut lining — slippery elm and marshmallow root coat inflamed tissue. Seed DS-01 repopulates the microbiome with clinically studied strains. One prepares the terrain, the other plants the seeds. They are meant to work together.",
     whyThisBrand: "Most probiotics are dead before they reach your gut. Stomach acid, heat, and shelf time destroy fragile bacterial strains — a University of California study found that only 15% of probiotic supplements contained viable organisms at levels claimed on the label. Seed uses a ViaCap nested capsule: an outer prebiotic capsule that protects the inner probiotic capsule through stomach acid. 24 strains, all with published human clinical evidence. Refrigeration not required.",
@@ -145,7 +145,7 @@ const SUPPLEMENTS = [
     color: "#3A0A0A",
     category: "specialty",
     price: "~$28–$40",
-    asin: "B004VCOOUU",
+    asin: "B005ERPBRC",
     teaPairing: ["Heart of a King", "Blood Pressure Balance", "Post-50 Men's Foundation", "Volcanic Vitality"],
     teaNote: "Hawthorn berry in your heart blends supports myocardial efficiency and vascular tone. CoQ10 provides the cellular energy currency (ATP) the heart muscle runs on. The heart beats 100,000 times per day — it has the highest mitochondrial density of any organ in the body. These two belong together.",
     whyThisBrand: "Qunol uses ubiquinol — the pre-converted, active form of CoQ10 — suspended in a water and fat soluble format for dramatically better absorption. Standard CoQ10 (ubiquinone) must be converted by the body before it can be used, and that conversion becomes less efficient with age. Independent testing confirms Qunol meets label claims consistently.",
@@ -166,8 +166,7 @@ const SUPPLEMENTS = [
     color: "#1A3A1A",
     category: "mineral",
     price: "~$16–$22",
-    asin: "B08BTK4494",
-//    linkBroken: true,
+    asin: "B0013OXKHC",
     teaPairing: ["Prostate Shield", "Volcanic Vitality", "Testosterone Harmony", "Zinc & Saw Palmetto Tonic"],
     teaNote: "The prostate concentrates zinc at higher levels than any other organ. Your Prostate Shield and Zinc & Saw Palmetto Tonic blends provide herbal support for that pathway — but herbal zinc sources alone can't replace the mineral itself. They work in concert.",
     whyThisBrand: "Thorne's zinc uses bisglycinate chelation — zinc bonded to two glycine molecules for superior absorption and gentler digestion. Zinc picolinate is another well-absorbed form. Zinc oxide and zinc sulfate (common in cheap supplements) have poor bioavailability and frequently cause nausea. Thorne manufactures under NSF Sport certification.",
@@ -188,7 +187,7 @@ const SUPPLEMENTS = [
     color: "#1A1A3A",
     category: "vitamin",
     price: "~$18–$24",
-    asin: "B0013OQGO6",
+    asin: "B002GJCVRS",
     teaPairing: ["Iron Will Morning", "Pre-Game Performance", "Alpha Brain Focus", "Brain Boost"],
     teaNote: "Your energy and focus blends work on neural pathways, adaptogens, and circulation. B12 is the raw material for myelin — the insulation around every nerve fiber. Without adequate B12, none of those pathways transmit signals efficiently. This is the foundation under the formula.",
     whyThisBrand: "Thorne's B12 uses methylcobalamin — the neurologically active form your body uses immediately. Cyanocobalamin (found in most B12 supplements) must be converted by the body through a two-step process, and people with MTHFR gene variants (roughly 40% of the population) do this conversion poorly. Methylcobalamin bypasses that entirely.",
@@ -209,7 +208,7 @@ const SUPPLEMENTS = [
     color: "#3A2A0A",
     category: "vitamin",
     price: "~$40–$55",
-    asin: "B07DH1ZJZ9",
+    asin: "B003YY8TZK",
     teaPairing: ["Liver & Love", "Deep Liver Cleanse", "Blood Purifier", "Immune blends", "Muscle and Recovery"],
     teaNote: "Vitamin C is essential for collagen synthesis and is a cofactor in your liver's Phase I detoxification pathway. Your liver cleanse teas are mobilizing toxins for excretion — vitamin C helps neutralize free radicals generated in that process and supports the collagen repair that follows. Take your liver blend with liposomal C for the full protocol.",
     whyThisBrand: "LivOn Labs pioneered liposomal vitamin C delivery. The phospholipid bubble surrounding each C molecule bypasses gut absorption limits — standard vitamin C above 200mg is mostly excreted because the intestinal transport mechanism saturates. Liposomal C achieves plasma levels comparable to intravenous vitamin C at a fraction of the cost. Used by integrative physicians for immune support and post-illness recovery.",
@@ -231,87 +230,149 @@ const CATEGORIES = [
   { key: "herb",     label: "Herbal Extracts",   emoji: "🌿" },
 ];
 
-// ─── NOTIFY MODAL ─────────────────────────────────────────────────────────────
-function NotifyModal({ supp, onClose }) {
-  const [email, setEmail]     = useState("");
-  const [sending, setSending] = useState(false);
-  const [done, setDone]       = useState(false);
-  const [err, setErr]         = useState("");
+// ─── SPINNING AMAZON BUTTON ──────────────────────────────────────────────────
+function AmazonSpinBtn({ onClick }) {
+  const text = "AMAZON · SHOP NOW · AMAZON · SHOP NOW · ";
+  const chars = text.split("");
+  const radius = 52;
+  const total = chars.length;
+  return (
+    <div
+      onClick={onClick}
+      title="View on Amazon"
+      style={{
+        position:"relative", width:120, height:120,
+        cursor:"pointer", flexShrink:0,
+      }}
+    >
+      {/* Rotating ring of text — counter-clockwise */}
+      <div style={{
+        position:"absolute", inset:0, borderRadius:"50%",
+        animation:"suppSpinCCW 18s linear infinite",
+      }}>
+        {chars.map((ch, i) => (
+          <span key={i} style={{
+            position:"absolute", top:0, left:"50%",
+            fontSize:"8.5px", fontFamily:"Jost,sans-serif",
+            fontWeight:600, color:"rgba(196,137,58,.85)",
+            letterSpacing:".04em",
+            transformOrigin:`0 ${radius}px`,
+            width:10, textAlign:"center", marginLeft:-5,
+            transform:`rotate(${i * (360 / total)}deg)`,
+          }}>{ch}</span>
+        ))}
+      </div>
+
+      {/* Center gold circle */}
+      <div style={{
+        position:"absolute", top:"50%", left:"50%",
+        transform:"translate(-50%,-50%)",
+        width:74, height:74,
+        background:"linear-gradient(135deg,#C8893A,#A06828)",
+        borderRadius:"50%",
+        display:"flex", flexDirection:"column",
+        alignItems:"center", justifyContent:"center",
+        boxShadow:"0 6px 24px rgba(196,137,58,.5)",
+        transition:"all .3s",
+      }}
+      onMouseEnter={e=>{e.currentTarget.style.transform="translate(-50%,-50%) scale(1.1)";e.currentTarget.style.boxShadow="0 10px 32px rgba(196,137,58,.7)";}}
+      onMouseLeave={e=>{e.currentTarget.style.transform="translate(-50%,-50%)";e.currentTarget.style.boxShadow="0 6px 24px rgba(196,137,58,.5)";}}>
+        <span style={{fontSize:"1.2rem",color:"white",lineHeight:1,transform:"rotate(-30deg)",display:"inline-block"}}>↗</span>
+        <span style={{fontSize:".42rem",letterSpacing:".12em",textTransform:"uppercase",color:"rgba(255,255,255,.9)",fontFamily:"Jost,sans-serif",marginTop:3}}>Shop</span>
+      </div>
+
+      <style>{`@keyframes suppSpinCCW{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}`}</style>
+    </div>
+  );
+}
+
+// ─── STOCK NOTIFICATION MODAL ────────────────────────────────────────────────
+function StockNotifyModal({ supp, onClose }) {
+  const [email, setEmail] = React.useState("");
+  const [sent, setSent] = React.useState(false);
+  const [sending, setSending] = React.useState(false);
 
   const handleSubmit = async () => {
-    if (!email || !email.includes("@")) { setErr("Please enter a valid email address."); return; }
-    setSending(true); setErr("");
+    if (!email || !email.includes("@")) return;
+    setSending(true);
     try {
-      const res = await fetch("/.netlify/functions/notify-supplement", {
+      await fetch("https://web-production-4c84.up.railway.app/notify-stock", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          supplementName: supp.name,
-          supplementBrand: supp.brand,
-          supplementSubtitle: supp.subtitle,
-          supplementAsin: supp.asin || "none",
-          supplementEmoji: supp.emoji,
-        }),
+        body: JSON.stringify({ email, supplement: supp.name, brand: supp.brand }),
       });
-      if (!res.ok) throw new Error("Function error");
-      setDone(true);
-    } catch(e) {
-      setErr("Something went wrong — please try again.");
-    }
+    } catch (_) {}
+    setSent(true);
     setSending(false);
   };
 
   return (
-    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:1100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}}
-      onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
-      <div style={{background:"#0F1A12",border:"1px solid rgba(196,137,58,.35)",borderRadius:22,maxWidth:460,width:"100%",padding:"32px 28px",position:"relative"}}>
-        <button onClick={onClose} style={{position:"absolute",top:16,right:16,background:"rgba(255,255,255,.08)",border:"none",color:"rgba(247,242,234,.5)",borderRadius:"50%",width:32,height:32,fontSize:"1rem",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
-
-        {!done ? (
+    <div style={{
+      position:"fixed", inset:0, background:"rgba(0,0,0,.8)",
+      zIndex:980, display:"flex", alignItems:"center", justifyContent:"center",
+      padding:20, backdropFilter:"blur(8px)",
+    }} onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div style={{
+        background:"#0F140F", border:"1px solid rgba(196,137,58,.3)",
+        borderRadius:20, maxWidth:400, width:"100%", padding:"28px 24px",
+      }}>
+        {sent ? (
+          <div style={{textAlign:"center"}}>
+            <div style={{fontSize:"2rem",marginBottom:12}}>🫖</div>
+            <h3 style={{fontFamily:"Playfair Display,serif",fontSize:"1.2rem",color:"#F7F2EA",margin:"0 0 10px"}}>We'll let you know</h3>
+            <p style={{fontSize:".8rem",color:"rgba(247,242,234,.55)",lineHeight:1.7,margin:"0 0 20px"}}>
+              As soon as <strong style={{color:"rgba(196,137,58,.85)"}}>{supp.name}</strong> is back in stock on Amazon, we'll send you a note.
+            </p>
+            <button onClick={onClose} style={{background:"rgba(196,137,58,.15)",border:"1px solid rgba(196,137,58,.3)",color:"rgba(196,137,58,.9)",borderRadius:10,padding:"10px 24px",fontFamily:"Jost,sans-serif",fontSize:".7rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer"}}>
+              Close
+            </button>
+          </div>
+        ) : (
           <>
-            <div style={{fontSize:"2.2rem",marginBottom:12,textAlign:"center"}}>🌿</div>
-            <h3 style={{fontFamily:"Playfair Display,serif",fontSize:"1.35rem",fontWeight:700,color:"#F7F2EA",textAlign:"center",margin:"0 0 8px"}}>
-              High Demand — Limited Availability
+            <div style={{fontSize:".56rem",letterSpacing:".22em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:10,fontFamily:"Jost,sans-serif",fontWeight:600}}>
+              ✦ Notify Me When Back In Stock
+            </div>
+            <h3 style={{fontFamily:"Playfair Display,serif",fontSize:"1.1rem",color:"#F7F2EA",margin:"0 0 8px",lineHeight:1.3}}>
+              {supp.name}
             </h3>
-            <p style={{fontSize:".78rem",color:"rgba(196,137,58,.85)",textAlign:"center",letterSpacing:".06em",textTransform:"uppercase",fontWeight:600,marginBottom:16}}>
-              {supp.emoji} {supp.name}
-            </p>
-            <p style={{fontSize:".82rem",color:"rgba(247,242,234,.7)",lineHeight:1.85,textAlign:"center",marginBottom:8,fontWeight:300}}>
-              This supplement is temporarily unavailable through our curated link. We only recommend products that meet our exact standard for ingredient form, purity, and third-party testing — which means we won't point you somewhere we can't stand behind.
-            </p>
-            <p style={{fontSize:".8rem",color:"rgba(247,242,234,.5)",lineHeight:1.75,textAlign:"center",marginBottom:24,fontStyle:"italic",fontWeight:300}}>
-              Leave your email and we'll notify you when it's back — or send you an equal-or-better alternative personally curated for you.
+            <p style={{fontSize:".78rem",color:"rgba(247,242,234,.5)",lineHeight:1.65,margin:"0 0 18px",fontWeight:300}}>
+              This item may be temporarily unavailable on Amazon. Leave your email and we'll reach out the moment it's back — no spam, just one notification.
             </p>
             <input
               type="email"
-              placeholder="Your email address"
+              placeholder="your@email.com"
               value={email}
-              onChange={e=>{setEmail(e.target.value);setErr("");}}
+              onChange={e=>setEmail(e.target.value)}
               onKeyDown={e=>{if(e.key==="Enter")handleSubmit();}}
-              style={{width:"100%",padding:"12px 14px",background:"rgba(255,255,255,.06)",border:`1px solid ${err?"rgba(200,80,80,.6)":"rgba(196,137,58,.3)"}`,borderRadius:10,color:"#F7F2EA",fontFamily:"Jost,sans-serif",fontSize:".82rem",outline:"none",boxSizing:"border-box",marginBottom:err?6:14}}
+              autoFocus
+              style={{
+                width:"100%", boxSizing:"border-box",
+                background:"rgba(255,255,255,.05)", border:"1px solid rgba(255,255,255,.15)",
+                borderRadius:10, padding:"11px 14px",
+                fontFamily:"Jost,sans-serif", fontSize:".85rem",
+                color:"#F7F2EA", outline:"none", marginBottom:12,
+              }}
             />
-            {err && <p style={{fontSize:".7rem",color:"rgba(220,100,100,.9)",marginBottom:10,paddingLeft:2}}>{err}</p>}
-            <button
-              onClick={handleSubmit}
-              disabled={sending}
-              style={{width:"100%",background:sending?"rgba(196,137,58,.4)":"linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,110,40,.9))",border:"none",color:"#0D0D1A",borderRadius:12,padding:"13px",fontFamily:"Jost,sans-serif",fontSize:".75rem",letterSpacing:".14em",textTransform:"uppercase",cursor:sending?"not-allowed":"pointer",fontWeight:700,marginBottom:12}}>
-              {sending ? "Sending…" : "✦ Notify Me When Available"}
-            </button>
-            <p style={{fontSize:".6rem",color:"rgba(247,242,234,.25)",textAlign:"center",margin:0,lineHeight:1.6}}>
-              We'll never share your email. One notification only — no spam, ever.
-            </p>
-          </>
-        ) : (
-          <>
-            <div style={{fontSize:"2.5rem",textAlign:"center",marginBottom:16}}>✦</div>
-            <h3 style={{fontFamily:"Playfair Display,serif",fontSize:"1.3rem",color:"#F7F2EA",textAlign:"center",margin:"0 0 12px"}}>You're on the list</h3>
-            <p style={{fontSize:".82rem",color:"rgba(247,242,234,.65)",lineHeight:1.85,textAlign:"center",marginBottom:24,fontWeight:300}}>
-              We'll reach out the moment <strong style={{color:"rgba(196,137,58,.9)"}}>{supp.name}</strong> is available — or with something equal or better. Thank you for trusting us with your wellness.
-            </p>
-            <button onClick={onClose} style={{width:"100%",background:"rgba(255,255,255,.06)",border:"1px solid rgba(196,137,58,.3)",color:"rgba(196,137,58,.9)",borderRadius:12,padding:"12px",fontFamily:"Jost,sans-serif",fontSize:".75rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontWeight:600}}>
-              Continue Browsing
-            </button>
+            <div style={{display:"flex",gap:8}}>
+              <button onClick={handleSubmit} disabled={sending||!email.includes("@")} style={{
+                flex:1, background:"linear-gradient(135deg,#C8893A,#A06828)",
+                border:"none", color:"white", borderRadius:10,
+                padding:"11px", fontFamily:"Jost,sans-serif",
+                fontSize:".7rem", letterSpacing:".1em", textTransform:"uppercase",
+                cursor:"pointer", fontWeight:600,
+                opacity: (!email.includes("@")||sending) ? .5 : 1,
+              }}>
+                {sending ? "Saving…" : "Notify Me ✦"}
+              </button>
+              <button onClick={onClose} style={{
+                background:"rgba(255,255,255,.05)", border:"1px solid rgba(255,255,255,.12)",
+                color:"rgba(247,242,234,.5)", borderRadius:10,
+                padding:"11px 16px", fontFamily:"Jost,sans-serif",
+                fontSize:".7rem", cursor:"pointer",
+              }}>
+                Cancel
+              </button>
+            </div>
           </>
         )}
       </div>
@@ -330,15 +391,25 @@ export default function SupplementsPage({ onNav }) {
     ? SUPPLEMENTS
     : SUPPLEMENTS.filter(s => s.category === filter);
 
-  const handleBuy = (supp) => {
-    // If ASIN is missing or supplement is flagged broken, show notify modal immediately
-    if (!supp.asin || supp.linkBroken) {
-      setNotifySupp(supp);
+  const handleBuy = async (supp) => {
+    if (supp.seedUrl) {
+      window.open(supp.seedUrl, "_blank");
       return;
     }
-    const win = window.open(amz(supp.asin), "_blank");
-    // If popup was blocked, fall back to notify modal
-    if (!win) setNotifySupp(supp);
+    const url = amz(supp.asin);
+    // Open in new tab
+    const newTab = window.open(url, "_blank");
+    // After a short delay, check if the tab opened — if link failed offer notification
+    setTimeout(() => {
+      const confirm = window.confirm(
+        `Could not reach the Amazon listing for ${supp.name}.\n\nWould you like us to notify you when it's back in stock?`
+      );
+      if (confirm) setNotifySupp(supp);
+    }, 3500);
+    // If tab was blocked entirely, show notify modal immediately
+    if (!newTab || newTab.closed || typeof newTab.closed === "undefined") {
+      setNotifySupp(supp);
+    }
   };
 
   return (
@@ -495,9 +566,10 @@ export default function SupplementsPage({ onNav }) {
       {selected && (
         <DetailModal supp={selected} onClose={()=>setSelected(null)} onBuy={()=>handleBuy(selected)}/>
       )}
+
+      {/* ── STOCK NOTIFICATION MODAL ─────────────────────────────────────────── */}
       {notifySupp && (
-        <NotifyModal supp={notifySupp} onClose={()=>setNotifySupp(null)}/>
-      )}
+        <StockNotifyModal supp={notifySupp} onClose={()=>setNotifySupp(null)}/>
       )}
     </div>
   );
@@ -591,11 +663,11 @@ function SupplementCard({ supp, onDetail, onBuy }) {
         </div>
 
         {/* Price + buttons */}
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,flexWrap:"wrap"}}>
           <div style={{fontFamily:"Playfair Display,serif",fontSize:"1rem",color:"rgba(196,137,58,.9)",fontWeight:600}}>
             {supp.price}
           </div>
-          <div style={{display:"flex",gap:7}}>
+          <div style={{display:"flex",gap:7,alignItems:"center"}}>
             <button
               onClick={e=>{e.stopPropagation();onDetail();}}
               style={{
@@ -608,18 +680,9 @@ function SupplementCard({ supp, onDetail, onBuy }) {
               onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.06)";}}>
               Why This →
             </button>
-            <button
-              onClick={e=>{e.stopPropagation();onBuy();}}
-              style={{
-                background:"rgba(196,137,58,.85)",border:"none",color:"#0D0D1A",
-                borderRadius:40,padding:"7px 16px",fontSize:".63rem",
-                letterSpacing:".1em",textTransform:"uppercase",
-                cursor:"pointer",fontWeight:700,transition:"all .2s",
-              }}
-              onMouseEnter={e=>{e.currentTarget.style.background="rgba(196,137,58,1)";}}
-              onMouseLeave={e=>{e.currentTarget.style.background="rgba(196,137,58,.85)";}}>
-              View on Amazon
-            </button>
+            <div onClick={e=>{e.stopPropagation();onBuy();}}>
+              <AmazonSpinBtn onClick={onBuy}/>
+            </div>
           </div>
         </div>
       </div>
@@ -751,23 +814,11 @@ function DetailModal({ supp, onClose, onBuy }) {
             </p>
           </div>
 
-          {/* CTA */}
-          <button
-            onClick={onBuy}
-            style={{
-              width:"100%",
-              background:"linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,110,40,.9))",
-              border:"none",color:"#0D0D1A",borderRadius:14,
-              padding:"14px",fontFamily:"Jost,sans-serif",
-              fontSize:".75rem",letterSpacing:".14em",textTransform:"uppercase",
-              cursor:"pointer",fontWeight:700,marginBottom:10,
-              transition:"all .2s",
-            }}
-            onMouseEnter={e=>{e.currentTarget.style.opacity=".9";e.currentTarget.style.transform="translateY(-1px)";}}
-            onMouseLeave={e=>{e.currentTarget.style.opacity="1";e.currentTarget.style.transform="";}}>
-            View on Amazon →
-          </button>
-          <p style={{fontSize:".6rem",color:"rgba(247,242,234,.25)",textAlign:"center",margin:0,lineHeight:1.6}}>
+          {/* CTA — spinning Amazon button */}
+          <div style={{display:"flex",justifyContent:"center",margin:"8px 0 16px"}}>
+            <AmazonSpinBtn onClick={onBuy}/>
+          </div>
+          <p style={{fontSize:".6rem",color:"rgba(247,242,234,.25)",textAlign:"center",margin:"0 0 4px",lineHeight:1.6}}>
             Affiliate link — we earn a small commission at no cost to you.<br/>
             These statements have not been evaluated by the FDA. Not intended to diagnose, treat, cure, or prevent any disease.
           </p>
