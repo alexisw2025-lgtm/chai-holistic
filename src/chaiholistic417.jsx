@@ -1193,11 +1193,19 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
           messages: newMessages.map(m => ({ role: m.role, content: m.text }))
         })
       });
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error("Amara API error:", res.status, errText);
+        throw new Error(`HTTP ${res.status}: ${errText}`);
+      }
       const data = await res.json();
-      const reply = data?.reply || data?.content?.[0]?.text?.trim() || "I'm here with you. Take your time.";
+      console.log("Amara response:", data);
+      const reply = data?.reply || data?.content?.[0]?.text?.trim();
+      if (!reply) throw new Error("Empty reply from API");
       setAmaraMessages(prev => [...prev, { role: "assistant", text: reply }]);
     } catch (e) {
-      setAmaraMessages(prev => [...prev, { role: "assistant", text: "Something interrupted our connection for a moment. I'm still here — please try again." }]);
+      console.error("Amara fetch failed:", e.message);
+      setAmaraMessages(prev => [...prev, { role: "assistant", text: `Something paused our connection. (${e.message}) — Please try again in a moment.` }]);
     } finally {
       setAmaraLoading(false);
     }
@@ -1411,8 +1419,8 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
     .nav-logo-text span:first-child{font-size:1.35rem;}
     .nav-logo-text span:last-child{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-family:'Jost',sans-serif;font-weight:400;}
     @keyframes spin{to{transform:rotate(360deg);}}
-    .nav-links{display:flex;gap:.45rem;flex-wrap:nowrap;align-items:center;overflow-x:auto;}
-    .nav-lnk{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;white-space:nowrap;}
+    .nav-links{display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;}
+    .nav-lnk{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;white-space:nowrap;}
     .nav-lnk:hover,.nav-lnk.on{opacity:1;border-bottom-color:var(--gold);}
     .nav-right{display:flex;align-items:center;gap:10px;}
     .cart-btn{background:var(--bark);color:var(--parch);border:none;padding:8px 18px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;display:flex;align-items:center;gap:7px;}
@@ -3238,124 +3246,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 </div>
               </div>
 
-            {/* ── HOME SEARCH BAR ────────────────────────────────────────── */}
-            <div style={{marginTop:20,maxWidth:440,width:"100%"}}>
-              <div style={{
-                display:"flex",alignItems:"center",
-                background:"rgba(255,255,255,.06)",
-                border:"1.5px solid rgba(196,137,58,.3)",
-                borderRadius:50,padding:"10px 18px",gap:10,
-                transition:"border-color .2s, box-shadow .2s",
-              }}
-              onFocus={()=>{}}
-              >
-                <span style={{fontSize:"1rem",opacity:.55}}>🔍</span>
-                <input
-                  placeholder="Search teas, herbs, or wellness goals…"
-                  style={{
-                    flex:1,background:"none",border:"none",outline:"none",
-                    color:"var(--cream)",fontFamily:"Jost,sans-serif",
-                    fontSize:".84rem",fontWeight:300,
-                  }}
-                  onFocus={e=>{e.target.parentNode.style.borderColor="var(--gold)";e.target.parentNode.style.boxShadow="0 0 0 3px rgba(196,137,58,.12)";}}
-                  onBlur={e=>{e.target.parentNode.style.borderColor="rgba(196,137,58,.3)";e.target.parentNode.style.boxShadow="none";}}
-                  onChange={e=>{
-                    const q = e.target.value.toLowerCase().trim();
-                    if (!q) return;
-                    // Search BLENDS by name, tagline, benefit
-                    const blendHit = BLENDS.find(b=>
-                      b.name.toLowerCase().includes(q) ||
-                      (b.tagline||"").toLowerCase().includes(q) ||
-                      (b.benefit||"").toLowerCase().includes(q) ||
-                      (b.occasion||"").toLowerCase().includes(q)
-                    );
-                    if (blendHit) setHomeSearchResults(BLENDS.filter(b=>
-                      b.name.toLowerCase().includes(q) ||
-                      (b.tagline||"").toLowerCase().includes(q) ||
-                      (b.benefit||"").toLowerCase().includes(q)
-                    ).slice(0,5));
-                    else setHomeSearchResults([]);
-                    setHomeSearchQuery(q);
-                  }}
-                  onKeyDown={e=>{
-                    if(e.key==="Enter"){
-                      nav("shop");
-                      setHomeSearchQuery("");
-                      setHomeSearchResults([]);
-                      e.target.value="";
-                    }
-                  }}
-                />
-                {homeSearchQuery && (
-                  <button onClick={()=>{setHomeSearchQuery("");setHomeSearchResults([]);document.querySelector('.home-search-input') && (document.querySelector('.home-search-input').value="");}}
-                    style={{background:"none",border:"none",color:"rgba(255,255,255,.35)",cursor:"pointer",fontSize:".9rem",padding:0,lineHeight:1}}>✕</button>
-                )}
-              </div>
-              {/* Results dropdown */}
-              {homeSearchResults.length > 0 && (
-                <div style={{
-                  background:"linear-gradient(160deg,#0F1A12,#0A0F0B)",
-                  border:"1px solid rgba(196,137,58,.22)",
-                  borderRadius:16,marginTop:8,overflow:"hidden",
-                  boxShadow:"0 16px 40px rgba(0,0,0,.6)",zIndex:200,position:"relative",
-                }}>
-                  {homeSearchResults.map(b=>(
-                    <div key={b.id}
-                      onClick={()=>{
-                        nav("shop");
-                        setHomeSearchQuery("");
-                        setHomeSearchResults([]);
-                      }}
-                      style={{
-                        display:"flex",alignItems:"center",gap:12,
-                        padding:"11px 16px",cursor:"pointer",
-                        borderBottom:"1px solid rgba(196,137,58,.07)",
-                        transition:"background .15s",
-                      }}
-                      onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.08)"}
-                      onMouseLeave={e=>e.currentTarget.style.background="transparent"}
-                    >
-                      <div style={{
-                        width:38,height:38,borderRadius:8,flexShrink:0,
-                        background:`linear-gradient(135deg,${b.color||"#2A4A2D"},rgba(10,15,11,.8))`,
-                        display:"flex",alignItems:"center",justifyContent:"center",
-                        fontSize:"1.1rem",
-                      }}>{b.emoji||"🍵"}</div>
-                      <div style={{flex:1,minWidth:0}}>
-                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"#F7F2EA",fontWeight:600,marginBottom:2}}>{b.name}</div>
-                        <div style={{fontFamily:"Jost,sans-serif",fontSize:".65rem",color:"rgba(196,137,58,.7)",fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{b.tagline||b.benefit}</div>
-                      </div>
-                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:".82rem",color:"rgba(196,137,58,.8)",flexShrink:0}}>${b.price}</div>
-                    </div>
-                  ))}
-                  <div style={{padding:"8px 16px",borderTop:"1px solid rgba(196,137,58,.1)"}}>
-                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"rgba(255,255,255,.3)",textAlign:"center"}}>
-                      Press Enter or tap a result to explore the full collection
-                    </div>
-                  </div>
-                </div>
-              )}
-              {homeSearchQuery && homeSearchResults.length === 0 && (
-                <div style={{
-                  background:"linear-gradient(160deg,#0F1A12,#0A0F0B)",
-                  border:"1px solid rgba(196,137,58,.15)",
-                  borderRadius:14,marginTop:8,padding:"14px 18px",
-                  display:"flex",alignItems:"center",gap:10,
-                }}>
-                  <span style={{fontSize:".8rem"}}>🌿</span>
-                  <div>
-                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".76rem",color:"rgba(247,242,234,.6)",fontWeight:300}}>
-                      No exact match — try browsing the full collection
-                    </div>
-                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".65rem",color:"rgba(196,137,58,.6)",marginTop:3,cursor:"pointer",textDecoration:"underline",textDecorationStyle:"dotted"}}
-                      onClick={()=>{nav("herbs");setHomeSearchQuery("");setHomeSearchResults("");}}>
-                      Search the Herb Archive instead →
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            </div>
+                        </div>
           </div>
           <div className="hero-visual">
             <HeroCards onNav={nav} onOpenRecipe={(id)=>{nav("recipes");setTimeout(()=>setActiveRecipe(id),150);}} />
@@ -3364,6 +3255,72 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         </div>
       </section>
 
+
+      {/* ── HOME SEARCH BAR ─────────────────────────────────────────────────── */}
+      <div style={{background:"linear-gradient(180deg,rgba(15,26,18,0) 0%,rgba(15,26,18,1) 100%)",padding:"0 24px 32px",marginTop:-20}}>
+        <div style={{maxWidth:600,margin:"0 auto",position:"relative"}}>
+          <div style={{
+            display:"flex",alignItems:"center",gap:12,
+            background:"rgba(255,255,255,.07)",
+            border:"1.5px solid rgba(196,137,58,.35)",
+            borderRadius:50,padding:"13px 22px",
+            transition:"border-color .2s,box-shadow .2s",
+            backdropFilter:"blur(12px)",
+          }}
+            onFocus={()=>{}}
+          >
+            <span style={{fontSize:"1.1rem",opacity:.6}}>🔍</span>
+            <input
+              placeholder="Search teas, herbs, or wellness goals…"
+              value={homeSearchQuery}
+              onChange={e=>{
+                const q = e.target.value;
+                setHomeSearchQuery(q);
+                const ql = q.toLowerCase().trim();
+                if(!ql){setHomeSearchResults([]);return;}
+                setHomeSearchResults(BLENDS.filter(b=>
+                  b.name.toLowerCase().includes(ql)||
+                  (b.tagline||"").toLowerCase().includes(ql)||
+                  (b.benefit||"").toLowerCase().includes(ql)||
+                  (b.occasion||"").toLowerCase().includes(ql)
+                ).slice(0,6));
+              }}
+              onKeyDown={e=>{if(e.key==="Enter"&&homeSearchResults.length>0){nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}}
+              style={{flex:1,background:"none",border:"none",outline:"none",color:"var(--cream)",fontFamily:"Jost,sans-serif",fontSize:".88rem",fontWeight:300}}
+            />
+            {homeSearchQuery&&<button onClick={()=>{setHomeSearchQuery("");setHomeSearchResults([]);}} style={{background:"none",border:"none",color:"rgba(255,255,255,.4)",cursor:"pointer",fontSize:"1.1rem",padding:0,lineHeight:1}}>✕</button>}
+          </div>
+          {homeSearchResults.length>0&&(
+            <div style={{position:"absolute",top:"calc(100% + 8px)",left:0,right:0,background:"linear-gradient(160deg,#0F1A12,#0A0F0B)",border:"1px solid rgba(196,137,58,.25)",borderRadius:18,overflow:"hidden",zIndex:200,boxShadow:"0 16px 40px rgba(0,0,0,.6)"}}>
+              {homeSearchResults.map(b=>(
+                <div key={b.id} onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}
+                  style={{display:"flex",alignItems:"center",gap:12,padding:"12px 18px",cursor:"pointer",borderBottom:"1px solid rgba(196,137,58,.07)",transition:"background .15s"}}
+                  onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.09)"}
+                  onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                  <div style={{width:40,height:40,borderRadius:10,flexShrink:0,background:`linear-gradient(135deg,${b.color||"#2A4A2D"},rgba(10,15,11,.8))`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.2rem"}}>{b.emoji||"🍵"}</div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"#F7F2EA",fontWeight:600}}>{b.name}</div>
+                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".65rem",color:"rgba(196,137,58,.7)",fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{b.tagline||b.benefit}</div>
+                  </div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:".85rem",color:"rgba(196,137,58,.85)",flexShrink:0}}>${b.price}</div>
+                </div>
+              ))}
+              <div style={{padding:"8px 18px 10px",borderTop:"1px solid rgba(196,137,58,.1)",fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"rgba(255,255,255,.3)",textAlign:"center"}}>
+                Enter to browse full collection
+              </div>
+            </div>
+          )}
+          {homeSearchQuery&&homeSearchResults.length===0&&(
+            <div style={{position:"absolute",top:"calc(100% + 8px)",left:0,right:0,background:"linear-gradient(160deg,#0F1A12,#0A0F0B)",border:"1px solid rgba(196,137,58,.15)",borderRadius:14,padding:"14px 18px",display:"flex",alignItems:"center",gap:10,zIndex:200}}>
+              <span>🌿</span>
+              <div>
+                <div style={{fontFamily:"Jost,sans-serif",fontSize:".76rem",color:"rgba(247,242,234,.6)",fontWeight:300}}>No blends matched — try a health goal or feeling</div>
+                <div style={{fontFamily:"Jost,sans-serif",fontSize:".65rem",color:"rgba(196,137,58,.6)",marginTop:3,cursor:"pointer",textDecorationLine:"underline",textDecorationStyle:"dotted"}} onClick={()=>{nav("herbs");setHomeSearchQuery("");setHomeSearchResults([]);}}>Search the Herb Archive instead →</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
       <div className="mq">
         <div className="mq-track">
           {[...Array(2)].map((_,p)=>["Morning Rituals","Evening Calm","Liver Cleanse","Kidney Flush","⚡ Men's Wellness","Vibe Shift Rings","Tea Finder","Ritual Builder","Cleanse Tracker","Herb Pairing Guide","Sip &amp; Heal · 40 Recipes"].map((t,i)=>(
@@ -3373,6 +3330,14 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
       </div>
 
       {/* ── Prayer / Intention Section ──────────────────────────────────── */}
+      <div style={{background:"linear-gradient(135deg,#0A0F0B,#0F1A12)",borderTop:"1px solid rgba(196,137,58,.15)",padding:"20px 24px 0",textAlign:"center"}}>
+        <div style={{display:"inline-flex",alignItems:"center",gap:10,background:"rgba(196,137,58,.1)",border:"1px solid rgba(196,137,58,.25)",borderRadius:50,padding:"10px 22px",flexWrap:"wrap",justifyContent:"center"}}>
+          <span style={{fontSize:"1.1rem"}}>💍</span>
+          <span style={{fontFamily:"Jost,sans-serif",fontSize:".78rem",color:"rgba(247,242,234,.75)",fontWeight:300,lineHeight:1.6}}>
+            <strong style={{color:"rgba(196,137,58,.9)",fontWeight:600}}>Have your Vibe Shift Ring?</strong>{" "}Slide it onto your finger — then press it gently against the floating ring below and receive your intention spoken over you.
+          </span>
+        </div>
+      </div>
       <PrayerSection onNavigate={(blend) => nav("tea-library", { blend })} />
 
       {/* ── VIBE SHIFT RING OFFER — shown near prayer section ───────────────── */}
@@ -3753,27 +3718,41 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:10}}>
               {[
                 {year:"2737 BCE", emoji:"🍃", title:"The First Cup",
-                 text:"Emperor Shen Nong discovered tea when leaves drifted into his boiling water. He documented its healing properties — a happy accident that changed the world."},
+                 text:"Emperor Shen Nong discovered tea when leaves drifted into his boiling water. He documented its healing properties — a happy accident that changed the world.",
+                 more:"Shen Nong was already cataloguing hundreds of plants for medicine when tea found him. The first documented healing use was for digestive complaints and mental clarity. Modern science confirms both: tea's catechins genuinely support gut health, and L-theanine produces calm focus unlike any other compound. The accident was 5,000 years ago. The evidence keeps growing.",
+                 blend:"Golden Healer", rec:"Our Golden Healer blend honours this ancient discovery — turmeric, ginger, and cinnamon layered together as Shen Nong would have understood: plants chosen for their healing, not just their flavour."},
                 {year:"~500 BCE", emoji:"📜", title:"Medicine Before Pleasure",
-                 text:"Tea appears in ancient Chinese medical texts as a treatment for fatigue, poor eyesight, and digestion. For a thousand years, tea was prescribed by physicians."},
-                {year:"760 CE",   emoji:"📖", title:"The Classic of Tea",
-                 text:"Lu Yu writes Ch'a Ching — the first book ever written entirely about tea. His opening line: Tea is a drink fit for the most exalted."},
+                 text:"Tea appears in ancient Chinese medical texts as a treatment for fatigue, poor eyesight, and digestion. For a thousand years, tea was prescribed by physicians.",
+                 more:"The Pen Ts'ao (The Great Herbal) lists tea as treating tumors, bladder ailments, and lethargy. These aren't metaphors — they reflect real observation. Today we understand why: tea's antioxidants protect cellular DNA, its diuretic properties support kidney function, and its caffeine-theanine synergy genuinely addresses fatigue at a neurological level. Ancient physicians were clinical observers.",
+                 blend:"Morning Rise", rec:"Morning Rise is your daily prescription — green tea with tulsi and cardamom. Calm, focused energy from your very first cup. No crash. Just the sustained clarity ancient healers knew tea could provide."},
+                {year:"760 CE", emoji:"📖", title:"The Classic of Tea",
+                 text:"Lu Yu writes Ch'a Ching — the first book ever written entirely about tea. His opening line: Tea is a drink fit for the most exalted.",
+                 more:"Lu Yu spent 20 years perfecting this text. He described 28 pieces of tea equipment, the ideal water source (mountain spring, then river water, then well water), and the philosophy of tea as spiritual discipline. His core belief: preparation is inseparable from the medicine. The ritual of mindful brewing produces measurable changes in cortisol and heart rate before the first sip. The ceremony is medicine.",
+                 blend:"Calm Within", rec:"Calm Within was built for the ritual. When you steep it slowly — passionflower, lemon balm, lavender — you're doing what Lu Yu described: using the preparation itself as the first dose of calm."},
                 {year:"1191 CE", emoji:"🏯", title:"Elixir of Life",
-                 text:"Buddhist monk Eisai writes: Tea is the ultimate mental and medical remedy and has the ability to make one's life more full and complete."},
-                {year:"1700s",   emoji:"🌍", title:"The World Discovers Tea",
-                 text:"Tea becomes the most traded commodity on earth after spices. Wars are fought over it. The Boston Tea Party changes the course of history."},
-                {year:"Today",   emoji:"🔬", title:"Science Catches Up",
-                 text:"3.7 billion cups consumed every day. Modern research confirms what ancient healers always knew: tea contains compounds found nowhere else in nature."},
+                 text:"Buddhist monk Eisai writes: Tea is the ultimate mental and medical remedy and has the ability to make one's life more full and complete.",
+                 more:"Eisai introduced tea to Japan as medicine, not beverage. He personally grew Japan's first tea garden and prescribed tea for five specific conditions — heart disease, fatigue, beriberi, poor digestion, and paralysis. Four of those five have modern clinical evidence linking tea consumption to improvement. His word 'elixir' wasn't metaphor. He had watched it work for decades.",
+                 blend:"Immunity Shield", rec:"Immunity Shield carries the same conviction Eisai had — that the right herbs, consistently used, change the body's baseline. Elderberry, echinacea, tulsi, hibiscus. A complete immune ritual in every cup."},
+                {year:"1700s", emoji:"🌍", title:"The World Discovers Tea",
+                 text:"Tea becomes the most traded commodity on earth after spices. Wars are fought over it. The Boston Tea Party changes the course of history.",
+                 more:"What drove this global obsession? Not just taste — safety. Boiling water to brew tea eliminated waterborne disease in an era when water killed millions. Tea-drinking populations survived epidemics that devastated others. Humanity instinctively understood tea was protecting them. The economic and political history of tea is really the story of humanity reaching for something that kept us alive.",
+                 blend:"2AM Reset", rec:"2AM Reset is tea at its most essential — chamomile, valerian, passionflower for the body that needs rest and the mind that won't stop. What people have reached for in the dark hours for 5,000 years."},
+                {year:"Today", emoji:"🔬", title:"Science Catches Up",
+                 text:"3.7 billion cups consumed every day. Modern research confirms what ancient healers always knew: tea contains compounds found nowhere else in nature.",
+                 more:"Over 10,000 published studies on tea since 1990. L-theanine found almost nowhere else in nature. EGCG among the most potent natural antioxidants ever studied. Polyphenols that selectively feed specific beneficial gut bacteria. Anti-inflammatory catechins. Cortisol-reducing ritual effects measurable by blood test. The ancients prescribed tea for 5,000 years on observation alone. The science took until the 1990s to catch up. The tea was right all along.",
+                 blend:"Gut & Glow", rec:"Gut & Glow represents everything science has confirmed about tea and the gut-skin connection — marshmallow root, fennel, chamomile, and burdock working exactly the way ancient healers described: from the inside out."},
               ].map(item=>(
                 <div key={item.year}
-                  style={{background:"white",border:"1px solid var(--dust)",borderRadius:16,padding:"16px 18px",display:"flex",gap:12,alignItems:"flex-start",transition:"all .25s"}}
-                  onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 4px 16px rgba(28,26,23,.08)";e.currentTarget.style.borderColor="var(--sage)";}}
-                  onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";e.currentTarget.style.borderColor="var(--dust)";}}>
+                  onClick={()=>setTeaCardModal(item)}
+                  style={{background:"white",border:"1px solid var(--dust)",borderRadius:16,padding:"16px 18px",display:"flex",gap:12,alignItems:"flex-start",transition:"all .25s",cursor:"pointer"}}
+                  onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 6px 20px rgba(28,26,23,.13)";e.currentTarget.style.borderColor="var(--sage)";e.currentTarget.style.transform="translateY(-2px)";}}
+                  onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";e.currentTarget.style.borderColor="var(--dust)";e.currentTarget.style.transform="";}}>
                   <span style={{fontSize:"1.4rem",flexShrink:0,marginTop:2}}>{item.emoji}</span>
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--gold)",fontWeight:500,marginBottom:2}}>{item.year}</div>
                     <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",marginBottom:5}}>{item.title}</div>
-                    <p style={{fontSize:".72rem",color:"#6A5F50",lineHeight:1.65,fontWeight:300,margin:0}}>{item.text}</p>
+                    <p style={{fontSize:".72rem",color:"#6A5F50",lineHeight:1.65,fontWeight:300,margin:"0 0 6px"}}>{item.text}</p>
+                    <div style={{fontSize:".58rem",color:"var(--sage-d)",letterSpacing:".1em",textTransform:"uppercase",fontWeight:600}}>Read more →</div>
                   </div>
                 </div>
               ))}
@@ -3789,29 +3768,41 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:10}}>
               {[
                 {icon:"🧠",compound:"L-Theanine",title:"Calm Focus Without the Crash",
-                 text:"Found almost exclusively in tea. Promotes alpha brainwave activity — relaxed alertness — without the crash of coffee."},
-                {icon:"🛡",compound:"Polyphenols & EGCG",title:"The Most Powerful Antioxidants",
-                 text:"Tea polyphenols neutralize free radicals that damage cells and accelerate aging, reducing inflammation at a cellular level."},
+                 text:"Found almost exclusively in tea. Promotes alpha brainwave activity — relaxed alertness — without the crash of coffee.",
+                 more:"L-theanine is so rare in nature that tea is your primary dietary source. It crosses the blood-brain barrier and increases GABA, serotonin, and dopamine activity simultaneously. Combined with caffeine, it produces what researchers call 'attentive calmness' — the alpha brainwave state associated with meditation. A 2008 study found the combination improved accuracy, reaction time, and sustained attention significantly more than either compound alone. This is not marketing. It is neuroscience.",
+                 blend:"Morning Rise", rec:"Morning Rise is built around this synergy — green tea for the L-theanine and gentle caffeine, paired with tulsi and cardamom for adaptogenic support. The smoothest, most intentional way to start a day."},
+                {icon:"🛡",compound:"Polyphenols & EGCG",title:"The Most Powerful Antioxidants Known",
+                 text:"Tea polyphenols neutralize free radicals that damage cells and accelerate aging, reducing inflammation at a cellular level.",
+                 more:"EGCG (epigallocatechin gallate) is one of the most intensely studied plant compounds in cancer prevention research. It inhibits NF-kB — the master inflammatory switch — protects DNA strands from oxidative cutting, and reduces LDL oxidation in blood vessel walls. Green tea has the highest EGCG concentration, but our herbal blends layer on top: turmeric adds curcumin, hibiscus adds anthocyanins, ginger adds gingerols. Together they create a broader antioxidant profile than any single plant.",
+                 blend:"Golden Healer", rec:"Golden Healer is our most antioxidant-dense blend — turmeric, ginger, cinnamon, and black pepper (which increases curcumin absorption by 2,000%). Built for inflammation, built for protection, built for the long game."},
                 {icon:"❤",compound:"Catechins",title:"The Heart's Best Friend",
-                 text:"Studies across Japan, China, and Europe link regular tea consumption with lower cardiovascular risk and healthier blood pressure."},
-                {icon:"🌱",compound:"Prebiotics",title:"Your Gut Remembers",
-                 text:"Tea polyphenols feed beneficial gut bacteria. A healthy gut directly affects mood, immunity, energy, and cognitive function."},
+                 text:"Studies across Japan, China, and Europe link regular tea consumption with lower cardiovascular risk and healthier blood pressure.",
+                 more:"A landmark 2006 study of 40,530 Japanese adults found those who drank 5+ cups of green tea daily had 26% lower cardiovascular mortality and 16% lower all-cause mortality. Catechins reduce LDL cholesterol oxidation — it's not the cholesterol itself that damages arteries, but oxidised LDL. Tea prevents that oxidation. Hibiscus adds direct blood pressure reduction through ACE-inhibitor-like mechanisms, confirmed in multiple human trials at effects comparable to pharmaceutical interventions.",
+                 blend:"Heart Opener", rec:"Heart Opener is our cardiovascular ritual — hawthorn berry (the most studied herbal heart tonic in the world), hibiscus (clinically shown to reduce systolic BP), and rose. Three herbs with combined centuries of cardiac use and modern clinical backing."},
+                {icon:"🌱",compound:"Prebiotics",title:"Your Gut Shapes Everything",
+                 text:"Tea polyphenols feed beneficial gut bacteria. A healthy gut directly affects mood, immunity, energy, and cognitive function.",
+                 more:"Tea polyphenols act as selective prebiotics — they feed Lactobacillus and Bifidobacterium while suppressing Clostridium and other harmful species. This selective feeding changes the gut's microbial landscape measurably within 4 weeks of consistent tea drinking. The gut-brain axis means these changes directly affect serotonin production (90% of which is made in the gut), immune regulation, inflammatory signalling, and even cognitive clarity. Your gut biome is not separate from your mood. They are the same system.",
+                 blend:"Gut & Glow", rec:"Gut & Glow feeds the microbiome directly — marshmallow root soothes the intestinal lining, fennel calms smooth muscle spasms, chamomile reduces gut inflammation, burdock provides prebiotic inulin. A complete gut restoration ritual."},
                 {icon:"💆",compound:"Cortisol Regulation",title:"Your Nervous System Thanks You",
-                 text:"Regular tea drinkers have measurably lower cortisol after challenging tasks. The ritual itself is medicine no supplement can replicate."},
+                 text:"Regular tea drinkers have measurably lower cortisol after challenging tasks. The ritual itself is medicine no supplement can replicate.",
+                 more:"A 2007 UCL study measured cortisol in black tea drinkers versus a matched placebo group through a series of stressful tasks. Tea drinkers showed 47% lower post-stress cortisol and returned to baseline 20 minutes faster. The effect was partly biochemical (theanine, polyphenols) and partly ritual — the act of preparation itself produced measurable parasympathetic activation. You cannot separate the tea from the ceremony. Both are the medicine. The cup tells your nervous system: you have time. You are safe. Breathe.",
+                 blend:"Stress Armor", rec:"Stress Armor combines ashwagandha and tulsi — both clinically proven to reduce cortisol — with the ritual of a warming cup steeped with intention. Daily cortisol regulation is one of the most powerful longevity interventions available. This blend makes it a ritual you look forward to."},
                 {icon:"⏳",compound:"Longevity",title:"Five Thousand Years of Evidence",
-                 text:"The cultures with the highest tea consumption consistently rank among the world's most long-lived. Five thousand years is not coincidence."},
+                 text:"The cultures with the highest tea consumption consistently rank among the world's most long-lived. Five thousand years is not coincidence.",
+                 more:"Okinawa, Japan leads the world in centenarians per capita. They drink green tea daily. The original Blue Zones research — studying the world's longest-lived communities — identified herbal tea consumption as one of the consistent shared practices across all five zones, regardless of culture, religion, or diet. The Ikarian Greeks drink wild herbal teas; the Sardinians drink milk thistle tea; the Nicoyans drink guaro de sapo herb tea. Different plants, same wisdom: steep and drink. Something in the ritual of daily herbal preparation is good for a very long life.",
+                 blend:"Morning Rise", rec:"Start here. One intentional cup every morning. The longevity research isn't about any single compound — it's about consistency, ritual, and the cumulative effect of years of giving your body something real. Morning Rise is that first daily act of care."},
               ].map(f=>(
                 <div key={f.title}
                   onClick={()=>setTeaCardModal({year:f.compound,title:f.title,text:f.text,more:f.more,blend:f.blend,rec:f.rec})}
                   style={{background:"white",border:"1px solid var(--dust)",borderRadius:16,padding:"16px 18px",display:"flex",gap:12,alignItems:"flex-start",transition:"all .25s",cursor:"pointer"}}
-                  onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 6px 20px rgba(28,26,23,.12)";e.currentTarget.style.borderColor="var(--sage)";e.currentTarget.style.transform="translateY(-2px)";}}
+                  onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 6px 20px rgba(28,26,23,.13)";e.currentTarget.style.borderColor="var(--sage)";e.currentTarget.style.transform="translateY(-2px)";}}
                   onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";e.currentTarget.style.borderColor="var(--dust)";e.currentTarget.style.transform="";}}>
                   <span style={{fontSize:"1.4rem",flexShrink:0,marginTop:2}}>{f.icon}</span>
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--sage-d)",fontWeight:500,marginBottom:2}}>{f.compound}</div>
                     <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",marginBottom:5}}>{f.title}</div>
                     <p style={{fontSize:".72rem",color:"#6A5F50",lineHeight:1.65,fontWeight:300,margin:"0 0 6px"}}>{f.text}</p>
-                    <div style={{fontSize:".58rem",color:"var(--sage-d)",letterSpacing:".1em",textTransform:"uppercase",fontWeight:500}}>Tap to explore</div>
+                    <div style={{fontSize:".58rem",color:"var(--sage-d)",letterSpacing:".1em",textTransform:"uppercase",fontWeight:600}}>Read more →</div>
                   </div>
                 </div>
               ))}
