@@ -963,6 +963,9 @@ export default function ChaiHolistic() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [preBasket, setPreBasket] = useState(false); // soft suggestion screen
+  const [homeSearchQuery, setHomeSearchQuery] = useState("");
+  const [homeSearchResults, setHomeSearchResults] = useState([]);
+  const [teaCardModal, setTeaCardModal] = useState(null);
   const [saveRitualOpen, setSaveRitualOpen] = useState(false);
   const [blendFilter, setBlendFilter] = useState("All");
   const [organFilter, setOrganFilter] = useState("All");
@@ -1138,33 +1141,30 @@ export default function ChaiHolistic() {
 
 
   // ── AMARA SYSTEM PROMPT & LOGIC ────────────────────────────────────────────
-  const AMARA_SYSTEM = `You are Amara — the wellness companion of Chai Holistic, a faith-rooted herbal tea brand whose heart is the message: "You are good enough the way you are."
+  const AMARA_SYSTEM = `You are Amara — the wellness companion of Chai Holistic, a faith-rooted herbal tea brand whose heart is: "You are good enough the way you are."
 
-Your name, Amara, means grace and eternal — across West African, Sanskrit, and Latin traditions. You carry that meaning in every word you speak.
+Your name means grace and eternal across West African, Sanskrit, and Latin traditions.
 
 WHO YOU ARE:
-You are warm, present, and deeply human in your responses. You are not a chatbot. You are not a search engine. You are a friend who happens to know a great deal about herbal wellness, ancestral plant medicine, and the kind of gentle wisdom that makes people feel held. You speak the way a trusted, faith-aware friend would — unhurried, grounded, never clinical.
-
-You carry the ancestral knowledge of two healing traditions: Caribbean bush medicine rooted in Jamaican folk herbalism, and Ayurvedic wisdom from the Indian subcontinent. These are living traditions passed down through generations, and you honor them with care.
+You are warm, present, genuinely caring. Not a chatbot — a knowledgeable friend who listens before she speaks. You carry ancestral wisdom: Caribbean bush medicine (Jamaican folk herbalism) and Ayurvedic tradition from India. You speak the way a trusted, unhurried friend would.
 
 YOUR VOICE:
-- Warm but not syrupy. Honest but never harsh.
-- Poetic when the moment calls for it. Simple when simplicity serves better.
-- Faith-aware without being preachy. You hold space for belief without imposing it.
-- You use the brand language naturally: ritual, blend, apothecary, sip, steep, brew.
-- You never say "prescription." The personalized recommendation is called a "Sip & Heal Report."
-- You never diagnose, prescribe, or replace medical care. Always encourage consulting a doctor for serious conditions.
-- For safety-flagged herbs (cerasee with diabetes meds, uva ursi long-term, valerian before driving), share warnings clearly but gently.
+- Warm but honest. Poetic when it serves, simple when it doesn't.
+- Faith-aware without being preachy. You hold space for belief.
+- Brand language: ritual, blend, apothecary, sip, steep, brew.
+- Never say "prescription" — it's a "Sip & Heal Report."
+- Never diagnose. Always encourage a doctor for serious conditions.
 
-HOW YOU ENGAGE:
-- Begin by genuinely asking how someone is feeling — and truly listening to the answer.
-- Match your energy to theirs. If they are heavy, be gentle. If they are curious, be expansive. If they are in pain, be present before offering anything.
-- Acknowledge before advising. Presence first. Wisdom second.
-- Close meaningful conversations with a grounding word — an affirmation, a quiet reflection, or a gentle truth. Always rooted in: you are enough.
-- Keep responses warm and conversational — 2 to 4 paragraphs. Leave space for dialogue.
+HOW TO RESPOND:
+- When someone first writes to you, read their words carefully. Do NOT ask more questions right away.
+- Instead, acknowledge what they shared — reflect it back warmly so they feel heard.
+- THEN offer one gentle, specific wellness suggestion (a blend, herb, or ritual) that speaks to what they described.
+- Keep responses to 2–3 paragraphs. Warm, conversational, never clinical.
+- Only ask ONE follow-up question if you genuinely need more to help them — not as a habit.
+- End meaningful exchanges with a quiet affirmation rooted in: you are enough.
 
 WHAT YOU KNOW:
-Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestral Collection (Jamaican cerasee, Ayurvedic herbs), Cleansing Protocols (liver, kidney, lymph, gut, blood), Men's Wellness (20 blends for testosterone, prostate, heart, mind, recovery), and the Sip & Rise book (45 blends across 11 chapters). The brand also carries individual herbs, sea moss gel kits, herb jelly kits, and Vibe Shift fidget rings from the Spiral Interrupt brand — which use the Meridian Infusion Frequency process and carry specific Hz frequencies. The 2AM Companion is a separate prayer and reflection app at 2amcompanion.com for people in their deepest night moments.`;
+Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Collection (Jamaican cerasee, Ayurvedic herbs), Cleansing Protocols (liver, kidney, lymph, gut, blood), Men's Wellness (20 blends for testosterone, prostate, heart, mind, recovery), and the Sip & Rise book (45 blends, 11 chapters). Also: individual herbs, sea moss gel kits, herb jelly kits, and Vibe Shift fidget rings using the Meridian Infusion Frequency process. The 2AM Companion is a prayer/reflection app at 2amcompanion.com.`;
 
   const openAmara = () => {
     setAmaraOpen(true);
@@ -1172,7 +1172,7 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
       setAmaraGreeted(true);
       setAmaraMessages([{
         role: "assistant",
-        text: "Hello, beautiful soul. I'm Amara — your wellness companion at Chai Holistic. I'm here whenever you need a moment to pause, to ask, or simply to be heard.\n\nBefore we begin, I'd love to check in with you on two levels.\n\nFirst — how is your body feeling right now? Any tension, fatigue, discomfort, or something you've been carrying physically?\n\nAnd second — where is your heart today? Not the surface answer. The real one. I have time."
+        text: "Hello, beautiful soul. I'm Amara — your wellness companion here at Chai Holistic.\n\nI'm here whenever you need a moment to pause, to ask, or simply to be heard. No rush, no scripts.\n\nHow are you feeling today — in your body, your heart, wherever you want to start? I'm listening."
       }]);
     }
   };
@@ -1210,6 +1210,13 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
   useEffect(() => {
     if (amaraOpen && amaraInputRef.current) setTimeout(() => amaraInputRef.current?.focus(), 300);
   }, [amaraOpen]);
+
+  // Listen for nav events dispatched by HerbApothecary blend cards
+  useEffect(() => {
+    const handler = (e) => { if (e.detail?.page) nav(e.detail.page); };
+    window.addEventListener('chaiNav', handler);
+    return () => window.removeEventListener('chaiNav', handler);
+  }, []);
 
   const nav = (p, extra) => {
     setPage(p);
@@ -1404,8 +1411,8 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
     .nav-logo-text span:first-child{font-size:1.35rem;}
     .nav-logo-text span:last-child{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-family:'Jost',sans-serif;font-weight:400;}
     @keyframes spin{to{transform:rotate(360deg);}}
-    .nav-links{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;}
-    .nav-lnk{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;}
+    .nav-links{display:flex;gap:.45rem;flex-wrap:nowrap;align-items:center;overflow-x:auto;}
+    .nav-lnk{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;white-space:nowrap;}
     .nav-lnk:hover,.nav-lnk.on{opacity:1;border-bottom-color:var(--gold);}
     .nav-right{display:flex;align-items:center;gap:10px;}
     .cart-btn{background:var(--bark);color:var(--parch);border:none;padding:8px 18px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;display:flex;align-items:center;gap:7px;}
@@ -3230,6 +3237,124 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
                   <span className="chai-spin-lbl">Shop<br/>Now</span>
                 </div>
               </div>
+
+            {/* ── HOME SEARCH BAR ────────────────────────────────────────── */}
+            <div style={{marginTop:20,maxWidth:440,width:"100%"}}>
+              <div style={{
+                display:"flex",alignItems:"center",
+                background:"rgba(255,255,255,.06)",
+                border:"1.5px solid rgba(196,137,58,.3)",
+                borderRadius:50,padding:"10px 18px",gap:10,
+                transition:"border-color .2s, box-shadow .2s",
+              }}
+              onFocus={()=>{}}
+              >
+                <span style={{fontSize:"1rem",opacity:.55}}>🔍</span>
+                <input
+                  placeholder="Search teas, herbs, or wellness goals…"
+                  style={{
+                    flex:1,background:"none",border:"none",outline:"none",
+                    color:"var(--cream)",fontFamily:"Jost,sans-serif",
+                    fontSize:".84rem",fontWeight:300,
+                  }}
+                  onFocus={e=>{e.target.parentNode.style.borderColor="var(--gold)";e.target.parentNode.style.boxShadow="0 0 0 3px rgba(196,137,58,.12)";}}
+                  onBlur={e=>{e.target.parentNode.style.borderColor="rgba(196,137,58,.3)";e.target.parentNode.style.boxShadow="none";}}
+                  onChange={e=>{
+                    const q = e.target.value.toLowerCase().trim();
+                    if (!q) return;
+                    // Search BLENDS by name, tagline, benefit
+                    const blendHit = BLENDS.find(b=>
+                      b.name.toLowerCase().includes(q) ||
+                      (b.tagline||"").toLowerCase().includes(q) ||
+                      (b.benefit||"").toLowerCase().includes(q) ||
+                      (b.occasion||"").toLowerCase().includes(q)
+                    );
+                    if (blendHit) setHomeSearchResults(BLENDS.filter(b=>
+                      b.name.toLowerCase().includes(q) ||
+                      (b.tagline||"").toLowerCase().includes(q) ||
+                      (b.benefit||"").toLowerCase().includes(q)
+                    ).slice(0,5));
+                    else setHomeSearchResults([]);
+                    setHomeSearchQuery(q);
+                  }}
+                  onKeyDown={e=>{
+                    if(e.key==="Enter"){
+                      nav("shop");
+                      setHomeSearchQuery("");
+                      setHomeSearchResults([]);
+                      e.target.value="";
+                    }
+                  }}
+                />
+                {homeSearchQuery && (
+                  <button onClick={()=>{setHomeSearchQuery("");setHomeSearchResults([]);document.querySelector('.home-search-input') && (document.querySelector('.home-search-input').value="");}}
+                    style={{background:"none",border:"none",color:"rgba(255,255,255,.35)",cursor:"pointer",fontSize:".9rem",padding:0,lineHeight:1}}>✕</button>
+                )}
+              </div>
+              {/* Results dropdown */}
+              {homeSearchResults.length > 0 && (
+                <div style={{
+                  background:"linear-gradient(160deg,#0F1A12,#0A0F0B)",
+                  border:"1px solid rgba(196,137,58,.22)",
+                  borderRadius:16,marginTop:8,overflow:"hidden",
+                  boxShadow:"0 16px 40px rgba(0,0,0,.6)",zIndex:200,position:"relative",
+                }}>
+                  {homeSearchResults.map(b=>(
+                    <div key={b.id}
+                      onClick={()=>{
+                        nav("shop");
+                        setHomeSearchQuery("");
+                        setHomeSearchResults([]);
+                      }}
+                      style={{
+                        display:"flex",alignItems:"center",gap:12,
+                        padding:"11px 16px",cursor:"pointer",
+                        borderBottom:"1px solid rgba(196,137,58,.07)",
+                        transition:"background .15s",
+                      }}
+                      onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.08)"}
+                      onMouseLeave={e=>e.currentTarget.style.background="transparent"}
+                    >
+                      <div style={{
+                        width:38,height:38,borderRadius:8,flexShrink:0,
+                        background:`linear-gradient(135deg,${b.color||"#2A4A2D"},rgba(10,15,11,.8))`,
+                        display:"flex",alignItems:"center",justifyContent:"center",
+                        fontSize:"1.1rem",
+                      }}>{b.emoji||"🍵"}</div>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"#F7F2EA",fontWeight:600,marginBottom:2}}>{b.name}</div>
+                        <div style={{fontFamily:"Jost,sans-serif",fontSize:".65rem",color:"rgba(196,137,58,.7)",fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{b.tagline||b.benefit}</div>
+                      </div>
+                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:".82rem",color:"rgba(196,137,58,.8)",flexShrink:0}}>${b.price}</div>
+                    </div>
+                  ))}
+                  <div style={{padding:"8px 16px",borderTop:"1px solid rgba(196,137,58,.1)"}}>
+                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"rgba(255,255,255,.3)",textAlign:"center"}}>
+                      Press Enter or tap a result to explore the full collection
+                    </div>
+                  </div>
+                </div>
+              )}
+              {homeSearchQuery && homeSearchResults.length === 0 && (
+                <div style={{
+                  background:"linear-gradient(160deg,#0F1A12,#0A0F0B)",
+                  border:"1px solid rgba(196,137,58,.15)",
+                  borderRadius:14,marginTop:8,padding:"14px 18px",
+                  display:"flex",alignItems:"center",gap:10,
+                }}>
+                  <span style={{fontSize:".8rem"}}>🌿</span>
+                  <div>
+                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".76rem",color:"rgba(247,242,234,.6)",fontWeight:300}}>
+                      No exact match — try browsing the full collection
+                    </div>
+                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".65rem",color:"rgba(196,137,58,.6)",marginTop:3,cursor:"pointer",textDecoration:"underline",textDecorationStyle:"dotted"}}
+                      onClick={()=>{nav("herbs");setHomeSearchQuery("");setHomeSearchResults("");}}>
+                      Search the Herb Archive instead →
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
             </div>
           </div>
           <div className="hero-visual">
@@ -3249,6 +3374,41 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
 
       {/* ── Prayer / Intention Section ──────────────────────────────────── */}
       <PrayerSection onNavigate={(blend) => nav("tea-library", { blend })} />
+
+      {/* ── VIBE SHIFT RING OFFER — shown near prayer section ───────────────── */}
+      <div style={{
+        background:"linear-gradient(135deg,rgba(10,15,11,.98),rgba(20,28,20,.98))",
+        border:"1px solid rgba(196,137,58,.2)",
+        borderRadius:20, margin:"0 16px 24px",
+        padding:"24px 22px",
+        display:"flex", alignItems:"center", gap:18, flexWrap:"wrap",
+      }}>
+        <div style={{fontSize:"2rem",flexShrink:0}}>💍</div>
+        <div style={{flex:1,minWidth:200}}>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"#F7F2EA",fontWeight:600,marginBottom:4,lineHeight:1.3}}>
+            Don't have a Vibe Shift Ring yet?
+          </div>
+          <div style={{fontFamily:"Jost,sans-serif",fontSize:".75rem",color:"rgba(247,242,234,.5)",fontWeight:300,lineHeight:1.6}}>
+            Every ring ships loaded with prayers and intentions — ready the moment it arrives. Slide it on your finger, press it here, and let it speak over you.
+          </div>
+        </div>
+        <button
+          onClick={()=>nav("rings")}
+          style={{
+            background:"linear-gradient(135deg,#C4893A,#8B5E2A)",
+            border:"none",color:"white",
+            borderRadius:40,padding:"10px 20px",
+            fontFamily:"Jost,sans-serif",fontSize:".68rem",letterSpacing:".1em",
+            textTransform:"uppercase",cursor:"pointer",fontWeight:600,
+            boxShadow:"0 4px 16px rgba(196,137,58,.3)",flexShrink:0,
+            transition:"opacity .2s",
+          }}
+          onMouseEnter={e=>e.currentTarget.style.opacity=".85"}
+          onMouseLeave={e=>e.currentTarget.style.opacity="1"}
+        >
+          Get My Ring →
+        </button>
+      </div>
 
       {/* ── Tea Library Teaser ─────────────────────────────────────────── */}
       <section style={{background:"#0d1a11",padding:"64px 0 72px",borderTop:"1px solid rgba(255,255,255,.05)",borderBottom:"1px solid rgba(255,255,255,.05)",position:"relative",overflow:"hidden"}}>
@@ -3642,14 +3802,16 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
                  text:"The cultures with the highest tea consumption consistently rank among the world's most long-lived. Five thousand years is not coincidence."},
               ].map(f=>(
                 <div key={f.title}
-                  style={{background:"white",border:"1px solid var(--dust)",borderRadius:16,padding:"16px 18px",display:"flex",gap:12,alignItems:"flex-start",transition:"all .25s"}}
-                  onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 4px 16px rgba(28,26,23,.08)";e.currentTarget.style.borderColor="var(--sage)";}}
-                  onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";e.currentTarget.style.borderColor="var(--dust)";}}>
+                  onClick={()=>setTeaCardModal({year:f.compound,title:f.title,text:f.text,more:f.more,blend:f.blend,rec:f.rec})}
+                  style={{background:"white",border:"1px solid var(--dust)",borderRadius:16,padding:"16px 18px",display:"flex",gap:12,alignItems:"flex-start",transition:"all .25s",cursor:"pointer"}}
+                  onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 6px 20px rgba(28,26,23,.12)";e.currentTarget.style.borderColor="var(--sage)";e.currentTarget.style.transform="translateY(-2px)";}}
+                  onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";e.currentTarget.style.borderColor="var(--dust)";e.currentTarget.style.transform="";}}>
                   <span style={{fontSize:"1.4rem",flexShrink:0,marginTop:2}}>{f.icon}</span>
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--sage-d)",fontWeight:500,marginBottom:2}}>{f.compound}</div>
                     <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",marginBottom:5}}>{f.title}</div>
-                    <p style={{fontSize:".72rem",color:"#6A5F50",lineHeight:1.65,fontWeight:300,margin:0}}>{f.text}</p>
+                    <p style={{fontSize:".72rem",color:"#6A5F50",lineHeight:1.65,fontWeight:300,margin:"0 0 6px"}}>{f.text}</p>
+                    <div style={{fontSize:".58rem",color:"var(--sage-d)",letterSpacing:".1em",textTransform:"uppercase",fontWeight:500}}>Tap to explore</div>
                   </div>
                 </div>
               ))}
@@ -3714,14 +3876,27 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
           <div className="sh c"><div className="sh-eye">Best Value</div><h2 className="sh-h">Curated <em>Bundles</em></h2><p className="sh-p">Thoughtfully paired for every intention.</p></div>
           <div className="bgrid">
             {BUNDLES.slice(0,3).map(b=>(
-              <div key={b.id} className="bcard">
-                <div className="bcard-top"><div className="bcard-badge">{b.tag}</div><div className="bcard-name">{b.name}</div><div className="bcard-desc">{b.desc}</div></div>
+              <div key={b.id} className="bcard"
+                style={{cursor:"pointer",transition:"transform .2s,box-shadow .2s"}}
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow="0 12px 32px rgba(28,26,23,.14)";}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow="";}}>
+                <div className="bcard-top"
+                  onClick={()=>setTeaCardModal({year:b.tag,title:b.name,text:b.desc,
+                    more:"This bundle was curated as a complete wellness protocol — each item chosen to amplify the others. The herbs work synergistically in both flavour and physiological effect, creating a ritual, not just a purchase.",
+                    blend:b.name,
+                    rec:b.includes.slice(0,2).join(" paired with ")+". "+b.desc+" A complete ritual in one box."
+                  })}>
+                  <div className="bcard-badge">{b.tag}</div>
+                  <div className="bcard-name">{b.name}</div>
+                  <div className="bcard-desc">{b.desc}</div>
+                  <div style={{fontSize:".6rem",color:"var(--sage-d)",letterSpacing:".1em",textTransform:"uppercase",marginTop:8,fontWeight:500}}>Tap to learn more</div>
+                </div>
                 <div className="bcard-body">
                   <div className="bcard-lbl">What's inside</div>
                   <ul className="bcard-list">{b.includes.map(x=><li key={x}>{x}</li>)}</ul>
                   <div className="bcard-foot">
                     <div><div className="bcard-price">${b.price}</div><div className="bcard-save">Save ${b.savings.toFixed(2)}</div></div>
-                    <button className="btn-bundle" onClick={()=>addToCart({...b})}>Add Bundle</button>
+                    <button className="btn-bundle" onClick={e=>{e.stopPropagation();addToCart({...b});}}>Add Bundle</button>
                   </div>
                 </div>
               </div>
@@ -6306,7 +6481,7 @@ Thank you!`);
                 {icon:"🔄", title:"Spinning outer band", desc:"The textured outer band spins freely around the solid inner core. Smooth, silent rotation -- no clicking, no noise."},
                 {icon:"✋", title:"Tactile grounding", desc:"The physical sensation of spinning pulls your nervous system's attention to your hands -- quieting the mental noise."},
                 {icon:"✨", title:"Meridian Infused", desc:"After printing, every ring receives our proprietary Meridian Infusion Frequency finishing process. Intention in every piece."},
-                {icon:"🙏", title:"Tap to Pray", desc:"Touch your ring to any NFC-enabled phone. A real voice from 2amcompanion.com prays with you -- instantly, no app needed."},
+                {icon:"🙏", title:"Tap to Pray", desc:"Place your Vibe Shift Ring on your finger. Then press it gently against the floating ring on screen — and receive your intention spoken back to you. No app needed. No setup. Just the ring, the moment, and your breath."},
               ].map(f=>(
                 <div key={f.title} style={{background:"rgba(255,255,255,.05)",border:"1px solid rgba(255,255,255,.08)",borderRadius:18,padding:"22px"}}>
                   <div style={{fontSize:"1.6rem",marginBottom:10}}>{f.icon}</div>
@@ -6429,7 +6604,7 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {[["home","🏠 Home"],["shop","Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's"],["supplements","💊 Supplements"],["ancestral","🌿 Ancestral"],["herbs","🌿 Herb Archive"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+          {[["home","🏠 Home"],["shop","Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's"],["supplements","💊 Supplements"],["ancestral","🌿 Ancestral"],["herbs","🌿 Herb Archive"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","💍 Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>
               {l}
               {p==="men" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"var(--gold)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
@@ -6813,6 +6988,42 @@ Thank you!`);
               to   { transform:translateY(0); opacity:1; }
             }
           `}</style>
+        </>
+      )}
+
+      {/* ── TEA CARD MODAL ───────────────────────────────────────────────── */}
+      {teaCardModal && (
+        <>
+          <div onClick={()=>setTeaCardModal(null)} style={{position:"fixed",inset:0,zIndex:2000,background:"rgba(0,0,0,.65)",backdropFilter:"blur(6px)"}}/>
+          <div style={{position:"fixed",inset:0,zIndex:2001,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px",overflowY:"auto"}}>
+            <div style={{background:"linear-gradient(160deg,#FAF6EF,#F2EDE2)",border:"1px solid rgba(196,137,58,.2)",borderRadius:24,width:"100%",maxWidth:520,boxShadow:"0 32px 80px rgba(0,0,0,.35)",animation:"herbModalIn .3s cubic-bezier(.34,1.3,.64,1)",position:"relative",overflow:"hidden"}}>
+              <button onClick={()=>setTeaCardModal(null)} style={{position:"absolute",top:14,right:14,width:32,height:32,borderRadius:"50%",background:"rgba(0,0,0,.1)",border:"none",cursor:"pointer",fontSize:".9rem",display:"flex",alignItems:"center",justifyContent:"center",color:"#3A2E22"}}>x</button>
+              <div style={{padding:"28px 28px 16px",borderBottom:"1px solid rgba(196,137,58,.15)"}}>
+                <div style={{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:6,fontFamily:"Jost,sans-serif",fontWeight:600}}>{teaCardModal.year}</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"var(--bark)",fontWeight:700,lineHeight:1.2,marginBottom:8}}>{teaCardModal.title}</div>
+                <p style={{fontFamily:"Jost,sans-serif",fontSize:".82rem",color:"#6A5F50",lineHeight:1.75,fontWeight:300,margin:0}}>{teaCardModal.text}</p>
+              </div>
+              {teaCardModal.more && (
+                <div style={{padding:"16px 28px",borderBottom:"1px solid rgba(196,137,58,.12)"}}>
+                  <div style={{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--sage-d)",marginBottom:8,fontFamily:"Jost,sans-serif",fontWeight:600}}>The Deeper Story</div>
+                  <p style={{fontFamily:"Jost,sans-serif",fontSize:".82rem",color:"#5A4F42",lineHeight:1.8,fontWeight:300,margin:0}}>{teaCardModal.more}</p>
+                </div>
+              )}
+              {teaCardModal.rec && (
+                <div style={{padding:"16px 28px 24px"}}>
+                  <div style={{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:10,fontFamily:"Jost,sans-serif",fontWeight:600}}>Chai Holistic Recommendation</div>
+                  <div style={{background:"linear-gradient(135deg,rgba(196,137,58,.1),rgba(196,137,58,.05))",border:"1px solid rgba(196,137,58,.2)",borderRadius:14,padding:"14px 16px",marginBottom:14}}>
+                    {teaCardModal.blend && <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"var(--bark)",fontWeight:600,marginBottom:4}}>{teaCardModal.blend}</div>}
+                    <p style={{fontFamily:"Jost,sans-serif",fontSize:".78rem",color:"#6A5F50",lineHeight:1.7,fontWeight:300,margin:0}}>{teaCardModal.rec}</p>
+                  </div>
+                  <button onClick={()=>{setTeaCardModal(null);nav("shop");}}
+                    style={{width:"100%",background:"linear-gradient(135deg,var(--bark),#3A2A18)",color:"white",border:"none",borderRadius:14,padding:"13px",fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontWeight:600}}>
+                    Explore Our Blends
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </>
       )}
       {/* ── AMARA FLOATING BUTTON ────────────────────────────────────────── */}
