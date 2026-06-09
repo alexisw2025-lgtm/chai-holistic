@@ -7321,46 +7321,7 @@ Thank you!`);
       )}
 
       {/* ── GLOBAL SEARCH RESULTS OVERLAY (mobile + any search) ────────────── */}
-      {homeSearchQuery && homeSearchResults.length === 0 && (
-        <>
-          <div onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");}} style={{position:"fixed",inset:0,zIndex:1050,background:"rgba(0,0,0,.35)",backdropFilter:"blur(2px)"}}/>
-          <div style={{position:"fixed",bottom:0,left:0,right:0,zIndex:1051,background:"white",borderRadius:"20px 20px 0 0",padding:"28px 24px 40px",boxShadow:"0 -8px 40px rgba(0,0,0,.15)",animation:"slideUp .3s cubic-bezier(.34,1.2,.64,1)"}}>
-            <div style={{width:36,height:4,borderRadius:2,background:"rgba(61,43,31,.15)",margin:"0 auto 20px"}}/>
-            <div style={{textAlign:"center",marginBottom:24}}>
-              <div style={{fontSize:"2rem",marginBottom:10}}>🌿</div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.15rem",color:"var(--bark)",fontWeight:600,marginBottom:8}}>
-                We didn't find "{homeSearchQuery}"
-              </div>
-              <p style={{fontFamily:"Jost,sans-serif",fontSize:".82rem",color:"rgba(61,43,31,.55)",fontWeight:300,lineHeight:1.7,maxWidth:320,margin:"0 auto"}}>
-                That herb or blend isn't in our collection yet — but it might be soon. Would you like us to let you know when we add it?
-              </p>
-            </div>
-            <div style={{display:"flex",flexDirection:"column",gap:10,maxWidth:380,margin:"0 auto"}}>
-              <button
-                onClick={()=>{
-                  setShowRequest(true);
-                  setReqHerb(homeSearchQuery);
-                  setHomeSearchResults([]);
-                  setHomeSearchQuery("");
-                  if(searchInputRef.current)searchInputRef.current.value="";
-                }}
-                style={{background:"linear-gradient(135deg,var(--bark),#3A2A18)",color:"white",border:"none",borderRadius:14,padding:"14px",fontFamily:"Jost,sans-serif",fontSize:".74rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600}}>
-                Yes — notify me when you add it →
-              </button>
-              <button
-                onClick={()=>{nav("herbs");setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
-                style={{background:"rgba(61,43,31,.06)",border:"1px solid rgba(61,43,31,.15)",color:"var(--bark)",borderRadius:14,padding:"13px",fontFamily:"Jost,sans-serif",fontSize:".74rem",cursor:"pointer"}}>
-                Browse the Herb Archive instead →
-              </button>
-              <button
-                onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
-                style={{background:"none",border:"none",color:"rgba(61,43,31,.35)",fontFamily:"Jost,sans-serif",fontSize:".72rem",cursor:"pointer",padding:"8px"}}>
-                ← Go back
-              </button>
-            </div>
-          </div>
-        </>
-      )}
+
       {homeSearchResults.length > 0 && (
         <>
           <div
@@ -7401,7 +7362,42 @@ Thank you!`);
                   <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"var(--bark)",marginBottom:6}}>Searching the web for you…</div>
                   <div style={{fontFamily:"Jost,sans-serif",fontSize:".72rem",color:"rgba(61,43,31,.45)",fontWeight:300}}>Finding the best information on "{homeSearchQuery}"</div>
                 </div>
-              ) : homeSearchResults[0]?.isNoResult ? null : (
+              ) : homeSearchResults[0]?.isNoResult ? (
+                <div style={{padding:"28px 20px",textAlign:"center"}}>
+                  <div style={{fontSize:"2.5rem",marginBottom:14}}>🌿</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"var(--bark)",fontWeight:600,marginBottom:8}}>
+                    We didn't find "{homeSearchResults[0]?.name||homeSearchQuery}"
+                  </div>
+                  <p style={{fontFamily:"Jost,sans-serif",fontSize:".8rem",color:"rgba(61,43,31,.55)",fontWeight:300,lineHeight:1.75,maxWidth:300,margin:"0 auto 20px"}}>
+                    That isn't in our collection yet — but we'd love to know you're looking for it. We can let you know the moment we add it.
+                  </p>
+                  <div style={{display:"flex",flexDirection:"column",gap:10,maxWidth:320,margin:"0 auto"}}>
+                    <button
+                      onClick={()=>{
+                        setShowRequest(true);
+                        setReqHerb(homeSearchResults[0]?.name||homeSearchQuery);
+                        setHomeSearchResults([]);
+                        setHomeSearchQuery("");
+                        if(searchInputRef.current)searchInputRef.current.value="";
+                      }}
+                      style={{background:"linear-gradient(135deg,var(--bark),#3A2A18)",color:"white",border:"none",borderRadius:14,padding:"13px",fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,boxShadow:"0 4px 16px rgba(61,43,31,.2)"}}>
+                      Yes — notify me when you add it →
+                    </button>
+                    <button
+                      onClick={()=>{nav("herbs");setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
+                      style={{background:"rgba(61,43,31,.06)",border:"1px solid rgba(61,43,31,.15)",color:"var(--bark)",borderRadius:14,padding:"12px",fontFamily:"Jost,sans-serif",fontSize:".72rem",cursor:"pointer",transition:"background .2s"}}
+                      onMouseEnter={e=>e.currentTarget.style.background="rgba(61,43,31,.12)"}
+                      onMouseLeave={e=>e.currentTarget.style.background="rgba(61,43,31,.06)"}>
+                      Browse the Herb Archive →
+                    </button>
+                    <button
+                      onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
+                      style={{background:"none",border:"none",color:"rgba(61,43,31,.35)",fontFamily:"Jost,sans-serif",fontSize:".7rem",cursor:"pointer",padding:"6px"}}>
+                      ← Go back
+                    </button>
+                  </div>
+                </div>
+              ) : (
                 homeSearchResults.map((r,i)=>(
                   <div key={r.id||i}
                     onClick={()=>{if(r.action)r.action();if(!r.isWebResult){setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}}

@@ -428,22 +428,24 @@ export default function PrayerSection({ onNavigate }) {
           transform: translate(-50%,-50%);
           border-radius: 50%; pointer-events: none;
         }
-        .rs-or1 { width:74px;  height:74px;  border:1px solid rgba(82,184,130,.2);  animation:rs-orb 4.2s ease-in-out 0s   infinite; }
-        .rs-or2 { width:98px;  height:98px;  border:1px solid rgba(192,136,48,.13); animation:rs-orb 4.2s ease-in-out .75s infinite; }
-        .rs-or3 { width:122px; height:122px; border:1px solid rgba(82,184,130,.07); animation:rs-orb 4.2s ease-in-out 1.5s infinite; }
+        .rs-or1 { width:74px;  height:74px;  border:1.5px solid rgba(74,160,120,.35); animation:rs-orb 4.2s ease-in-out 0s   infinite; }
+        .rs-or2 { width:98px;  height:98px;  border:1px solid rgba(74,160,120,.22);   animation:rs-orb 4.2s ease-in-out .75s infinite; }
+        .rs-or3 { width:122px; height:122px; border:1px solid rgba(74,160,120,.1);    animation:rs-orb 4.2s ease-in-out 1.5s infinite; }
         @keyframes rs-orb {
-          0%   { transform:translate(-50%,-50%) scale(.9);   opacity:0; }
-          28%  { opacity:1; }
-          100% { transform:translate(-50%,-50%) scale(1.08); opacity:0; }
+          0%   { transform:translate(-50%,-50%) scale(1);    opacity:0; }
+          20%  { opacity:.8; }
+          100% { transform:translate(-50%,-50%) scale(1.22); opacity:0; }
         }
 
         .rs-gold-dot {
-          position: absolute; top:14px; left:50%; transform:translateX(-50%);
+          position: absolute; top:50%; left:50%;
+          transform: translate(-50%,-50%);
           width:8px; height:8px; border-radius:50%;
-          background:radial-gradient(circle,#f5d080,#c08830);
-          box-shadow:0 0 10px 4px rgba(192,136,48,.45);
+          background:radial-gradient(circle,rgba(74,160,120,.9),rgba(40,120,80,.8));
+          box-shadow:0 0 10px 4px rgba(74,160,120,.45);
           animation:rs-dotPulse 3.2s ease-in-out infinite;
           pointer-events:none; z-index:2;
+          opacity:0; /* hidden — lotus is the centrepiece, dot was for hands */
         }
         @keyframes rs-dotPulse {
           0%,100% { box-shadow:0 0 8px 3px rgba(192,136,48,.35); opacity:.7; }
