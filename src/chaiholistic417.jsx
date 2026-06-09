@@ -3257,10 +3257,17 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
       </section>
 
-      {/* ── SEARCH BAR ─── sits between hero and ticker, full width ─────── */}
-      <div style={{padding:"16px 16px 0",background:"var(--linen)"}}>
+      <div className="mq">
+        <div className="mq-track">
+          {[...Array(2)].map((_,p)=>["Morning Rituals","Evening Calm","Liver Cleanse","Kidney Flush","⚡ Men's Wellness","Vibe Shift Rings","Tea Finder","Ritual Builder","Cleanse Tracker","Herb Pairing Guide","Sip &amp; Heal · 40 Recipes"].map((t,i)=>(
+            <div key={`${p}-${i}`} className="mq-item" style={{cursor:"pointer"}} onClick={()=>{const m={"Morning Rituals":()=>{nav("shop");setBlendFilter("Morning");},"Evening Calm":()=>{nav("shop");setBlendFilter("Evening");},"Liver Cleanse":()=>nav("shop"),"Kidney Flush":()=>nav("shop"),"⚡ Men's Wellness":()=>nav("men"),"Vibe Shift Rings":()=>nav("rings"),"Tea Finder":()=>setFinderOpen(true),"Ritual Builder":()=>setRitualOpen(true),"Cleanse Tracker":()=>setTrackerOpen(true),"Herb Pairing Guide":()=>nav("shop"),"Sip &amp; Heal · 40 Recipes":()=>nav("recipes")};const a=m[t];if(a)a();}}><span>✦</span>{t}</div>
+          )))}
+        </div>
+      </div>
+      {/* ── SEARCH BAR — right below the scrolling ticker ─────────────────── */}
+      <div style={{padding:"16px 16px 8px",background:"var(--linen)"}}>
         <div style={{maxWidth:540,margin:"0 auto",position:"relative"}}>
-          <div style={{display:"flex",borderRadius:50,overflow:"hidden",border:"1.5px solid rgba(61,43,31,.25)",background:"white",boxShadow:"0 2px 12px rgba(0,0,0,.08)"}}>
+          <div id="searchWrap" style={{display:"flex",borderRadius:50,overflow:"hidden",border:"1.5px solid rgba(61,43,31,.25)",background:"white",boxShadow:"0 2px 12px rgba(0,0,0,.08)"}}>
             <input
               id="mainSearch"
               type="text"
@@ -3270,33 +3277,32 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
               autoCorrect="off"
               autoCapitalize="off"
               spellCheck="false"
+              defaultValue=""
               placeholder="Search teas, herbs, or wellness goals…"
-              value={homeSearchQuery}
-              onChange={e=>setHomeSearchQuery(e.target.value)}
-              onFocus={e=>{e.target.parentNode.parentNode.style.boxShadow="0 0 0 3px rgba(196,137,58,.25)";}}
-              onBlur={e=>{e.target.parentNode.parentNode.style.boxShadow="0 2px 12px rgba(0,0,0,.08)";}}
+              onFocus={()=>document.getElementById('searchWrap').style.borderColor='rgba(196,137,58,.6)'}
+              onBlur={()=>document.getElementById('searchWrap').style.borderColor='rgba(61,43,31,.25)'}
               onKeyDown={e=>{
                 if(e.key==="Enter"){
                   e.preventDefault();
-                  const q=homeSearchQuery.toLowerCase().trim();
+                  const q=(e.target.value||"").toLowerCase().trim();
                   if(!q)return;
+                  setHomeSearchQuery(q);
                   setHomeSearchResults(BLENDS.filter(b=>b.name.toLowerCase().includes(q)||(b.tagline||"").toLowerCase().includes(q)||(b.benefit||"").toLowerCase().includes(q)).slice(0,6));
                   e.target.blur();
                 }
               }}
-              style={{flex:1,background:"none",border:"none",outline:"none",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:"16px",fontWeight:300,padding:"14px 16px",minWidth:0}}
+              style={{flex:1,background:"none",border:"none",outline:"none",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:"16px",fontWeight:300,padding:"14px 16px",minWidth:0,WebkitAppearance:"none"}}
             />
-            {homeSearchQuery&&(
-              <button onClick={()=>{setHomeSearchQuery("");setHomeSearchResults([]);}} style={{background:"none",border:"none",color:"rgba(61,43,31,.35)",cursor:"pointer",padding:"0 10px",flexShrink:0,fontSize:"1rem"}}>✕</button>
-            )}
             <button
               onClick={()=>{
-                const q=homeSearchQuery.toLowerCase().trim();
+                const inp=document.getElementById('mainSearch');
+                const q=(inp?.value||"").toLowerCase().trim();
                 if(!q)return;
+                setHomeSearchQuery(q);
                 setHomeSearchResults(BLENDS.filter(b=>b.name.toLowerCase().includes(q)||(b.tagline||"").toLowerCase().includes(q)||(b.benefit||"").toLowerCase().includes(q)).slice(0,6));
-                document.getElementById('mainSearch')?.blur();
+                inp?.blur();
               }}
-              style={{background:"var(--bark)",border:"none",color:"white",padding:"14px 22px",fontFamily:"Jost,sans-serif",fontSize:".7rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap",transition:"background .2s"}}
+              style={{background:"var(--bark)",border:"none",color:"white",padding:"14px 22px",fontFamily:"Jost,sans-serif",fontSize:".7rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap"}}
               onMouseEnter={e=>e.currentTarget.style.background="var(--sage-d)"}
               onMouseLeave={e=>e.currentTarget.style.background="var(--bark)"}>
               Search
@@ -3305,7 +3311,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
           {homeSearchResults.length>0&&(
             <div style={{position:"absolute",top:"calc(100% + 6px)",left:0,right:0,background:"white",border:"1px solid rgba(61,43,31,.12)",borderRadius:16,overflow:"hidden",boxShadow:"0 12px 32px rgba(0,0,0,.15)",zIndex:500}}>
               {homeSearchResults.map(b=>(
-                <div key={b.id} onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}
+                <div key={b.id} onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);const inp=document.getElementById('mainSearch');if(inp)inp.value="";}}
                   style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",cursor:"pointer",borderBottom:"1px solid rgba(61,43,31,.07)",WebkitTapHighlightColor:"transparent"}}
                   onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.07)"}
                   onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
@@ -3318,9 +3324,9 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 </div>
               ))}
               <div onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}
-                style={{padding:"10px 16px",borderTop:"1px solid rgba(61,43,31,.08)",textAlign:"center",cursor:"pointer",background:"rgba(196,137,58,.04)",WebkitTapHighlightColor:"transparent"}}
-                onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.1)"}
-                onMouseLeave={e=>e.currentTarget.style.background="rgba(196,137,58,.04)"}>
+                style={{padding:"10px 16px",borderTop:"1px solid rgba(61,43,31,.08)",textAlign:"center",cursor:"pointer",WebkitTapHighlightColor:"transparent"}}
+                onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.08)"}
+                onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
                 <span style={{fontFamily:"Jost,sans-serif",fontSize:".68rem",color:"var(--bark)",letterSpacing:".1em",textTransform:"uppercase"}}>Browse All Blends →</span>
               </div>
             </div>
@@ -3337,14 +3343,6 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         </div>
       </div>
 
-
-      <div className="mq">
-        <div className="mq-track">
-          {[...Array(2)].map((_,p)=>["Morning Rituals","Evening Calm","Liver Cleanse","Kidney Flush","⚡ Men's Wellness","Vibe Shift Rings","Tea Finder","Ritual Builder","Cleanse Tracker","Herb Pairing Guide","Sip &amp; Heal · 40 Recipes"].map((t,i)=>(
-            <div key={`${p}-${i}`} className="mq-item" style={{cursor:"pointer"}} onClick={()=>{const m={"Morning Rituals":()=>{nav("shop");setBlendFilter("Morning");},"Evening Calm":()=>{nav("shop");setBlendFilter("Evening");},"Liver Cleanse":()=>nav("shop"),"Kidney Flush":()=>nav("shop"),"⚡ Men's Wellness":()=>nav("men"),"Vibe Shift Rings":()=>nav("rings"),"Tea Finder":()=>setFinderOpen(true),"Ritual Builder":()=>setRitualOpen(true),"Cleanse Tracker":()=>setTrackerOpen(true),"Herb Pairing Guide":()=>nav("shop"),"Sip &amp; Heal · 40 Recipes":()=>nav("recipes")};const a=m[t];if(a)a();}}><span>✦</span>{t}</div>
-          )))}
-        </div>
-      </div>
 
       {/* ── Prayer / Intention Section ──────────────────────────────────── */}
       <div style={{background:"linear-gradient(135deg,#0A0F0B,#0F1A12)",borderTop:"1px solid rgba(196,137,58,.15)",padding:"20px 24px 0",textAlign:"center"}}>
