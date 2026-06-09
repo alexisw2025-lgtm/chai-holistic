@@ -414,14 +414,14 @@
       spawnParticles();
       playBowl(false);
 
-      status.textContent = '✦  preparing today\'s prayer…';
+      status.textContent = '✦  your prayer is coming…';
       status.className = 'status loading';
 
       try {
         const res = await fetch(`${RAILWAY}/speak-intention`, {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ text: prayer.voice, voice: 'shimmer' }) // shimmer = warmer, more intimate
+          body: JSON.stringify({ text: prayer.voice, voice: 'alloy' })
         });
         if (!res.ok) throw new Error('TTS unavailable');
 

@@ -126,7 +126,7 @@ async function speakIntention(text) {
     const res = await fetch(`${RAILWAY_URL}/speak-intention`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text, voice: "nova" }),
+      body: JSON.stringify({ text, voice: "alloy" }),
     });
     if (!res.ok) throw new Error("TTS fetch failed");
     const blob = await res.blob();
@@ -202,34 +202,46 @@ export default function PrayerSection({ onNavigate }) {
     }
   }
 
+  const [speakLoading, setSpeakLoading] = useState(false);
+
+  // Speak immediately on first tap — bowl + particles + voice all at once
   function onHandsTap() {
     if (phase !== 0) return;
-    const pick = getDailyIntention(); // same intention for everyone today
+    const pick = getDailyIntention();
     setChosen(pick);
     setFiring(true);
     setActivated(true);
+    setSpeakLoading(true);
     playBowl(false);
     spawnParticles(["#c08830","#deb96a","#52b882","#a8e0c0","#fff8e8"], 24, 95);
-    after(80,   () => setPhase(1));
-    after(2600, () => setPhase(1.5));
+    after(80, () => setPhase(1));
+    after(600, () => setPhase(1.5)); // show ring faster — no long wait
+    // Speak immediately — iOS audio policy is satisfied by this user gesture
+    speakIntention(pick.voice).finally(() => {
+      setSpeakLoading(false);
+      // After voice finishes, show blend and reset
+      setTodayBlend(getDailyBlend());
+      after(200, () => setShowBlend(true));
+      after(1800, () => setShowReset(true));
+    });
   }
 
-  const [speakLoading, setSpeakLoading] = useState(false);
-
+  // Ring press = replay the affirmation
   function onRingTap() {
-    if (phase !== 1.5) return;
-    setPhase(2);
+    if (phase < 1.5) return;
+    if (speakLoading) return; // already speaking
     setRingFired(true);
     setSpeakLoading(true);
     spawnParticles(["#f5d080","#c08830","#deb96a","#fff8e0"], 18, 70);
     playBowl(true);
-    // Call async TTS — must be triggered here inside the user gesture for iOS audio policy
     if (chosen) {
-      speakIntention(chosen.voice).finally(() => setSpeakLoading(false));
+      speakIntention(chosen.voice).finally(() => {
+        setSpeakLoading(false);
+        setShowTone(true);
+        after(400, () => { setTodayBlend(getDailyBlend()); setShowBlend(true); });
+        after(2000, () => setShowReset(true));
+      });
     }
-    after(2000, () => { playBowl(true); setShowTone(true); });
-    after(2200, () => { setTodayBlend(getDailyBlend()); setShowBlend(true); });
-    after(4200, () => setShowReset(true));
   }
 
   function reset() {
@@ -848,7 +860,7 @@ export default function PrayerSection({ onNavigate }) {
               <div
                 className="rs-ring-icon"
                 role="button" tabIndex={0}
-                aria-label="Tap your Vibe Shift Ring to hear your affirmation"
+                aria-label="Tap to replay your affirmation"
                 aria-pressed={phase === 2}
                 onClick={onRingTap}
                 onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onRingTap(); } }}
@@ -900,8 +912,8 @@ export default function PrayerSection({ onNavigate }) {
               <div className={`rs-panel rs-panel-ring${showRingMoment ? "" : " hidden"}`}>
                 <div className="rs-ring-cue">✦ &nbsp; Now carry it with you &nbsp; ✦</div>
                 <div className="rs-ring-headline">
-                  Touch your Vibe Shift Ring, then<br/>
-                  <span style={{fontSize:"14px",color:"rgba(255,255,255,.45)"}}>press the floating icon to hear your affirmation.</span>
+                  Your affirmation is being spoken.<br/>
+                  <span style={{fontSize:"14px",color:"rgba(255,255,255,.45)"}}>Press the ring icon to hear it again.</span>
                 </div>
                 <div className="rs-ring-sub">
                   Your affirmation, spoken and sealed.<br/>

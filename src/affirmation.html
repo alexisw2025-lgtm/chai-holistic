@@ -408,7 +408,7 @@
         const res = await fetch(`${RAILWAY}/speak-intention`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: intention.voice, voice: 'nova' })
+          body: JSON.stringify({ text: intention.voice, voice: 'alloy' })
         });
 
         if (!res.ok) throw new Error('TTS unavailable');
@@ -424,7 +424,7 @@
         };
         audio.onended = () => {
           URL.revokeObjectURL(url);
-          status.textContent = '✦  carry this with you today';
+          status.textContent = '✦  carry this with you today ✦';
           status.className = 'status';
           wave.classList.remove('show');
           playing = false;
@@ -436,7 +436,7 @@
       } catch (err) {
         // Fallback to browser speech
         console.warn('TTS fallback:', err);
-        status.textContent = '✦  your intention is speaking…';
+        status.textContent = '✦  your affirmation is speaking…';
         status.className = 'status playing';
         wave.classList.add('show');
 
