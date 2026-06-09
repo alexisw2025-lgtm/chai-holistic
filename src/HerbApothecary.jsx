@@ -1224,7 +1224,6 @@ function HerbModal({ herb, onClose }) {
           })()}
 
       </div>
-      </div>
       <style>{`@keyframes herbModalIn{from{opacity:0;transform:scale(.95) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
     </>
   );
