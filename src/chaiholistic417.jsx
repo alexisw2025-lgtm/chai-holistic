@@ -3233,81 +3233,6 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 🌿 &nbsp;<strong>Free Sip &amp; Heal Report</strong> &nbsp;— personalized to you
               </button>
 
-              {/* ── HERO SEARCH BAR ──────────────────────────────────────── */}
-              <div style={{marginTop:14,width:"100%",position:"relative"}}>
-                <div id="hSW" style={{display:"flex",alignItems:"center",background:"rgba(255,255,255,.06)",border:"1.5px solid rgba(196,137,58,.28)",borderRadius:50,overflow:"hidden"}}>
-                  <span style={{paddingLeft:16,fontSize:".95rem",opacity:.5,flexShrink:0}}>🔍</span>
-                  <input
-                    id="heroSearchInput"
-                    type="text"
-                    inputMode="text"
-                    enterKeyHint="search"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    autoCapitalize="off"
-                    spellCheck="false"
-                    placeholder="Search teas, herbs, wellness goals…"
-                    value={homeSearchQuery}
-                    onChange={e=>setHomeSearchQuery(e.target.value)}
-                    onFocus={()=>{const w=document.getElementById('hSW');if(w)w.style.borderColor='rgba(196,137,58,.65)';}}
-                    onBlur={()=>{const w=document.getElementById('hSW');if(w)w.style.borderColor='rgba(196,137,58,.28)';}}
-                    onKeyDown={e=>{
-                      if(e.key==="Enter"){
-                        e.preventDefault();
-                        const q=homeSearchQuery.toLowerCase().trim();
-                        if(!q)return;
-                        setHomeSearchResults(BLENDS.filter(b=>b.name.toLowerCase().includes(q)||(b.tagline||"").toLowerCase().includes(q)||(b.benefit||"").toLowerCase().includes(q)).slice(0,6));
-                        e.target.blur();
-                      }
-                    }}
-                    style={{flex:1,background:"none",border:"none",outline:"none",color:"var(--cream)",fontFamily:"Jost,sans-serif",fontSize:"16px",fontWeight:300,padding:"12px 8px",minWidth:0}}
-                  />
-                  {homeSearchQuery&&<button onClick={()=>{setHomeSearchQuery("");setHomeSearchResults([]);}} style={{background:"none",border:"none",color:"rgba(255,255,255,.3)",cursor:"pointer",fontSize:".95rem",padding:"0 8px",flexShrink:0}}>✕</button>}
-                  <button
-                    onClick={()=>{
-                      const q=homeSearchQuery.toLowerCase().trim();
-                      if(!q)return;
-                      setHomeSearchResults(BLENDS.filter(b=>b.name.toLowerCase().includes(q)||(b.tagline||"").toLowerCase().includes(q)||(b.benefit||"").toLowerCase().includes(q)).slice(0,6));
-                      document.getElementById('heroSearchInput')?.blur();
-                    }}
-                    style={{background:"linear-gradient(135deg,#C4893A,#8B5E2A)",border:"none",color:"white",padding:"12px 16px",fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap"}}>
-                    Search
-                  </button>
-                </div>
-                {homeSearchResults.length>0&&(
-                  <div style={{background:"#0F1A12",border:"1px solid rgba(196,137,58,.25)",borderRadius:16,marginTop:6,overflow:"hidden",boxShadow:"0 16px 40px rgba(0,0,0,.75)",position:"relative",zIndex:300}}>
-                    {homeSearchResults.map(b=>(
-                      <div key={b.id} onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}
-                        style={{display:"flex",alignItems:"center",gap:10,padding:"11px 14px",cursor:"pointer",borderBottom:"1px solid rgba(196,137,58,.07)",WebkitTapHighlightColor:"transparent"}}
-                        onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.09)"}
-                        onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                        <div style={{width:38,height:38,borderRadius:8,flexShrink:0,background:`linear-gradient(135deg,${b.color||"#2A4A2D"},rgba(10,15,11,.8))`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.1rem"}}>{b.emoji||"🍵"}</div>
-                        <div style={{flex:1,minWidth:0}}>
-                          <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"#F7F2EA",fontWeight:600}}>{b.name}</div>
-                          <div style={{fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"rgba(196,137,58,.65)",fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{b.tagline||b.benefit}</div>
-                        </div>
-                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:".82rem",color:"rgba(196,137,58,.8)",flexShrink:0}}>${b.price}</div>
-                      </div>
-                    ))}
-                    <div onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}
-                      style={{padding:"10px 14px",borderTop:"1px solid rgba(196,137,58,.1)",textAlign:"center",cursor:"pointer",WebkitTapHighlightColor:"transparent"}}
-                      onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.06)"}
-                      onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                      <span style={{fontFamily:"Jost,sans-serif",fontSize:".65rem",color:"rgba(196,137,58,.6)",letterSpacing:".1em",textTransform:"uppercase"}}>Browse all blends →</span>
-                    </div>
-                  </div>
-                )}
-                {homeSearchQuery&&homeSearchResults.length===0&&(
-                  <div style={{background:"#0F1A12",border:"1px solid rgba(196,137,58,.15)",borderRadius:12,marginTop:6,padding:"12px 14px",display:"flex",alignItems:"center",gap:10,zIndex:300,position:"relative"}}>
-                    <span>🌿</span>
-                    <div>
-                      <div style={{fontFamily:"Jost,sans-serif",fontSize:".74rem",color:"rgba(247,242,234,.5)",fontWeight:300}}>No blends matched — try a feeling or health goal</div>
-                      <div onClick={()=>{nav("herbs");setHomeSearchQuery("");setHomeSearchResults([]);}} style={{fontFamily:"Jost,sans-serif",fontSize:".63rem",color:"rgba(196,137,58,.6)",marginTop:2,cursor:"pointer",textDecorationLine:"underline"}}>Search the Herb Archive →</div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
             </div>
               {/* SPINNING CHAI HOLISTIC BADGE */}
               <div className="chai-spin" onClick={()=>nav("shop")} title="Shop the Collection">
@@ -3331,6 +3256,86 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         </div>
 
       </section>
+
+      {/* ── SEARCH BAR ─── sits between hero and ticker, full width ─────── */}
+      <div style={{padding:"16px 16px 0",background:"var(--linen)"}}>
+        <div style={{maxWidth:540,margin:"0 auto",position:"relative"}}>
+          <div style={{display:"flex",borderRadius:50,overflow:"hidden",border:"1.5px solid rgba(61,43,31,.25)",background:"white",boxShadow:"0 2px 12px rgba(0,0,0,.08)"}}>
+            <input
+              id="mainSearch"
+              type="text"
+              inputMode="text"
+              enterKeyHint="search"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck="false"
+              placeholder="Search teas, herbs, or wellness goals…"
+              value={homeSearchQuery}
+              onChange={e=>setHomeSearchQuery(e.target.value)}
+              onFocus={e=>{e.target.parentNode.parentNode.style.boxShadow="0 0 0 3px rgba(196,137,58,.25)";}}
+              onBlur={e=>{e.target.parentNode.parentNode.style.boxShadow="0 2px 12px rgba(0,0,0,.08)";}}
+              onKeyDown={e=>{
+                if(e.key==="Enter"){
+                  e.preventDefault();
+                  const q=homeSearchQuery.toLowerCase().trim();
+                  if(!q)return;
+                  setHomeSearchResults(BLENDS.filter(b=>b.name.toLowerCase().includes(q)||(b.tagline||"").toLowerCase().includes(q)||(b.benefit||"").toLowerCase().includes(q)).slice(0,6));
+                  e.target.blur();
+                }
+              }}
+              style={{flex:1,background:"none",border:"none",outline:"none",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:"16px",fontWeight:300,padding:"14px 16px",minWidth:0}}
+            />
+            {homeSearchQuery&&(
+              <button onClick={()=>{setHomeSearchQuery("");setHomeSearchResults([]);}} style={{background:"none",border:"none",color:"rgba(61,43,31,.35)",cursor:"pointer",padding:"0 10px",flexShrink:0,fontSize:"1rem"}}>✕</button>
+            )}
+            <button
+              onClick={()=>{
+                const q=homeSearchQuery.toLowerCase().trim();
+                if(!q)return;
+                setHomeSearchResults(BLENDS.filter(b=>b.name.toLowerCase().includes(q)||(b.tagline||"").toLowerCase().includes(q)||(b.benefit||"").toLowerCase().includes(q)).slice(0,6));
+                document.getElementById('mainSearch')?.blur();
+              }}
+              style={{background:"var(--bark)",border:"none",color:"white",padding:"14px 22px",fontFamily:"Jost,sans-serif",fontSize:".7rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap",transition:"background .2s"}}
+              onMouseEnter={e=>e.currentTarget.style.background="var(--sage-d)"}
+              onMouseLeave={e=>e.currentTarget.style.background="var(--bark)"}>
+              Search
+            </button>
+          </div>
+          {homeSearchResults.length>0&&(
+            <div style={{position:"absolute",top:"calc(100% + 6px)",left:0,right:0,background:"white",border:"1px solid rgba(61,43,31,.12)",borderRadius:16,overflow:"hidden",boxShadow:"0 12px 32px rgba(0,0,0,.15)",zIndex:500}}>
+              {homeSearchResults.map(b=>(
+                <div key={b.id} onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}
+                  style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",cursor:"pointer",borderBottom:"1px solid rgba(61,43,31,.07)",WebkitTapHighlightColor:"transparent"}}
+                  onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.07)"}
+                  onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                  <div style={{width:40,height:40,borderRadius:10,flexShrink:0,background:`linear-gradient(135deg,${b.color||"#2A4A2D"},rgba(10,15,11,.7))`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.2rem"}}>{b.emoji||"🍵"}</div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",fontWeight:600}}>{b.name}</div>
+                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".65rem",color:"var(--gold)",fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{b.tagline||b.benefit}</div>
+                  </div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:".85rem",color:"var(--gold)",flexShrink:0,fontWeight:600}}>${b.price}</div>
+                </div>
+              ))}
+              <div onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}
+                style={{padding:"10px 16px",borderTop:"1px solid rgba(61,43,31,.08)",textAlign:"center",cursor:"pointer",background:"rgba(196,137,58,.04)",WebkitTapHighlightColor:"transparent"}}
+                onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.1)"}
+                onMouseLeave={e=>e.currentTarget.style.background="rgba(196,137,58,.04)"}>
+                <span style={{fontFamily:"Jost,sans-serif",fontSize:".68rem",color:"var(--bark)",letterSpacing:".1em",textTransform:"uppercase"}}>Browse All Blends →</span>
+              </div>
+            </div>
+          )}
+          {homeSearchQuery&&homeSearchResults.length===0&&(
+            <div style={{position:"absolute",top:"calc(100% + 6px)",left:0,right:0,background:"white",border:"1px solid rgba(61,43,31,.1)",borderRadius:12,padding:"14px 16px",display:"flex",alignItems:"center",gap:10,zIndex:500,boxShadow:"0 8px 24px rgba(0,0,0,.1)"}}>
+              <span>🌿</span>
+              <div>
+                <div style={{fontFamily:"Jost,sans-serif",fontSize:".78rem",color:"var(--bark)",fontWeight:300}}>No blends matched — try a feeling or health goal</div>
+                <div onClick={()=>{nav("herbs");setHomeSearchQuery("");setHomeSearchResults([]);}} style={{fontFamily:"Jost,sans-serif",fontSize:".68rem",color:"var(--gold)",marginTop:3,cursor:"pointer",textDecorationLine:"underline"}}>Search the Herb Archive →</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
 
       <div className="mq">
