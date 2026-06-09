@@ -1483,15 +1483,9 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
     .nav-logo-text span:last-child{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-family:'Jost',sans-serif;font-weight:400;}
     @keyframes spin{to{transform:rotate(360deg);}}
 
-    /* NAV SEARCH */
-    #navSearchInput{transition:width .2s;}
-    #navSearchInput:focus{width:200px !important;}
-    @media(max-width:960px){#navSearchContainer{display:none;}}
-    /* MOBILE HERO SEARCH */
-    @media(max-width:960px){
-      .mob-search-bar{display:block !important;}
-      .hero{padding-top:70px;}
-    }
+    /* SEARCH BAR */
+    .site-search-bar{padding:14px 16px 0;background:var(--linen);}
+    @media(max-width:960px){.mob-search-bar{display:block !important;}.hero{padding-top:70px;}}
 
     .nav-links{display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;}
     .nav-lnk{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;white-space:nowrap;}
@@ -2107,11 +2101,8 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
     .freq-wrap:hover .freq-rB{animation:freqRingB 1.6s ease-out .55s infinite;}
     .freq-wrap:hover .freq-rC{animation:freqRingC 1.6s ease-out 1.1s infinite;}
 
-    /* SPINNING SHOP NOW */
+    /* SPINNING SHOP NOW — SVG text-on-path */
     .spin-cta{position:relative;width:140px;height:140px;cursor:pointer;flex-shrink:0;}
-    .spin-outer{position:absolute;inset:0;border-radius:50%;animation:spinRing 14s linear infinite;}
-    .spin-text-wrap{position:absolute;inset:0;}
-    .spin-char{position:absolute;top:0;left:50%;font-size:9.5px;font-family:'Jost',sans-serif;font-weight:500;color:rgba(196,137,58,.9);letter-spacing:.02em;transform-origin:0 70px;width:12px;text-align:center;margin-left:-6px;}
     .spin-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:76px;height:76px;background:var(--gold);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(196,137,58,.45);transition:all .3s;}
     .spin-cta:hover .spin-center{background:var(--bark);box-shadow:0 8px 28px rgba(61,43,31,.4);transform:translate(-50%,-50%) scale(1.1);}
     .spin-arrow{font-size:1.3rem;color:white;line-height:1;}
@@ -2121,8 +2112,6 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
     /* HOME PAGE CHAI HOLISTIC SPINNING BADGE */
     .chai-spin{position:relative;width:160px;height:160px;cursor:pointer;flex-shrink:0;}
-    .chai-spin-outer{position:absolute;inset:0;border-radius:50%;animation:spinRingCCW 16s linear infinite;}
-    .chai-spin-char{position:absolute;top:0;left:50%;font-size:9px;font-family:'Jost',sans-serif;font-weight:500;color:var(--bark);letter-spacing:.04em;transform-origin:0 73px;width:11px;text-align:center;margin-left:-5.5px;}
     .chai-spin-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:98px;height:98px;background:var(--bark);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 28px rgba(61,43,31,.28);transition:all .35s;border:2px solid var(--dust);}
     .chai-spin:hover .chai-spin-center{background:var(--sage-d);transform:translate(-50%,-50%) scale(1.08);box-shadow:0 10px 36px rgba(74,114,80,.35);}
     .chai-spin-arrow{font-size:1.5rem;color:var(--parch);transform:rotate(-30deg);display:inline-block;line-height:1;}
@@ -2186,7 +2175,6 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
       .ringsgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
       .chai-spin{width:120px;height:120px;}
       .chai-spin-center{width:74px;height:74px;}
-      .chai-spin-char{transform-origin:0 54px;}
     }
 
     /* ── MOBILE (≤600px) ── */
@@ -3363,13 +3351,22 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
               </button>
 
             </div>
-              {/* SPINNING CHAI HOLISTIC BADGE */}
+              {/* SPINNING CHAI HOLISTIC BADGE — SVG text-on-path, always centered */}
               <div className="chai-spin" onClick={()=>nav("shop")} title="Shop the Collection">
-                <div className="chai-spin-outer">
-                  {"CHAI HOLISTIC · SHOP NOW · CHAI HOLISTIC · SHOP NOW · ".split("").map((ch,i)=>(
-                    <span key={i} className="chai-spin-char" style={{transform:`rotate(${i*6.15}deg)`}}>{ch}</span>
-                  ))}
-                </div>
+                {/* SVG spinning text ring */}
+                <svg
+                  viewBox="0 0 160 160"
+                  style={{position:"absolute",inset:0,width:"100%",height:"100%",animation:"spinRingCCW 16s linear infinite"}}
+                >
+                  <defs>
+                    <path id="chaiSpinPath" d="M 80,80 m -62,0 a 62,62 0 1,1 124,0 a 62,62 0 1,1 -124,0"/>
+                  </defs>
+                  <text style={{fontSize:"9.5px",fontFamily:"Jost,sans-serif",fontWeight:500,letterSpacing:"3.2px",fill:"var(--bark)"}}>
+                    <textPath href="#chaiSpinPath" startOffset="0%">
+                      CHAI HOLISTIC · SHOP NOW · CHAI HOLISTIC · SHOP NOW ·
+                    </textPath>
+                  </text>
+                </svg>
                 <div className="chai-spin-center">
                   <span className="chai-spin-arrow">↗</span>
                   <span className="chai-spin-lbl">Shop<br/>Now</span>
@@ -3391,6 +3388,51 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
           {[...Array(2)].map((_,p)=>["Morning Rituals","Evening Calm","Liver Cleanse","Kidney Flush","⚡ Men's Wellness","Vibe Shift Rings","Tea Finder","Ritual Builder","Cleanse Tracker","Herb Pairing Guide","Sip &amp; Heal · 40 Recipes"].map((t,i)=>(
             <div key={`${p}-${i}`} className="mq-item" style={{cursor:"pointer"}} onClick={()=>{const m={"Morning Rituals":()=>{nav("shop");setBlendFilter("Morning");},"Evening Calm":()=>{nav("shop");setBlendFilter("Evening");},"Liver Cleanse":()=>nav("shop"),"Kidney Flush":()=>nav("shop"),"⚡ Men's Wellness":()=>nav("men"),"Vibe Shift Rings":()=>nav("rings"),"Tea Finder":()=>setFinderOpen(true),"Ritual Builder":()=>setRitualOpen(true),"Cleanse Tracker":()=>setTrackerOpen(true),"Herb Pairing Guide":()=>nav("shop"),"Sip &amp; Heal · 40 Recipes":()=>nav("recipes")};const a=m[t];if(a)a();}}><span>✦</span>{t}</div>
           )))}
+        </div>
+      </div>
+
+      {/* ── SEARCH BAR — below ticker, above prayer section ──────────────── */}
+      <div className="site-search-bar">
+        <div style={{maxWidth:580,margin:"0 auto",position:"relative"}}>
+          <div id="searchWrap" style={{display:"flex",borderRadius:50,overflow:"hidden",border:"1.5px solid rgba(61,43,31,.25)",background:"white",boxShadow:"0 2px 12px rgba(0,0,0,.08)"}}>
+            <input
+              ref={searchInputRef}
+              id="mainSearch"
+              type="text"
+              inputMode="text"
+              enterKeyHint="search"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck="false"
+              placeholder="Search teas, herbs, or wellness goals…"
+              onFocus={()=>{const w=document.getElementById('searchWrap');if(w)w.style.borderColor='rgba(196,137,58,.6)';}}
+              onBlur={()=>{const w=document.getElementById('searchWrap');if(w)w.style.borderColor='rgba(61,43,31,.25)';}}
+              onKeyDown={e=>{
+                if(e.key==="Enter"){
+                  e.preventDefault();
+                  const q=(searchInputRef.current?.value||"").toLowerCase().trim();
+                  if(!q)return;
+                  runGlobalSearch(q);
+                  searchInputRef.current?.blur();
+                }
+              }}
+              style={{flex:1,background:"none",border:"none",outline:"none",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:"16px",fontWeight:300,padding:"14px 16px",minWidth:0,WebkitAppearance:"none"}}
+            />
+            <button
+              onMouseDown={e=>{
+                e.preventDefault();
+                const q=(searchInputRef.current?.value||"").toLowerCase().trim();
+                if(!q)return;
+                runGlobalSearch(q);
+                searchInputRef.current?.blur();
+              }}
+              style={{background:"var(--bark)",border:"none",color:"white",padding:"14px 22px",fontFamily:"Jost,sans-serif",fontSize:".7rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap"}}
+              onMouseEnter={e=>e.currentTarget.style.background="var(--sage-d)"}
+              onMouseLeave={e=>e.currentTarget.style.background="var(--bark)"}>
+              Search
+            </button>
+          </div>
         </div>
       </div>
 
@@ -6705,80 +6747,6 @@ Thank you!`);
             🌿 Sip &amp; Seek
           </span>
         </div>
-        {/* ── NAV SEARCH ── */}
-        <div style={{position:"relative",display:"flex",alignItems:"center"}} id="navSearchContainer">
-          <div style={{display:"flex",alignItems:"center",background:"rgba(61,43,31,.08)",border:"1px solid rgba(61,43,31,.18)",borderRadius:50,overflow:"hidden",transition:"border-color .2s, box-shadow .2s"}} id="navSearchWrap">
-            <input
-              ref={searchInputRef}
-              id="navSearchInput"
-              type="text"
-              inputMode="text"
-              enterKeyHint="search"
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-              spellCheck="false"
-              placeholder="Search…"
-              onFocus={()=>{
-                const w=document.getElementById('navSearchWrap');
-                if(w){w.style.borderColor='rgba(196,137,58,.6)';w.style.boxShadow='0 0 0 2px rgba(196,137,58,.15)';}
-                document.getElementById('navSearchContainer').style.zIndex='600';
-              }}
-              onBlur={()=>{
-                const w=document.getElementById('navSearchWrap');
-                if(w){w.style.borderColor='rgba(61,43,31,.18)';w.style.boxShadow='none';}
-                setTimeout(()=>{
-                  document.getElementById('navSearchContainer').style.zIndex='';
-                  setHomeSearchResults([]);
-                  setHomeSearchQuery('');
-                },200);
-              }}
-              onKeyDown={e=>{
-                if(e.key==='Enter'){
-                  e.preventDefault();
-                  const q=(searchInputRef.current?.value||'').toLowerCase().trim();
-                  if(!q)return;
-                  runGlobalSearch(q);
-                  e.target.blur();
-                }
-              }}
-              style={{background:"none",border:"none",outline:"none",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:"16px",fontWeight:300,padding:"7px 12px",width:140,minWidth:0,WebkitAppearance:"none"}}
-            />
-            <button
-              onMouseDown={e=>{
-                e.preventDefault();
-                const q=(searchInputRef.current?.value||'').toLowerCase().trim();
-                if(!q)return;
-                runGlobalSearch(q);
-              }}
-              style={{background:"none",border:"none",color:"var(--bark)",cursor:"pointer",padding:"7px 12px 7px 4px",fontSize:"1rem",opacity:.5,flexShrink:0}}>🔍</button>
-          </div>
-          {homeSearchResults.length>0&&(
-            <div style={{position:"absolute",top:"calc(100% + 8px)",right:0,width:340,background:"white",border:"1px solid rgba(61,43,31,.15)",borderRadius:18,overflow:"hidden",boxShadow:"0 16px 48px rgba(0,0,0,.18)",zIndex:600,maxHeight:"80vh",overflowY:"auto"}}>
-              {homeSearchResults.map((r,i)=>(
-                <div key={r.id||i}
-                  onMouseDown={e=>{e.preventDefault();if(r.action)r.action();setHomeSearchResults([]);setHomeSearchQuery('');if(searchInputRef.current)searchInputRef.current.value='';}}
-                  style={{display:"flex",alignItems:"center",gap:10,padding:"11px 14px",cursor:"pointer",borderBottom:"1px solid rgba(61,43,31,.06)",WebkitTapHighlightColor:"transparent"}}
-                  onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.06)"}
-                  onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                  <div style={{width:36,height:36,borderRadius:8,flexShrink:0,background:`linear-gradient(135deg,${r.color||"#2A4A2D"},rgba(10,15,11,.6))`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1rem"}}>{r.emoji||"🌿"}</div>
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:1}}>
-                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:".85rem",color:"var(--bark)",fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.name}</div>
-                      <span style={{fontSize:".5rem",background:r.typeColor||"rgba(74,114,80,.15)",color:r.typeColor?"white":"var(--sage-d)",padding:"1px 6px",borderRadius:20,letterSpacing:".06em",textTransform:"uppercase",fontFamily:"Jost,sans-serif",flexShrink:0}}>{r.type}</span>
-                    </div>
-                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"rgba(61,43,31,.55)",fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.desc}</div>
-                  </div>
-                  {r.price&&<div style={{fontFamily:"'Playfair Display',serif",fontSize:".82rem",color:"var(--gold)",flexShrink:0,fontWeight:600}}>${r.price}</div>}
-                </div>
-              ))}
-              <div style={{padding:"10px 14px",borderTop:"1px solid rgba(61,43,31,.08)",textAlign:"center",background:"rgba(196,137,58,.04)"}}>
-                <span style={{fontFamily:"Jost,sans-serif",fontSize:".64rem",color:"rgba(61,43,31,.5)",letterSpacing:".08em",textTransform:"uppercase"}}>Press Enter to search everything →</span>
-              </div>
-            </div>
-          )}
-        </div>
-
         <div className="nav-right">
           <button className="cart-btn" onClick={()=>{ if(cart.length>0){setPreBasket(true);}else{setCartOpen(true);} }}>
             Basket {cartCount>0&&<span className="cart-badge">{cartCount}</span>}

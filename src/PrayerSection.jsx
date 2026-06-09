@@ -843,15 +843,15 @@ export default function PrayerSection({ onNavigate }) {
               onClick={onHandsTap}
               onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onHandsTap(); } }}
             >
-              <div className="rs-orbit rs-or1"/>
-              <div className="rs-orbit rs-or2"/>
-              <div className="rs-orbit rs-or3"/>
+              <div className="rs-orbit rs-or1" style={{borderColor:"rgba(74,160,120,.35)"}}/>
+              <div className="rs-orbit rs-or2" style={{borderColor:"rgba(74,160,120,.2)"}}/>
+              <div className="rs-orbit rs-or3" style={{borderColor:"rgba(74,160,120,.15)"}}/>
               <div className="rs-burst rs-br1"/>
               <div className="rs-burst rs-br2"/>
               <div className="rs-burst rs-br3"/>
               <div className="rs-burst rs-br4"/>
-              <div className="rs-gold-dot"/>
-              <span className="rs-hands">🙏</span>
+              <div className="rs-gold-dot" style={{background:"rgba(74,160,120,.8)"}}/>
+              <span className="rs-hands" style={{filter:"drop-shadow(0 0 12px rgba(74,160,120,.7))",animation:"rs-lotus-breathe 3.5s ease-in-out infinite"}}>🪷</span>
               <span className="rs-tap-hint">✦ tap to receive your affirmation</span>
             </div>
 
