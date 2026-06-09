@@ -965,6 +965,7 @@ export default function ChaiHolistic() {
   const [preBasket, setPreBasket] = useState(false); // soft suggestion screen
   const [homeSearchQuery, setHomeSearchQuery] = useState("");
   const [homeSearchResults, setHomeSearchResults] = useState([]);
+  const searchInputRef = useRef(null);
   const [teaCardModal, setTeaCardModal] = useState(null);
   const [saveRitualOpen, setSaveRitualOpen] = useState(false);
   const [blendFilter, setBlendFilter] = useState("All");
@@ -3269,6 +3270,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         <div style={{maxWidth:540,margin:"0 auto",position:"relative"}}>
           <div id="searchWrap" style={{display:"flex",borderRadius:50,overflow:"hidden",border:"1.5px solid rgba(61,43,31,.25)",background:"white",boxShadow:"0 2px 12px rgba(0,0,0,.08)"}}>
             <input
+              ref={searchInputRef}
               id="mainSearch"
               type="text"
               inputMode="text"
@@ -3277,30 +3279,32 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
               autoCorrect="off"
               autoCapitalize="off"
               spellCheck="false"
-              defaultValue=""
               placeholder="Search teas, herbs, or wellness goals…"
-              onFocus={()=>document.getElementById('searchWrap').style.borderColor='rgba(196,137,58,.6)'}
-              onBlur={()=>document.getElementById('searchWrap').style.borderColor='rgba(61,43,31,.25)'}
+              onFocus={()=>{const w=document.getElementById('searchWrap');if(w)w.style.borderColor='rgba(196,137,58,.6)';}}
+              onBlur={()=>{const w=document.getElementById('searchWrap');if(w)w.style.borderColor='rgba(61,43,31,.25)';}}
               onKeyDown={e=>{
                 if(e.key==="Enter"){
                   e.preventDefault();
-                  const q=(e.target.value||"").toLowerCase().trim();
+                  const q=(searchInputRef.current?.value||"").toLowerCase().trim();
                   if(!q)return;
+                  const res=BLENDS.filter(b=>b.name.toLowerCase().includes(q)||(b.tagline||"").toLowerCase().includes(q)||(b.benefit||"").toLowerCase().includes(q)).slice(0,6);
                   setHomeSearchQuery(q);
-                  setHomeSearchResults(BLENDS.filter(b=>b.name.toLowerCase().includes(q)||(b.tagline||"").toLowerCase().includes(q)||(b.benefit||"").toLowerCase().includes(q)).slice(0,6));
-                  e.target.blur();
+                  setHomeSearchResults(res);
+                  searchInputRef.current?.blur();
                 }
               }}
               style={{flex:1,background:"none",border:"none",outline:"none",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:"16px",fontWeight:300,padding:"14px 16px",minWidth:0,WebkitAppearance:"none"}}
             />
             <button
-              onClick={()=>{
-                const inp=document.getElementById('mainSearch');
-                const q=(inp?.value||"").toLowerCase().trim();
+              onMouseDown={e=>{
+                // Use onMouseDown so value is captured BEFORE blur fires
+                e.preventDefault();
+                const q=(searchInputRef.current?.value||"").toLowerCase().trim();
                 if(!q)return;
+                const res=BLENDS.filter(b=>b.name.toLowerCase().includes(q)||(b.tagline||"").toLowerCase().includes(q)||(b.benefit||"").toLowerCase().includes(q)).slice(0,6);
                 setHomeSearchQuery(q);
-                setHomeSearchResults(BLENDS.filter(b=>b.name.toLowerCase().includes(q)||(b.tagline||"").toLowerCase().includes(q)||(b.benefit||"").toLowerCase().includes(q)).slice(0,6));
-                inp?.blur();
+                setHomeSearchResults(res);
+                searchInputRef.current?.blur();
               }}
               style={{background:"var(--bark)",border:"none",color:"white",padding:"14px 22px",fontFamily:"Jost,sans-serif",fontSize:".7rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap"}}
               onMouseEnter={e=>e.currentTarget.style.background="var(--sage-d)"}
