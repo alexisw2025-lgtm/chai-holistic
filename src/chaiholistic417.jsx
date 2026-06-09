@@ -971,45 +971,59 @@ export default function ChaiHolistic() {
     if (!q) return;
     const results = [];
     const ql = q.toLowerCase();
-    // Search BLENDS
+    // Tea Blends → go to shop
     BLENDS.filter(b=>
       b.name.toLowerCase().includes(ql)||(b.tagline||"").toLowerCase().includes(ql)||
       (b.benefit||"").toLowerCase().includes(ql)||(b.occasion||"").toLowerCase().includes(ql)
-    ).slice(0,4).forEach(b=>results.push({
+    ).slice(0,3).forEach(b=>results.push({
       id:"blend-"+b.id, name:b.name, desc:b.tagline||b.benefit, emoji:b.emoji||"🍵",
       color:b.color, price:b.price, type:"Tea Blend", typeColor:"#3A6B2A",
       action:()=>nav("shop")
     }));
-    // Search HERBS (shop herbs)
+    // Shop herbs → go to shop (herb section)
     HERBS.filter(h=>
       h.name.toLowerCase().includes(ql)||(h.benefit||"").toLowerCase().includes(ql)
-    ).slice(0,3).forEach(h=>results.push({
-      id:"herb-"+h.id, name:h.name, desc:h.benefit, emoji:"🌿",
-      color:"#2A4A2D", type:"Herb", typeColor:"#4A7250",
+    ).slice(0,2).forEach(h=>results.push({
+      id:"herb-"+h.id, name:h.name+" (herb)", desc:h.benefit, emoji:"🌿",
+      color:"#2A4A2D", type:"Shop Herb", typeColor:"#4A7250",
       action:()=>nav("shop")
     }));
-    // Search Herb Archive (key herbs by name)
-    const ARCHIVE_HERBS = ["Cerasee","Moringa","Ginkgo Biloba","St. John's Wort","Rhodiola Rosea","Licorice Root","Hawthorn Berry","Black Seed","Sarsaparilla","Rosemary","Slippery Elm","Maca Root","Yarrow","Schisandra","Reishi","Cat's Claw","Fo-Ti","Lemongrass","Saw Palmetto","Ceylon Cinnamon","Ginger Root","Turmeric","Dandelion Root","Chamomile","Cardamom","Milk Thistle","Peppermint","Nettle Leaf","Hibiscus","Ashwagandha","Rose Petals","Lavender","Lemon Balm","Passionflower","Tulsi","Valerian Root","Burdock Root","Elderberry","Echinacea","Fennel Seed","Corn Silk","Marshmallow Root","Skullcap"];
+    // Herb Archive → go to herbs page
+    const ARCHIVE_HERBS = [
+      "Cerasee","Moringa","Ginkgo Biloba","St. John's Wort","Rhodiola Rosea",
+      "Licorice Root","Hawthorn Berry","Black Seed","Sarsaparilla","Rosemary",
+      "Slippery Elm","Maca Root","Yarrow","Schisandra","Reishi","Cat's Claw",
+      "Fo-Ti","Lemongrass","Saw Palmetto","Ceylon Cinnamon","Ginger Root",
+      "Turmeric","Dandelion Root","Chamomile","Cardamom","Milk Thistle",
+      "Peppermint","Nettle Leaf","Hibiscus","Ashwagandha","Rose Petals",
+      "Lavender","Lemon Balm","Passionflower","Tulsi","Valerian Root",
+      "Burdock Root","Elderberry","Echinacea","Fennel Seed","Corn Silk",
+      "Marshmallow Root","Skullcap"
+    ];
     ARCHIVE_HERBS.filter(n=>n.toLowerCase().includes(ql)).slice(0,3).forEach((n,i)=>results.push({
-      id:"archive-"+i, name:n, desc:"In the Herb Archive — history, benefits & sources", emoji:"📖",
+      id:"archive-"+i, name:n, desc:"Herb Archive — full history, benefits & research", emoji:"📖",
       color:"#1A3A2A", type:"Herb Archive", typeColor:"#1A5A3A",
-      action:()=>nav("herbs")
+      action:()=>nav("herbs")          // ← correctly goes to herbs page
     }));
-    // Sea Moss
-    if("sea moss gel".includes(ql)||ql.includes("sea")||ql.includes("moss")){
-      results.push({id:"seamoss", name:"Sea Moss Gel Kits", desc:"wildcrafted sea moss gel kits — immune, thyroid, joint support", emoji:"🌊", color:"#0A3A4A", type:"Product", typeColor:"#0A5A6B", action:()=>nav("seamoss")});
+    // Ancestral → ancestral page
+    if(ql.includes("ancestor")||ql.includes("ancestral")||ql.includes("jamaican")||ql.includes("caribbean")||ql.includes("cerasee")||ql.includes("bush")||ql.includes("guine")){
+      results.push({id:"ancestral", name:"Ancestral Teas", desc:"Jamaican bush medicine & Ayurvedic heritage blends", emoji:"🌿", color:"#2A1A0A", type:"Ancestral", typeColor:"#6A3A0A", action:()=>nav("ancestral")});
     }
-    // Supplements
-    if("supplement".includes(ql)||ql.includes("vitamin")||ql.includes("mineral")||ql.includes("supplement")){
-      results.push({id:"supps", name:"Supplements & Vitamins", desc:"Amazon affiliate supplement recommendations with tea pairings", emoji:"💊", color:"#3A2A4A", type:"Supplements", typeColor:"#5A3A6B", action:()=>nav("supplements")});
+    // Sea Moss → seamoss page
+    if(ql.includes("sea")||ql.includes("moss")||ql.includes("gel")){
+      results.push({id:"seamoss", name:"Sea Moss Gel Kits", desc:"Wildcrafted sea moss — immune, thyroid & joint support", emoji:"🌊", color:"#0A3A4A", type:"Product", typeColor:"#0A5A6B", action:()=>nav("seamoss")});
     }
-    // Men's wellness
+    // Supplements → supplements page
+    if(ql.includes("vitamin")||ql.includes("mineral")||ql.includes("supplement")||ql.includes("capsule")){
+      results.push({id:"supps", name:"Supplements & Vitamins", desc:"Affiliate supplement picks with tea pairings", emoji:"💊", color:"#3A2A4A", type:"Supplements", typeColor:"#5A3A6B", action:()=>nav("supplements")});
+    }
+    // Men's → men page
     if(ql.includes("men")||ql.includes("prostate")||ql.includes("testosterone")||ql.includes("male")){
-      results.push({id:"mens", name:"Men's Wellness Collection", desc:"20 blends for prostate, testosterone, heart, and recovery", emoji:"⚡", color:"#1A2A3A", type:"Men's", typeColor:"#2A4A6B", action:()=>nav("men")});
+      results.push({id:"mens", name:"Men's Wellness Collection", desc:"20 blends for prostate, testosterone, heart & recovery", emoji:"⚡", color:"#1A2A3A", type:"Men's", typeColor:"#2A4A6B", action:()=>nav("men")});
     }
-    // Ancestral
-    if(ql.includes("ancestor")||ql.includes("ancestral")||ql.includes("jamaican")||ql.includes("caribbean")||ql.includes("cerasee")||ql.includes("bush")){
-      results.push({id:"ancestral", name:"Ancestral Teas", desc:"Jamaican bush medicine and Ayurvedic heritage blends", emoji:"🌿", color:"#2A1A0A", type:"Ancestral", typeColor:"#6A3A0A", action:()=>nav("ancestral")});
+    // Tea Library → tea-library page
+    if(ql.includes("library")||ql.includes("learn")||ql.includes("guide")){
+      results.push({id:"lib", name:"Tea Library", desc:"Complete guide to every blend — steeping, pairing & ritual", emoji:"📚", color:"#2A3A1A", type:"Library", typeColor:"#3A5A2A", action:()=>nav("tea-library")});
     }
     setHomeSearchQuery(q);
     setHomeSearchResults(results.slice(0,10));
@@ -3290,27 +3304,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
               🔍
             </button>
           </div>
-          {homeSearchResults.length>0&&(
-            <div style={{background:"white",border:"1px solid rgba(61,43,31,.12)",borderRadius:16,marginTop:6,overflow:"hidden",boxShadow:"0 12px 32px rgba(0,0,0,.2)",maxHeight:"60vh",overflowY:"auto"}}>
-              {homeSearchResults.map((r,i)=>(
-                <div key={r.id||i}
-                  onMouseDown={e=>{e.preventDefault();if(r.action)r.action();setHomeSearchResults([]);setHomeSearchQuery("");const inp=document.getElementById('mobSearchInput');if(inp)inp.value="";}}
-                  style={{display:"flex",alignItems:"center",gap:10,padding:"12px 14px",cursor:"pointer",borderBottom:"1px solid rgba(61,43,31,.06)",WebkitTapHighlightColor:"transparent"}}
-                  onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.07)"}
-                  onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                  <div style={{width:38,height:38,borderRadius:8,flexShrink:0,background:`linear-gradient(135deg,${r.color||"#2A4A2D"},rgba(10,15,11,.6))`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:".95rem"}}>{r.emoji||"🌿"}</div>
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{display:"flex",alignItems:"center",gap:5,marginBottom:1}}>
-                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:".85rem",color:"var(--bark)",fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.name}</div>
-                      <span style={{fontSize:".48rem",background:r.typeColor||"rgba(74,114,80,.15)",color:"white",padding:"1px 5px",borderRadius:20,letterSpacing:".06em",textTransform:"uppercase",fontFamily:"Jost,sans-serif",flexShrink:0}}>{r.type}</span>
-                    </div>
-                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"rgba(61,43,31,.5)",fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.desc}</div>
-                  </div>
-                  {r.price&&<div style={{fontFamily:"'Playfair Display',serif",fontSize:".8rem",color:"var(--gold)",flexShrink:0,fontWeight:600}}>${r.price}</div>}
-                </div>
-              ))}
-            </div>
-          )}
+          {/* results shown in global overlay below */}
         </div>
         <div className="hero-orb a"/><div className="hero-orb b"/>
         <div className="hero-inner">
@@ -5259,7 +5253,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
     };
 
     const handleAddToCart = () => {
-      const linkCharge = rcPrayerLink&&rcPrayerLink.type==='custom' ? 6 : 0;
+      const linkCharge = rcPrayerLink?.type==='custom' ? 6 : 0;
       const item = {
         ...ring,
         id: `${ring.id}-${selectedDesign.id}-${selectedSize}`,
@@ -5567,26 +5561,45 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
                   Every Vibe Shift Ring ships ready to connect. Touch it to any phone and a page opens instantly — no app needed.
                 </div>
 
-                {/* OPTION 1: Default */}
-                <div onClick={()=>{setRcPrayerLink({type:'default',url:null,verified:true});setRcLinkUrl('');setRcLinkTestShown(false);setRcLinkAttempts(0);scrollConfigToEnd();}}
+                {/* OPTION 1 — Daily Affirmation */}
+                <div onClick={()=>{setRcPrayerLink({type:'affirmation',url:null,verified:true});setRcLinkUrl('');setRcLinkTestShown(false);setRcLinkAttempts(0);scrollConfigToEnd();}}
                   style={{display:"flex",alignItems:"flex-start",gap:14,padding:"14px 16px",
-                    background:rcPrayerLink&&rcPrayerLink.type==='default'?"rgba(45,74,45,.5)":"rgba(255,255,255,.04)",
-                    border:rcPrayerLink&&rcPrayerLink.type==='default'?"1.5px solid rgba(196,137,58,.7)":"1px solid rgba(255,255,255,.1)",
+                    background:rcPrayerLink?.type==='affirmation'?"rgba(82,60,20,.5)":"rgba(255,255,255,.04)",
+                    border:rcPrayerLink?.type==='affirmation'?"1.5px solid rgba(196,137,58,.7)":"1px solid rgba(255,255,255,.1)",
                     borderRadius:14,cursor:"pointer",marginBottom:10,transition:"all .2s"}}>
                   <div style={{width:22,height:22,borderRadius:"50%",flexShrink:0,marginTop:1,
-                    background:rcPrayerLink&&rcPrayerLink.type==='default'?"var(--gold)":"rgba(255,255,255,.08)",
-                    border:rcPrayerLink&&rcPrayerLink.type==='default'?"none":"1.5px solid rgba(255,255,255,.2)",
+                    background:rcPrayerLink?.type==='affirmation'?"var(--gold)":"rgba(255,255,255,.08)",
+                    border:rcPrayerLink?.type==='affirmation'?"none":"1.5px solid rgba(255,255,255,.2)",
                     display:"flex",alignItems:"center",justifyContent:"center",fontSize:".7rem",color:"white"}}>
-                    {rcPrayerLink&&rcPrayerLink.type==='default'?"✓":""}
+                    {rcPrayerLink?.type==='affirmation'?"✓":""}
                   </div>
                   <div style={{flex:1}}>
-                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:3}}>🙏 2amcompanion.com Prayer Library</div>
-                    <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.6,fontWeight:300}}>Ships connected to a living library of recorded prayers. Touch your ring, hear a voice, pray together. Ready the moment it arrives — no setup needed.</div>
-                    <div style={{fontSize:".62rem",color:"rgba(196,137,58,.7)",marginTop:4,fontWeight:500}}>Included with every ring</div>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:3}}>✨ Daily Affirmation</div>
+                    <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.6,fontWeight:300}}>A new spoken affirmation every day — warm, personal, beautifully voiced. A moment of nourishment whenever you need it. Touch your ring, receive your affirmation.</div>
+                    <div style={{fontSize:".62rem",color:"rgba(196,137,58,.7)",marginTop:4,fontWeight:500}}>Included · Rotates daily</div>
                   </div>
                 </div>
 
-                {/* OPTION 2: Custom Link */}
+                {/* OPTION 2 — 2AM Companion Prayer */}
+                <div onClick={()=>{setRcPrayerLink({type:'default',url:null,verified:true});setRcLinkUrl('');setRcLinkTestShown(false);setRcLinkAttempts(0);scrollConfigToEnd();}}
+                  style={{display:"flex",alignItems:"flex-start",gap:14,padding:"14px 16px",
+                    background:rcPrayerLink?.type==='default'?"rgba(45,74,45,.5)":"rgba(255,255,255,.04)",
+                    border:rcPrayerLink?.type==='default'?"1.5px solid rgba(196,137,58,.7)":"1px solid rgba(255,255,255,.1)",
+                    borderRadius:14,cursor:"pointer",marginBottom:10,transition:"all .2s"}}>
+                  <div style={{width:22,height:22,borderRadius:"50%",flexShrink:0,marginTop:1,
+                    background:rcPrayerLink?.type==='default'?"var(--gold)":"rgba(255,255,255,.08)",
+                    border:rcPrayerLink?.type==='default'?"none":"1.5px solid rgba(255,255,255,.2)",
+                    display:"flex",alignItems:"center",justifyContent:"center",fontSize:".7rem",color:"white"}}>
+                    {rcPrayerLink?.type==='default'?"✓":""}
+                  </div>
+                  <div style={{flex:1}}>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:3}}>🙏 2AM Companion · Daily Prayer</div>
+                    <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.6,fontWeight:300}}>A new prayer every day — spoken in a warm, human voice. For the 2AM moments, the hard days, and the quiet Tuesdays. You are not praying alone.</div>
+                    <div style={{fontSize:".62rem",color:"rgba(196,137,58,.7)",marginTop:4,fontWeight:500}}>Included · Rotates daily</div>
+                  </div>
+                </div>
+
+                {/* OPTION 3 — Custom Link */}
                 <div onClick={()=>{if(!rcPrayerLink||rcPrayerLink.type!=='custom')setRcPrayerLink({type:'custom',url:'',verified:false});}}
                   style={{display:"flex",alignItems:"flex-start",gap:14,padding:"14px 16px",
                     background:rcPrayerLink&&rcPrayerLink.type==='custom'?"rgba(196,137,58,.08)":"rgba(255,255,255,.04)",
@@ -7153,6 +7166,61 @@ Thank you!`);
                   </button>
                 </div>
               )}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ── GLOBAL SEARCH RESULTS OVERLAY (mobile + any search) ────────────── */}
+      {homeSearchResults.length > 0 && (
+        <>
+          <div
+            onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");}}
+            style={{position:"fixed",inset:0,zIndex:1050,background:"rgba(0,0,0,.4)",backdropFilter:"blur(2px)"}}
+          />
+          <div style={{
+            position:"fixed",bottom:0,left:0,right:0,zIndex:1051,
+            background:"white",
+            borderRadius:"20px 20px 0 0",
+            maxHeight:"75vh",
+            display:"flex",flexDirection:"column",
+            boxShadow:"0 -8px 40px rgba(0,0,0,.2)",
+            animation:"slideUp .3s cubic-bezier(.34,1.2,.64,1)",
+          }}>
+            {/* Handle + header */}
+            <div style={{padding:"12px 20px 0",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(61,43,31,.08)"}}>
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <div style={{width:36,height:4,borderRadius:2,background:"rgba(61,43,31,.15)",margin:"0 auto"}}/>
+              </div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",fontWeight:600}}>
+                {homeSearchResults.length} result{homeSearchResults.length!==1?"s":""} for "{homeSearchQuery}"
+              </div>
+              <button
+                onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");const i=document.getElementById('mobSearchInput');if(i)i.value="";const n=document.getElementById('navSearchInput');if(n)n.value="";}}
+                style={{background:"rgba(61,43,31,.08)",border:"none",borderRadius:"50%",width:30,height:30,cursor:"pointer",fontSize:".85rem",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--bark)"}}>✕</button>
+            </div>
+            {/* Results list */}
+            <div style={{overflowY:"auto",flex:1,padding:"8px 0 env(safe-area-inset-bottom,0)"}}>
+              {homeSearchResults.map((r,i)=>(
+                <div key={r.id||i}
+                  onClick={()=>{if(r.action)r.action();setHomeSearchResults([]);setHomeSearchQuery("");const inp=document.getElementById('mobSearchInput');if(inp)inp.value="";const nav2=document.getElementById('navSearchInput');if(nav2)nav2.value="";}}
+                  style={{display:"flex",alignItems:"center",gap:12,padding:"14px 20px",cursor:"pointer",borderBottom:"1px solid rgba(61,43,31,.06)",WebkitTapHighlightColor:"transparent",transition:"background .15s"}}
+                  onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.06)"}
+                  onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                  <div style={{width:44,height:44,borderRadius:10,flexShrink:0,background:`linear-gradient(135deg,${r.color||"#2A4A2D"},rgba(10,15,11,.5))`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.2rem"}}>{r.emoji||"🌿"}</div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3}}>
+                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"var(--bark)",fontWeight:600}}>{r.name}</div>
+                      <span style={{fontSize:".52rem",background:r.typeColor||"rgba(74,114,80,.2)",color:"white",padding:"2px 7px",borderRadius:20,letterSpacing:".08em",textTransform:"uppercase",fontFamily:"Jost,sans-serif",flexShrink:0,fontWeight:600}}>{r.type}</span>
+                    </div>
+                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".72rem",color:"rgba(61,43,31,.55)",lineHeight:1.4}}>{r.desc}</div>
+                  </div>
+                  <div style={{flexShrink:0,display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4}}>
+                    {r.price&&<div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--gold)",fontWeight:600}}>${r.price}</div>}
+                    <span style={{fontSize:"1rem",color:"rgba(61,43,31,.3)"}}>›</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </>

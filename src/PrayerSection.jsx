@@ -51,14 +51,46 @@ function getDailyBlend() {
 }
 
 const INTENTIONS = [
-  { lines: ["You are here at the right moment.", "Something in you already knows.", "Begin."],                                    voice: "You are here at the right moment. Something in you already knows. Begin." },
-  { lines: ["Take one breath before this cup.", "You are nourishing yourself today.", "That is enough."],                         voice: "Take one breath before this cup. You are nourishing yourself today. That is enough." },
-  { lines: ["Stillness is not empty.", "It is full of everything you need.", "Receive it now."],                                  voice: "Stillness is not empty. It is full of everything you need. Receive it now." },
-  { lines: ["What your body is asking for,", "this blend already knows.", "Trust the ritual."],                                  voice: "What your body is asking for, this blend already knows. Trust the ritual." },
-  { lines: ["This moment belongs to you.", "No one else. Just you.", "Breathe in."],                                             voice: "This moment belongs to you. No one else. Just you. Breathe in." },
-  { lines: ["The healing has already begun.", "You chose to show up.", "That is the practice."],                                 voice: "The healing has already begun. You chose to show up. That is the practice." },
-  { lines: ["You came to the right place.", "Everything you need is here.", "Let it in."],                                       voice: "You came to the right place. Everything you need is here. Let it in." },
+  { lines:["You are here at the right moment.", "Something in you already knows.", "Begin."],                                         voice:"You are here at the right moment. Something in you already knows. Begin." },
+  { lines:["Take one breath before this cup.", "You are nourishing yourself today.", "That is enough."],                              voice:"Take one breath before this cup. You are nourishing yourself today. That is enough." },
+  { lines:["Stillness is not empty.", "It is full of everything you need.", "Receive it now."],                                       voice:"Stillness is not empty. It is full of everything you need. Receive it now." },
+  { lines:["What your body is asking for,", "this blend already knows.", "Trust the ritual."],                                        voice:"What your body is asking for, this blend already knows. Trust the ritual." },
+  { lines:["This moment belongs to you.", "No one else. Just you.", "Breathe in."],                                                   voice:"This moment belongs to you. No one else. Just you. Breathe in." },
+  { lines:["The healing has already begun.", "You chose to show up.", "That is the practice."],                                       voice:"The healing has already begun. You chose to show up. That is the practice." },
+  { lines:["You came to the right place.", "Everything you need is here.", "Let it in."],                                             voice:"You came to the right place. Everything you need is here. Let it in." },
+  { lines:["Your body is not broken.", "It is asking to be heard.", "This cup is you listening."],                                    voice:"Your body is not broken. It is asking to be heard. This cup is you listening." },
+  { lines:["Rest is not weakness.", "It is the soil where healing grows.", "Let yourself rest today."],                               voice:"Rest is not weakness. It is the soil where healing grows. Let yourself rest today." },
+  { lines:["You have carried enough.", "For this moment, put it down.", "The tea will hold you."],                                    voice:"You have carried enough. For this moment, put it down. The tea will hold you." },
+  { lines:["What you tend to, grows.", "What you sip with intention, heals.", "Tend to yourself today."],                             voice:"What you tend to, grows. What you sip with intention, heals. Tend to yourself today." },
+  { lines:["Healing is not a destination.", "It is the decision you made", "when you filled the kettle."],                            voice:"Healing is not a destination. It is the decision you made when you filled the kettle." },
+  { lines:["You are good enough.", "Exactly as you are.", "Right now. In this moment."],                                              voice:"You are good enough. Exactly as you are. Right now. In this moment." },
+  { lines:["Something ancient is in this cup.", "Generations of healers", "put it here for you."],                                   voice:"Something ancient is in this cup. Generations of healers put it here for you." },
+  { lines:["The intention is already set.", "Your body already knows what to do.", "Trust what is growing."],                         voice:"The intention is already set. Your body already knows what to do. Trust what is growing." },
+  { lines:["You are not behind.", "You are right on time.", "The ritual begins now."],                                                voice:"You are not behind. You are right on time. The ritual begins now." },
+  { lines:["Breathe in what you need.", "Breathe out what no longer serves.", "This cup carries both."],                              voice:"Breathe in what you need. Breathe out what no longer serves. This cup carries both." },
+  { lines:["Your ancestors knew something", "that science is still catching up to.", "You are the living proof."],                    voice:"Your ancestors knew something that science is still catching up to. You are the living proof." },
+  { lines:["Small rituals build strong lives.", "This cup is not small.", "It is everything."],                                       voice:"Small rituals build strong lives. This cup is not small. It is everything." },
+  { lines:["The body speaks before the mind does.", "Your craving for this cup", "was already a prayer."],                           voice:"The body speaks before the mind does. Your craving for this cup was already a prayer." },
+  { lines:["You chose wellness today.", "In a world that makes it hard,", "that is an act of love."],                                 voice:"You chose wellness today. In a world that makes it hard, that is an act of love." },
+  { lines:["There is medicine in the pause.", "Before the first sip,", "breathe and receive."],                                       voice:"There is medicine in the pause. Before the first sip, breathe and receive." },
+  { lines:["What you put in your body", "becomes the energy you walk with.", "Choose it with care."],                                 voice:"What you put in your body becomes the energy you walk with. Choose it with care." },
+  { lines:["Healing is not linear.", "But showing up every day", "is how it happens."],                                               voice:"Healing is not linear. But showing up every day is how it happens." },
+  { lines:["This is your medicine.", "Not prescribed by anyone else.", "You knew what you needed."],                                  voice:"This is your medicine. Not prescribed by anyone else. You knew what you needed." },
+  { lines:["The world will keep moving.", "This cup will not.", "For this moment, neither will you."],                                voice:"The world will keep moving. This cup will not. For this moment, neither will you." },
+  { lines:["Let the warmth reach the tight places.", "The held-in places.", "The places still healing."],                             voice:"Let the warmth reach the tight places. The held-in places. The places still healing." },
+  { lines:["You are someone worth caring for.", "Start with this cup.", "Then keep going."],                                          voice:"You are someone worth caring for. Start with this cup. Then keep going." },
+  { lines:["Something in you said yes today.", "To nourishment. To ritual. To yourself.", "Honor that yes."],                         voice:"Something in you said yes today. To nourishment. To ritual. To yourself. Honor that yes." },
+  { lines:["The herbs remember.", "What the body forgets,", "the plants have kept safe."],                                            voice:"The herbs remember. What the body forgets, the plants have kept safe." },
+  { lines:["Today's intention is simple:", "show up for yourself", "the way you show up for everyone else."],                         voice:"Today's intention is simple: show up for yourself the way you show up for everyone else." },
 ];
+
+// ── Daily rotation: same intention for everyone on the same calendar day ──────
+function getDailyIntention() {
+  const now   = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const day   = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+  return INTENTIONS[day % INTENTIONS.length];
+}
 
 let audioCtx = null;
 
@@ -172,7 +204,7 @@ export default function PrayerSection({ onNavigate }) {
 
   function onHandsTap() {
     if (phase !== 0) return;
-    const pick = INTENTIONS[Math.floor(Math.random() * INTENTIONS.length)];
+    const pick = getDailyIntention(); // same intention for everyone today
     setChosen(pick);
     setFiring(true);
     setActivated(true);
@@ -717,6 +749,23 @@ export default function PrayerSection({ onNavigate }) {
           to   { opacity:1; transform:translateY(0); }
         }
 
+        @keyframes rs-orbit-spin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes rs-hands-breathe {
+          0%,100% { transform: scale(1);    filter: drop-shadow(0 0 8px rgba(192,136,48,.5)); }
+          50%     { transform: scale(1.08); filter: drop-shadow(0 0 14px rgba(192,136,48,.85)); }
+        }
+        @keyframes rs-lotus-breathe {
+          0%,100% { transform: scale(1);    filter: drop-shadow(0 0 8px rgba(74,160,120,.5)); }
+          50%     { transform: scale(1.08); filter: drop-shadow(0 0 14px rgba(74,160,120,.9)); }
+        }
+        @keyframes rs-ring-pulse {
+          0%   { transform: scale(1);    opacity: .7; }
+          100% { transform: scale(1.8); opacity: 0; }
+        }
+
         @media (max-width: 480px) {
           .rs-row { gap:18px; padding:0 16px; }
           .rs-orbit-stage, .rs-ring-wrap { width:110px; height:110px; }
@@ -740,8 +789,8 @@ export default function PrayerSection({ onNavigate }) {
         {/* ── SECTION HEADER ── */}
         <div className="rs-header">
           <div className="rs-header-eye">✦ &nbsp; Chai Holistic · Daily Ritual &nbsp; ✦</div>
-          <h2 className="rs-header-h">A moment before you begin.<br/><em>Your intention. Your blend.</em></h2>
-          <p className="rs-header-sub">Touch the praying hands to receive your daily intention. Then touch your Vibe Shift ring to carry it with you.</p>
+          <h2 className="rs-header-h">A moment before you begin.<br/><em>Your affirmation. Your blend.</em></h2>
+          <p className="rs-header-sub">Touch the praying hands to receive today's affirmation. Then touch your Vibe Shift Ring — and press the floating icon on screen — to hear your intention spoken to you.</p>
           <div className="rs-daily-teaser">
             <span className="rs-daily-teaser-emoji">{todayBlendPreview.emoji}</span>
             <span className="rs-daily-teaser-text">
@@ -777,7 +826,7 @@ export default function PrayerSection({ onNavigate }) {
             <div
               className={`rs-orbit-stage${firing ? " firing" : ""}${idleHidden ? " hide" : ""}${activated ? " activated" : ""}`}
               role="button" tabIndex={0}
-              aria-label="Tap to receive your intention"
+              aria-label="Tap to receive your affirmation"
               aria-pressed={phase > 0}
               onClick={onHandsTap}
               onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onHandsTap(); } }}
@@ -791,7 +840,7 @@ export default function PrayerSection({ onNavigate }) {
               <div className="rs-burst rs-br4"/>
               <div className="rs-gold-dot"/>
               <span className="rs-hands">🙏</span>
-              <span className="rs-tap-hint">✦ tap to receive</span>
+              <span className="rs-tap-hint">✦ tap to receive your affirmation</span>
             </div>
 
             {/* Ring (phase 1.5+) */}
@@ -799,7 +848,7 @@ export default function PrayerSection({ onNavigate }) {
               <div
                 className="rs-ring-icon"
                 role="button" tabIndex={0}
-                aria-label="Tap your Vibe Shift ring to hear your intention"
+                aria-label="Tap your Vibe Shift Ring to hear your affirmation"
                 aria-pressed={phase === 2}
                 onClick={onRingTap}
                 onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onRingTap(); } }}
@@ -808,34 +857,19 @@ export default function PrayerSection({ onNavigate }) {
                 <div className="rs-rburst rs-rb1"/>
                 <div className="rs-rburst rs-rb2"/>
                 <div className="rs-rburst rs-rb3"/>
-                <svg className="rs-ring-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="rsRG" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%"   stopColor="#f5d080"/>
-                      <stop offset="35%"  stopColor="#c08830"/>
-                      <stop offset="65%"  stopColor="#deb96a"/>
-                      <stop offset="100%" stopColor="#a07020"/>
-                    </linearGradient>
-                    <linearGradient id="rsRS" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%"   stopColor="rgba(255,240,180,.6)"/>
-                      <stop offset="100%" stopColor="rgba(255,240,180,0)"/>
-                    </linearGradient>
-                    <filter id="rsRF"><feGaussianBlur stdDeviation="2.5" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
-                  </defs>
-                  <ellipse cx="40" cy="40" rx="28" ry="10" stroke="url(#rsRG)" strokeWidth="5.5" fill="none" filter="url(#rsRF)"/>
-                  <ellipse cx="40" cy="40" rx="28" ry="10" stroke="rgba(0,0,0,.25)" strokeWidth="2" fill="none" strokeDasharray="3,3" opacity=".4"/>
-                  <ellipse cx="32" cy="36" rx="10" ry="3.5" fill="url(#rsRS)" opacity=".7" transform="rotate(-12, 32, 36)"/>
-                  <ellipse cx="40" cy="40" rx="28" ry="10" stroke="rgba(255,220,100,.18)" strokeWidth="1" fill="none" strokeDasharray="1,5"/>
-                  <ellipse cx="40" cy="30.5" rx="5" ry="3.5" fill="url(#rsRG)" opacity=".9"/>
-                  <ellipse cx="39" cy="29.5" rx="2" ry="1.5" fill="rgba(255,250,220,.7)"/>
-                  <path d="M12 40 Q12 54 40 58 Q68 54 68 40" stroke="url(#rsRG)" strokeWidth="4" fill="none" opacity=".5" filter="url(#rsRF)"/>
-                  <ellipse cx="40" cy="57" rx="22" ry="5" fill="rgba(0,0,0,.3)" opacity=".6"/>
-                  <circle cx="40" cy="40" r="2.5" fill="rgba(192,136,48,0)">
-                    <animate attributeName="r" values="2.5;5;2.5" dur="2.5s" repeatCount="indefinite"/>
-                    <animate attributeName="opacity" values="0.6;0;0.6" dur="2.5s" repeatCount="indefinite"/>
-                    <animate attributeName="fill" values="rgba(192,136,48,.6);rgba(192,136,48,0);rgba(192,136,48,.6)" dur="2.5s" repeatCount="indefinite"/>
-                  </circle>
-                </svg>
+                {/* Prayer hands inside gold rotating ring */}
+                <div style={{position:"relative",width:80,height:80,display:"flex",alignItems:"center",justifyContent:"center"}}>
+                  {/* Outer gold rotating orbit */}
+                  <div style={{position:"absolute",inset:-8,borderRadius:"50%",border:"2.5px solid transparent",borderTopColor:"rgba(192,136,48,.9)",borderRightColor:"rgba(192,136,48,.35)",animation:"rs-orbit-spin 3s linear infinite"}}/>
+                  <div style={{position:"absolute",inset:-15,borderRadius:"50%",border:"1.5px solid transparent",borderBottomColor:"rgba(192,136,48,.45)",borderLeftColor:"rgba(192,136,48,.18)",animation:"rs-orbit-spin 6s linear infinite reverse"}}/>
+                  {/* Gold pulse rings */}
+                  <div style={{position:"absolute",inset:0,borderRadius:"50%",border:"2px solid rgba(192,136,48,.4)",animation:"rs-ring-pulse 2s ease-out infinite"}}/>
+                  <div style={{position:"absolute",inset:0,borderRadius:"50%",border:"2px solid rgba(192,136,48,.22)",animation:"rs-ring-pulse 2s ease-out infinite .65s"}}/>
+                  {/* Gold circle background */}
+                  <div style={{position:"relative",zIndex:1,width:72,height:72,borderRadius:"50%",background:"radial-gradient(circle at 40% 35%, rgba(255,220,120,.18) 0%, rgba(192,136,48,.12) 50%, rgba(20,12,4,.7) 100%)",border:"2px solid rgba(192,136,48,.6)",boxShadow:"0 0 20px rgba(192,136,48,.4), 0 0 40px rgba(192,136,48,.15)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                    <span style={{fontSize:32,filter:"drop-shadow(0 0 8px rgba(192,136,48,.6))",animation:"rs-hands-breathe 3s ease-in-out infinite"}}>🙏</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -866,18 +900,18 @@ export default function PrayerSection({ onNavigate }) {
               <div className={`rs-panel rs-panel-ring${showRingMoment ? "" : " hidden"}`}>
                 <div className="rs-ring-cue">✦ &nbsp; Now carry it with you &nbsp; ✦</div>
                 <div className="rs-ring-headline">
-                  Touch your Vibe Shift ring.<br/>
-                  <span style={{fontSize:"14px",color:"rgba(255,255,255,.45)"}}>Hear your intention spoken aloud.</span>
+                  Touch your Vibe Shift Ring, then<br/>
+                  <span style={{fontSize:"14px",color:"rgba(255,255,255,.45)"}}>press the floating icon to hear your affirmation.</span>
                 </div>
                 <div className="rs-ring-sub">
-                  Your intention, spoken and sealed.<br/>
-                  Carry it through your day.
+                  Your affirmation, spoken and sealed.<br/>
+                  Carry it with you today.
                 </div>
 
                 <div className={`rs-voice${voiceShow ? " show" : ""}`}>
                   {chosen && voiceShow ? (
                     speakLoading
-                      ? <span style={{fontSize:"12px",color:"rgba(255,255,255,.35)",fontStyle:"normal",letterSpacing:".08em"}}>✦ &nbsp; Preparing your intention…</span>
+                      ? <span style={{fontSize:"12px",color:"rgba(255,255,255,.35)",fontStyle:"normal",letterSpacing:".08em"}}>✦ &nbsp; Preparing your affirmation…</span>
                       : `"${chosen.voice}"`
                   ) : ""}
                 </div>
