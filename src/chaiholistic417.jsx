@@ -1,3 +1,4 @@
+import HerbApothecary from "./HerbApothecary";
 import React, { useState, useEffect, useRef } from "react";
 import TeaLibrary from "./TeaLibrary";
 import PrayerSection from "./PrayerSection";
