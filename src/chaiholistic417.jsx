@@ -2289,41 +2289,57 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
     }
   `;
 
-  // --- 2AM OVERLAY ---------------------------------------------------------
+  // --- 2AM OVERLAY — now the Prayer Experience ---------------------------------
   const TwoAMOverlay = () => {
-    const blend = BLENDS.find(b => b.id === "m2");
     return (
-      <div className="twoam-ov">
-        <div className="twoam-inner">
-          <div className="twoam-title">Can't sleep?</div>
-          <div className="twoam-sub">You're not alone. Let's make you something warm.<br />This blend was made for exactly this moment.</div>
-          <div className="twoam-card">
-            <div className="twoam-blend-name">2AM Reset</div>
-            <ul className="twoam-steps">
-              <li>Combine 1 tsp cinnamon, 1/2 tsp cardamom, 1/4 tsp ginger, 2 cloves</li>
-              <li>⏱ Bring water to just off the boil -- boil then wait 60 seconds</li>
-              <li>Steep for 8 minutes. Let it sit and work.</li>
-              <li>Strain. Add raw honey if you'd like.</li>
-              <li>Sit somewhere soft. Breathe. Sip slowly.</li>
-            </ul>
-            {timerFor === "2am" && (timerSec !== null || timerDone) ? (
-              // When 2AM timer is running -- show the full overlay on top of 2AM screen
-              // (The LargeTimerOverlay renders globally so it appears automatically)
-              <div style={{textAlign:"center",padding:"16px",background:"rgba(196,137,58,.1)",borderRadius:14,border:"1px solid rgba(196,137,58,.3)"}}>
-                <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",letterSpacing:".12em",textTransform:"uppercase",marginBottom:6}}>Timer started -- full screen counting</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:"2.2rem",color:"var(--gold)"}}>{timerSec !== null ? fmt(timerSec) : "Ready"}</div>
-                <div style={{fontSize:".68rem",color:"rgba(255,255,255,.35)",marginTop:4}}>The steaming cup timer is counting above this screen</div>
-                <button className="btn-twoam" style={{marginTop:10,background:"rgba(196,137,58,.2)",borderColor:"rgba(196,137,58,.4)"}} onClick={stopTimer}>Stop Timer</button>
+      <div className="twoam-ov" style={{background:"#060a08",flexDirection:"column",padding:0,overflow:"auto"}}>
+        {/* Close button */}
+        <button
+          onClick={close2AM}
+          style={{
+            position:"fixed",top:16,right:16,zIndex:800,
+            width:36,height:36,borderRadius:"50%",
+            background:"rgba(255,255,255,.08)",
+            border:"1px solid rgba(255,255,255,.15)",
+            color:"rgba(255,255,255,.6)",cursor:"pointer",
+            fontSize:".9rem",display:"flex",alignItems:"center",justifyContent:"center",
+            transition:"all .2s",
+          }}
+          onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.18)";}}
+          onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.08)";}}
+        >✕</button>
+        {/* Full prayer section */}
+        <PrayerSection onNavigate={(blend)=>{ close2AM(); nav("tea-library",{blend}); }}/>
+        {/* Tea offer below */}
+        <div style={{
+          maxWidth:480,margin:"0 auto",padding:"0 20px 48px",textAlign:"center",
+        }}>
+          <div style={{
+            background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",
+            borderRadius:20,padding:"22px 24px",marginBottom:16,
+          }}>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",marginBottom:6}}>
+              Can't sleep?
+            </div>
+            <div style={{fontSize:".78rem",color:"rgba(255,255,255,.4)",fontWeight:300,lineHeight:1.7,marginBottom:16}}>
+              This blend was made for exactly this moment.
+            </div>
+            {(()=>{const blend=BLENDS.find(b=>b.id==="m2");return blend?(
+              <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
+                <div style={{width:48,height:48,borderRadius:10,background:"linear-gradient(135deg,#4A3728,#2A1A10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.4rem",flexShrink:0}}>🍵</div>
+                <div style={{textAlign:"left",flex:1}}>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:2}}>2AM Reset</div>
+                  <div style={{fontSize:".68rem",color:"rgba(255,255,255,.4)"}}>Cinnamon · Cardamom · Ginger · Cloves</div>
+                </div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"var(--gold)",flexShrink:0}}>${blend.price}</div>
               </div>
-            ) : (
-              <button className="btn-twoam gold" onClick={() => startTimer(blend,"2am")}>Start Brewing -- 8 min</button>
-            )}
+            ):null;})()}
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              <button className="btn-twoam gold" style={{flex:1}} onClick={()=>{const b=BLENDS.find(b=>b.id==="m2");if(b)addToCart({...b,emoji:"🍵"});close2AM();}}>Add to Basket</button>
+              <button className="btn-twoam" style={{flex:1}} onClick={()=>{close2AM();window.open("https://2amcompanion.com","_blank");}}>2amcompanion.com ↗</button>
+            </div>
           </div>
-          <div className="twoam-actions">
-            <button className="btn-twoam gold" onClick={() => { addToCart({...blend,emoji:"🍵"}); close2AM(); }}>Add to Basket -- ${(blend ? blend.price : "")}</button>
-            <button className="btn-twoam" onClick={() => { close2AM(); window.open("https://2amcompanion.com","_blank"); }}>2amcompanion.com ↗</button>
-            <button className="btn-twoam" onClick={close2AM}>Close</button>
-          </div>
+          <button className="btn-twoam" style={{width:"100%"}} onClick={close2AM}>← Back to Chai Holistic</button>
         </div>
       </div>
     );
@@ -3381,16 +3397,12 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
       {/* ── Prayer / Intention Section ──────────────────────────────────── */}
       <div style={{background:"linear-gradient(135deg,#0A0F0B,#0F1A12)",borderTop:"1px solid rgba(196,137,58,.15)",padding:"20px 24px 0"}}>
         <div style={{maxWidth:560,margin:"0 auto",display:"flex",alignItems:"center",gap:16,background:"rgba(196,137,58,.1)",border:"1px solid rgba(196,137,58,.25)",borderRadius:20,padding:"14px 18px",flexWrap:"wrap"}}>
-          <img
-            src="/vibe-shift-ring.jpg"
-            alt="Vibe Shift Ring"
-            style={{width:64,height:64,borderRadius:12,objectFit:"cover",border:"2px solid rgba(196,137,58,.4)",flexShrink:0,boxShadow:"0 4px 16px rgba(0,0,0,.4)"}}
-          />
+          <img src="/vibe-shift-ring.jpg" alt="Vibe Shift Ring" style={{width:64,height:64,borderRadius:12,objectFit:"cover",border:"2px solid rgba(196,137,58,.4)",flexShrink:0,boxShadow:"0 4px 16px rgba(0,0,0,.4)"}}/>
           <div style={{flex:1,minWidth:200}}>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"rgba(247,242,234,.9)",fontWeight:600,marginBottom:4}}>Have your Vibe Shift Ring?</div>
-            <div style={{fontFamily:"Jost,sans-serif",fontSize:".74rem",color:"rgba(247,242,234,.6)",fontWeight:300,lineHeight:1.6}}>Slide it onto your finger — then press it gently against the floating ring below and receive your intention spoken over you.</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"rgba(247,242,234,.9)",fontWeight:600,marginBottom:4}}>✨ Daily Affirmation</div>
+            <div style={{fontFamily:"Jost,sans-serif",fontSize:".74rem",color:"rgba(247,242,234,.6)",fontWeight:300,lineHeight:1.6}}>Touch the lotus to receive today's affirmation — then press it to hear it spoken to you.</div>
           </div>
-          <button onClick={()=>nav("rings")} style={{background:"linear-gradient(135deg,#C4893A,#8B5E2A)",border:"none",color:"white",borderRadius:40,padding:"9px 18px",fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap"}}>Get Mine →</button>
+          <button onClick={()=>nav("rings")} style={{background:"linear-gradient(135deg,#C4893A,#8B5E2A)",border:"none",color:"white",borderRadius:40,padding:"9px 18px",fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap"}}>Get My Ring →</button>
         </div>
       </div>
       <PrayerSection onNavigate={(blend) => nav("tea-library", { blend })} />
@@ -6862,7 +6874,7 @@ Thank you!`);
       {/* 2AM BUTTON   hidden while overlay is open */}
       {!twoAM && (
         <button className="twoam-btn" onClick={open2AM}>
-          {isNight?"✨ Can't sleep?":"🌙 2AM Mode"}
+          {isNight?"🙏 Pray with me":"🙏 Daily Prayer"}
         </button>
       )}
 
