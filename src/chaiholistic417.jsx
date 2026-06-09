@@ -966,6 +966,13 @@ export default function ChaiHolistic() {
   const [homeSearchQuery, setHomeSearchQuery] = useState("");
   const [homeSearchResults, setHomeSearchResults] = useState([]);
   const searchInputRef = useRef(null);
+  // Herb notify request modal
+  const [showRequest, setShowRequest] = useState(false);
+  const [reqName, setReqName]   = useState("");
+  const [reqEmail, setReqEmail] = useState("");
+  const [reqHerb, setReqHerb]   = useState("");
+  const [reqGoal, setReqGoal]   = useState("");
+  const [reqSent, setReqSent]   = useState(false);
 
   // ── COMPREHENSIVE GLOBAL SEARCH ────────────────────────────────────────────
   // Searches every field across all data, then falls back to web + AI if empty
@@ -1163,45 +1170,68 @@ export default function ChaiHolistic() {
     setHomeSearchResults([{id:"loading", name:"Searching the web for you…", desc:"Finding the best information on this topic", emoji:"🔍", color:"#2A3A2A", type:"Loading", typeColor:"#4A6B4A", isLoading:true}]);
 
     try {
-      const res = await fetch("https://web-production-4c84.up.railway.app/search-herb", {
+      // Use Anthropic API directly for herb/wellness knowledge
+      const aiRes = await fetch("https://api.anthropic.com/v1/messages", {
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({query:q, brand:"Chai Holistic"})
+        body:JSON.stringify({
+          model:"claude-sonnet-4-20250514",
+          max_tokens:500,
+          messages:[{
+            role:"user",
+            content:`You are a helpful assistant for Chai Holistic, a wellness tea brand. Someone searched for: "${q}".
+
+Tell them briefly what this herb/ingredient/wellness topic is (2-3 sentences), what it's known for health-wise, and what they could use at Chai Holistic that relates to it.
+
+Respond ONLY with valid JSON, no markdown, no code blocks:
+{
+  "title": "Name or short title",
+  "summary": "2-3 sentence explanation of what this is and its health benefits",
+  "source": "Based on traditional herbal medicine and published nutritional research",
+  "related_suggestion": "One specific Chai Holistic product or category that relates to this, e.g. Ginger Root herb or Golden Healer blend or Men's Wellness collection",
+  "related_emoji": "one emoji",
+  "related_type": "Tea Blend or Herb or Collection",
+  "related_page": "shop or herbs or men or ancestral or supplements"
+}`
+          }]
+        })
       });
+      const aiData = await aiRes.json();
+      const rawText = aiData.content?.[0]?.text||"{}";
+      const info = JSON.parse(rawText.replace(/```json|```/g,"").trim());
 
-      if (!res.ok) throw new Error("search unavailable");
-      const data = await res.json();
-
-      // Build web results
       const webResults = [];
 
-      // Any related items from our collection
-      if (data.related && data.related.length > 0) {
-        data.related.forEach((r,i) => webResults.push({
-          id:"related-"+i, name:r.name, desc:r.desc,
-          emoji:r.emoji||"🌿", color:"#2A4A2D",
-          price:r.price, type:r.type||"Related", typeColor:"#4A7250",
-          action:()=>nav(r.page||"shop")
-        }));
+      // AI knowledge card
+      if (info.summary) {
+        webResults.push({
+          id:"ai-info",
+          name: info.title || q,
+          desc: info.summary,
+          emoji:"🌐", color:"#1A3A4A",
+          type:"General Info", typeColor:"#1A5A6B",
+          isWebResult:true,
+          source: info.source,
+          action:()=>{}  // info only, no nav
+        });
       }
 
-      // Web info card
-      if (data.summary) {
+      // Related Chai Holistic suggestion
+      if (info.related_suggestion) {
         webResults.push({
-          id:"web-info", name:data.title||q,
-          desc:data.summary,
-          emoji:"🌐", color:"#1A3A4A",
-          type:"From the Web", typeColor:"#1A5A6B",
-          isWebResult:true, url:data.url,
-          action:()=>data.url&&window.open(data.url,"_blank")
+          id:"ai-related",
+          name: info.related_suggestion,
+          desc: "We have something related at Chai Holistic — tap to explore",
+          emoji: info.related_emoji||"🌿",
+          color:"#2A4A2D",
+          type: info.related_type||"Related",
+          typeColor:"#3A6B2A",
+          action:()=>nav(info.related_page||"shop")
         });
       }
 
       setHomeSearchResults(webResults.length > 0 ? webResults : [{
-        id:"no-web", name:"No web results found",
-        desc:"We looked online but couldn't find specific information",
-        emoji:"🌿", color:"#2A3A2A", type:"", typeColor:"",
-        isNoResult:true
+        id:"no-result", isNoResult:true, name:q, desc:"", emoji:"", color:"", type:"", typeColor:""
       }]);
 
     } catch(err) {
@@ -7420,6 +7450,92 @@ Thank you!`);
                     </div>
                   </div>
                 ))
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ── HERB NOTIFY REQUEST MODAL ────────────────────────────────────────── */}
+      {showRequest && (
+        <>
+          <div onClick={()=>{setShowRequest(false);setReqSent(false);}} style={{position:"fixed",inset:0,zIndex:3000,background:"rgba(0,0,0,.6)",backdropFilter:"blur(5px)"}}/>
+          <div style={{position:"fixed",inset:0,zIndex:3001,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px",overflowY:"auto"}}>
+            <div style={{background:"linear-gradient(160deg,#FAF6EF,#F2EDE2)",border:"1px solid rgba(196,137,58,.2)",borderRadius:24,width:"100%",maxWidth:460,boxShadow:"0 32px 80px rgba(0,0,0,.3)",position:"relative",overflow:"hidden"}}>
+              <button onClick={()=>{setShowRequest(false);setReqSent(false);}} style={{position:"absolute",top:14,right:14,width:32,height:32,borderRadius:"50%",background:"rgba(0,0,0,.08)",border:"none",cursor:"pointer",fontSize:".9rem",display:"flex",alignItems:"center",justifyContent:"center",color:"#3A2E22"}}>✕</button>
+
+              {!reqSent ? (
+                <>
+                  <div style={{padding:"28px 28px 16px",borderBottom:"1px solid rgba(196,137,58,.15)",textAlign:"center"}}>
+                    <div style={{fontSize:"2rem",marginBottom:10}}>🌿</div>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.2rem",color:"var(--bark)",fontWeight:700,marginBottom:8}}>Tell us what you're looking for</div>
+                    <p style={{fontFamily:"Jost,sans-serif",fontSize:".78rem",color:"rgba(61,43,31,.5)",lineHeight:1.75,fontWeight:300,margin:0}}>Every blend we've ever made started with someone's real need. Your search tells us something — and we want to listen.</p>
+                  </div>
+                  <div style={{padding:"18px 28px 24px",display:"flex",flexDirection:"column",gap:12}}>
+                    <div>
+                      <label style={{display:"block",fontFamily:"Jost,sans-serif",fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>What were you looking for?</label>
+                      <input value={reqHerb} onChange={e=>setReqHerb(e.target.value)} placeholder="e.g. lion's mane, sea buckthorn…"
+                        style={{width:"100%",boxSizing:"border-box",background:"rgba(255,255,255,.8)",border:"1px solid rgba(196,137,58,.25)",borderRadius:12,padding:"11px 14px",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:".84rem",outline:"none"}}
+                        onFocus={e=>e.target.style.borderColor="rgba(196,137,58,.6)"}
+                        onBlur={e=>e.target.style.borderColor="rgba(196,137,58,.25)"}/>
+                    </div>
+                    <div>
+                      <label style={{display:"block",fontFamily:"Jost,sans-serif",fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>What are you hoping it helps with? <span style={{color:"rgba(0,0,0,.3)",textTransform:"none",letterSpacing:0,fontSize:".58rem"}}>(optional)</span></label>
+                      <textarea value={reqGoal} onChange={e=>setReqGoal(e.target.value)} rows={3}
+                        placeholder="e.g. I've been having trouble sleeping, my joints have been stiff…"
+                        style={{width:"100%",boxSizing:"border-box",background:"rgba(255,255,255,.8)",border:"1px solid rgba(196,137,58,.25)",borderRadius:12,padding:"11px 14px",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:".84rem",outline:"none",resize:"vertical",lineHeight:1.6}}
+                        onFocus={e=>e.target.style.borderColor="rgba(196,137,58,.6)"}
+                        onBlur={e=>e.target.style.borderColor="rgba(196,137,58,.25)"}/>
+                    </div>
+                    <div>
+                      <label style={{display:"block",fontFamily:"Jost,sans-serif",fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>Your first name <span style={{color:"rgba(0,0,0,.3)",textTransform:"none",letterSpacing:0,fontSize:".58rem"}}>(so we know who we're talking to)</span></label>
+                      <input value={reqName} onChange={e=>setReqName(e.target.value)} placeholder="e.g. Maya"
+                        style={{width:"100%",boxSizing:"border-box",background:"rgba(255,255,255,.8)",border:"1px solid rgba(196,137,58,.25)",borderRadius:12,padding:"11px 14px",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:".84rem",outline:"none"}}
+                        onFocus={e=>e.target.style.borderColor="rgba(196,137,58,.6)"}
+                        onBlur={e=>e.target.style.borderColor="rgba(196,137,58,.25)"}/>
+                    </div>
+                    <div>
+                      <label style={{display:"block",fontFamily:"Jost,sans-serif",fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>Email <span style={{color:"rgba(0,0,0,.3)",textTransform:"none",letterSpacing:0,fontSize:".58rem"}}>(only if you'd like us to reach out)</span></label>
+                      <input type="email" value={reqEmail} onChange={e=>setReqEmail(e.target.value)} placeholder="we'll only write if we have something for you"
+                        style={{width:"100%",boxSizing:"border-box",background:"rgba(255,255,255,.8)",border:"1px solid rgba(196,137,58,.25)",borderRadius:12,padding:"11px 14px",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:".84rem",outline:"none"}}
+                        onFocus={e=>e.target.style.borderColor="rgba(196,137,58,.6)"}
+                        onBlur={e=>e.target.style.borderColor="rgba(196,137,58,.25)"}/>
+                    </div>
+                    <div style={{background:"rgba(74,114,80,.08)",border:"1px solid rgba(74,114,80,.2)",borderRadius:10,padding:"10px 14px",display:"flex",gap:8,alignItems:"flex-start"}}>
+                      <span style={{flexShrink:0}}>🤝</span>
+                      <p style={{margin:0,fontFamily:"Jost,sans-serif",fontSize:".66rem",color:"rgba(61,43,31,.45)",lineHeight:1.65,fontWeight:300}}>We won't sell your information or send newsletters you didn't ask for. This is just a conversation.</p>
+                    </div>
+                    <button
+                      disabled={!reqHerb.trim()}
+                      onClick={async()=>{
+                        if(!reqHerb.trim())return;
+                        try {
+                          await fetch("https://web-production-4c84.up.railway.app/herb-request",{
+                            method:"POST",headers:{"Content-Type":"application/json"},
+                            body:JSON.stringify({herb:reqHerb,goal:reqGoal,name:reqName,email:reqEmail})
+                          });
+                        } catch(e){}
+                        setReqSent(true);
+                      }}
+                      style={{background:reqHerb.trim()?"linear-gradient(135deg,var(--bark),#3A2A18)":"rgba(0,0,0,.06)",border:"none",color:reqHerb.trim()?"white":"rgba(0,0,0,.25)",borderRadius:14,padding:"13px",fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".12em",textTransform:"uppercase",cursor:reqHerb.trim()?"pointer":"default",fontWeight:600,transition:"all .2s"}}>
+                      Send My Request →
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div style={{padding:"48px 32px",textAlign:"center"}}>
+                  <div style={{fontSize:"3rem",marginBottom:16}}>🌿</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"var(--bark)",fontWeight:700,marginBottom:12}}>We heard you{reqName?", "+reqName.trim():""}.
+                  </div>
+                  <p style={{fontFamily:"Jost,sans-serif",fontSize:".82rem",color:"rgba(61,43,31,.5)",lineHeight:1.8,fontWeight:300,marginBottom:24}}>
+                    {reqGoal.trim()?(`Knowing you're working on "${reqGoal.trim().slice(0,60)}${reqGoal.length>60?"…":""}" helps us understand what our community needs.`):"Every search that doesn't find an answer tells us where to grow next."}<br/><br/>
+                    {reqEmail.trim()?`We'll reach out to ${reqEmail.trim()} if and when we have something for you.`:"Feel free to check back — the collection grows regularly."}
+                  </p>
+                  <button onClick={()=>{setShowRequest(false);setReqSent(false);setReqName("");setReqEmail("");setReqHerb("");setReqGoal("");}}
+                    style={{background:"rgba(196,137,58,.15)",border:"1px solid rgba(196,137,58,.3)",color:"rgba(61,43,31,.8)",borderRadius:40,padding:"11px 24px",fontFamily:"Jost,sans-serif",fontSize:".7rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer"}}>
+                    Explore the Collection
+                  </button>
+                </div>
               )}
             </div>
           </div>
