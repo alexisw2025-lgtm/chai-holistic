@@ -3253,79 +3253,165 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             <div className="h-badge" style={{cursor:"pointer"}} onClick={()=>nav("recipes")}>Sip &amp; Heal<small>40 Recipes from the book</small></div>
           </div>
         </div>
+
       </section>
 
 
-      {/* ── HOME SEARCH BAR ─────────────────────────────────────────────────── */}
-      <div style={{background:"linear-gradient(180deg,rgba(15,26,18,0) 0%,rgba(15,26,18,1) 100%)",padding:"0 24px 32px",marginTop:-20}}>
-        <div style={{maxWidth:600,margin:"0 auto",position:"relative"}}>
-          <div style={{
-            display:"flex",alignItems:"center",gap:12,
-            background:"rgba(255,255,255,.07)",
-            border:"1.5px solid rgba(196,137,58,.35)",
-            borderRadius:50,padding:"13px 22px",
-            transition:"border-color .2s,box-shadow .2s",
-            backdropFilter:"blur(12px)",
-          }}
-            onFocus={()=>{}}
-          >
-            <span style={{fontSize:"1.1rem",opacity:.6}}>🔍</span>
-            <input
-              placeholder="Search teas, herbs, or wellness goals…"
-              value={homeSearchQuery}
-              onChange={e=>{
-                const q = e.target.value;
-                setHomeSearchQuery(q);
-                const ql = q.toLowerCase().trim();
-                if(!ql){setHomeSearchResults([]);return;}
-                setHomeSearchResults(BLENDS.filter(b=>
-                  b.name.toLowerCase().includes(ql)||
-                  (b.tagline||"").toLowerCase().includes(ql)||
-                  (b.benefit||"").toLowerCase().includes(ql)||
-                  (b.occasion||"").toLowerCase().includes(ql)
-                ).slice(0,6));
-              }}
-              onKeyDown={e=>{if(e.key==="Enter"&&homeSearchResults.length>0){nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}}
-              style={{flex:1,background:"none",border:"none",outline:"none",color:"var(--cream)",fontFamily:"Jost,sans-serif",fontSize:".88rem",fontWeight:300}}
-            />
-            {homeSearchQuery&&<button onClick={()=>{setHomeSearchQuery("");setHomeSearchResults([]);}} style={{background:"none",border:"none",color:"rgba(255,255,255,.4)",cursor:"pointer",fontSize:"1.1rem",padding:0,lineHeight:1}}>✕</button>}
-          </div>
-          {homeSearchResults.length>0&&(
-            <div style={{position:"absolute",top:"calc(100% + 8px)",left:0,right:0,background:"linear-gradient(160deg,#0F1A12,#0A0F0B)",border:"1px solid rgba(196,137,58,.25)",borderRadius:18,overflow:"hidden",zIndex:200,boxShadow:"0 16px 40px rgba(0,0,0,.6)"}}>
-              {homeSearchResults.map(b=>(
-                <div key={b.id} onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}
-                  style={{display:"flex",alignItems:"center",gap:12,padding:"12px 18px",cursor:"pointer",borderBottom:"1px solid rgba(196,137,58,.07)",transition:"background .15s"}}
-                  onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.09)"}
-                  onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
-                  <div style={{width:40,height:40,borderRadius:10,flexShrink:0,background:`linear-gradient(135deg,${b.color||"#2A4A2D"},rgba(10,15,11,.8))`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.2rem"}}>{b.emoji||"🍵"}</div>
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"#F7F2EA",fontWeight:600}}>{b.name}</div>
-                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".65rem",color:"rgba(196,137,58,.7)",fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{b.tagline||b.benefit}</div>
-                  </div>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:".85rem",color:"rgba(196,137,58,.85)",flexShrink:0}}>${b.price}</div>
-                </div>
-              ))}
-              <div style={{padding:"8px 18px 10px",borderTop:"1px solid rgba(196,137,58,.1)",fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"rgba(255,255,255,.3)",textAlign:"center"}}>
-                Enter to browse full collection
-              </div>
-            </div>
-          )}
-          {homeSearchQuery&&homeSearchResults.length===0&&(
-            <div style={{position:"absolute",top:"calc(100% + 8px)",left:0,right:0,background:"linear-gradient(160deg,#0F1A12,#0A0F0B)",border:"1px solid rgba(196,137,58,.15)",borderRadius:14,padding:"14px 18px",display:"flex",alignItems:"center",gap:10,zIndex:200}}>
-              <span>🌿</span>
-              <div>
-                <div style={{fontFamily:"Jost,sans-serif",fontSize:".76rem",color:"rgba(247,242,234,.6)",fontWeight:300}}>No blends matched — try a health goal or feeling</div>
-                <div style={{fontFamily:"Jost,sans-serif",fontSize:".65rem",color:"rgba(196,137,58,.6)",marginTop:3,cursor:"pointer",textDecorationLine:"underline",textDecorationStyle:"dotted"}} onClick={()=>{nav("herbs");setHomeSearchQuery("");setHomeSearchResults([]);}}>Search the Herb Archive instead →</div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
       <div className="mq">
         <div className="mq-track">
           {[...Array(2)].map((_,p)=>["Morning Rituals","Evening Calm","Liver Cleanse","Kidney Flush","⚡ Men's Wellness","Vibe Shift Rings","Tea Finder","Ritual Builder","Cleanse Tracker","Herb Pairing Guide","Sip &amp; Heal · 40 Recipes"].map((t,i)=>(
             <div key={`${p}-${i}`} className="mq-item" style={{cursor:"pointer"}} onClick={()=>{const m={"Morning Rituals":()=>{nav("shop");setBlendFilter("Morning");},"Evening Calm":()=>{nav("shop");setBlendFilter("Evening");},"Liver Cleanse":()=>nav("shop"),"Kidney Flush":()=>nav("shop"),"⚡ Men's Wellness":()=>nav("men"),"Vibe Shift Rings":()=>nav("rings"),"Tea Finder":()=>setFinderOpen(true),"Ritual Builder":()=>setRitualOpen(true),"Cleanse Tracker":()=>setTrackerOpen(true),"Herb Pairing Guide":()=>nav("shop"),"Sip &amp; Heal · 40 Recipes":()=>nav("recipes")};const a=m[t];if(a)a();}}><span>✦</span>{t}</div>
           )))}
+        </div>
+      </div>
+
+{/* ── HOME SEARCH BAR ─────────────────────────────────────────────────── */}
+      <div style={{padding:"28px 24px 8px",width:"100%",boxSizing:"border-box"}}>
+        <div style={{maxWidth:640,margin:"0 auto",position:"relative"}}>
+
+          {/* Input row */}
+          <div style={{
+            display:"flex",alignItems:"center",gap:0,
+            background:"rgba(255,255,255,.07)",
+            border:"1.5px solid rgba(196,137,58,.35)",
+            borderRadius:50,overflow:"hidden",
+            backdropFilter:"blur(12px)",
+            transition:"border-color .2s,box-shadow .2s",
+          }}>
+            <span style={{fontSize:"1.1rem",opacity:.55,paddingLeft:20,flexShrink:0}}>🔍</span>
+            <input
+              id="homeSearchInput"
+              type="search"
+              enterKeyHint="search"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck="false"
+              placeholder="Search teas, herbs, or wellness goals…"
+              value={homeSearchQuery}
+              onChange={e=>{
+                const val = e.target.value;
+                setHomeSearchQuery(val);
+                // Clear results while typing so dropdown doesn't interrupt
+                if (!val.trim()) setHomeSearchResults([]);
+              }}
+              onKeyDown={e=>{
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  const q = homeSearchQuery.toLowerCase().trim();
+                  if (!q) return;
+                  const results = BLENDS.filter(b=>
+                    b.name.toLowerCase().includes(q)||
+                    (b.tagline||"").toLowerCase().includes(q)||
+                    (b.benefit||"").toLowerCase().includes(q)||
+                    (b.occasion||"").toLowerCase().includes(q)
+                  ).slice(0,6);
+                  setHomeSearchResults(results);
+                  // blur to dismiss mobile keyboard so results are visible
+                  e.target.blur();
+                }
+              }}
+              style={{
+                flex:1,background:"none",border:"none",outline:"none",
+                color:"var(--cream)",fontFamily:"Jost,sans-serif",
+                // 16px minimum prevents iOS auto-zoom on focus
+                fontSize:"16px",fontWeight:300,
+                padding:"14px 12px",minWidth:0,
+              }}
+            />
+            {homeSearchQuery && (
+              <button
+                onClick={()=>{setHomeSearchQuery("");setHomeSearchResults("");document.getElementById("homeSearchInput")?.focus();}}
+                style={{background:"none",border:"none",color:"rgba(255,255,255,.35)",cursor:"pointer",fontSize:"1.1rem",padding:"14px 10px",lineHeight:1,flexShrink:0}}
+                aria-label="Clear search">✕</button>
+            )}
+            {/* Search button — tappable on mobile */}
+            <button
+              onClick={()=>{
+                const q = homeSearchQuery.toLowerCase().trim();
+                if (!q) return;
+                const results = BLENDS.filter(b=>
+                  b.name.toLowerCase().includes(q)||
+                  (b.tagline||"").toLowerCase().includes(q)||
+                  (b.benefit||"").toLowerCase().includes(q)||
+                  (b.occasion||"").toLowerCase().includes(q)
+                ).slice(0,6);
+                setHomeSearchResults(results);
+                document.getElementById("homeSearchInput")?.blur();
+              }}
+              style={{
+                background:"linear-gradient(135deg,#C4893A,#8B5E2A)",
+                border:"none",color:"white",
+                padding:"12px 20px",
+                fontFamily:"Jost,sans-serif",fontSize:".72rem",
+                letterSpacing:".1em",textTransform:"uppercase",
+                cursor:"pointer",fontWeight:600,flexShrink:0,
+                borderRadius:"0 50px 50px 0",
+                transition:"opacity .2s",
+                // Large tap target for mobile
+                minHeight:50,
+              }}
+              onMouseEnter={e=>e.currentTarget.style.opacity=".85"}
+              onMouseLeave={e=>e.currentTarget.style.opacity="1"}
+            >Search</button>
+          </div>
+
+          {/* Results */}
+          {homeSearchResults.length > 0 && (
+            <div style={{
+              position:"absolute",top:"calc(100% + 8px)",left:0,right:0,
+              background:"linear-gradient(160deg,#0F1A12,#0A0F0B)",
+              border:"1px solid rgba(196,137,58,.25)",
+              borderRadius:18,overflow:"hidden",zIndex:200,
+              boxShadow:"0 16px 40px rgba(0,0,0,.65)",
+            }}>
+              {homeSearchResults.map(b=>(
+                <div key={b.id}
+                  onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}
+                  style={{display:"flex",alignItems:"center",gap:12,padding:"13px 18px",cursor:"pointer",borderBottom:"1px solid rgba(196,137,58,.07)",transition:"background .15s",WebkitTapHighlightColor:"transparent"}}
+                  onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.09)"}
+                  onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                  <div style={{width:44,height:44,borderRadius:10,flexShrink:0,background:`linear-gradient(135deg,${b.color||"#2A4A2D"},rgba(10,15,11,.8))`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.3rem"}}>{b.emoji||"🍵"}</div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".92rem",color:"#F7F2EA",fontWeight:600,marginBottom:2}}>{b.name}</div>
+                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".68rem",color:"rgba(196,137,58,.7)",fontStyle:"italic",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{b.tagline||b.benefit}</div>
+                  </div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"rgba(196,137,58,.85)",flexShrink:0}}>${b.price}</div>
+                </div>
+              ))}
+              <div
+                onClick={()=>{nav("shop");setHomeSearchQuery("");setHomeSearchResults([]);}}
+                style={{padding:"12px 18px",borderTop:"1px solid rgba(196,137,58,.12)",display:"flex",alignItems:"center",justifyContent:"center",gap:8,cursor:"pointer",WebkitTapHighlightColor:"transparent"}}
+                onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.06)"}
+                onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                <span style={{fontFamily:"Jost,sans-serif",fontSize:".7rem",color:"rgba(196,137,58,.7)",letterSpacing:".1em",textTransform:"uppercase"}}>Browse All Blends →</span>
+              </div>
+            </div>
+          )}
+
+          {/* No results */}
+          {homeSearchQuery && homeSearchResults.length === 0 && homeSearchResults !== [] && Array.isArray(homeSearchResults) && homeSearchQuery.trim() && (
+            <div style={{
+              position:"absolute",top:"calc(100% + 8px)",left:0,right:0,
+              background:"linear-gradient(160deg,#0F1A12,#0A0F0B)",
+              border:"1px solid rgba(196,137,58,.15)",
+              borderRadius:14,padding:"16px 18px",
+              display:"flex",alignItems:"center",gap:12,zIndex:200,
+            }}>
+              <span style={{fontSize:"1.2rem"}}>🌿</span>
+              <div>
+                <div style={{fontFamily:"Jost,sans-serif",fontSize:".78rem",color:"rgba(247,242,234,.6)",fontWeight:300,marginBottom:4}}>
+                  No blends matched "{homeSearchQuery}" — try a health goal or feeling
+                </div>
+                <div
+                  onClick={()=>{nav("herbs");setHomeSearchQuery("");setHomeSearchResults([]);}}
+                  style={{fontFamily:"Jost,sans-serif",fontSize:".68rem",color:"rgba(196,137,58,.7)",cursor:"pointer",textDecorationLine:"underline",textDecorationStyle:"dotted"}}>
+                  Search the Herb Archive instead →
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
 
