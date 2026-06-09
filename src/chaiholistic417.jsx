@@ -5,6 +5,7 @@ import WellnessProfileModal from "./WellnessProfileModal";
 import MocktailsPage from "./MocktailsPage";
 import SupplementsPage from "./SupplementsPage";
 import AncestralTeas from "./AncestralTeas";
+import HerbApothecary from "./HerbApothecary";
 import JellyPage from "./JellyPage";
 import SeaMossPage from "./SeaMossPage";
 import imgSre1 from "./rings/scre1.jpg";
@@ -961,6 +962,7 @@ export default function ChaiHolistic() {
   const [page, setPage] = useState("home");
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [preBasket, setPreBasket] = useState(false); // soft suggestion screen
   const [saveRitualOpen, setSaveRitualOpen] = useState(false);
   const [blendFilter, setBlendFilter] = useState("All");
   const [organFilter, setOrganFilter] = useState("All");
@@ -1170,7 +1172,7 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
       setAmaraGreeted(true);
       setAmaraMessages([{
         role: "assistant",
-        text: "Hello, beautiful soul. I'm Amara — I'm here whenever you need a moment to pause, ask, or just be heard.\n\nHow are you feeling today? Not the surface answer — the real one. I'm listening."
+        text: "Hello, beautiful soul. I'm Amara — your wellness companion at Chai Holistic. I'm here whenever you need a moment to pause, to ask, or simply to be heard.\n\nBefore we begin, I'd love to check in with you on two levels.\n\nFirst — how is your body feeling right now? Any tension, fatigue, discomfort, or something you've been carrying physically?\n\nAnd second — where is your heart today? Not the surface answer. The real one. I have time."
       }]);
     }
   };
@@ -1183,18 +1185,16 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
     setAmaraMessages(newMessages);
     setAmaraLoading(true);
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("https://web-production-4c84.up.railway.app/amara-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 400,
           system: AMARA_SYSTEM,
           messages: newMessages.map(m => ({ role: m.role, content: m.text }))
         })
       });
       const data = await res.json();
-      const reply = data?.content?.[0]?.text?.trim() || "I'm here with you. Take your time.";
+      const reply = data?.reply || data?.content?.[0]?.text?.trim() || "I'm here with you. Take your time.";
       setAmaraMessages(prev => [...prev, { role: "assistant", text: reply }]);
     } catch (e) {
       setAmaraMessages(prev => [...prev, { role: "assistant", text: "Something interrupted our connection for a moment. I'm still here — please try again." }]);
@@ -1420,7 +1420,7 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
     .btn-season:hover{background:rgba(255,255,255,.25);}
 
     /* 2AM BUTTON */
-    .twoam-btn{position:fixed;bottom:28px;right:28px;z-index:400;background:#1C1A17;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);padding:11px 18px;font-family:'Jost',sans-serif;font-size:.7rem;letter-spacing:.1em;cursor:pointer;border-radius:50px;transition:all .3s;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:pulse2am 3s ease-in-out infinite;}
+    .twoam-btn{position:fixed;top:80px;left:16px;z-index:400;background:#1C1A17;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);padding:11px 18px;font-family:'Jost',sans-serif;font-size:.7rem;letter-spacing:.1em;cursor:pointer;border-radius:50px;transition:all .3s;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:pulse2am 3s ease-in-out infinite;}
     .twoam-btn:hover{background:var(--bark);color:white;border-color:rgba(255,255,255,.3);}
     div:has(> .print-tooltip):hover .print-tooltip{opacity:1 !important;}
     @keyframes pulse2am{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.3)}50%{box-shadow:0 4px 32px rgba(196,137,58,.35)}}
@@ -2178,7 +2178,7 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
       .rng-name{font-size:1.2rem;}
 
       /* Floating buttons */
-      .twoam-btn{bottom:20px;right:16px;padding:9px 14px;font-size:.64rem;}
+      .twoam-btn{top:72px;left:12px;padding:9px 14px;font-size:.64rem;}
       .back-top{bottom:72px;right:16px;width:38px;height:38px;font-size:1rem;}
       .sec-nav{right:10px;}
 
@@ -3517,7 +3517,7 @@ Chai Holistic carries 40+ herbal tea blends spanning Morning & Everyday, Ancestr
             </button>
           </div>
           <div className="b-showcase">
-            {BLENDS.slice(0,9).map(b=>{
+            {BLENDS.slice(0,5).map(b=>{
               const isExp = blendExpanded===b.id;
               return (
               <div key={b.id} className={`b-tile ${isExp?"b-tile-exp":""}`} onClick={()=>setBlendExpanded(isExp?null:b.id)}>
@@ -6429,12 +6429,13 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {[["home","🏠 Home"],["shop","Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's"],["supplements","💊 Supplements"],["ancestral","🌿 Ancestral"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+          {[["home","🏠 Home"],["shop","Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's"],["supplements","💊 Supplements"],["ancestral","🌿 Ancestral"],["herbs","🌿 Herb Archive"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","Rings"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>
               {l}
               {p==="men" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"var(--gold)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
               {p==="supplements" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"var(--sage-d)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
               {p==="ancestral" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"#6A4A2A",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
+              {p==="herbs" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"rgba(74,114,80,.8)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
             </span>
           ))}
           <span className="nav-lnk" onClick={()=>setProfileOpen(true)}
@@ -6448,7 +6449,7 @@ Thank you!`);
           </span>
         </div>
         <div className="nav-right">
-          <button className="cart-btn" onClick={()=>setCartOpen(true)}>
+          <button className="cart-btn" onClick={()=>{ if(cart.length>0){setPreBasket(true);}else{setCartOpen(true);} }}>
             Basket {cartCount>0&&<span className="cart-badge">{cartCount}</span>}
           </button>
           <button className="ham-btn" onClick={()=>setMobMenuOpen(o=>!o)} aria-label="Menu">
@@ -6461,7 +6462,7 @@ Thank you!`);
 
       {/* ── Mobile slide-down menu ── */}
       <div className={`mob-menu${mobMenuOpen?" open":""}`}>
-        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's Wellness"],["supplements","💊 Vitamins & Minerals"],["ancestral","🌿 Ancestral Teas"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's Wellness"],["supplements","💊 Vitamins & Minerals"],["ancestral","🌿 Ancestral Teas"],["herbs","📖 Herb Archive"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
           <div key={p} className="mob-lnk" onClick={()=>{nav(p);setMobMenuOpen(false);}}>
             <span>{l}{p==="men"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--gold)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="supplements"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--sage-d)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="ancestral"&&<span style={{marginLeft:8,fontSize:".48rem",background:"#6A4A2A",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}</span>
             <span style={{color:"var(--dust)"}}>›</span>
@@ -6473,7 +6474,7 @@ Thank you!`);
         <div className="mob-lnk mob-lnk-special" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);setMobMenuOpen(false);}}>
           🌿 Sip &amp; Seek <span style={{color:"var(--gold)"}}>›</span>
         </div>
-        <div className="mob-lnk" onClick={()=>{setCartOpen(true);setMobMenuOpen(false);}}>
+        <div className="mob-lnk" onClick={()=>{setMobMenuOpen(false); if(cart.length>0){setPreBasket(true);}else{setCartOpen(true);}}}>
           🛒 Cart {cartCount>0&&`(${cartCount})`} <span style={{color:"var(--dust)"}}>›</span>
         </div>
       </div>
@@ -6507,6 +6508,7 @@ Thank you!`);
         {page==="men"&&<MensWellness onNav={nav} onAddToCart={addToCart}/>}
         {page==="supplements"&&<SupplementsPage onNav={nav}/>}
         {page==="ancestral"&&<AncestralTeas onNav={nav}/>}
+        {page==="herbs"&&<HerbApothecary/>}
         {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart}/>}
       </div>
 
@@ -6622,7 +6624,7 @@ Thank you!`);
             <div>
               <div className="ft-col-h">Shop</div>
               <span className="ft-lnk" style={{color:"var(--gold)",fontWeight:500}} onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}>📖 Sip &amp; Heal Book -- $24.99</span>
-              {[["Tea Blends","shop"],["Cleansing Blends","shop"],["Individual Herbs","shop"],["Bundle & Save","shop"],["⚡ Men's Wellness","men"],["💊 Vitamins & Minerals","supplements"],["🌿 Ancestral Teas","ancestral"],["Vibe Shift Rings","rings"]].map(([l,p])=><span key={l} className="ft-lnk" onClick={()=>nav(p)}>{l}</span>)}
+              {[["Tea Blends","shop"],["Cleansing Blends","shop"],["Individual Herbs","shop"],["Bundle & Save","shop"],["⚡ Men's Wellness","men"],["💊 Vitamins & Minerals","supplements"],["🌿 Ancestral Teas","ancestral"],["📖 Herb Archive","herbs"],["Vibe Shift Rings","rings"]].map(([l,p])=><span key={l} className="ft-lnk" onClick={()=>nav(p)}>{l}</span>)}
             </div>
             <div>
               <div className="ft-col-h">Features</div>
@@ -6662,11 +6664,162 @@ Thank you!`);
         </div>
       </footer>
 
+
+      {/* ── PERSISTENT BASKET BAR — shows when cart has items ─────────────── */}
+      {cart.length > 0 && !cartOpen && !preBasket && (
+        <div
+          onClick={()=>setPreBasket(true)}
+          style={{
+            position:"fixed", bottom:0, left:0, right:0, zIndex:1100,
+            background:"linear-gradient(135deg,#C4893A 0%,#8B5E2A 100%)",
+            borderTop:"1px solid rgba(255,255,255,.15)",
+            padding:"14px 20px",
+            display:"flex", alignItems:"center", justifyContent:"space-between",
+            cursor:"pointer",
+            boxShadow:"0 -4px 24px rgba(196,137,58,.35)",
+            fontFamily:"Jost,sans-serif",
+          }}
+        >
+          <div style={{display:"flex",alignItems:"center",gap:12}}>
+            <div style={{
+              width:36,height:36,borderRadius:"50%",
+              background:"rgba(0,0,0,.2)",
+              display:"flex",alignItems:"center",justifyContent:"center",
+              fontSize:"1.1rem", position:"relative",
+            }}>
+              🫖
+              <div style={{
+                position:"absolute",top:-4,right:-4,
+                background:"#F7F2EA",color:"#8B5E2A",
+                width:18,height:18,borderRadius:"50%",
+                display:"flex",alignItems:"center",justifyContent:"center",
+                fontSize:".58rem",fontWeight:700,lineHeight:1,
+              }}>{cart.reduce((s,i)=>s+i.qty,0)}</div>
+            </div>
+            <div>
+              <div style={{fontSize:".78rem",fontWeight:600,color:"white",lineHeight:1.2}}>Your Ritual Basket</div>
+              <div style={{fontSize:".62rem",color:"rgba(255,255,255,.75)",marginTop:1}}>{cart.length} blend{cart.length!==1?"s":""} selected</div>
+            </div>
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:14}}>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",fontWeight:700}}>${cartTotal.toFixed(2)}</div>
+            <div style={{
+              background:"rgba(0,0,0,.25)",border:"1px solid rgba(255,255,255,.25)",
+              borderRadius:40, padding:"7px 16px",
+              fontSize:".68rem",letterSpacing:".1em",textTransform:"uppercase",
+              color:"white",fontWeight:600,
+            }}>View Basket →</div>
+          </div>
+        </div>
+      )}
+
+      {/* ── PRE-BASKET SUGGESTION SCREEN ────────────────────────────────────── */}
+      {preBasket && (
+        <>
+          <div className="overlay" onClick={()=>setPreBasket(false)}/>
+          <div style={{
+            position:"fixed", bottom:0, left:0, right:0, zIndex:1200,
+            background:"linear-gradient(160deg,#FBF7F1 0%,#F4EDE2 100%)",
+            borderRadius:"24px 24px 0 0",
+            boxShadow:"0 -12px 48px rgba(0,0,0,.25)",
+            padding:"0 0 env(safe-area-inset-bottom,0)",
+            maxHeight:"70vh",
+            display:"flex", flexDirection:"column",
+            animation:"slideUp .35s cubic-bezier(.34,1.3,.64,1)",
+          }}>
+            {/* Handle */}
+            <div style={{display:"flex",justifyContent:"center",padding:"12px 0 4px"}}>
+              <div style={{width:36,height:4,borderRadius:2,background:"rgba(0,0,0,.12)"}}/>
+            </div>
+
+            {/* Header */}
+            <div style={{padding:"8px 22px 14px",borderBottom:"1px solid rgba(196,137,58,.15)"}}>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"#1C1A17",fontWeight:700,marginBottom:3}}>
+                Before you go…
+              </div>
+              <div style={{fontSize:".78rem",color:"#8A7A6A",fontWeight:300,lineHeight:1.5}}>
+                Is there anything your ritual might be missing? A few blends others love with your selection.
+              </div>
+            </div>
+
+            {/* Suggestions — 2 blends not in cart */}
+            <div style={{overflowY:"auto",padding:"14px 18px",flex:1}}>
+              {BLENDS.filter(b=>!cart.find(c=>c.id===b.id)).slice(0,2).map(b=>(
+                <div key={b.id} style={{
+                  display:"flex",alignItems:"center",gap:12,
+                  background:"white",border:"1px solid rgba(196,137,58,.18)",
+                  borderRadius:14,padding:"12px 14px",marginBottom:10,
+                  boxShadow:"0 2px 10px rgba(0,0,0,.05)",
+                }}>
+                  <div style={{
+                    width:44,height:44,borderRadius:10,overflow:"hidden",flexShrink:0,
+                    background:`linear-gradient(135deg,${b.color},${b.color}88)`,
+                    display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.3rem",
+                  }}>🍵</div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"#1C1A17",fontWeight:600,marginBottom:2}}>{b.name}</div>
+                    <div style={{fontSize:".68rem",color:"#9A8A78",fontStyle:"italic",marginBottom:4,lineHeight:1.3}}>{b.tagline}</div>
+                    <div style={{fontSize:".62rem",color:"var(--sage-d,#4A7250)",background:"rgba(74,114,80,.08)",display:"inline-block",padding:"2px 8px",borderRadius:20}}>{b.benefit.split("·")[0].trim()}</div>
+                  </div>
+                  <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:6,flexShrink:0}}>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"#C4893A",fontWeight:600}}>${b.price}</div>
+                    <button
+                      onClick={()=>{ addToCart({...b,emoji:"🍵"}); }}
+                      style={{
+                        background:"#C4893A",color:"white",border:"none",
+                        padding:"6px 14px",borderRadius:40,
+                        fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",
+                        fontFamily:"Jost,sans-serif",cursor:"pointer",fontWeight:600,
+                      }}
+                      onMouseEnter={e=>e.currentTarget.style.background="#8B5E2A"}
+                      onMouseLeave={e=>e.currentTarget.style.background="#C4893A"}
+                    >+ Add</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA */}
+            <div style={{padding:"12px 18px 20px",borderTop:"1px solid rgba(196,137,58,.12)",display:"flex",gap:10}}>
+              <button
+                onClick={()=>{setPreBasket(false);}}
+                style={{
+                  flex:1,background:"transparent",
+                  border:"1.5px solid rgba(196,137,58,.35)",
+                  color:"#8A7A6A",borderRadius:12,padding:"12px 0",
+                  fontFamily:"Jost,sans-serif",fontSize:".7rem",letterSpacing:".1em",
+                  textTransform:"uppercase",cursor:"pointer",transition:"all .2s",
+                }}
+                onMouseEnter={e=>e.currentTarget.style.borderColor="#C4893A"}
+                onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(196,137,58,.35)"}
+              >← Keep Browsing</button>
+              <button
+                onClick={()=>{setPreBasket(false);setCartOpen(true);}}
+                style={{
+                  flex:2,
+                  background:"linear-gradient(135deg,#C4893A,#8B5E2A)",
+                  color:"white",border:"none",borderRadius:12,padding:"12px 0",
+                  fontFamily:"Jost,sans-serif",fontSize:".75rem",letterSpacing:".1em",
+                  textTransform:"uppercase",cursor:"pointer",fontWeight:600,
+                  boxShadow:"0 4px 16px rgba(196,137,58,.35)",
+                }}
+              >Continue to My Basket ({cart.reduce((s,i)=>s+i.qty,0)}) →</button>
+            </div>
+          </div>
+
+          <style>{`
+            @keyframes slideUp {
+              from { transform:translateY(100%); opacity:0; }
+              to   { transform:translateY(0); opacity:1; }
+            }
+          `}</style>
+        </>
+      )}
       {/* ── AMARA FLOATING BUTTON ────────────────────────────────────────── */}
       <button
         onClick={openAmara}
         style={{
-          position:"fixed", bottom:28, right:24, zIndex:1200,
+          position:"fixed", bottom: cart.length>0 && !cartOpen && !preBasket ? 78 : 28, right:24, zIndex:1200,
           width:58, height:58, borderRadius:"50%",
           background:"linear-gradient(135deg,#C4893A,#8B5E2A)",
           border:"2px solid rgba(196,137,58,.5)",
