@@ -850,7 +850,7 @@ export default function PrayerSection({ onNavigate }) {
               <div className="rs-burst rs-br2"/>
               <div className="rs-burst rs-br3"/>
               <div className="rs-burst rs-br4"/>
-              <div className="rs-gold-dot" style={{background:"rgba(74,160,120,.8)"}}/>
+
               <span className="rs-hands" style={{filter:"drop-shadow(0 0 12px rgba(74,160,120,.7))",animation:"rs-lotus-breathe 3.5s ease-in-out infinite"}}>🪷</span>
               <span className="rs-tap-hint">✦ tap to receive your affirmation</span>
             </div>
@@ -872,14 +872,14 @@ export default function PrayerSection({ onNavigate }) {
                 {/* Prayer hands inside gold rotating ring */}
                 <div style={{position:"relative",width:80,height:80,display:"flex",alignItems:"center",justifyContent:"center"}}>
                   {/* Outer gold rotating orbit */}
-                  <div style={{position:"absolute",inset:-8,borderRadius:"50%",border:"2.5px solid transparent",borderTopColor:"rgba(192,136,48,.9)",borderRightColor:"rgba(192,136,48,.35)",animation:"rs-orbit-spin 3s linear infinite"}}/>
-                  <div style={{position:"absolute",inset:-15,borderRadius:"50%",border:"1.5px solid transparent",borderBottomColor:"rgba(192,136,48,.45)",borderLeftColor:"rgba(192,136,48,.18)",animation:"rs-orbit-spin 6s linear infinite reverse"}}/>
+                  <div style={{position:"absolute",inset:-8,borderRadius:"50%",border:"2.5px solid transparent",borderTopColor:"rgba(74,160,120,.9)",borderRightColor:"rgba(74,160,120,.3)",animation:"rs-orbit-spin 3s linear infinite"}}/>
+                  <div style={{position:"absolute",inset:-15,borderRadius:"50%",border:"1.5px solid transparent",borderBottomColor:"rgba(74,160,120,.4)",borderLeftColor:"rgba(74,160,120,.15)",animation:"rs-orbit-spin 6s linear infinite reverse"}}/>
                   {/* Gold pulse rings */}
-                  <div style={{position:"absolute",inset:0,borderRadius:"50%",border:"2px solid rgba(192,136,48,.4)",animation:"rs-ring-pulse 2s ease-out infinite"}}/>
-                  <div style={{position:"absolute",inset:0,borderRadius:"50%",border:"2px solid rgba(192,136,48,.22)",animation:"rs-ring-pulse 2s ease-out infinite .65s"}}/>
+                  <div style={{position:"absolute",inset:0,borderRadius:"50%",border:"2px solid rgba(74,160,120,.4)",animation:"rs-ring-pulse 2s ease-out infinite"}}/>
+                  <div style={{position:"absolute",inset:0,borderRadius:"50%",border:"2px solid rgba(74,160,120,.2)",animation:"rs-ring-pulse 2s ease-out infinite .65s"}}/>
                   {/* Gold circle background */}
-                  <div style={{position:"relative",zIndex:1,width:72,height:72,borderRadius:"50%",background:"radial-gradient(circle at 40% 35%, rgba(255,220,120,.18) 0%, rgba(192,136,48,.12) 50%, rgba(20,12,4,.7) 100%)",border:"2px solid rgba(192,136,48,.6)",boxShadow:"0 0 20px rgba(192,136,48,.4), 0 0 40px rgba(192,136,48,.15)",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                    <span style={{fontSize:32,filter:"drop-shadow(0 0 8px rgba(192,136,48,.6))",animation:"rs-hands-breathe 3s ease-in-out infinite"}}>🙏</span>
+                  <div style={{position:"relative",zIndex:1,width:72,height:72,borderRadius:"50%",background:"radial-gradient(circle at 40% 35%, rgba(120,220,180,.18) 0%, rgba(74,160,120,.14) 50%, rgba(4,20,12,.75) 100%)",border:"2px solid rgba(74,160,120,.65)",boxShadow:"0 0 20px rgba(74,160,120,.4), 0 0 40px rgba(74,160,120,.18)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                    <span style={{fontSize:32,filter:"drop-shadow(0 0 10px rgba(74,160,120,.7))",animation:"rs-lotus-breathe 3.5s ease-in-out infinite"}}>🪷</span>
                   </div>
                 </div>
               </div>
