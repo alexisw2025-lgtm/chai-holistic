@@ -10,6 +10,7 @@
 
 import { useState } from "react";
 import { useLang } from "./LangContext";
+import { getRecipe } from "./translations_content";
 
 const C = {
   forest:  "#0d1a11",
@@ -636,6 +637,11 @@ function isKitchenIngredient(ing) {
 
 export default function JellyPage({ onAddToCart }) {
   const { T, lang } = useLang();
+  const tr = (jelly) => {
+    if (!lang || lang === "en") return jelly;
+    const t = getRecipe("jelly", jelly.id, lang);
+    return { ...jelly, ...t };
+  };
   const [category, setCategory] = useState("All");
   const [search, setSearch]     = useState("");
   const [active, setActive]     = useState(null);
@@ -839,7 +845,7 @@ export default function JellyPage({ onAddToCart }) {
             gap: 18,
           }}>
             {filtered.map(j => (
-              <JellyCard key={j.id} j={j} onOpen={setActive} />
+              <JellyCard key={j.id} j={tr(j)} onOpen={setActive} />
             ))}
           </div>
         )}
@@ -864,7 +870,7 @@ export default function JellyPage({ onAddToCart }) {
         </div>
       </div>
 
-      {active && <JellyModal j={active} onClose={() => setActive(null)} onAddToCart={onAddToCart} />}
+      {active && <JellyModal j={tr(active)} onClose={() => setActive(null)} onAddToCart={onAddToCart} />}
     </div>
   );
 }

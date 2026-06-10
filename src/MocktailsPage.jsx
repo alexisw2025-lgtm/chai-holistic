@@ -1249,7 +1249,7 @@ export default function MocktailsPage() {
             gap: 20,
           }}>
             {filtered.map(m => (
-              <MocktailCard key={m.id} m={m} onOpen={setActive} />
+              <MocktailCard key={m.id} m={tr(m)} onOpen={setActive} />
             ))}
           </div>
         )}
@@ -1275,7 +1275,7 @@ export default function MocktailsPage() {
       </div>
 
       {/* ── Recipe modal ──────────────────────────────────────────────────── */}
-      {active && <MocktailModal m={active} onClose={() => setActive(null)} />}
+      {active && <MocktailModal m={tr(active)} onClose={() => setActive(null)} />}
 
       {/* ══════════════════════════════════════════════════════════════════════
           SEAWEED JELLY SECTION

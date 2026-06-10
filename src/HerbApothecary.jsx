@@ -1245,7 +1245,7 @@ export default function HerbApothecary() {
   const inputRef = useRef(null);
 
   const filtered = useMemo(() => {
-    let r = HERB_DATA;
+    let r = herbs;
     if (category !== "all") r = r.filter(h => h.category.some(c => c.includes(category)));
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -1265,7 +1265,7 @@ export default function HerbApothecary() {
   const suggestions = useMemo(() => {
     if (!search.trim() || search.length < 2) return [];
     const q = search.toLowerCase();
-    return HERB_DATA.filter(h => h.name.toLowerCase().includes(q) || h.tags.some(t => t.toLowerCase().includes(q))).slice(0, 5);
+    return herbs.filter(h => h.name.toLowerCase().includes(q) || h.tags.some(t => t.toLowerCase().includes(q))).slice(0, 5);
   }, [search]);
 
   return (
@@ -1282,7 +1282,7 @@ export default function HerbApothecary() {
           Every herb we use. Its history, its healing, and the research behind it.
         </p>
         <p style={{fontFamily:"Jost,sans-serif",fontSize:".72rem",color:"rgba(196,137,58,.6)",fontStyle:"italic",margin:"0 auto 32px"}}>
-          {HERB_DATA.length} herbs documented · Sources cited from NIH, WHO, EMA &amp; peer-reviewed journals
+          {herbs.length} herbs documented · Sources cited from NIH, WHO, EMA &amp; peer-reviewed journals
         </p>
 
         {/* SEARCH */}

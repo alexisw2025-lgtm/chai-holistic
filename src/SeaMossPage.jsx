@@ -11,6 +11,7 @@
 
 import { useState } from "react";
 import { useLang } from "./LangContext";
+import { getRecipe } from "./translations_content";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const C = {
@@ -920,6 +921,12 @@ function isSmKitchen(ing) {
 
 export default function SeaMossPage({ onAddToCart }) {
   const { T, lang } = useLang();
+  // Overlay translated content onto recipe objects
+  const tr = (recipe) => {
+    if (!lang || lang === "en") return recipe;
+    const t = getRecipe("seamoss", recipe.id, lang);
+    return { ...recipe, ...t };
+  };
   const [category, setCategory] = useState("All");
   const [search, setSearch]     = useState("");
   const [active, setActive]     = useState(null);
@@ -1370,7 +1377,7 @@ export default function SeaMossPage({ onAddToCart }) {
             gap: 18,
           }}>
             {filtered.map(r => (
-              <RecipeCard key={r.id} r={r} onOpen={setActive} />
+              <RecipeCard key={r.id} r={tr(r)} onOpen={setActive} />
             ))}
           </div>
         )}
@@ -1443,7 +1450,7 @@ export default function SeaMossPage({ onAddToCart }) {
         </div>
       </div>
 
-      {active && <RecipeModal r={active} onClose={() => setActive(null)} onAddToCart={onAddToCart} />}
+      {active && <RecipeModal r={tr(active)} onClose={() => setActive(null)} onAddToCart={onAddToCart} />}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLang } from "./LangContext";
+import { getContent } from "./translations_content";
 
 // ─── ANCESTRAL TEA COLLECTION ─────────────────────────────────────────────────
 // These recipes come from two lineages: Jamaican bush medicine and Indian
@@ -630,6 +631,11 @@ const COLLECTIONS = [
 // ─── COMPONENT ────────────────────────────────────────────────────────────────
 export default function AncestralTeas({ onNav }) {
   const { T, lang } = useLang();
+  const C_TRANS = getContent(lang);
+  // Translate tea name
+  const tn = (name) => C_TRANS.ancestral_teas[name]?.[lang] || name;
+  // Translate collection title
+  const ct = (id, field) => C_TRANS.ancestral_collections[id]?.[field] || null;
   const [activeCollection, setActiveCollection] = useState("yard");
   const [selectedTea, setSelectedTea] = useState(null);
 

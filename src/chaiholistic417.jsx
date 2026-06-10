@@ -9,6 +9,7 @@ import HerbApothecary from "./HerbApothecary";
 import JellyPage from "./JellyPage";
 import SeaMossPage from "./SeaMossPage";
 import { LangProvider, useLang } from "./LangContext";
+import { getBlendName, getHerbName } from "./translations_content";
 import imgSre1 from "./rings/scre1.jpg";
 import imgScre2 from "./rings/scre2.jpg";
 import imgScre3 from "./rings/scre3.jpg";
@@ -1302,6 +1303,7 @@ const getSuppPairing = (blend) => {
 
 function MensWellness({ onNav, onAddToCart }) {
   const { T, lang } = useLang();
+  const bn = (name) => getBlendName(name, lang);
   const [filter, setFilter] = useState("all");
   const [selected, setSelected] = useState(null);
   const [prostateOpen, setProstateOpen] = useState(false);
