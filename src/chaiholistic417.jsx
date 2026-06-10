@@ -230,16 +230,16 @@ const LANGS = {
     btn_search:"Search", btn_add_basket:"Add to Basket",
     btn_shop_now:"Shop Now", btn_learn_more:"Learn More →",
     btn_see_all:"See All", btn_browse_all:"Browse All 40 Recipes Free",
-    btn_close:"Close", btn_back:"{T.prayer_back}", btn_send:"Send",
+    btn_close:"Close", btn_back:"← Back", btn_send:"Send",
     btn_save:"Save My Ritual", btn_start:"Get Started",
-    btn_try_again:"Try Again", btn_notify:"{T.btn_notify}",
-    btn_browse_herbs:"{T.btn_browse_herbs}",
+    btn_try_again:"Try Again", btn_notify:"Yes — notify me →",
+    btn_browse_herbs:"Browse the Herb Archive →",
     // Search
     search_placeholder:"Search teas, herbs, or wellness goals…",
     search_loading:"Searching for you…",
     search_looking:"Looking up",
     search_noresult:"We don't have",
-    search_noresult2:"{T.search_noresult2}",
+    search_noresult2:"yet — would you like us to let you know when we add it?",
     search_scroll:"scroll to see all results ↓",
     // Nav
     nav_home:"Home", nav_shop:"Shop", nav_recipes:"Brew Rituals",
@@ -249,11 +249,11 @@ const LANGS = {
     // Prayer / Affirmation
     pray_btn_night:"🙏 Pray with me", pray_btn_day:"🙏 Daily Prayer",
     affirmation_header:"Daily Affirmation",
-    affirmation_sub:"{T.affirmation_sub}",
+    affirmation_sub:"Touch the lotus to receive today's affirmation — then press it to hear it spoken to you.",
     affirmation_ring_note:"Have a Vibe Shift Ring? Touch your ring to your phone to hear today's affirmation anytime, anywhere.",
     prayer_eyebrow:"Daily Prayer",
     prayer_back:"← Back",
-    prayer_ring_note:"{T.prayer_ring_note}",
+    prayer_ring_note:"Have a Vibe Shift Ring? Touch it to your phone anytime to hear today's prayer — no screen needed.",
     // Section headers
     sec_features:"Features you won't find anywhere else",
     sec_features_eye:"Why Chai Holistic",
@@ -263,7 +263,7 @@ const LANGS = {
     sec_story_eye:"Our Story",
     sec_why_tea:"Why Tea is the Greatest Gift the Earth Ever Gave Us",
     sec_why_eye:"The Story of Tea",
-    sec_science:"{T.sec_science}",
+    sec_science:"Here is how it works",
     sec_science_eye:"The Science of Tea",
     sec_bundles:"Curated Bundles",
     sec_bundles_eye:"Best Value",
@@ -282,7 +282,7 @@ const LANGS = {
     shop_bundles:"Bundles", shop_tools:"Brew Tools",
     // Cart
     cart_title:"Your Ritual Basket", cart_empty:"Your basket is empty.",
-    cart_empty_sub:"{T.cart_empty_sub}",
+    cart_empty_sub:"Add some blends to get started.",
     cart_subtotal:"Subtotal", cart_checkout:"Proceed to Checkout",
     cart_added:"added to your Ritual Basket",
     // Features cards
@@ -8101,7 +8101,7 @@ Thank you!`);
                 <div style={{padding:"28px 24px",textAlign:"center"}}>
                   <div style={{fontSize:"2.4rem",marginBottom:12}}>🌿</div>
                   <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.05rem",color:"var(--bark)",fontWeight:600,marginBottom:8}}>
-                    {T.search_noresult} "{homeSearchQuery}" yet
+                    {T.search_noresult||"We don't have"} "{homeSearchQuery}" {T.search_noresult2||"yet — would you like us to let you know when we add it?"}
                   </div>
                   <p style={{fontFamily:"Jost,sans-serif",fontSize:".78rem",color:"rgba(61,43,31,.5)",fontWeight:300,lineHeight:1.75,maxWidth:280,margin:"0 auto 20px"}}>
                     Would you like us to let you know when we add it?
@@ -8137,7 +8137,7 @@ Thank you!`);
                 <>
                   {homeSearchResults.length > 3 && (
                     <div style={{textAlign:"center",padding:"8px 0 2px",fontFamily:"Jost,sans-serif",fontSize:".6rem",color:"rgba(61,43,31,.3)",letterSpacing:".08em"}}>
-                      {T.search_scroll.replace('scroll', '').trim()}{homeSearchResults.length} {T.search_scroll.includes('↓')?'↓':''}
+                    {T.search_scroll||`scroll to see all ${homeSearchResults.length} results ↓`}
                     </div>
                   )}
                   {homeSearchResults.map((r,i)=>(
