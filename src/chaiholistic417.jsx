@@ -2486,25 +2486,180 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
     }
   `;
 
-  // --- 2AM OVERLAY — pure prayer experience, nothing commercial ───────────────
-  const TwoAMOverlay = () => (
-    <div className="twoam-ov" style={{background:"#060a08",flexDirection:"column",padding:0,overflow:"auto",position:"relative"}}>
-      {/* Quiet close — top right, unobtrusive */}
-      <button
-        onClick={close2AM}
-        style={{
-          position:"fixed",top:14,right:14,zIndex:800,
-          width:34,height:34,borderRadius:"50%",
-          background:"rgba(255,255,255,.06)",
-          border:"1px solid rgba(255,255,255,.1)",
-          color:"rgba(255,255,255,.45)",cursor:"pointer",
-          fontSize:".85rem",display:"flex",alignItems:"center",justifyContent:"center",
+  // --- 2AM PRAYER OVERLAY — self-contained, separate from affirmation ─────────
+  const DAILY_PRAYERS = [
+    {lines:["You are not alone in this moment.","Something greater holds you","even when you cannot feel it."], voice:"You are not alone in this moment. Something greater holds you, even when you cannot feel it. Be still and receive that."},
+    {lines:["Whatever brought you here at this hour,","you are seen.","You are known. You are loved."], voice:"Whatever brought you here at this hour, you are seen. You are known. You are loved. Let that be enough for right now."},
+    {lines:["The night is not your enemy.","It is making space","for something only silence can grow."], voice:"The night is not your enemy. It is making space for something only silence can grow. Rest in that truth tonight."},
+    {lines:["You have carried more than they know.","May you be given exactly","what you need to keep going."], voice:"You have carried more than they know. May you be given exactly what you need to keep going. You are stronger than this moment."},
+    {lines:["This is a prayer for the in-between.","The waiting. The not-yet.","You are being prepared, not forgotten."], voice:"This is a prayer for the in-between. The waiting. The not-yet. You are being prepared, not forgotten. Hold on."},
+    {lines:["May your body find rest.","May your mind release its grip.","May peace come like a slow tide."], voice:"May your body find rest. May your mind release its grip. May peace come like a slow tide, quietly, without asking permission."},
+    {lines:["Whatever you lost,","whatever still aches —","grief is love with nowhere to go."], voice:"Whatever you lost, whatever still aches — grief is love with nowhere to go. May your grief be honored tonight, and may healing come."},
+    {lines:["You do not have to fix it tonight.","You do not have to have the answer.","Tonight, you just have to breathe."], voice:"You do not have to fix it tonight. You do not have to have the answer. Tonight, you just have to breathe. That is enough."},
+    {lines:["May the fear that woke you","be replaced by a quiet knowing:","you will get through this."], voice:"May the fear that woke you be replaced by a quiet knowing: you will get through this. You have been through nights before. You are still here."},
+    {lines:["This moment is holy.","Not because it is easy,","but because you are in it, still trying."], voice:"This moment is holy. Not because it is easy, but because you are in it, still trying. That is the most sacred thing a person can do."},
+    {lines:["There is grace for the tired.","There is mercy for the uncertain.","There is room for you exactly as you are."], voice:"There is grace for the tired. There is mercy for the uncertain. There is room for you exactly as you are — no performance required."},
+    {lines:["You were made to survive this.","And more than survive —","to bloom from it."], voice:"You were made to survive this. And more than survive — to bloom from it. The difficulty is not the end of your story. It is the soil."},
+  ];
+
+  const TwoAMOverlay = () => {
+    const [prayerPlaying, setPrayerPlaying] = React.useState(false);
+    const [prayerSpoken, setPrayerSpoken] = React.useState(false);
+
+    const today = (() => {
+      const now = new Date();
+      const start = new Date(now.getFullYear(), 0, 0);
+      const day = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+      return DAILY_PRAYERS[day % DAILY_PRAYERS.length];
+    })();
+
+    const speakPrayer = async () => {
+      if (prayerPlaying) return;
+      setPrayerPlaying(true);
+      try {
+        const res = await fetch("https://web-production-4c84.up.railway.app/speak-intention", {
+          method:"POST", headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({text: today.voice, voice:"alloy"})
+        });
+        if (!res.ok) throw new Error("TTS unavailable");
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audio.onended = () => { URL.revokeObjectURL(url); setPrayerPlaying(false); setPrayerSpoken(true); };
+        await audio.play();
+      } catch {
+        // Browser fallback
+        const synth = window.speechSynthesis;
+        if (synth) {
+          synth.cancel();
+          const utt = new SpeechSynthesisUtterance(today.voice);
+          utt.rate = 0.75; utt.pitch = 0.9;
+          const voices = synth.getVoices();
+          const preferred = ["Samantha","Karen","Moira","Google UK English Female"];
+          for (const name of preferred) {
+            const v = voices.find(v => v.name.includes(name));
+            if (v) { utt.voice = v; break; }
+          }
+          utt.onend = () => { setPrayerPlaying(false); setPrayerSpoken(true); };
+          synth.speak(utt);
+        } else {
+          setPrayerPlaying(false); setPrayerSpoken(true);
+        }
+      }
+    };
+
+    return (
+      <div style={{
+        position:"fixed",inset:0,zIndex:700,
+        background:"linear-gradient(180deg,#06090e 0%,#080d10 100%)",
+        display:"flex",flexDirection:"column",alignItems:"center",
+        justifyContent:"center",padding:"40px 28px",
+        overflowY:"auto",
+      }}>
+        {/* Stars */}
+        <div style={{position:"fixed",inset:0,backgroundImage:"radial-gradient(1px 1px at 15% 20%,rgba(255,255,255,.4) 0%,transparent 100%),radial-gradient(1px 1px at 72% 15%,rgba(255,255,255,.35) 0%,transparent 100%),radial-gradient(1px 1px at 88% 30%,rgba(255,255,255,.25) 0%,transparent 100%),radial-gradient(1px 1px at 45% 8%,rgba(255,255,255,.3) 0%,transparent 100%),radial-gradient(1px 1px at 60% 75%,rgba(255,255,255,.25) 0%,transparent 100%)",pointerEvents:"none"}}/>
+
+        {/* Close — back home */}
+        <button onClick={close2AM} style={{
+          position:"fixed",top:16,left:20,zIndex:800,
+          display:"flex",alignItems:"center",gap:8,
+          background:"rgba(255,255,255,.07)",border:"1px solid rgba(255,255,255,.12)",
+          color:"rgba(255,255,255,.55)",cursor:"pointer",
+          borderRadius:50,padding:"8px 16px",
+          fontFamily:"Jost,sans-serif",fontSize:".68rem",letterSpacing:".1em",
+          textTransform:"uppercase",transition:"all .2s",
         }}
-      >✕</button>
-      {/* The prayer section fills everything */}
-      <PrayerSection onNavigate={(blend)=>{ close2AM(); nav("tea-library",{blend}); }}/>
-    </div>
-  );
+        onMouseEnter={e=>e.currentTarget.style.background="rgba(255,255,255,.14)"}
+        onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,.07)"}>
+          ← Back
+        </button>
+
+        {/* Eyebrow */}
+        <div style={{fontFamily:"Cinzel,serif",fontSize:".58rem",letterSpacing:".28em",textTransform:"uppercase",color:"rgba(196,137,58,.5)",marginBottom:32,position:"relative",zIndex:1}}>
+          ✦ &nbsp; Daily Prayer &nbsp; ✦
+        </div>
+
+        {/* Prayer hands with gold orbit */}
+        <div onClick={speakPrayer} style={{
+          position:"relative",width:130,height:130,
+          display:"flex",alignItems:"center",justifyContent:"center",
+          cursor:"pointer",marginBottom:36,
+          flexShrink:0,
+        }}>
+          {/* Orbit rings */}
+          <div style={{position:"absolute",inset:-10,borderRadius:"50%",border:"2px solid transparent",borderTopColor:"rgba(192,136,48,.8)",borderRightColor:"rgba(192,136,48,.3)",animation:"twoamOrbit 3s linear infinite"}}/>
+          <div style={{position:"absolute",inset:-18,borderRadius:"50%",border:"1px solid transparent",borderBottomColor:"rgba(192,136,48,.4)",borderLeftColor:"rgba(192,136,48,.15)",animation:"twoamOrbit 6s linear infinite reverse"}}/>
+          {/* Pulse */}
+          <div style={{position:"absolute",inset:0,borderRadius:"50%",border:"1.5px solid rgba(192,136,48,.4)",animation:"twoamPulse 2.5s ease-out infinite"}}/>
+          <div style={{position:"absolute",inset:0,borderRadius:"50%",border:"1.5px solid rgba(192,136,48,.2)",animation:"twoamPulse 2.5s ease-out infinite .8s"}}/>
+          {/* Gold circle */}
+          <div style={{
+            width:100,height:100,borderRadius:"50%",
+            background:"radial-gradient(circle at 40% 35%,rgba(255,220,120,.15) 0%,rgba(192,136,48,.1) 50%,rgba(5,10,8,.8) 100%)",
+            border:"2px solid rgba(192,136,48,.6)",
+            boxShadow:"0 0 24px rgba(192,136,48,.35),0 0 50px rgba(192,136,48,.12)",
+            display:"flex",alignItems:"center",justifyContent:"center",
+            position:"relative",zIndex:1,
+            transition:"transform .15s",
+          }}>
+            <span style={{
+              fontSize:44,
+              filter:`drop-shadow(0 0 ${prayerPlaying?"18px":"8px"} rgba(192,136,48,${prayerPlaying?".9":".5"}))`,
+              animation:"twoamHandsBreathe 3s ease-in-out infinite",
+              display:"block",
+            }}>🙏</span>
+          </div>
+          {/* Hint */}
+          <div style={{
+            position:"absolute",bottom:-22,left:"50%",transform:"translateX(-50%)",
+            fontFamily:"Cinzel,serif",fontSize:"7px",letterSpacing:".18em",
+            textTransform:"uppercase",color:"rgba(192,136,48,.45)",whiteSpace:"nowrap",
+            animation:"twoamHintPulse 2.5s ease-in-out infinite",
+          }}>
+            {prayerPlaying ? "speaking…" : prayerSpoken ? "tap to replay" : "tap to hear your prayer"}
+          </div>
+        </div>
+
+        {/* Prayer lines */}
+        <div style={{textAlign:"center",maxWidth:320,marginBottom:24,position:"relative",zIndex:1}}>
+          <div style={{width:1,height:24,background:"linear-gradient(to bottom,transparent,rgba(192,136,48,.4),transparent)",margin:"0 auto 12px"}}/>
+          {today.lines.map((l,i)=>(
+            <div key={i} style={{
+              fontFamily:"Cormorant Garamond,serif",
+              fontSize:i===1?"clamp(1.15rem,4.5vw,1.45rem)":"clamp(.95rem,3.5vw,1.15rem)",
+              color:i===1?"rgba(192,136,48,.88)":"rgba(255,255,255,.75)",
+              fontStyle:i===1?"italic":"normal",
+              lineHeight:1.6,marginBottom:4,
+              fontWeight:300,
+            }}>{l}</div>
+          ))}
+          <div style={{width:1,height:24,background:"linear-gradient(to bottom,rgba(192,136,48,.4),transparent)",margin:"12px auto 0"}}/>
+        </div>
+
+        {/* Date */}
+        <div style={{fontFamily:"Cinzel,serif",fontSize:"8px",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(255,255,255,.15)",marginBottom:20,position:"relative",zIndex:1}}>
+          {new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}
+        </div>
+
+        {/* Ring note */}
+        <div style={{
+          maxWidth:280,textAlign:"center",
+          fontFamily:"Cormorant Garamond,serif",fontSize:".82rem",
+          color:"rgba(255,255,255,.28)",lineHeight:1.65,
+          position:"relative",zIndex:1,
+        }}>
+          Have a Vibe Shift Ring? Touch it to your phone anytime to hear today's prayer — no screen needed.
+        </div>
+
+        <style>{`
+          @keyframes twoamOrbit { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+          @keyframes twoamPulse { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(1.7);opacity:0} }
+          @keyframes twoamHandsBreathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+          @keyframes twoamHintPulse { 0%,100%{opacity:.45} 50%{opacity:.8} }
+        `}</style>
+      </div>
+    );
+  };
 
   // --- TEA FINDER MODAL -----------------------------------------------------
   const TeaFinderModal = () => {
