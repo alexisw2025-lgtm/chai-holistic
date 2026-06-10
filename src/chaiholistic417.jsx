@@ -296,7 +296,7 @@ const LANGS = {
     amara_placeholder:"Ask Amara anything…",
     amara_greeting:"Hello, beautiful soul. I'm Amara — your wellness companion here at Chai Holistic.",
     // Footer
-    footer_tagline:T.footer_tagline,
+    footer_tagline:"You are good enough the way you are.",
     footer_made:"Handcrafted with love. Rooted in tradition. Made for you.",
     // Misc
     out_of_stock:"Out of Stock",
@@ -1375,7 +1375,7 @@ function MensWellness({ onNav, onAddToCart }) {
                 </div>
                 <button onClick={()=>{onAddToCart({...selected,emoji:"🍵"});setSelected(null);}}
                   style={{background:"linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,110,40,.9))",border:"none",color:"#0D0D1A",borderRadius:40,padding:"10px 28px",fontSize:".72rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700}}>
-                  🛒 {T.btn_add_basket} — ${selected.price.toFixed(2)}
+                  🛒 Add to Basket — ${selected.price.toFixed(2)}
                 </button>
               </div>
             </div>
