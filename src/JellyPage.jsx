@@ -9,6 +9,7 @@
  */
 
 import { useState } from "react";
+import { useLang } from "./LangContext";
 
 const C = {
   forest:  "#0d1a11",
@@ -634,6 +635,7 @@ function isKitchenIngredient(ing) {
 }
 
 export default function JellyPage({ onAddToCart }) {
+  const { T, lang } = useLang();
   const [category, setCategory] = useState("All");
   const [search, setSearch]     = useState("");
   const [active, setActive]     = useState(null);
@@ -762,8 +764,8 @@ export default function JellyPage({ onAddToCart }) {
             </div>
             {/* Add extra shaker button */}
             <div style={{ flexShrink: 0, textAlign: "center" }}>
-              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.4)", marginBottom: 4 }}>One shaker bottle comes with every kit.</div>
-              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.3)", marginBottom: 6 }}>Need an extra for the gym, desk, or a friend?</div>
+              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.4)", marginBottom: 4 }}>{T.jelly_shaker_note || "One shaker bottle comes with every kit."}</div>
+              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.3)", marginBottom: 6 }}>{T.jelly_shaker_note2 || "Need an extra for the gym, desk, or a friend?"}</div>
               <button
                 onClick={() => onAddToCart && onAddToCart({ id: "shaker_extra", name: "Extra Shaker Bottle", price: 8, emoji: "🥤" })}
                 style={{ background: "rgba(192,136,48,.15)", border: "1px solid rgba(192,136,48,.4)", color: "#deb96a", padding: "8px 18px", borderRadius: 50, fontSize: ".68rem", letterSpacing: ".08em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif", cursor: "pointer", whiteSpace: "nowrap" }}>
@@ -788,7 +790,7 @@ export default function JellyPage({ onAddToCart }) {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search recipes or benefits..."
+            placeholder={T.jelly_search_placeholder || "Search recipes or benefits..."}
             style={{
               flex: "1 1 180px", minWidth: 160,
               background: "rgba(255,255,255,.05)",
@@ -826,9 +828,9 @@ export default function JellyPage({ onAddToCart }) {
           <div style={{ textAlign: "center", padding: "60px 0", color: "rgba(255,255,255,.4)" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>🌊</div>
             <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.2rem", color: "white", marginBottom: 8 }}>
-              No kits found
+              {T.jelly_no_results || "No kits found"}
             </div>
-            <div style={{ fontSize: ".85rem" }}>Try clearing your filters.</div>
+            <div style={{ fontSize: ".85rem" }}>{T.jelly_no_results_sub || "Try clearing your filters."}</div>
           </div>
         ) : (
           <div style={{
@@ -853,7 +855,7 @@ export default function JellyPage({ onAddToCart }) {
             fontSize: "1.05rem", fontStyle: "italic",
             color: "rgba(255,255,255,.5)", marginBottom: 8,
           }}>
-            "Wellness that looks like a dessert. Tastes like a treat. Works like medicine."
+            {T.jelly_quote || "Wellness that looks like a dessert. Tastes like a treat. Works like medicine."}
           </div>
           <div style={{
             fontSize: ".6rem", color: "rgba(192,136,48,.45)",

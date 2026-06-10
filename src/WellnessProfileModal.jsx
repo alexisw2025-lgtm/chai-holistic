@@ -34,6 +34,7 @@
  */
 
 import { useState, useEffect, useRef } from "react";
+import { useLang } from "./LangContext";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -490,6 +491,7 @@ function SipReportCard({ name, rxBlends, ritual, goal, onClose }) {
 
 // ─── Main modal ───────────────────────────────────────────────────────────────
 export default function WellnessProfileModal({ open, onClose }) {
+  const { T, lang } = useLang();
   const [stepIdx, setStepIdx] = useState(0);
   const [answers, setAnswers] = useState({
     name: "", email: "", goal: "", energy: "", stress: "",

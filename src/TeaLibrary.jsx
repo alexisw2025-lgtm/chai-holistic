@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useLang } from "./LangContext";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -515,6 +516,7 @@ function NavBtn({ onClick, disabled, children }) {
 
 
 export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart }) {
+  const { T: TL, lang } = useLang();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [modalIdx, setModalIdx] = useState(null);

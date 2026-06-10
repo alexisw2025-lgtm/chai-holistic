@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
+import { useLang } from "./LangContext";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // BLEND LOOKUP — maps herb.blends[] names to shop card data
@@ -1230,6 +1231,7 @@ function HerbModal({ herb, onClose }) {
 }
 
 export default function HerbApothecary() {
+  const { T, lang } = useLang();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [selected, setSelected] = useState(null);
@@ -1289,7 +1291,7 @@ export default function HerbApothecary() {
             <span style={{fontSize:"1rem",opacity:.6}}>🔍</span>
             <input ref={inputRef} value={search} onChange={e=>setSearch(e.target.value)}
               onFocus={()=>setFocused(true)} onBlur={()=>setTimeout(()=>setFocused(false),200)}
-              placeholder="Search by herb name, benefit, or health concern…"
+              placeholder={T.herb_search_placeholder || "Search by herb name, benefit, or health concern…"}
               style={{flex:1,background:"none",border:"none",outline:"none",color:"#F7F2EA",fontFamily:"Jost,sans-serif",fontSize:".88rem",fontWeight:300}}/>
             {search && <button onClick={()=>setSearch("")} style={{background:"none",border:"none",color:"rgba(255,255,255,.4)",cursor:"pointer",fontSize:"1rem",padding:0,lineHeight:1}}>✕</button>}
           </div>
@@ -1315,7 +1317,7 @@ export default function HerbApothecary() {
         {search && (
           <div style={{marginTop:12,fontFamily:"Jost,sans-serif"}}>
             <div style={{fontSize:".72rem",color:"rgba(255,255,255,.35)",marginBottom: filtered.length>0 ? 8 : 0}}>
-              {filtered.length === 0 ? "No herbs found. Try a different search term." : `${filtered.length} herb${filtered.length!==1?"s":""} found`}
+              {filtered.length === 0 ? {T.herb_no_results || "No herbs found. Try a different search term."} : `${filtered.length} herb${filtered.length!==1?"s":""} found`}
             </div>
             {filtered.length === 0 && (
               <div style={{fontSize:".7rem",color:"rgba(196,137,58,.55)",fontStyle:"italic",cursor:"pointer",textDecoration:"underline",textDecorationStyle:"dotted"}}

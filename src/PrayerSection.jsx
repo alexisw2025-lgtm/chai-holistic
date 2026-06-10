@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { useLang } from "./LangContext";
 
 const DAILY_BLENDS = [
   { n:1,  emoji:"🌙", name:"Deep Sleep & Calm Blend",                part:"Part I",   benefit:"Calms the nervous system and guides the body into deep, restorative sleep." },
@@ -153,9 +154,11 @@ async function speakIntention(text) {
   }
 }
 
-export default function PrayerSection({ onNavigate, T: TT, lang }) {
-  // Use passed T or fallback to English strings
-  const t = (key, fallback) => (TT && TT[key]) ? TT[key] : fallback;
+export default function PrayerSection({ onNavigate, T: TT, lang: langProp }) {
+  const { T: TC, lang: langCtx } = useLang();
+  const lang = langProp || langCtx;
+  // Use passed T prop, then context T, then fallback
+  const t = (key, fallback) => (TT && TT[key]) ? TT[key] : (TC && TC[key]) ? TC[key] : fallback;
   // phase: 0=idle, 1=hands tapped, 1.5=ring moment visible, 2=ring tapped
   const [phase, setPhase]           = useState(0);
   const [chosen, setChosen]         = useState(null);

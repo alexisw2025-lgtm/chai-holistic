@@ -10,6 +10,7 @@
  */
 
 import { useState } from "react";
+import { useLang } from "./LangContext";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const C = {
@@ -1068,6 +1069,7 @@ function MocktailModal({ m, onClose }) {
 
 // ─── Main page ─────────────────────────────────────────────────────────────────
 export default function MocktailsPage() {
+  const { T, lang } = useLang();
   const [category, setCategory] = useState("All");
   const [occasion, setOccasion] = useState("All");
   const [search, setSearch]     = useState("");
@@ -1177,7 +1179,7 @@ export default function MocktailsPage() {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search recipes or benefits..."
+            placeholder={T.mocktail_search_placeholder || "Search recipes or benefits..."}
             style={{
               flex: "1 1 200px", minWidth: 180,
               background: C.parch, border: `1px solid ${C.dust}`,
@@ -1234,10 +1236,10 @@ export default function MocktailsPage() {
           <div style={{ textAlign: "center", padding: "60px 0", color: "#8A7A6A" }}>
             <div style={{ fontSize: "2.5rem", marginBottom: 12 }}>🍵</div>
             <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.2rem", marginBottom: 8 }}>
-              No recipes found
+              {T.mocktail_no_results || "No recipes found"}
             </div>
             <div style={{ fontSize: ".85rem" }}>
-              Try clearing your filters or search a different term.
+              {T.mocktail_no_results_sub || "Try clearing your filters or search a different term."}
             </div>
           </div>
         ) : (

@@ -10,6 +10,7 @@
  */
 
 import { useState } from "react";
+import { useLang } from "./LangContext";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const C = {
@@ -918,6 +919,7 @@ function isSmKitchen(ing) {
 }
 
 export default function SeaMossPage({ onAddToCart }) {
+  const { T, lang } = useLang();
   const [category, setCategory] = useState("All");
   const [search, setSearch]     = useState("");
   const [active, setActive]     = useState(null);
@@ -1289,11 +1291,11 @@ export default function SeaMossPage({ onAddToCart }) {
               ))}
             </div>
             <div style={{ flexShrink: 0, textAlign: "center" }}>
-              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.35)", marginBottom: 6 }}>Want a spare?</div>
+              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.35)", marginBottom: 6 }>{T.sm_want_spare || "Want a spare?"}</div>
               <button
                 onClick={() => onAddToCart && onAddToCart({ id: "shaker_extra", name: "Extra Shaker Bottle", price: 8, emoji: "🥤" })}
                 style={{ background: "rgba(26,138,106,.15)", border: "1px solid rgba(26,138,106,.4)", color: "#2aaa85", padding: "8px 18px", borderRadius: 50, fontSize: ".68rem", letterSpacing: ".08em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif", cursor: "pointer", whiteSpace: "nowrap" }}>
-                + Add a Spare Shaker Bottle — $8
+                {T.sm_add_shaker || "+ Add a Spare Shaker Bottle — $8"}
               </button>
             </div>
           </div>
@@ -1316,7 +1318,7 @@ export default function SeaMossPage({ onAddToCart }) {
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search by flavor, benefit..."
+            placeholder={T.sm_search_placeholder || "Search by flavor, benefit..."}
             style={{
               flex: "1 1 180px", minWidth: 160,
               background: "rgba(255,255,255,.05)",
@@ -1358,8 +1360,8 @@ export default function SeaMossPage({ onAddToCart }) {
             <div style={{
               fontFamily: "'Playfair Display', serif",
               fontSize: "1.2rem", color: "white", marginBottom: 8,
-            }}>No recipes found</div>
-            <div style={{ fontSize: ".85rem" }}>Try clearing your search or filters.</div>
+            }>{T.sm_no_results || "No recipes found"}</div>
+            <div style={{ fontSize: ".85rem" }}>{T.sm_no_results_sub || "Try clearing your search or filters."}</div>
           </div>
         ) : (
           <div style={{
@@ -1390,7 +1392,7 @@ export default function SeaMossPage({ onAddToCart }) {
               fontFamily: "'Playfair Display', serif",
               fontSize: "1.3rem", color: "white",
               fontWeight: 400, marginBottom: 20,
-            }}>How to Use Sea Moss Gel Daily</h3>
+            }>{T.sm_how_to_use || "How to Use Sea Moss Gel Daily"}</h3>
             <div style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
@@ -1431,8 +1433,7 @@ export default function SeaMossPage({ onAddToCart }) {
               fontStyle: "italic",
               color: "rgba(255,255,255,.5)", marginBottom: 10, lineHeight: 1.7,
             }}>
-              "She made it every week without fail.<br/>
-              Now you can too."
+              {T.sm_quote || "She made it every week without fail. Now you can too."}
             </div>
             <div style={{
               fontSize: ".6rem", color: C.aquaL,

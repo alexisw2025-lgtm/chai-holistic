@@ -8,6 +8,7 @@ import AncestralTeas from "./AncestralTeas";
 import HerbApothecary from "./HerbApothecary";
 import JellyPage from "./JellyPage";
 import SeaMossPage from "./SeaMossPage";
+import { LangProvider, useLang } from "./LangContext";
 import imgSre1 from "./rings/scre1.jpg";
 import imgScre2 from "./rings/scre2.jpg";
 import imgScre3 from "./rings/scre3.jpg";
@@ -304,6 +305,75 @@ const LANGS = {
     new_badge:"NEW",
     free_shipping:"Free shipping on orders over $50",
     tagline:"You are good enough the way you are.",
+    // Nav (missing keys)
+    nav_shop:"Shop", nav_recipes:"Brew Rituals", nav_supplements:"Supplements",
+    nav_ancestral:"Ancestral", nav_mocktails:"Mocktails", nav_jelly:"Jelly",
+    nav_faq:"FAQ", nav_library:"Tea Library",
+    // Buttons (missing keys)
+    btn_recipes:"Browse Recipes", btn_ritual:"Build My Ritual",
+    btn_report_sub:"personalized to you", btn_add_basket:"Add to Basket",
+    btn_send:"Send",
+    // Cart (missing key)
+    cart_empty:"Your basket is empty.",
+    // Prayer (missing key)
+    pray_btn_day:"🙏 Daily Prayer",
+    // Search
+    search_placeholder:"Search teas, herbs, or wellness goals…",
+    // Amara
+    amara_greeting:"Hello, beautiful soul. I'm Amara — your wellness companion here at Chai Holistic.",
+    // SeaMoss page
+    sm_search_placeholder:"Search by flavor, benefit...",
+    sm_no_results:"No recipes found",
+    sm_no_results_sub:"Try clearing your search or filters.",
+    sm_how_to_use:"How to Use Sea Moss Gel Daily",
+    sm_quote:"She made it every week without fail. Now you can too.",
+    sm_add_shaker:"+ Add a Spare Shaker Bottle — $8",
+    sm_want_spare:"Want a spare?",
+    // Jelly page
+    jelly_search_placeholder:"Search recipes or benefits...",
+    jelly_no_results:"No kits found",
+    jelly_no_results_sub:"Try clearing your filters.",
+    jelly_quote:"Wellness that looks like a dessert. Tastes like a treat. Works like medicine.",
+    jelly_shaker_note:"One shaker bottle comes with every kit.",
+    jelly_shaker_note2:"Need an extra for the gym, desk, or a friend?",
+    // Mocktails page
+    mocktail_search_placeholder:"Search recipes or benefits...",
+    mocktail_no_results:"No recipes found",
+    mocktail_no_results_sub:"Try clearing your filters or search a different term.",
+    // Herb Apothecary
+    herb_search_placeholder:"Search by herb name, benefit, or health concern…",
+    herb_no_results:"No herbs found. Try a different search term.",
+    // Recipe sections
+    rec_ingredients:"Ingredients",
+    rec_steps:"Steps",
+    rec_benefits:"Benefits",
+    rec_steep:"Steep",
+    rec_serving:"Serving",
+    rec_tip:"Tip",
+    rec_shelf_life:"Shelf Life",
+    rec_add_to_basket:"Add Kit to Basket",
+    rec_close:"Close",
+    rec_difficulty:"Difficulty",
+    rec_time:"Time",
+    rec_servings:"Servings",
+    rec_per_serving:"per serving",
+    rec_daily_use:"Daily Use",
+    // Ancestral
+    anc_view_blend:"View Blend",
+    anc_add_to_basket:"Add to Basket",
+    // Supplements
+    supp_view:"View on Amazon",
+    supp_pairing:"Tea Pairing",
+    // Tea Library
+    tl_search_placeholder:"Search blends, ingredients, or benefits…",
+    tl_no_results:"No blends found",
+    tl_brew_instructions:"Brew Instructions",
+    // General UI
+    ui_close:"✕",
+    ui_back:"← Back",
+    ui_add_basket:"Add to Basket",
+    ui_shop_now:"Shop Now",
+    ui_learn_more:"Learn More",
   },
   es: {
     code:"es", name:"Español", flag:"🇪🇸",
@@ -397,6 +467,67 @@ const LANGS = {
     free_shipping:"Envío gratis en pedidos mayores de $50",
     footer_tagline:"Eres suficiente tal como eres.",
     footer_made:"Hecho artesanalmente con amor. Arraigado en la tradición. Hecho para ti.",
+    // Nav (missing)
+    nav_shop:"Tienda", nav_recipes:"Rituales de Brew", nav_supplements:"Suplementos",
+    nav_ancestral:"Ancestral", nav_mocktails:"Mocktails", nav_jelly:"Jaleas",
+    nav_faq:"Preguntas", nav_library:"Biblioteca de Tés",
+    // Buttons (missing)
+    btn_recipes:"Ver Recetas", btn_ritual:"Construye Tu Ritual",
+    btn_report_sub:"personalizado para ti", btn_add_basket:"Añadir al Carro",
+    btn_send:"Enviar",
+    // Cart (missing)
+    cart_empty:"Tu cesta está vacía.",
+    // Prayer (missing)
+    pray_btn_day:"🙏 Oración Diaria",
+    // Search
+    search_placeholder:"Buscar tés, hierbas o metas de bienestar…",
+    // Amara
+    amara_greeting:"Hola, alma bella. Soy Amara — tu compañera de bienestar en Chai Holistic.",
+    // SeaMoss page
+    sm_search_placeholder:"Buscar por sabor o beneficio...",
+    sm_no_results:"No se encontraron recetas",
+    sm_no_results_sub:"Intenta limpiar tu búsqueda o filtros.",
+    sm_how_to_use:"Cómo Usar el Gel de Musgo Marino Diariamente",
+    sm_quote:"Lo hacía cada semana sin falta. Ahora tú también puedes.",
+    sm_add_shaker:"+ Añadir un Shaker Extra — $8",
+    sm_want_spare:"¿Quieres uno de repuesto?",
+    jelly_search_placeholder:"Buscar recetas o beneficios...",
+    jelly_no_results:"No se encontraron kits",
+    jelly_no_results_sub:"Intenta limpiar tus filtros.",
+    jelly_quote:"Bienestar que parece postre. Sabe como un capricho. Funciona como medicina.",
+    jelly_shaker_note:"Un shaker viene con cada kit.",
+    jelly_shaker_note2:"¿Necesitas uno extra para el gym o un amigo?",
+    mocktail_search_placeholder:"Buscar recetas o beneficios...",
+    mocktail_no_results:"No se encontraron recetas",
+    mocktail_no_results_sub:"Intenta limpiar tus filtros.",
+    herb_search_placeholder:"Buscar por nombre de hierba, beneficio o problema de salud…",
+    herb_no_results:"No se encontraron hierbas. Intenta un término diferente.",
+    rec_ingredients:"Ingredientes",
+    rec_steps:"Pasos",
+    rec_benefits:"Beneficios",
+    rec_steep:"Infusión",
+    rec_serving:"Porción",
+    rec_tip:"Consejo",
+    rec_shelf_life:"Vida Útil",
+    rec_add_to_basket:"Añadir Kit al Carro",
+    rec_close:"Cerrar",
+    rec_difficulty:"Dificultad",
+    rec_time:"Tiempo",
+    rec_servings:"Porciones",
+    rec_per_serving:"por porción",
+    rec_daily_use:"Uso Diario",
+    anc_view_blend:"Ver Mezcla",
+    anc_add_to_basket:"Añadir al Carro",
+    supp_view:"Ver en Amazon",
+    supp_pairing:"Maridaje de Té",
+    tl_search_placeholder:"Buscar mezclas, ingredientes o beneficios…",
+    tl_no_results:"No se encontraron mezclas",
+    tl_brew_instructions:"Instrucciones de Preparación",
+    ui_close:"✕",
+    ui_back:"← Volver",
+    ui_add_basket:"Añadir al Carro",
+    ui_shop_now:"Comprar Ahora",
+    ui_learn_more:"Más Info",
   },
   fr: {
     code:"fr", name:"Français", flag:"🇫🇷",
@@ -490,6 +621,67 @@ const LANGS = {
     free_shipping:"Livraison gratuite pour les commandes de plus de 50$",
     footer_tagline:"Vous êtes assez bien tel que vous êtes.",
     footer_made:"Fait artisanalement avec amour. Ancré dans la tradition. Fait pour vous.",
+    // Nav (missing)
+    nav_shop:"Boutique", nav_recipes:"Rituels de Préparation", nav_supplements:"Suppléments",
+    nav_ancestral:"Ancestral", nav_mocktails:"Mocktails", nav_jelly:"Gelées",
+    nav_faq:"FAQ", nav_library:"Bibliothèque de Thés",
+    // Buttons (missing)
+    btn_recipes:"Parcourir les Recettes", btn_ritual:"Créer Mon Rituel",
+    btn_report_sub:"personnalisé pour vous", btn_add_basket:"Ajouter au Panier",
+    btn_send:"Envoyer",
+    // Cart (missing)
+    cart_empty:"Votre panier est vide.",
+    // Prayer (missing)
+    pray_btn_day:"🙏 Prière du Jour",
+    // Search
+    search_placeholder:"Rechercher des thés, herbes ou objectifs bien-être…",
+    // Amara
+    amara_greeting:"Bonjour, belle âme. Je suis Amara — votre accompagnatrice bien-être chez Chai Holistic.",
+    // SeaMoss page
+    sm_search_placeholder:"Rechercher par saveur ou bénéfice...",
+    sm_no_results:"Aucune recette trouvée",
+    sm_no_results_sub:"Essayez de réinitialiser votre recherche ou vos filtres.",
+    sm_how_to_use:"Comment Utiliser le Gel de Mousse Marine Quotidiennement",
+    sm_quote:"Elle le faisait chaque semaine sans faute. Maintenant vous aussi pouvez.",
+    sm_add_shaker:"+ Ajouter un Shaker Supplémentaire — 8$",
+    sm_want_spare:"Vous en voulez un de rechange?",
+    jelly_search_placeholder:"Rechercher des recettes ou des bénéfices...",
+    jelly_no_results:"Aucun kit trouvé",
+    jelly_no_results_sub:"Essayez de réinitialiser vos filtres.",
+    jelly_quote:"Le bien-être qui ressemble à un dessert. Qui goûte comme une gâterie. Qui fonctionne comme un médicament.",
+    jelly_shaker_note:"Un shaker est inclus avec chaque kit.",
+    jelly_shaker_note2:"Besoin d'un extra pour la salle de sport ou un ami?",
+    mocktail_search_placeholder:"Rechercher des recettes ou des bénéfices...",
+    mocktail_no_results:"Aucune recette trouvée",
+    mocktail_no_results_sub:"Essayez de réinitialiser vos filtres.",
+    herb_search_placeholder:"Rechercher par nom d'herbe, bénéfice ou préoccupation santé…",
+    herb_no_results:"Aucune herbe trouvée. Essayez un autre terme.",
+    rec_ingredients:"Ingrédients",
+    rec_steps:"Étapes",
+    rec_benefits:"Bénéfices",
+    rec_steep:"Infusion",
+    rec_serving:"Portion",
+    rec_tip:"Conseil",
+    rec_shelf_life:"Durée de Conservation",
+    rec_add_to_basket:"Ajouter le Kit au Panier",
+    rec_close:"Fermer",
+    rec_difficulty:"Difficulté",
+    rec_time:"Temps",
+    rec_servings:"Portions",
+    rec_per_serving:"par portion",
+    rec_daily_use:"Utilisation Quotidienne",
+    anc_view_blend:"Voir le Mélange",
+    anc_add_to_basket:"Ajouter au Panier",
+    supp_view:"Voir sur Amazon",
+    supp_pairing:"Accord Thé",
+    tl_search_placeholder:"Rechercher des mélanges, ingrédients ou bénéfices…",
+    tl_no_results:"Aucun mélange trouvé",
+    tl_brew_instructions:"Instructions de Préparation",
+    ui_close:"✕",
+    ui_back:"← Retour",
+    ui_add_basket:"Ajouter au Panier",
+    ui_shop_now:"Acheter Maintenant",
+    ui_learn_more:"En Savoir Plus",
   },
   pt: {
     code:"pt", name:"Português", flag:"🇧🇷",
@@ -583,6 +775,67 @@ const LANGS = {
     free_shipping:"Frete grátis em pedidos acima de $50",
     footer_tagline:"Você é bom o suficiente do jeito que é.",
     footer_made:"Feito artesanalmente com amor. Enraizado na tradição. Feito para você.",
+    // Nav (missing)
+    nav_shop:"Loja", nav_recipes:"Rituais de Preparo", nav_supplements:"Suplementos",
+    nav_ancestral:"Ancestral", nav_mocktails:"Mocktails", nav_jelly:"Geleias",
+    nav_faq:"Perguntas", nav_library:"Biblioteca de Chás",
+    // Buttons (missing)
+    btn_recipes:"Ver Receitas", btn_ritual:"Construir Meu Ritual",
+    btn_report_sub:"personalizado para você", btn_add_basket:"Adicionar ao Cesto",
+    btn_send:"Enviar",
+    // Cart (missing)
+    cart_empty:"Seu cesto está vazio.",
+    // Prayer (missing)
+    pray_btn_day:"🙏 Oração Diária",
+    // Search
+    search_placeholder:"Pesquisar chás, ervas ou objetivos de bem-estar…",
+    // Amara
+    amara_greeting:"Olá, bela alma. Sou Amara — sua companheira de bem-estar na Chai Holistic.",
+    // SeaMoss page
+    sm_search_placeholder:"Buscar por sabor ou benefício...",
+    sm_no_results:"Nenhuma receita encontrada",
+    sm_no_results_sub:"Tente limpar sua busca ou filtros.",
+    sm_how_to_use:"Como Usar o Gel de Musgo do Mar Diariamente",
+    sm_quote:"Ela fazia toda semana sem falta. Agora você também pode.",
+    sm_add_shaker:"+ Adicionar um Shaker Extra — $8",
+    sm_want_spare:"Quer um de reserva?",
+    jelly_search_placeholder:"Buscar receitas ou benefícios...",
+    jelly_no_results:"Nenhum kit encontrado",
+    jelly_no_results_sub:"Tente limpar seus filtros.",
+    jelly_quote:"Bem-estar que parece sobremesa. Tem gosto de capricho. Funciona como remédio.",
+    jelly_shaker_note:"Um shaker vem com cada kit.",
+    jelly_shaker_note2:"Precisa de um extra para a academia ou um amigo?",
+    mocktail_search_placeholder:"Buscar receitas ou benefícios...",
+    mocktail_no_results:"Nenhuma receita encontrada",
+    mocktail_no_results_sub:"Tente limpar seus filtros.",
+    herb_search_placeholder:"Buscar por nome de erva, benefício ou preocupação de saúde…",
+    herb_no_results:"Nenhuma erva encontrada. Tente um termo diferente.",
+    rec_ingredients:"Ingredientes",
+    rec_steps:"Passos",
+    rec_benefits:"Benefícios",
+    rec_steep:"Infusão",
+    rec_serving:"Porção",
+    rec_tip:"Dica",
+    rec_shelf_life:"Validade",
+    rec_add_to_basket:"Adicionar Kit ao Cesto",
+    rec_close:"Fechar",
+    rec_difficulty:"Dificuldade",
+    rec_time:"Tempo",
+    rec_servings:"Porções",
+    rec_per_serving:"por porção",
+    rec_daily_use:"Uso Diário",
+    anc_view_blend:"Ver Mistura",
+    anc_add_to_basket:"Adicionar ao Cesto",
+    supp_view:"Ver na Amazon",
+    supp_pairing:"Harmonização com Chá",
+    tl_search_placeholder:"Buscar misturas, ingredientes ou benefícios…",
+    tl_no_results:"Nenhuma mistura encontrada",
+    tl_brew_instructions:"Instruções de Preparo",
+    ui_close:"✕",
+    ui_back:"← Voltar",
+    ui_add_basket:"Adicionar ao Cesto",
+    ui_shop_now:"Comprar Agora",
+    ui_learn_more:"Saiba Mais",
   },
   ht: {
     code:"ht", name:"Kreyòl Ayisyen", flag:"🇭🇹",
@@ -676,6 +929,67 @@ const LANGS = {
     free_shipping:"Livrezon gratis pou kòmann ki depase $50",
     footer_tagline:"Ou bon ase jan ou ye a.",
     footer_made:"Fè avèk lanmou. Rasin nan tradisyon. Fè pou ou.",
+    // Nav (missing)
+    nav_shop:"Magazen", nav_recipes:"Ritiyèl Bwason", nav_supplements:"Sipleman",
+    nav_ancestral:"Ansestral", nav_mocktails:"Mocktails", nav_jelly:"Jelè",
+    nav_faq:"Kesyon", nav_library:"Bibliyotèk Tè",
+    // Buttons (missing)
+    btn_recipes:"Gade Resèt yo", btn_ritual:"Bati Ritiyèl Mwen",
+    btn_report_sub:"pèsonalize pou ou", btn_add_basket:"Ajoute nan Panye",
+    btn_send:"Voye",
+    // Cart (missing)
+    cart_empty:"Panye ou vid.",
+    // Prayer (missing)
+    pray_btn_day:"🙏 Lapriyè Jodi a",
+    // Search
+    search_placeholder:"Chèche tè, zèb, oswa objektif byenèt…",
+    // Amara
+    amara_greeting:"Bonjou, bèl nanm. Mwen se Amara — konpayon byenèt ou nan Chai Holistic.",
+    // SeaMoss page
+    sm_search_placeholder:"Chèche pa gou oswa benefis...",
+    sm_no_results:"Pa gen resèt jwenn",
+    sm_no_results_sub:"Eseye efase rechèch oswa filtre ou yo.",
+    sm_how_to_use:"Kijan pou Itilize Jèl Mous Lanmè Chak Jou",
+    sm_quote:"Li te fè l chak semèn san manke. Kounye a ou kapab tou.",
+    sm_add_shaker:"+ Ajoute yon Bouteya Shaker Siplemantè — $8",
+    sm_want_spare:"Ou vle youn siplemantè?",
+    jelly_search_placeholder:"Chèche resèt oswa benefis...",
+    jelly_no_results:"Pa gen kit jwenn",
+    jelly_no_results_sub:"Eseye efase filtre ou yo.",
+    jelly_quote:"Byenèt ki sanble yon desè. Gou yon plezi. Travay kou yon medikaman.",
+    jelly_shaker_note:"Yon shaker vini ak chak kit.",
+    jelly_shaker_note2:"Bezwen youn ankò pou jim oswa yon zanmi?",
+    mocktail_search_placeholder:"Chèche resèt oswa benefis...",
+    mocktail_no_results:"Pa gen resèt jwenn",
+    mocktail_no_results_sub:"Eseye efase filtre ou yo.",
+    herb_search_placeholder:"Chèche pa non zèb, benefis, oswa konsèn sante…",
+    herb_no_results:"Pa gen zèb jwenn. Eseye yon lòt tèm.",
+    rec_ingredients:"Engredyan",
+    rec_steps:"Etap",
+    rec_benefits:"Benefis",
+    rec_steep:"Enfizyon",
+    rec_serving:"Pòsyon",
+    rec_tip:"Konsèy",
+    rec_shelf_life:"Dire nan Frijidè",
+    rec_add_to_basket:"Ajoute Kit nan Panye",
+    rec_close:"Fèmen",
+    rec_difficulty:"Difikilte",
+    rec_time:"Tan",
+    rec_servings:"Pòsyon",
+    rec_per_serving:"pou chak pòsyon",
+    rec_daily_use:"Itilizasyon Chak Jou",
+    anc_view_blend:"Wè Melanj",
+    anc_add_to_basket:"Ajoute nan Panye",
+    supp_view:"Wè sou Amazon",
+    supp_pairing:"Asosyasyon Tè",
+    tl_search_placeholder:"Chèche melanj, engredyan oswa benefis…",
+    tl_no_results:"Pa gen melanj jwenn",
+    tl_brew_instructions:"Enstriksyon Preparasyon",
+    ui_close:"✕",
+    ui_back:"← Retounen",
+    ui_add_basket:"Ajoute nan Panye",
+    ui_shop_now:"Achte Kounye",
+    ui_learn_more:"Aprann Plis",
   },
   jm: {
     code:"jm", name:"Patwa", flag:"🇯🇲",
@@ -769,6 +1083,67 @@ const LANGS = {
     free_shipping:"Free shipping pan orders over $50",
     footer_tagline:"Yuh good enough just as yuh be.",
     footer_made:"Handcrafted wid love. Rooted in tradition. Made fi yuh.",
+    // Nav (missing)
+    nav_shop:"Shop", nav_recipes:"Brew Rituals", nav_supplements:"Supplements",
+    nav_ancestral:"Ancestral", nav_mocktails:"Mocktails", nav_jelly:"Jelly",
+    nav_faq:"FAQ", nav_library:"Tea Library",
+    // Buttons (missing)
+    btn_recipes:"Browse Recipes", btn_ritual:"Build Mi Ritual",
+    btn_report_sub:"personalised fi yuh", btn_add_basket:"Add to Basket",
+    btn_send:"Send",
+    // Cart (missing)
+    cart_empty:"Yuh basket empty.",
+    // Prayer (missing)
+    pray_btn_day:"🙏 Daily Prayer",
+    // Search
+    search_placeholder:"Search fi teas, herbs, or wellness goals…",
+    // Amara
+    amara_greeting:"Hello, beautiful soul. Mi name Amara — yuh wellness companion here at Chai Holistic.",
+    // SeaMoss page
+    sm_search_placeholder:"Search by flavor or benefit...",
+    sm_no_results:"No recipes found",
+    sm_no_results_sub:"Try clearing yuh search or filters.",
+    sm_how_to_use:"How fi Use Sea Moss Gel Every Day",
+    sm_quote:"She mek it every week widout fail. Now yuh can too.",
+    sm_add_shaker:"+ Add a Spare Shaker Bottle — $8",
+    sm_want_spare:"Want a spare?",
+    jelly_search_placeholder:"Search recipes or benefits...",
+    jelly_no_results:"No kits found",
+    jelly_no_results_sub:"Try clearing yuh filters.",
+    jelly_quote:"Wellness weh look like dessert. Taste like a treat. Work like medicine.",
+    jelly_shaker_note:"One shaker bottle come wid every kit.",
+    jelly_shaker_note2:"Need an extra fi di gym or a friend?",
+    mocktail_search_placeholder:"Search recipes or benefits...",
+    mocktail_no_results:"No recipes found",
+    mocktail_no_results_sub:"Try clearing yuh filters or search a different term.",
+    herb_search_placeholder:"Search by herb name, benefit, or health concern…",
+    herb_no_results:"No herbs found. Try a different search term.",
+    rec_ingredients:"Ingredients",
+    rec_steps:"Steps",
+    rec_benefits:"Benefits",
+    rec_steep:"Steep",
+    rec_serving:"Serving",
+    rec_tip:"Tip",
+    rec_shelf_life:"Shelf Life",
+    rec_add_to_basket:"Add Kit to Basket",
+    rec_close:"Close",
+    rec_difficulty:"Difficulty",
+    rec_time:"Time",
+    rec_servings:"Servings",
+    rec_per_serving:"per serving",
+    rec_daily_use:"Daily Use",
+    anc_view_blend:"View Blend",
+    anc_add_to_basket:"Add to Basket",
+    supp_view:"View pon Amazon",
+    supp_pairing:"Tea Pairing",
+    tl_search_placeholder:"Search blends, ingredients, or benefits…",
+    tl_no_results:"No blends found",
+    tl_brew_instructions:"Brew Instructions",
+    ui_close:"✕",
+    ui_back:"← Back",
+    ui_add_basket:"Add to Basket",
+    ui_shop_now:"Shop Now",
+    ui_learn_more:"Learn More",
   },
 };
 
@@ -926,6 +1301,7 @@ const getSuppPairing = (blend) => {
 };
 
 function MensWellness({ onNav, onAddToCart }) {
+  const { T, lang } = useLang();
   const [filter, setFilter] = useState("all");
   const [selected, setSelected] = useState(null);
   const [prostateOpen, setProstateOpen] = useState(false);
@@ -1538,7 +1914,7 @@ export default function ChaiHolistic() {
   const [preBasket, setPreBasket] = useState(false); // soft suggestion screen
   const [lang, setLang] = useState(() => detectLang());
   const [langOpen, setLangOpen] = useState(false);
-  const T = LANGS[lang] || LANGS.en;
+  const T = new Proxy(LANGS[lang] || LANGS.en, { get: (obj, key) => obj[key] ?? LANGS.en[key] ?? key });
   const switchLang = (code) => { setLang(code); setLangOpen(false); try{localStorage.setItem('chai_lang',code);}catch{} };
   const [homeSearchQuery, setHomeSearchQuery] = useState("");
   const [homeSearchResults, setHomeSearchResults] = useState([]);
@@ -7532,6 +7908,7 @@ Thank you!`);
 
   // --- MAIN RENDER ----------------------------------------------------------
   return (
+    <LangProvider lang={lang} T={T}>
     <>
       <style>{CSS}</style>
       <div ref={topRef} style={{position:"absolute",top:0,left:0}}/>
@@ -8495,5 +8872,6 @@ Thank you!`);
       `}</style>
 
     </>
+    </LangProvider>
   );
 }

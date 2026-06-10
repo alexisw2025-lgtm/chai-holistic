@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLang } from "./LangContext";
 
 // ─── AFFILIATE TAG ────────────────────────────────────────────────────────────
 const TAG = "xiomaka-20";
@@ -386,6 +387,7 @@ function StockNotifyModal({ supp, onClose }) {
 
 // ─── COMPONENT ────────────────────────────────────────────────────────────────
 export default function SupplementsPage({ onNav }) {
+  const { T, lang } = useLang();
   const [filter, setFilter]         = useState("all");
   const [selected, setSelected]     = useState(null);
   const [expanded, setExpanded]     = useState(null);
