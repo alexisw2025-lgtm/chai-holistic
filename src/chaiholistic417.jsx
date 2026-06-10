@@ -7353,106 +7353,177 @@ Thank you!`);
         </>
       )}
 
-      {/* ── GLOBAL SEARCH RESULTS OVERLAY (mobile + any search) ────────────── */}
-
-      {(homeSearchResults.length > 0 || (homeSearchQuery && homeSearchResults.length === 0)) && (
+      {/* ── GLOBAL SEARCH RESULTS OVERLAY ─────────────────────────────────────── */}
+      {homeSearchQuery.trim() !== "" && homeSearchResults.length > 0 && (
         <>
+          {/* Backdrop */}
           <div
             onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
-            style={{position:"fixed",inset:0,zIndex:1050,background:"rgba(0,0,0,.4)",backdropFilter:"blur(2px)"}}
+            style={{position:"fixed",inset:0,zIndex:1050,background:"rgba(0,0,0,.45)",backdropFilter:"blur(2px)"}}
           />
+          {/* Sheet */}
           <div style={{
             position:"fixed",bottom:0,left:0,right:0,zIndex:1051,
-            background:"white",
-            borderRadius:"20px 20px 0 0",
-            maxHeight:"78vh",
-            display:"flex",flexDirection:"column",
-            boxShadow:"0 -8px 40px rgba(0,0,0,.2)",
-            animation:"slideUp .3s cubic-bezier(.34,1.2,.64,1)",
+            background:"white",borderRadius:"22px 22px 0 0",
+            maxHeight:"80vh",display:"flex",flexDirection:"column",
+            boxShadow:"0 -8px 40px rgba(0,0,0,.22)",
+            animation:"slideUp .28s cubic-bezier(.34,1.2,.64,1)",
           }}>
-            {/* Handle + header */}
-            <div style={{padding:"12px 20px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(61,43,31,.08)",flexShrink:0}}>
-              <div style={{width:36,height:4,borderRadius:2,background:"rgba(61,43,31,.12)"}}/>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"var(--bark)",fontWeight:600,flex:1,textAlign:"center",margin:"0 12px"}}>
-                {homeSearchResults[0]?.isLoading ? `Searching for "${homeSearchQuery}"…` :
-                 homeSearchResults[0]?.isNoResult ? `Nothing found for "${homeSearchQuery}"` :
-                 `${homeSearchResults.length} result${homeSearchResults.length!==1?"s":""} for "${homeSearchQuery}"`}
+            {/* Drag handle */}
+            <div style={{padding:"10px 0 0",display:"flex",justifyContent:"center",flexShrink:0}}>
+              <div style={{width:40,height:4,borderRadius:2,background:"rgba(61,43,31,.15)"}}/>
+            </div>
+            {/* Header row */}
+            <div style={{
+              padding:"8px 16px 10px",
+              display:"flex",alignItems:"center",justifyContent:"space-between",
+              borderBottom:"1px solid rgba(61,43,31,.08)",flexShrink:0,
+            }}>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"var(--bark)",fontWeight:600,flex:1}}>
+                {homeSearchResults[0]?.isLoading
+                  ? `Searching for "${homeSearchQuery}"…`
+                  : homeSearchResults[0]?.isNoResult
+                  ? `Nothing found for "${homeSearchQuery}"`
+                  : `${homeSearchResults.filter(r=>!r.isNoResult&&!r.isLoading).length} result${homeSearchResults.filter(r=>!r.isNoResult&&!r.isLoading).length!==1?"s":""} for "${homeSearchQuery}"`}
               </div>
               <button
                 onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
-                style={{background:"rgba(61,43,31,.08)",border:"none",borderRadius:"50%",width:30,height:30,cursor:"pointer",fontSize:".85rem",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--bark)",flexShrink:0}}>✕</button>
+                style={{
+                  marginLeft:12,flexShrink:0,
+                  width:32,height:32,borderRadius:"50%",
+                  background:"rgba(61,43,31,.09)",border:"none",
+                  cursor:"pointer",fontSize:".85rem",
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  color:"var(--bark)",fontWeight:600,
+                }}>✕</button>
             </div>
-            {/* Results list — scrollable with momentum */}
-            <div style={{overflowY:"auto",flex:1,WebkitOverflowScrolling:"touch",padding:"4px 0 env(safe-area-inset-bottom,16px)"}}>
-              {homeSearchResults.length > 3 && !homeSearchResults[0]?.isLoading && !homeSearchResults[0]?.isNoResult && (
-                <div style={{textAlign:"center",padding:"6px 0 2px",fontFamily:"Jost,sans-serif",fontSize:".6rem",color:"rgba(61,43,31,.3)",letterSpacing:".08em"}}>
-                  {homeSearchResults.length} results · scroll for more ↓
+
+            {/* Scrollable content */}
+            <div style={{
+              overflowY:"auto",flex:1,
+              WebkitOverflowScrolling:"touch",
+              padding:"0 0 env(safe-area-inset-bottom,16px)",
+            }}>
+              {/* Loading */}
+              {homeSearchResults[0]?.isLoading && (
+                <div style={{padding:"36px 24px",textAlign:"center"}}>
+                  <div style={{fontSize:"2.2rem",marginBottom:14,display:"inline-block",animation:"spin 1.5s linear infinite"}}>🌿</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"var(--bark)",marginBottom:6}}>Searching for you…</div>
+                  <div style={{fontFamily:"Jost,sans-serif",fontSize:".74rem",color:"rgba(61,43,31,.4)",fontWeight:300}}>Looking up "{homeSearchQuery}"</div>
                 </div>
               )}
-              {homeSearchResults[0]?.isLoading ? (
-                <div style={{padding:"32px 20px",textAlign:"center"}}>
-                  <div style={{fontSize:"2rem",marginBottom:12,animation:"spin 1.5s linear infinite",display:"inline-block"}}>🌿</div>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"var(--bark)",marginBottom:6}}>Searching the web for you…</div>
-                  <div style={{fontFamily:"Jost,sans-serif",fontSize:".72rem",color:"rgba(61,43,31,.45)",fontWeight:300}}>Finding the best information on "{homeSearchQuery}"</div>
-                </div>
-              ) : homeSearchResults[0]?.isNoResult ? (
-                <div style={{padding:"28px 20px",textAlign:"center"}}>
-                  <div style={{fontSize:"2.5rem",marginBottom:14}}>🌿</div>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"var(--bark)",fontWeight:600,marginBottom:8}}>
-                    We didn't find "{homeSearchResults[0]?.name||homeSearchQuery}"
+
+              {/* No results */}
+              {homeSearchResults[0]?.isNoResult && (
+                <div style={{padding:"28px 24px",textAlign:"center"}}>
+                  <div style={{fontSize:"2.4rem",marginBottom:12}}>🌿</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.05rem",color:"var(--bark)",fontWeight:600,marginBottom:8}}>
+                    We don't have "{homeSearchQuery}" yet
                   </div>
-                  <p style={{fontFamily:"Jost,sans-serif",fontSize:".8rem",color:"rgba(61,43,31,.55)",fontWeight:300,lineHeight:1.75,maxWidth:300,margin:"0 auto 20px"}}>
-                    That isn't in our collection yet — but we'd love to know you're looking for it. We can let you know the moment we add it.
+                  <p style={{fontFamily:"Jost,sans-serif",fontSize:".78rem",color:"rgba(61,43,31,.5)",fontWeight:300,lineHeight:1.75,maxWidth:280,margin:"0 auto 20px"}}>
+                    Would you like us to let you know when we add it?
                   </p>
-                  <div style={{display:"flex",flexDirection:"column",gap:10,maxWidth:320,margin:"0 auto"}}>
+                  <div style={{display:"flex",flexDirection:"column",gap:10,maxWidth:300,margin:"0 auto"}}>
                     <button
                       onClick={()=>{
                         setShowRequest(true);
-                        setReqHerb(homeSearchResults[0]?.name||homeSearchQuery);
+                        setReqHerb(homeSearchQuery);
                         setHomeSearchResults([]);
                         setHomeSearchQuery("");
                         if(searchInputRef.current)searchInputRef.current.value="";
                       }}
-                      style={{background:"linear-gradient(135deg,var(--bark),#3A2A18)",color:"white",border:"none",borderRadius:14,padding:"13px",fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,boxShadow:"0 4px 16px rgba(61,43,31,.2)"}}>
-                      Yes — notify me when you add it →
+                      style={{background:"linear-gradient(135deg,var(--bark),#3A2A18)",color:"white",border:"none",borderRadius:14,padding:"13px",fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600}}>
+                      Yes — notify me →
                     </button>
                     <button
                       onClick={()=>{nav("herbs");setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
-                      style={{background:"rgba(61,43,31,.06)",border:"1px solid rgba(61,43,31,.15)",color:"var(--bark)",borderRadius:14,padding:"12px",fontFamily:"Jost,sans-serif",fontSize:".72rem",cursor:"pointer",transition:"background .2s"}}
-                      onMouseEnter={e=>e.currentTarget.style.background="rgba(61,43,31,.12)"}
-                      onMouseLeave={e=>e.currentTarget.style.background="rgba(61,43,31,.06)"}>
+                      style={{background:"rgba(61,43,31,.06)",border:"1px solid rgba(61,43,31,.15)",color:"var(--bark)",borderRadius:14,padding:"12px",fontFamily:"Jost,sans-serif",fontSize:".72rem",cursor:"pointer"}}>
                       Browse the Herb Archive →
                     </button>
                     <button
                       onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
-                      style={{background:"none",border:"none",color:"rgba(61,43,31,.35)",fontFamily:"Jost,sans-serif",fontSize:".7rem",cursor:"pointer",padding:"6px"}}>
-                      ← Go back
+                      style={{background:"none",border:"none",color:"rgba(61,43,31,.3)",fontFamily:"Jost,sans-serif",fontSize:".7rem",cursor:"pointer",padding:"4px"}}>
+                      ← Close
                     </button>
                   </div>
                 </div>
-              ) : (
-                homeSearchResults.map((r,i)=>(
-                  <div key={r.id||i}
-                    onClick={()=>{if(r.action)r.action();if(!r.isWebResult){setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}}
-                    style={{display:"flex",alignItems:"flex-start",gap:12,padding:"14px 20px",cursor:"pointer",borderBottom:"1px solid rgba(61,43,31,.06)",WebkitTapHighlightColor:"transparent",transition:"background .15s",background:r.isWebResult?"rgba(26,52,74,.04)":"transparent"}}
-                    onMouseEnter={e=>e.currentTarget.style.background=r.isWebResult?"rgba(26,52,74,.08)":"rgba(196,137,58,.06)"}
-                    onMouseLeave={e=>e.currentTarget.style.background=r.isWebResult?"rgba(26,52,74,.04)":"transparent"}>
-                    <div style={{width:44,height:44,borderRadius:10,flexShrink:0,background:`linear-gradient(135deg,${r.color||"#2A4A2D"},rgba(10,15,11,.5))`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.2rem",marginTop:2}}>{r.emoji||"🌿"}</div>
-                    <div style={{flex:1,minWidth:0}}>
-                      <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3,flexWrap:"wrap"}}>
-                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"var(--bark)",fontWeight:600}}>{r.name}</div>
-                        {r.type&&<span style={{fontSize:".52rem",background:r.typeColor||"rgba(74,114,80,.2)",color:"white",padding:"2px 7px",borderRadius:20,letterSpacing:".08em",textTransform:"uppercase",fontFamily:"Jost,sans-serif",flexShrink:0,fontWeight:600}}>{r.type}</span>}
-                        {r.isWebResult&&<span style={{fontSize:".52rem",color:"rgba(61,43,31,.35)",fontFamily:"Jost,sans-serif"}}>· from the web</span>}
+              )}
+
+              {/* Results */}
+              {!homeSearchResults[0]?.isLoading && !homeSearchResults[0]?.isNoResult && (
+                <>
+                  {homeSearchResults.length > 3 && (
+                    <div style={{textAlign:"center",padding:"8px 0 2px",fontFamily:"Jost,sans-serif",fontSize:".6rem",color:"rgba(61,43,31,.3)",letterSpacing:".08em"}}>
+                      scroll to see all {homeSearchResults.length} results ↓
+                    </div>
+                  )}
+                  {homeSearchResults.map((r,i)=>(
+                    <div key={r.id||i}
+                      onClick={()=>{
+                        if(r.action)r.action();
+                        if(!r.isWebResult){
+                          setHomeSearchResults([]);
+                          setHomeSearchQuery("");
+                          if(searchInputRef.current)searchInputRef.current.value="";
+                        }
+                      }}
+                      style={{
+                        display:"flex",alignItems:"flex-start",gap:12,
+                        padding:"13px 16px",cursor:"pointer",
+                        borderBottom:"1px solid rgba(61,43,31,.06)",
+                        WebkitTapHighlightColor:"transparent",
+                        background:r.isWebResult?"rgba(26,52,74,.03)":"transparent",
+                        transition:"background .15s",
+                      }}
+                      onMouseEnter={e=>e.currentTarget.style.background=r.isWebResult?"rgba(26,52,74,.07)":"rgba(196,137,58,.07)"}
+                      onMouseLeave={e=>e.currentTarget.style.background=r.isWebResult?"rgba(26,52,74,.03)":"transparent"}>
+                      {/* Icon */}
+                      <div style={{
+                        width:42,height:42,borderRadius:10,flexShrink:0,
+                        background:`linear-gradient(135deg,${r.color||"#2A4A2D"},rgba(10,15,11,.5))`,
+                        display:"flex",alignItems:"center",justifyContent:"center",
+                        fontSize:"1.15rem",marginTop:1,
+                      }}>{r.emoji||"🌿"}</div>
+                      {/* Text — constrained so it never overflows */}
+                      <div style={{flex:1,minWidth:0,overflow:"hidden"}}>
+                        <div style={{display:"flex",alignItems:"center",gap:5,marginBottom:3,flexWrap:"wrap"}}>
+                          <div style={{
+                            fontFamily:"'Playfair Display',serif",fontSize:".9rem",
+                            color:"var(--bark)",fontWeight:600,
+                            overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",
+                            maxWidth:"calc(100% - 80px)",
+                          }}>{r.name}</div>
+                          {r.type&&<span style={{
+                            fontSize:".5rem",background:r.typeColor||"rgba(74,114,80,.2)",
+                            color:"white",padding:"2px 6px",borderRadius:20,
+                            letterSpacing:".07em",textTransform:"uppercase",
+                            fontFamily:"Jost,sans-serif",flexShrink:0,fontWeight:600,
+                            whiteSpace:"nowrap",
+                          }}>{r.type}</span>}
+                        </div>
+                        <div style={{
+                          fontFamily:"Jost,sans-serif",fontSize:".7rem",
+                          color:"rgba(61,43,31,.52)",lineHeight:1.5,
+                          display:"-webkit-box",WebkitLineClamp:2,
+                          WebkitBoxOrient:"vertical",overflow:"hidden",
+                        }}>{r.desc}</div>
                       </div>
-                      <div style={{fontFamily:"Jost,sans-serif",fontSize:".72rem",color:"rgba(61,43,31,.55)",lineHeight:1.5}}>{r.desc}</div>
-                      {r.isWebResult&&r.url&&<div style={{fontFamily:"Jost,sans-serif",fontSize:".6rem",color:"rgba(61,43,31,.28)",marginTop:3,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{r.url}</div>}
+                      {/* Price / arrow */}
+                      <div style={{flexShrink:0,display:"flex",flexDirection:"column",alignItems:"flex-end",gap:3,marginLeft:6,paddingTop:2}}>
+                        {r.price&&<div style={{fontFamily:"'Playfair Display',serif",fontSize:".85rem",color:"var(--gold)",fontWeight:600,whiteSpace:"nowrap"}}>${r.price}</div>}
+                        <span style={{fontSize:".9rem",color:"rgba(61,43,31,.22)"}}>›</span>
+                      </div>
                     </div>
-                    <div style={{flexShrink:0,display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4,marginLeft:4}}>
-                      {r.price&&<div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--gold)",fontWeight:600}}>${r.price}</div>}
-                      <span style={{fontSize:"1rem",color:"rgba(61,43,31,.25)"}}>›</span>
-                    </div>
+                  ))}
+                  {/* Bottom close strip */}
+                  <div style={{padding:"14px 16px",borderTop:"1px solid rgba(61,43,31,.06)",textAlign:"center"}}>
+                    <button
+                      onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
+                      style={{background:"none",border:"none",color:"rgba(61,43,31,.35)",fontFamily:"Jost,sans-serif",fontSize:".7rem",cursor:"pointer",letterSpacing:".08em"}}>
+                      ✕ Close results
+                    </button>
                   </div>
-                ))
+                </>
               )}
             </div>
           </div>

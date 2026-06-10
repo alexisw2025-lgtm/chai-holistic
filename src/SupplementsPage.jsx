@@ -232,10 +232,6 @@ const CATEGORIES = [
 
 // ─── SPINNING AMAZON BUTTON ──────────────────────────────────────────────────
 function AmazonSpinBtn({ onClick }) {
-  const text = "AMAZON · SHOP NOW · AMAZON · SHOP NOW · ";
-  const chars = text.split("");
-  const radius = 52;
-  const total = chars.length;
   return (
     <div
       onClick={onClick}
@@ -245,23 +241,31 @@ function AmazonSpinBtn({ onClick }) {
         cursor:"pointer", flexShrink:0,
       }}
     >
-      {/* Rotating ring of text — counter-clockwise */}
-      <div style={{
-        position:"absolute", inset:0, borderRadius:"50%",
-        animation:"suppSpinCCW 18s linear infinite",
-      }}>
-        {chars.map((ch, i) => (
-          <span key={i} style={{
-            position:"absolute", top:0, left:"50%",
-            fontSize:"8.5px", fontFamily:"Jost,sans-serif",
-            fontWeight:600, color:"rgba(196,137,58,.85)",
-            letterSpacing:".04em",
-            transformOrigin:`0 ${radius}px`,
-            width:10, textAlign:"center", marginLeft:-5,
-            transform:`rotate(${i * (360 / total)}deg)`,
-          }}>{ch}</span>
-        ))}
-      </div>
+      {/* SVG rotating text ring — perfectly centred via textPath */}
+      <svg
+        viewBox="0 0 120 120"
+        style={{
+          position:"absolute", inset:0, width:"100%", height:"100%",
+          animation:"suppSpinCCW 18s linear infinite",
+          overflow:"visible",
+        }}
+      >
+        <defs>
+          <path
+            id="suppSpinPath"
+            d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0"
+          />
+        </defs>
+        <text style={{
+          fontSize:"8.5px", fontFamily:"Jost,sans-serif",
+          fontWeight:600, letterSpacing:"3.5px",
+          fill:"rgba(196,137,58,.85)",
+        }}>
+          <textPath href="#suppSpinPath" startOffset="0%">
+            AMAZON · SHOP NOW · AMAZON · SHOP NOW ·
+          </textPath>
+        </text>
+      </svg>
 
       {/* Center gold circle */}
       <div style={{
