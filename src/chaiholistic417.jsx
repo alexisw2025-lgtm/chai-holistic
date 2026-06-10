@@ -213,6 +213,157 @@ const RINGS = [
 ];
 
 
+
+// ── LANGUAGE TRANSLATIONS ──────────────────────────────────────────────────────
+const LANGS = {
+  en: {
+    code:"en", name:"English", flag:"🇺🇸",
+    hero_eyebrow:"Chai Holistic · Est. 2024",
+    hero_h1:"Sip what heals you.",
+    hero_h2:"Bloom where you are.",
+    hero_p:"Handcrafted herbal blends from the Sip & Heal tradition. 40 recipes. Every occasion. Every body. Every season.",
+    btn_explore:"Explore the Collection",
+    btn_recipes:"Browse Recipes",
+    btn_find:"✦ Find My Tea",
+    btn_ritual:"Build My Ritual",
+    btn_report:"Free Sip & Heal Report",
+    btn_report_sub:"personalized to you",
+    btn_search:"Search",
+    search_placeholder:"Search teas, herbs, or wellness goals…",
+    nav_home:"Home", nav_shop:"Shop", nav_recipes:"Brew Rituals",
+    nav_men:"Men's", nav_supplements:"Supplements", nav_ancestral:"Ancestral",
+    nav_herbs:"Herb Archive", nav_mocktails:"Mocktails", nav_jelly:"Jelly",
+    nav_seamoss:"Sea Moss", nav_rings:"Rings", nav_faq:"FAQ", nav_library:"Tea Library",
+    pray_btn_night:"🙏 Pray with me", pray_btn_day:"🙏 Daily Prayer",
+    amara_placeholder:"Ask Amara anything…",
+    tagline:"You are good enough the way you are.",
+  },
+  es: {
+    code:"es", name:"Español", flag:"🇪🇸",
+    hero_eyebrow:"Chai Holistic · Est. 2024",
+    hero_h1:"Bebe lo que te sana.",
+    hero_h2:"Florece donde estás.",
+    hero_p:"Mezclas herbales artesanales de la tradición Sip & Heal. 40 recetas. Cada ocasión. Cada cuerpo. Cada temporada.",
+    btn_explore:"Explorar la Colección",
+    btn_recipes:"Ver Recetas",
+    btn_find:"✦ Encuentra Tu Té",
+    btn_ritual:"Construye Tu Ritual",
+    btn_report:"Informe Sip & Heal Gratis",
+    btn_report_sub:"personalizado para ti",
+    btn_search:"Buscar",
+    search_placeholder:"Busca tés, hierbas o metas de bienestar…",
+    nav_home:"Inicio", nav_shop:"Tienda", nav_recipes:"Rituales",
+    nav_men:"Hombres", nav_supplements:"Suplementos", nav_ancestral:"Ancestral",
+    nav_herbs:"Archivo de Hierbas", nav_mocktails:"Mocktails", nav_jelly:"Jaleas",
+    nav_seamoss:"Musgo Marino", nav_rings:"Anillos", nav_faq:"FAQ", nav_library:"Biblioteca",
+    pray_btn_night:"🙏 Orar conmigo", pray_btn_day:"🙏 Oración del Día",
+    amara_placeholder:"Pregúntale a Amara…",
+    tagline:"Eres suficiente tal como eres.",
+  },
+  fr: {
+    code:"fr", name:"Français", flag:"🇫🇷",
+    hero_eyebrow:"Chai Holistic · Est. 2024",
+    hero_h1:"Sirotez ce qui vous guérit.",
+    hero_h2:"Épanouissez-vous là où vous êtes.",
+    hero_p:"Mélanges d'herbes artisanaux de la tradition Sip & Heal. 40 recettes. Chaque occasion. Chaque corps. Chaque saison.",
+    btn_explore:"Explorer la Collection",
+    btn_recipes:"Parcourir les Recettes",
+    btn_find:"✦ Trouver Mon Thé",
+    btn_ritual:"Créer Mon Rituel",
+    btn_report:"Rapport Sip & Heal Gratuit",
+    btn_report_sub:"personnalisé pour vous",
+    btn_search:"Chercher",
+    search_placeholder:"Cherchez thés, herbes ou objectifs santé…",
+    nav_home:"Accueil", nav_shop:"Boutique", nav_recipes:"Rituels",
+    nav_men:"Hommes", nav_supplements:"Suppléments", nav_ancestral:"Ancestral",
+    nav_herbs:"Archives des Herbes", nav_mocktails:"Mocktails", nav_jelly:"Gelées",
+    nav_seamoss:"Mousse Marine", nav_rings:"Anneaux", nav_faq:"FAQ", nav_library:"Bibliothèque",
+    pray_btn_night:"🙏 Prier avec moi", pray_btn_day:"🙏 Prière du Jour",
+    amara_placeholder:"Demandez à Amara…",
+    tagline:"Vous êtes assez bien tel que vous êtes.",
+  },
+  pt: {
+    code:"pt", name:"Português", flag:"🇧🇷",
+    hero_eyebrow:"Chai Holistic · Est. 2024",
+    hero_h1:"Beba o que te cura.",
+    hero_h2:"Floresça onde você está.",
+    hero_p:"Misturas de ervas artesanais da tradição Sip & Heal. 40 receitas. Cada ocasião. Cada corpo. Cada estação.",
+    btn_explore:"Explorar a Coleção",
+    btn_recipes:"Ver Receitas",
+    btn_find:"✦ Encontrar Meu Chá",
+    btn_ritual:"Construir Meu Ritual",
+    btn_report:"Relatório Sip & Heal Grátis",
+    btn_report_sub:"personalizado para você",
+    btn_search:"Buscar",
+    search_placeholder:"Busque chás, ervas ou metas de bem-estar…",
+    nav_home:"Início", nav_shop:"Loja", nav_recipes:"Rituais",
+    nav_men:"Homens", nav_supplements:"Suplementos", nav_ancestral:"Ancestral",
+    nav_herbs:"Arquivo de Ervas", nav_mocktails:"Mocktails", nav_jelly:"Geleias",
+    nav_seamoss:"Musgo do Mar", nav_rings:"Anéis", nav_faq:"FAQ", nav_library:"Biblioteca",
+    pray_btn_night:"🙏 Rezar comigo", pray_btn_day:"🙏 Oração do Dia",
+    amara_placeholder:"Pergunte à Amara…",
+    tagline:"Você é bom o suficiente do jeito que é.",
+  },
+  ht: {
+    code:"ht", name:"Kreyòl Ayisyen", flag:"🇭🇹",
+    hero_eyebrow:"Chai Holistic · Est. 2024",
+    hero_h1:"Bwè sa ki geri ou.",
+    hero_h2:"Fleri kote ou ye a.",
+    hero_p:"Melanj zèb atizanal soti nan tradisyon Sip & Heal. 40 resèt. Chak okazyon. Chak kò. Chak sezon.",
+    btn_explore:"Eksplore Koleksyon an",
+    btn_recipes:"Gade Resèt yo",
+    btn_find:"✦ Jwenn Tè Mwen",
+    btn_ritual:"Bati Ritiyèl Mwen",
+    btn_report:"Rapò Sip & Heal Gratis",
+    btn_report_sub:"pèsonalize pou ou",
+    btn_search:"Chèche",
+    search_placeholder:"Chèche tè, zèb, oswa objektif sante…",
+    nav_home:"Akèy", nav_shop:"Magazen", nav_recipes:"Ritiyèl",
+    nav_men:"Gason", nav_supplements:"Sipleman", nav_ancestral:"Ansestral",
+    nav_herbs:"Achiv Zèb", nav_mocktails:"Mocktails", nav_jelly:"Jele",
+    nav_seamoss:"Mous Lanmè", nav_rings:"Bag", nav_faq:"FAQ", nav_library:"Bibliyotèk",
+    pray_btn_night:"🙏 Priye avèk mwen", pray_btn_day:"🙏 Lapriyè Jodi a",
+    amara_placeholder:"Mande Amara nenpòt bagay…",
+    tagline:"Ou bon ase jan ou ye a.",
+  },
+  jm: {
+    code:"jm", name:"Patwa", flag:"🇯🇲",
+    hero_eyebrow:"Chai Holistic · Est. 2024",
+    hero_h1:"Drink wah heal yuh.",
+    hero_h2:"Bloom whea yuh deh.",
+    hero_p:"Handcrafted herbal blends from di Sip & Heal tradition. 40 recipe. Every occasion. Every body. Every season.",
+    btn_explore:"Explore di Collection",
+    btn_recipes:"Browse Recipes",
+    btn_find:"✦ Find Mi Tea",
+    btn_ritual:"Build Mi Ritual",
+    btn_report:"Free Sip & Heal Report",
+    btn_report_sub:"personalised fi yuh",
+    btn_search:"Search",
+    search_placeholder:"Search teas, herbs or wellness goals…",
+    nav_home:"Home", nav_shop:"Shop", nav_recipes:"Brew Rituals",
+    nav_men:"Man Dem", nav_supplements:"Supplements", nav_ancestral:"Ancestral",
+    nav_herbs:"Herb Archive", nav_mocktails:"Mocktails", nav_jelly:"Jelly",
+    nav_seamoss:"Sea Moss", nav_rings:"Rings", nav_faq:"FAQ", nav_library:"Tea Library",
+    pray_btn_night:"🙏 Pray wid mi", pray_btn_day:"🙏 Daily Prayer",
+    amara_placeholder:"Ask Amara anyting…",
+    tagline:"Yuh good enough just as yuh be.",
+  },
+};
+
+// Detect language from browser
+function detectLang() {
+  try {
+    const saved = localStorage.getItem('chai_lang');
+    if (saved && LANGS[saved]) return saved;
+    const bl = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    if (bl.startsWith('es')) return 'es';
+    if (bl.startsWith('fr')) return 'fr';
+    if (bl.startsWith('pt')) return 'pt';
+    if (bl.startsWith('ht') || bl === 'fr-ht') return 'ht';
+    return 'en';
+  } catch { return 'en'; }
+}
+
 const MEN_BLENDS = [
   { id:"men1",  name:"Iron Will Morning",        tagline:"Rise with purpose and power",               price:19.99, color:"#2A1A0A", benefit:"Energy · Drive · Focus",         ingredients:["Ashwagandha Root","Rhodiola Rosea","Ginger Root","Black Pepper","Cinnamon"],           steepMin:8, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"A commanding morning blend built on ashwagandha and rhodiola — two of the most studied adaptogens for male energy, resilience, and mental sharpness.", affirmation:"I rise with intention. Today I build.", warning:"Contains Rhodiola. Avoid if on SSRIs or MAOIs." },
   { id:"men2",  name:"Deep Recharge Sleep",      tagline:"Testosterone-restoring deep sleep",          price:18.99, color:"#1A1A3A", benefit:"Deep Sleep · Recovery · Hormones",ingredients:["Valerian Root","Passionflower","Ashwagandha Root","Chamomile","Lemon Balm"],           steepMin:10, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Quality sleep is where testosterone is produced. This blend targets the deep, restorative stages of sleep that most men are chronically missing.", affirmation:"Rest is not weakness. Rest is where I rebuild.", warning:"Contains Valerian Root. Do not drive after use. Not for use during pregnancy." },
@@ -963,6 +1114,10 @@ export default function ChaiHolistic() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [preBasket, setPreBasket] = useState(false); // soft suggestion screen
+  const [lang, setLang] = useState(() => detectLang());
+  const [langOpen, setLangOpen] = useState(false);
+  const T = LANGS[lang] || LANGS.en;
+  const switchLang = (code) => { setLang(code); setLangOpen(false); try{localStorage.setItem('chai_lang',code);}catch{} };
   const [homeSearchQuery, setHomeSearchQuery] = useState("");
   const [homeSearchResults, setHomeSearchResults] = useState([]);
   const searchInputRef = useRef(null);
@@ -3602,14 +3757,14 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         <div className="hero-orb a"/><div className="hero-orb b"/>
         <div className="hero-inner">
           <div>
-            <div className="hero-eye"><div className="hero-eye-line"/><span className="hero-eye-txt">Chai Holistic · Est. 2024</span></div>
-            <h1 className="hero-h"><em>Sip what heals you.</em><br/><span className="g">Bloom</span> where you are.</h1>
-            <p className="hero-p">Handcrafted herbal blends from the Sip &amp; Heal tradition. 40 recipes. Every occasion. Every body. Every season.</p>
+            <div className="hero-eye"><div className="hero-eye-line"/><span className="hero-eye-txt">{T.hero_eyebrow}</span></div>
+            <h1 className="hero-h"><em>{T.hero_h1}</em><br/>{T.hero_h2}</h1>
+            <p className="hero-p">{T.hero_p}</p>
 
             {/* PRIMARY ACTIONS — three clear paths */}
             <div className="hero-btns">
-              <button className="btn-main" onClick={()=>nav("shop")}>Explore the Collection</button>
-              <button className="btn-ghost" onClick={()=>nav("recipes")}>Browse Recipes</button>
+              <button className="btn-main" onClick={()=>nav("shop")}>{T.btn_explore}</button>
+              <button className="btn-ghost" onClick={()=>nav("recipes")}>{T.btn_recipes}</button>
             </div>
 
             {/* FEATURE BUTTONS */}
@@ -3627,8 +3782,8 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
               {/* Secondary features */}
               <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-                <button className="btn-finder" style={{flex:1}} onClick={()=>setFinderOpen(true)}>✦ Find My Tea</button>
-                <button className="btn-ghost" style={{flex:1}} onClick={()=>setRitualOpen(true)}>Build My Ritual</button>
+                <button className="btn-finder" style={{flex:1}} onClick={()=>setFinderOpen(true)}>{T.btn_find}</button>
+                <button className="btn-ghost" style={{flex:1}} onClick={()=>setRitualOpen(true)}>{T.btn_ritual}</button>
               </div>
 
               <button
@@ -3636,7 +3791,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 style={{background:"linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))",color:"var(--gold)",border:"1.5px solid rgba(196,137,58,.45)",padding:"12px 20px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".74rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",transition:"all .25s",display:"flex",alignItems:"center",justifyContent:"center",gap:8,width:"100%"}}
                 onMouseEnter={e=>{e.currentTarget.style.background="rgba(192,136,48,.22)";e.currentTarget.style.borderColor="var(--gold)";}}
                 onMouseLeave={e=>{e.currentTarget.style.background="linear-gradient(135deg,rgba(192,136,48,.15),rgba(192,136,48,.08))";e.currentTarget.style.borderColor="rgba(196,137,58,.45)";}}>
-                🌿 &nbsp;<strong>Free Sip &amp; Heal Report</strong> &nbsp;— personalized to you
+                🌿 &nbsp;<strong>{T.btn_report}</strong> &nbsp;— {T.btn_report_sub}
               </button>
 
             </div>
@@ -6968,7 +7123,7 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {[["home","🏠 Home"],["shop","Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's"],["supplements","💊 Supplements"],["ancestral","🌿 Ancestral"],["herbs","🌿 Herb Archive"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly"],["seamoss","🌿 Sea Moss"],["rings","__RING_IMG__"],["faq","FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+          {[["home","🏠 "+T.nav_home],["shop",T.nav_shop],["recipes","🍵 "+T.nav_recipes],["men","⚡ "+T.nav_men],["supplements","💊 "+T.nav_supplements],["ancestral","🌿 "+T.nav_ancestral],["herbs","🌿 "+T.nav_herbs],["mocktails","🍹 "+T.nav_mocktails],["jelly","🌊 "+T.nav_jelly],["seamoss","🌿 "+T.nav_seamoss],["rings","__RING_IMG__"],["faq",T.nav_faq],["tea-library","📚 "+T.nav_library]].map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>
               {l==="__RING_IMG__" ? (
                 <span style={{display:"inline-flex",alignItems:"center",gap:5}}>
@@ -6991,6 +7146,37 @@ Thank you!`);
             style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500}}>
             🌿 Sip &amp; Seek
           </span>
+        </div>
+        {/* Language selector */}
+        <div style={{position:"relative"}}>
+          <button
+            onClick={()=>setLangOpen(o=>!o)}
+            style={{background:"none",border:"1px solid rgba(61,43,31,.18)",borderRadius:50,padding:"5px 10px",cursor:"pointer",display:"flex",alignItems:"center",gap:5,fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"var(--bark)",letterSpacing:".06em",transition:"all .2s"}}
+            onMouseEnter={e=>e.currentTarget.style.borderColor="rgba(196,137,58,.5)"}
+            onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(61,43,31,.18)"}
+            title="Change language">
+            <span style={{fontSize:".9rem"}}>{LANGS[lang]?.flag||"🌐"}</span>
+            <span>{LANGS[lang]?.code?.toUpperCase()||"EN"}</span>
+          </button>
+          {langOpen&&(
+            <>
+              <div onClick={()=>setLangOpen(false)} style={{position:"fixed",inset:0,zIndex:498}}/>
+              <div style={{position:"absolute",top:"calc(100% + 8px)",right:0,zIndex:499,background:"white",border:"1px solid rgba(61,43,31,.12)",borderRadius:14,boxShadow:"0 8px 32px rgba(0,0,0,.15)",overflow:"hidden",minWidth:170}}>
+                {Object.values(LANGS).map(l=>(
+                  <div key={l.code} onClick={()=>switchLang(l.code)}
+                    style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",cursor:"pointer",background:lang===l.code?"rgba(196,137,58,.08)":"transparent",borderBottom:"1px solid rgba(61,43,31,.06)",transition:"background .15s"}}
+                    onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.08)"}
+                    onMouseLeave={e=>e.currentTarget.style.background=lang===l.code?"rgba(196,137,58,.08)":"transparent"}>
+                    <span style={{fontSize:"1.1rem"}}>{l.flag}</span>
+                    <div>
+                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:".82rem",color:"var(--bark)",fontWeight:600}}>{l.name}</div>
+                    </div>
+                    {lang===l.code&&<span style={{marginLeft:"auto",color:"var(--gold)",fontSize:".75rem"}}>✓</span>}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
         <div className="nav-right">
           <button className="cart-btn" onClick={()=>{ if(cart.length>0){setPreBasket(true);}else{setCartOpen(true);} }}>
@@ -7018,7 +7204,7 @@ Thank you!`);
               autoCorrect="off"
               autoCapitalize="off"
               spellCheck="false"
-              placeholder="Search teas, herbs, or wellness goals…"
+              placeholder={T.search_placeholder}
               onFocus={()=>{const w=document.getElementById('searchWrap');if(w){w.style.borderColor='rgba(196,137,58,.6)';w.style.boxShadow='0 0 0 3px rgba(196,137,58,.12)';}}}
               onBlur={()=>{const w=document.getElementById('searchWrap');if(w){w.style.borderColor='rgba(61,43,31,.2)';w.style.boxShadow='0 1px 8px rgba(0,0,0,.07)';}}}
               onKeyDown={e=>{if(e.key==="Enter"){e.preventDefault();const q=(searchInputRef.current?.value||"").toLowerCase().trim();if(!q)return;runGlobalSearch(q);searchInputRef.current?.blur();}}}
@@ -7030,7 +7216,7 @@ Thank you!`);
               style={{background:"var(--bark)",border:"none",color:"white",padding:"11px 20px",fontFamily:"Jost,sans-serif",fontSize:".68rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap",transition:"background .2s"}}
               onMouseEnter={e=>e.currentTarget.style.background="var(--sage-d)"}
               onMouseLeave={e=>e.currentTarget.style.background="var(--bark)"}>
-              Search
+              {T.btn_search}
             </button>
           </div>
         </div>
@@ -7119,7 +7305,7 @@ Thank you!`);
       {/* 2AM BUTTON   hidden while overlay is open */}
       {!twoAM && (
         <button className="twoam-btn" onClick={open2AM}>
-          {isNight?"🙏 Pray with me":"🙏 Daily Prayer"}
+          {isNight?T.pray_btn_night:T.pray_btn_day}
         </button>
       )}
 
