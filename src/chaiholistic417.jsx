@@ -218,24 +218,91 @@ const RINGS = [
 const LANGS = {
   en: {
     code:"en", name:"English", flag:"🇺🇸",
+    // Hero
     hero_eyebrow:"Chai Holistic · Est. 2024",
     hero_h1:"Sip what heals you.",
     hero_h2:"Bloom where you are.",
     hero_p:"Handcrafted herbal blends from the Sip & Heal tradition. 40 recipes. Every occasion. Every body. Every season.",
-    btn_explore:"Explore the Collection",
-    btn_recipes:"Browse Recipes",
-    btn_find:"✦ Find My Tea",
-    btn_ritual:"Build My Ritual",
-    btn_report:"Free Sip & Heal Report",
-    btn_report_sub:"personalized to you",
-    btn_search:"Search",
+    // Buttons
+    btn_explore:"Explore the Collection", btn_recipes:"Browse Recipes",
+    btn_find:"✦ Find My Tea", btn_ritual:"Build My Ritual",
+    btn_report:"Free Sip & Heal Report", btn_report_sub:"personalized to you",
+    btn_search:"Search", btn_add_basket:"Add to Basket",
+    btn_shop_now:"Shop Now", btn_learn_more:"Learn More →",
+    btn_see_all:"See All", btn_browse_all:"Browse All 40 Recipes Free",
+    btn_close:"Close", btn_back:"{T.prayer_back}", btn_send:"Send",
+    btn_save:"Save My Ritual", btn_start:"Get Started",
+    btn_try_again:"Try Again", btn_notify:"{T.btn_notify}",
+    btn_browse_herbs:"{T.btn_browse_herbs}",
+    // Search
     search_placeholder:"Search teas, herbs, or wellness goals…",
+    search_loading:"Searching for you…",
+    search_looking:"Looking up",
+    search_noresult:"We don't have",
+    search_noresult2:"{T.search_noresult2}",
+    search_scroll:"scroll to see all results ↓",
+    // Nav
     nav_home:"Home", nav_shop:"Shop", nav_recipes:"Brew Rituals",
     nav_men:"Men's", nav_supplements:"Supplements", nav_ancestral:"Ancestral",
     nav_herbs:"Herb Archive", nav_mocktails:"Mocktails", nav_jelly:"Jelly",
     nav_seamoss:"Sea Moss", nav_rings:"Rings", nav_faq:"FAQ", nav_library:"Tea Library",
+    // Prayer / Affirmation
     pray_btn_night:"🙏 Pray with me", pray_btn_day:"🙏 Daily Prayer",
+    affirmation_header:"Daily Affirmation",
+    affirmation_sub:"{T.affirmation_sub}",
+    affirmation_ring_note:"Have a Vibe Shift Ring? Touch your ring to your phone to hear today's affirmation anytime, anywhere.",
+    prayer_eyebrow:"Daily Prayer",
+    prayer_back:"← Back",
+    prayer_ring_note:"{T.prayer_ring_note}",
+    // Section headers
+    sec_features:"Features you won't find anywhere else",
+    sec_features_eye:"Why Chai Holistic",
+    sec_blends:"The Sip & Heal Blends",
+    sec_blends_eye:"Our Collection",
+    sec_story:"Rooted in healing",
+    sec_story_eye:"Our Story",
+    sec_why_tea:"Why Tea is the Greatest Gift the Earth Ever Gave Us",
+    sec_why_eye:"The Story of Tea",
+    sec_science:"{T.sec_science}",
+    sec_science_eye:"The Science of Tea",
+    sec_bundles:"Curated Bundles",
+    sec_bundles_eye:"Best Value",
+    sec_bundles_sub:"Thoughtfully paired for every intention.",
+    sec_tools:"Brew Tools",
+    sec_rings:"Vibe Shift Rings",
+    sec_brewing:"Brewing Made Simple",
+    sec_faq:"Your Questions, Answered",
+    sec_all_recipes:"All 40 Recipes",
+    sec_all_recipes_eye:"Sip & Heal · Complete Guide",
+    sec_all_recipes_sub:"Click any recipe to expand steps and start your brew timer.",
+    sec_mens:"Built for the Male Body.",
+    sec_mens_eye:"Men's Wellness",
+    // Shop
+    shop_blends:"Blends", shop_cleansing:"Cleansing", shop_herbs:"Herbs",
+    shop_bundles:"Bundles", shop_tools:"Brew Tools",
+    // Cart
+    cart_title:"Your Ritual Basket", cart_empty:"Your basket is empty.",
+    cart_empty_sub:"{T.cart_empty_sub}",
+    cart_subtotal:"Subtotal", cart_checkout:"Proceed to Checkout",
+    cart_added:"added to your Ritual Basket",
+    // Features cards
+    feat_sip_seek:"Sip & Seek", feat_sip_seek_sub:"Personal tea + 7-day ritual",
+    feat_amara:"Meet Amara", feat_amara_sub:"Your wellness companion",
+    feat_ritual:"Build Your Ritual", feat_ritual_sub:"Daily ritual planner",
+    feat_cleanse:"Cleanse Tracker", feat_cleanse_sub:"Protocol + timer",
+    // Toast
+    toast_added:"added to your Ritual Basket",
+    // Amara
     amara_placeholder:"Ask Amara anything…",
+    amara_greeting:"Hello, beautiful soul. I'm Amara — your wellness companion here at Chai Holistic.",
+    // Footer
+    footer_tagline:T.footer_tagline,
+    footer_made:"Handcrafted with love. Rooted in tradition. Made for you.",
+    // Misc
+    out_of_stock:"Out of Stock",
+    in_stock:"In Stock",
+    new_badge:"NEW",
+    free_shipping:"Free shipping on orders over $50",
     tagline:"You are good enough the way you are.",
   },
   es: {
@@ -251,14 +318,85 @@ const LANGS = {
     btn_report:"Informe Sip & Heal Gratis",
     btn_report_sub:"personalizado para ti",
     btn_search:"Buscar",
-    search_placeholder:"Busca tés, hierbas o metas de bienestar…",
-    nav_home:"Inicio", nav_shop:"Tienda", nav_recipes:"Rituales",
-    nav_men:"Hombres", nav_supplements:"Suplementos", nav_ancestral:"Ancestral",
-    nav_herbs:"Archivo de Hierbas", nav_mocktails:"Mocktails", nav_jelly:"Jaleas",
-    nav_seamoss:"Musgo Marino", nav_rings:"Anillos", nav_faq:"FAQ", nav_library:"Biblioteca",
-    pray_btn_night:"🙏 Orar conmigo", pray_btn_day:"🙏 Oración del Día",
+    nav_home:"Inicio",
+    nav_men:"Hombres",
+    nav_herbs:"Archivo de Hierbas",
+    nav_seamoss:"Musgo Marino",
+    pray_btn_night:"🙏 Orar conmigo",
     amara_placeholder:"Pregúntale a Amara…",
     tagline:"Eres suficiente tal como eres.",
+    btn_add_basket:"Añadir al Carro",
+    btn_shop_now:"Comprar Ahora",
+    btn_learn_more:"Más Info →",
+    btn_see_all:"Ver Todo",
+    btn_browse_all:"Ver las 40 Recetas Gratis",
+    btn_close:"Cerrar",
+    btn_back:"← Volver",
+    btn_send:"Enviar",
+    btn_save:"Guardar Mi Ritual",
+    btn_start:"Comenzar",
+    btn_try_again:"Intentar de Nuevo",
+    btn_notify:"Sí — avísame →",
+    btn_browse_herbs:"Explorar el Archivo de Hierbas →",
+    search_loading:"Buscando para ti…",
+    search_looking:"Buscando",
+    search_noresult:"No tenemos",
+    search_noresult2:"todavía — ¿quieres que te avisemos cuando lo agreguemos?",
+    search_scroll:"desliza para ver todos los resultados ↓",
+    affirmation_header:"Afirmación Diaria",
+    affirmation_sub:"Toca el loto para recibir tu afirmación de hoy — luego presiónalo para escucharla.",
+    affirmation_ring_note:"¿Tienes un Vibe Shift Ring? Toca tu anillo en tu teléfono para escuchar tu afirmación en cualquier momento.",
+    prayer_eyebrow:"Oración Diaria",
+    prayer_back:"← Volver",
+    prayer_ring_note:"¿Tienes un Vibe Shift Ring? Tócalo en tu teléfono para escuchar la oración de hoy — sin necesidad de pantalla.",
+    sec_features:"Características que no encontrarás en ningún otro lugar",
+    sec_features_eye:"Por Qué Chai Holistic",
+    sec_blends:"Las Mezclas Sip & Heal",
+    sec_blends_eye:"Nuestra Colección",
+    sec_story:"Arraigado en la curación",
+    sec_story_eye:"Nuestra Historia",
+    sec_why_tea:"Por Qué el Té es el Mayor Regalo que la Tierra nos ha Dado",
+    sec_why_eye:"La Historia del Té",
+    sec_science:"Así es como funciona",
+    sec_science_eye:"La Ciencia del Té",
+    sec_bundles:"Paquetes Curados",
+    sec_bundles_eye:"Mejor Valor",
+    sec_bundles_sub:"Cuidadosamente emparejados para cada intención.",
+    sec_tools:"Herramientas de Preparación",
+    sec_rings:"Vibe Shift Rings",
+    sec_brewing:"Preparación Made Simple",
+    sec_faq:"Tus Preguntas, Respondidas",
+    sec_all_recipes:"Las 40 Recetas",
+    sec_all_recipes_eye:"Sip & Heal · Guía Completa",
+    sec_all_recipes_sub:"Haz clic en cualquier receta para ver los pasos e iniciar el temporizador.",
+    sec_mens:"Creado para el Cuerpo Masculino.",
+    sec_mens_eye:"Bienestar Masculino",
+    shop_blends:"Mezclas",
+    shop_cleansing:"Limpieza",
+    shop_herbs:"Hierbas",
+    shop_bundles:"Paquetes",
+    shop_tools:"Herramientas",
+    cart_title:"Tu Cesta Ritual",
+    cart_empty:"Tu cesta está vacía.",
+    cart_empty_sub:"Agrega mezclas para comenzar.",
+    cart_subtotal:"Subtotal",
+    cart_checkout:"Proceder al Pago",
+    cart_added:"agregado a tu Cesta Ritual",
+    feat_sip_seek:"Sip & Seek",
+    feat_sip_seek_sub:"Té personal + ritual de 7 días",
+    feat_amara:"Conoce a Amara",
+    feat_amara_sub:"Tu compañera de bienestar",
+    feat_ritual:"Construye Tu Ritual",
+    feat_ritual_sub:"Planificador de ritual diario",
+    feat_cleanse:"Rastreador de Limpieza",
+    feat_cleanse_sub:"Protocolo + temporizador",
+    toast_added:"agregado a tu Cesta Ritual",
+    out_of_stock:"Agotado",
+    in_stock:"En Stock",
+    new_badge:"NUEVO",
+    free_shipping:"Envío gratis en pedidos mayores de $50",
+    footer_tagline:"Eres suficiente tal como eres.",
+    footer_made:"Hecho artesanalmente con amor. Arraigado en la tradición. Hecho para ti.",
   },
   fr: {
     code:"fr", name:"Français", flag:"🇫🇷",
@@ -273,14 +411,85 @@ const LANGS = {
     btn_report:"Rapport Sip & Heal Gratuit",
     btn_report_sub:"personnalisé pour vous",
     btn_search:"Chercher",
-    search_placeholder:"Cherchez thés, herbes ou objectifs santé…",
-    nav_home:"Accueil", nav_shop:"Boutique", nav_recipes:"Rituels",
-    nav_men:"Hommes", nav_supplements:"Suppléments", nav_ancestral:"Ancestral",
-    nav_herbs:"Archives des Herbes", nav_mocktails:"Mocktails", nav_jelly:"Gelées",
-    nav_seamoss:"Mousse Marine", nav_rings:"Anneaux", nav_faq:"FAQ", nav_library:"Bibliothèque",
-    pray_btn_night:"🙏 Prier avec moi", pray_btn_day:"🙏 Prière du Jour",
+    nav_home:"Accueil",
+    nav_men:"Hommes",
+    nav_herbs:"Archives des Herbes",
+    nav_seamoss:"Mousse Marine",
+    pray_btn_night:"🙏 Prier avec moi",
     amara_placeholder:"Demandez à Amara…",
     tagline:"Vous êtes assez bien tel que vous êtes.",
+    btn_add_basket:"Ajouter au Panier",
+    btn_shop_now:"Acheter Maintenant",
+    btn_learn_more:"En Savoir Plus →",
+    btn_see_all:"Voir Tout",
+    btn_browse_all:"Parcourir les 40 Recettes Gratuitement",
+    btn_close:"Fermer",
+    btn_back:"← Retour",
+    btn_send:"Envoyer",
+    btn_save:"Sauvegarder Mon Rituel",
+    btn_start:"Commencer",
+    btn_try_again:"Réessayer",
+    btn_notify:"Oui — notifiez-moi →",
+    btn_browse_herbs:"Explorer l'Archive des Herbes →",
+    search_loading:"Recherche en cours…",
+    search_looking:"Recherche",
+    search_noresult:"Nous n'avons pas",
+    search_noresult2:"encore — voulez-vous que nous vous prévenions quand nous l'ajoutons ?",
+    search_scroll:"faire défiler pour voir tous les résultats ↓",
+    affirmation_header:"Affirmation du Jour",
+    affirmation_sub:"Touchez le lotus pour recevoir votre affirmation du jour — puis appuyez pour l'entendre.",
+    affirmation_ring_note:"Vous avez une Vibe Shift Ring? Touchez votre anneau sur votre téléphone pour entendre votre affirmation à tout moment.",
+    prayer_eyebrow:"Prière du Jour",
+    prayer_back:"← Retour",
+    prayer_ring_note:"Vous avez une Vibe Shift Ring? Touchez-la sur votre téléphone pour entendre la prière du jour — sans écran.",
+    sec_features:"Des fonctionnalités introuvables ailleurs",
+    sec_features_eye:"Pourquoi Chai Holistic",
+    sec_blends:"Les Mélanges Sip & Heal",
+    sec_blends_eye:"Notre Collection",
+    sec_story:"Ancré dans la guérison",
+    sec_story_eye:"Notre Histoire",
+    sec_why_tea:"Pourquoi le Thé est le Plus Grand Cadeau que la Terre nous ait Offert",
+    sec_why_eye:"L'Histoire du Thé",
+    sec_science:"Voici comment ça fonctionne",
+    sec_science_eye:"La Science du Thé",
+    sec_bundles:"Packs Curatés",
+    sec_bundles_eye:"Meilleure Valeur",
+    sec_bundles_sub:"Soigneusement associés pour chaque intention.",
+    sec_tools:"Outils de Préparation",
+    sec_rings:"Vibe Shift Rings",
+    sec_brewing:"Infusion Made Simple",
+    sec_faq:"Vos Questions, Nos Réponses",
+    sec_all_recipes:"Les 40 Recettes",
+    sec_all_recipes_eye:"Sip & Heal · Guide Complet",
+    sec_all_recipes_sub:"Cliquez sur une recette pour voir les étapes et démarrer le minuteur.",
+    sec_mens:"Conçu pour le Corps Masculin.",
+    sec_mens_eye:"Bien-être Masculin",
+    shop_blends:"Mélanges",
+    shop_cleansing:"Nettoyage",
+    shop_herbs:"Herbes",
+    shop_bundles:"Packs",
+    shop_tools:"Outils",
+    cart_title:"Votre Panier Rituel",
+    cart_empty:"Votre panier est vide.",
+    cart_empty_sub:"Ajoutez des mélanges pour commencer.",
+    cart_subtotal:"Sous-total",
+    cart_checkout:"Passer à la Caisse",
+    cart_added:"ajouté à votre Panier Rituel",
+    feat_sip_seek:"Sip & Seek",
+    feat_sip_seek_sub:"Thé personnel + rituel de 7 jours",
+    feat_amara:"Rencontrez Amara",
+    feat_amara_sub:"Votre accompagnatrice bien-être",
+    feat_ritual:"Construisez Votre Rituel",
+    feat_ritual_sub:"Planificateur de rituel quotidien",
+    feat_cleanse:"Suivi de Nettoyage",
+    feat_cleanse_sub:"Protocole + minuteur",
+    toast_added:"ajouté à votre Panier Rituel",
+    out_of_stock:"Épuisé",
+    in_stock:"En Stock",
+    new_badge:"NOUVEAU",
+    free_shipping:"Livraison gratuite pour les commandes de plus de 50$",
+    footer_tagline:"Vous êtes assez bien tel que vous êtes.",
+    footer_made:"Fait artisanalement avec amour. Ancré dans la tradition. Fait pour vous.",
   },
   pt: {
     code:"pt", name:"Português", flag:"🇧🇷",
@@ -295,14 +504,85 @@ const LANGS = {
     btn_report:"Relatório Sip & Heal Grátis",
     btn_report_sub:"personalizado para você",
     btn_search:"Buscar",
-    search_placeholder:"Busque chás, ervas ou metas de bem-estar…",
-    nav_home:"Início", nav_shop:"Loja", nav_recipes:"Rituais",
-    nav_men:"Homens", nav_supplements:"Suplementos", nav_ancestral:"Ancestral",
-    nav_herbs:"Arquivo de Ervas", nav_mocktails:"Mocktails", nav_jelly:"Geleias",
-    nav_seamoss:"Musgo do Mar", nav_rings:"Anéis", nav_faq:"FAQ", nav_library:"Biblioteca",
-    pray_btn_night:"🙏 Rezar comigo", pray_btn_day:"🙏 Oração do Dia",
+    nav_home:"Início",
+    nav_men:"Homens",
+    nav_herbs:"Arquivo de Ervas",
+    nav_seamoss:"Musgo do Mar",
+    pray_btn_night:"🙏 Rezar comigo",
     amara_placeholder:"Pergunte à Amara…",
     tagline:"Você é bom o suficiente do jeito que é.",
+    btn_add_basket:"Adicionar ao Cesto",
+    btn_shop_now:"Comprar Agora",
+    btn_learn_more:"Saiba Mais →",
+    btn_see_all:"Ver Tudo",
+    btn_browse_all:"Ver todas as 40 Receitas Grátis",
+    btn_close:"Fechar",
+    btn_back:"← Voltar",
+    btn_send:"Enviar",
+    btn_save:"Salvar Meu Ritual",
+    btn_start:"Começar",
+    btn_try_again:"Tentar Novamente",
+    btn_notify:"Sim — avise-me →",
+    btn_browse_herbs:"Explorar o Arquivo de Ervas →",
+    search_loading:"Procurando para você…",
+    search_looking:"Procurando",
+    search_noresult:"Não temos",
+    search_noresult2:"ainda — quer que avisemos quando adicionarmos?",
+    search_scroll:"rolar para ver todos os resultados ↓",
+    affirmation_header:"Afirmação Diária",
+    affirmation_sub:"Toque na lotus para receber sua afirmação de hoje — depois pressione para ouvi-la.",
+    affirmation_ring_note:"Tem um Vibe Shift Ring? Toque seu anel no telefone para ouvir sua afirmação a qualquer hora.",
+    prayer_eyebrow:"Oração Diária",
+    prayer_back:"← Voltar",
+    prayer_ring_note:"Tem um Vibe Shift Ring? Toque-o no telefone para ouvir a oração de hoje — sem necessidade de tela.",
+    sec_features:"Recursos que você não encontrará em nenhum outro lugar",
+    sec_features_eye:"Por Que Chai Holistic",
+    sec_blends:"As Misturas Sip & Heal",
+    sec_blends_eye:"Nossa Coleção",
+    sec_story:"Enraizado na cura",
+    sec_story_eye:"Nossa História",
+    sec_why_tea:"Por Que o Chá é o Maior Presente que a Terra já nos Deu",
+    sec_why_eye:"A História do Chá",
+    sec_science:"Veja como funciona",
+    sec_science_eye:"A Ciência do Chá",
+    sec_bundles:"Kits Curados",
+    sec_bundles_eye:"Melhor Valor",
+    sec_bundles_sub:"Cuidadosamente combinados para cada intenção.",
+    sec_tools:"Ferramentas de Preparo",
+    sec_rings:"Vibe Shift Rings",
+    sec_brewing:"Preparo Simplificado",
+    sec_faq:"Suas Perguntas, Respondidas",
+    sec_all_recipes:"Todas as 40 Receitas",
+    sec_all_recipes_eye:"Sip & Heal · Guia Completo",
+    sec_all_recipes_sub:"Clique em qualquer receita para ver os passos e iniciar o cronômetro.",
+    sec_mens:"Criado para o Corpo Masculino.",
+    sec_mens_eye:"Bem-estar Masculino",
+    shop_blends:"Misturas",
+    shop_cleansing:"Limpeza",
+    shop_herbs:"Ervas",
+    shop_bundles:"Kits",
+    shop_tools:"Ferramentas",
+    cart_title:"Seu Cesto Ritual",
+    cart_empty:"Seu cesto está vazio.",
+    cart_empty_sub:"Adicione algumas misturas para começar.",
+    cart_subtotal:"Subtotal",
+    cart_checkout:"Finalizar Compra",
+    cart_added:"adicionado ao seu Cesto Ritual",
+    feat_sip_seek:"Sip & Seek",
+    feat_sip_seek_sub:"Chá pessoal + ritual de 7 dias",
+    feat_amara:"Conheça a Amara",
+    feat_amara_sub:"Sua companheira de bem-estar",
+    feat_ritual:"Construa Seu Ritual",
+    feat_ritual_sub:"Planejador de ritual diário",
+    feat_cleanse:"Rastreador de Limpeza",
+    feat_cleanse_sub:"Protocolo + cronômetro",
+    toast_added:"adicionado ao seu Cesto Ritual",
+    out_of_stock:"Esgotado",
+    in_stock:"Em Estoque",
+    new_badge:"NOVO",
+    free_shipping:"Frete grátis em pedidos acima de $50",
+    footer_tagline:"Você é bom o suficiente do jeito que é.",
+    footer_made:"Feito artesanalmente com amor. Enraizado na tradição. Feito para você.",
   },
   ht: {
     code:"ht", name:"Kreyòl Ayisyen", flag:"🇭🇹",
@@ -317,14 +597,85 @@ const LANGS = {
     btn_report:"Rapò Sip & Heal Gratis",
     btn_report_sub:"pèsonalize pou ou",
     btn_search:"Chèche",
-    search_placeholder:"Chèche tè, zèb, oswa objektif sante…",
-    nav_home:"Akèy", nav_shop:"Magazen", nav_recipes:"Ritiyèl",
-    nav_men:"Gason", nav_supplements:"Sipleman", nav_ancestral:"Ansestral",
-    nav_herbs:"Achiv Zèb", nav_mocktails:"Mocktails", nav_jelly:"Jele",
-    nav_seamoss:"Mous Lanmè", nav_rings:"Bag", nav_faq:"FAQ", nav_library:"Bibliyotèk",
-    pray_btn_night:"🙏 Priye avèk mwen", pray_btn_day:"🙏 Lapriyè Jodi a",
+    nav_home:"Akèy",
+    nav_men:"Gason",
+    nav_herbs:"Achiv Zèb",
+    nav_seamoss:"Mous Lanmè",
+    pray_btn_night:"🙏 Priye avèk mwen",
     amara_placeholder:"Mande Amara nenpòt bagay…",
     tagline:"Ou bon ase jan ou ye a.",
+    btn_add_basket:"Ajoute nan Panye",
+    btn_shop_now:"Achte Kounye",
+    btn_learn_more:"Aprann Plis →",
+    btn_see_all:"Wè Tout",
+    btn_browse_all:"Gade tout 40 Resèt yo Gratis",
+    btn_close:"Fèmen",
+    btn_back:"← Retounen",
+    btn_send:"Voye",
+    btn_save:"Sove Ritiyèl Mwen",
+    btn_start:"Kòmanse",
+    btn_try_again:"Eseye Ankò",
+    btn_notify:"Wi — avèti mwen →",
+    btn_browse_herbs:"Eksplore Achiv Zèb yo →",
+    search_loading:"N ap chèche pou ou…",
+    search_looking:"Chèche",
+    search_noresult:"Nou pa gen",
+    search_noresult2:"ankò — èske ou vle nou avèti ou lè nou ajoute l?",
+    search_scroll:"defile pou wè tout rezilta yo ↓",
+    affirmation_header:"Afirmasyon Jodi a",
+    affirmation_sub:"Touche lotus la pou resevwa afirmasyon jodi a — epi peze l pou tande l.",
+    affirmation_ring_note:"Ou gen yon Vibe Shift Ring? Touche bag ou sou telefòn ou pou tande afirmasyon ou nenpòt ki lè.",
+    prayer_eyebrow:"Lapriyè Jodi a",
+    prayer_back:"← Retounen",
+    prayer_ring_note:"Ou gen yon Vibe Shift Ring? Touche l sou telefòn ou pou tande lapriyè jodi a — san ekran.",
+    sec_features:"Karakteristik ou p ap jwenn okote",
+    sec_features_eye:"Poukisa Chai Holistic",
+    sec_blends:"Melanj Sip & Heal yo",
+    sec_blends_eye:"Koleksyon Nou an",
+    sec_story:"Rasin nan gerizon",
+    sec_story_eye:"Istwa Nou",
+    sec_why_tea:"Poukisa Tè se Pi Bèl Kado Latè te Janm Ba Nou",
+    sec_why_eye:"Istwa Tè a",
+    sec_science:"Men kijan li travay",
+    sec_science_eye:"Syans Tè a",
+    sec_bundles:"Pakè Espesyal",
+    sec_bundles_eye:"Pi Bon Valè",
+    sec_bundles_sub:"Sonje chak entansyon avèk swen.",
+    sec_tools:"Zouti Preparasyon",
+    sec_rings:"Vibe Shift Rings",
+    sec_brewing:"Preparasyon Fasil",
+    sec_faq:"Kesyon Ou yo, Reponn",
+    sec_all_recipes:"Tout 40 Resèt yo",
+    sec_all_recipes_eye:"Sip & Heal · Gid Konplè",
+    sec_all_recipes_sub:"Klike sou nenpòt resèt pou wè etap yo epi kòmanse konte tan.",
+    sec_mens:"Fè pou Kò Gason.",
+    sec_mens_eye:"Byenèt Gason",
+    shop_blends:"Melanj",
+    shop_cleansing:"Netwayaj",
+    shop_herbs:"Zèb",
+    shop_bundles:"Pakè",
+    shop_tools:"Zouti",
+    cart_title:"Panye Ritiyèl Ou",
+    cart_empty:"Panye ou vid.",
+    cart_empty_sub:"Ajoute kèk melanj pou kòmanse.",
+    cart_subtotal:"Subtotal",
+    cart_checkout:"Pase nan Kès",
+    cart_added:"ajoute nan Panye Ritiyèl ou",
+    feat_sip_seek:"Sip & Seek",
+    feat_sip_seek_sub:"Tè pèsonèl + ritiyèl 7 jou",
+    feat_amara:"Rankontre Amara",
+    feat_amara_sub:"Konpayon byenèt ou",
+    feat_ritual:"Konstwi Ritiyèl Ou",
+    feat_ritual_sub:"Planifikatè ritiyèl chak jou",
+    feat_cleanse:"Swivi Netwayaj",
+    feat_cleanse_sub:"Pwotokòl + minutri",
+    toast_added:"ajoute nan Panye Ritiyèl ou",
+    out_of_stock:"Pa Disponib",
+    in_stock:"An Stock",
+    new_badge:"NOUVO",
+    free_shipping:"Livrezon gratis pou kòmann ki depase $50",
+    footer_tagline:"Ou bon ase jan ou ye a.",
+    footer_made:"Fè avèk lanmou. Rasin nan tradisyon. Fè pou ou.",
   },
   jm: {
     code:"jm", name:"Patwa", flag:"🇯🇲",
@@ -339,14 +690,85 @@ const LANGS = {
     btn_report:"Free Sip & Heal Report",
     btn_report_sub:"personalised fi yuh",
     btn_search:"Search",
-    search_placeholder:"Search teas, herbs or wellness goals…",
-    nav_home:"Home", nav_shop:"Shop", nav_recipes:"Brew Rituals",
-    nav_men:"Man Dem", nav_supplements:"Supplements", nav_ancestral:"Ancestral",
-    nav_herbs:"Herb Archive", nav_mocktails:"Mocktails", nav_jelly:"Jelly",
-    nav_seamoss:"Sea Moss", nav_rings:"Rings", nav_faq:"FAQ", nav_library:"Tea Library",
-    pray_btn_night:"🙏 Pray wid mi", pray_btn_day:"🙏 Daily Prayer",
+    nav_home:"Home",
+    nav_men:"Man Dem",
+    nav_herbs:"Herb Archive",
+    nav_seamoss:"Sea Moss",
+    pray_btn_night:"🙏 Pray wid mi",
     amara_placeholder:"Ask Amara anyting…",
     tagline:"Yuh good enough just as yuh be.",
+    btn_add_basket:"Add to Basket",
+    btn_shop_now:"Shop Now",
+    btn_learn_more:"Learn More →",
+    btn_see_all:"See All",
+    btn_browse_all:"Browse All 40 Recipes Free",
+    btn_close:"Close",
+    btn_back:"← Back",
+    btn_send:"Send",
+    btn_save:"Save Mi Ritual",
+    btn_start:"Get Started",
+    btn_try_again:"Try Again",
+    btn_notify:"Yeah — tell mi →",
+    btn_browse_herbs:"Browse di Herb Archive →",
+    search_loading:"Searching fi yuh…",
+    search_looking:"Looking up",
+    search_noresult:"Wi nuh have",
+    search_noresult2:"yet — yuh want wi let yuh know when wi add it?",
+    search_scroll:"scroll fi see more ↓",
+    affirmation_header:"Daily Affirmation",
+    affirmation_sub:"Touch di lotus fi receive yuh affirmation today — den press it fi hear it spoken to yuh.",
+    affirmation_ring_note:"Have a Vibe Shift Ring? Touch yuh ring to yuh phone fi hear yuh affirmation anytime.",
+    prayer_eyebrow:"Daily Prayer",
+    prayer_back:"← Back",
+    prayer_ring_note:"Have a Vibe Shift Ring? Touch it to yuh phone fi hear today's prayer — no screen needed.",
+    sec_features:"Features yuh cyaan find nowhere else",
+    sec_features_eye:"Why Chai Holistic",
+    sec_blends:"Di Sip & Heal Blends",
+    sec_blends_eye:"Wi Collection",
+    sec_story:"Rooted in healing",
+    sec_story_eye:"Wi Story",
+    sec_why_tea:"Why Tea is di Greatest Gift di Earth Ever Give Wi",
+    sec_why_eye:"Di Story of Tea",
+    sec_science:"Here is how it work",
+    sec_science_eye:"Di Science of Tea",
+    sec_bundles:"Curated Bundles",
+    sec_bundles_eye:"Best Value",
+    sec_bundles_sub:"Thoughtfully paired fi every intention.",
+    sec_tools:"Brew Tools",
+    sec_rings:"Vibe Shift Rings",
+    sec_brewing:"Brewing Made Simple",
+    sec_faq:"Yuh Questions, Answered",
+    sec_all_recipes:"All 40 Recipes",
+    sec_all_recipes_eye:"Sip & Heal · Complete Guide",
+    sec_all_recipes_sub:"Click any recipe fi see di steps an start yuh brew timer.",
+    sec_mens:"Built fi di Male Body.",
+    sec_mens_eye:"Men's Wellness",
+    shop_blends:"Blends",
+    shop_cleansing:"Cleansing",
+    shop_herbs:"Herbs",
+    shop_bundles:"Bundles",
+    shop_tools:"Brew Tools",
+    cart_title:"Yuh Ritual Basket",
+    cart_empty:"Yuh basket empty.",
+    cart_empty_sub:"Add some blends fi get started.",
+    cart_subtotal:"Subtotal",
+    cart_checkout:"Proceed to Checkout",
+    cart_added:"added to yuh Ritual Basket",
+    feat_sip_seek:"Sip & Seek",
+    feat_sip_seek_sub:"Personal tea + 7-day ritual",
+    feat_amara:"Meet Amara",
+    feat_amara_sub:"Yuh wellness companion",
+    feat_ritual:"Build Yuh Ritual",
+    feat_ritual_sub:"Daily ritual planner",
+    feat_cleanse:"Cleanse Tracker",
+    feat_cleanse_sub:"Protocol + timer",
+    toast_added:"added to yuh Ritual Basket",
+    out_of_stock:"Out of Stock",
+    in_stock:"In Stock",
+    new_badge:"NEW",
+    free_shipping:"Free shipping pan orders over $50",
+    footer_tagline:"Yuh good enough just as yuh be.",
+    footer_made:"Handcrafted wid love. Rooted in tradition. Made fi yuh.",
   },
 };
 
@@ -953,7 +1375,7 @@ function MensWellness({ onNav, onAddToCart }) {
                 </div>
                 <button onClick={()=>{onAddToCart({...selected,emoji:"🍵"});setSelected(null);}}
                   style={{background:"linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,110,40,.9))",border:"none",color:"#0D0D1A",borderRadius:40,padding:"10px 28px",fontSize:".72rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700}}>
-                  🛒 Add to Basket — ${selected.price.toFixed(2)}
+                  🛒 {T.btn_add_basket} — ${selected.price.toFixed(2)}
                 </button>
               </div>
             </div>
@@ -1722,7 +2144,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
   }, []);
   const addToCart = (item, type="blend") => {
     setCart(p => { const ex = p.find(i=>i.id===item.id); return ex ? p.map(i=>i.id===item.id?{...i,qty:i.qty+1}:i) : [...p,{...item,qty:1,type}]; });
-    toast(`✦ ${item.name} added to your Ritual Basket`);
+    toast(`✦ ${item.name} ${T.toast_added}`);
   };
   useEffect(() => { if (typeof window !== "undefined") { window._chaiNav = (p) => nav(p); } });
   const removeItem = id => setCart(p => p.filter(i => i.id !== id));
@@ -2731,7 +3153,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
         {/* Eyebrow */}
         <div style={{fontFamily:"Cinzel,serif",fontSize:".58rem",letterSpacing:".28em",textTransform:"uppercase",color:"rgba(196,137,58,.5)",marginBottom:32,position:"relative",zIndex:1}}>
-          ✦ &nbsp; Daily Prayer &nbsp; ✦
+          ✦   {T.prayer_eyebrow}   ✦
         </div>
 
         {/* Prayer hands with gold orbit */}
@@ -2857,7 +3279,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                     <div className="finder-result-desc">{r.desc}</div>
                     {r && r.warning ? <div className="warn-block" style={{marginTop:8}}><strong>⚠ Safety Note</strong>{r.warning}</div> : null}
                     <div style={{display:"flex",gap:"8px",marginTop:"10px",flexWrap:"wrap"}}>
-                      <button className="btn-add" onClick={() => { addToCart({...r,emoji:"🍵"}); setFinderOpen(false); resetFinder(); }}>Add to Basket -- ${r.price.toFixed(2)}</button>
+                      <button className="btn-add" onClick={() => { addToCart({...r,emoji:"🍵"}); setFinderOpen(false); resetFinder(); }}>{T.btn_add_basket} — ${r.price.toFixed(2)}</button>
                       <button className="btn-ghost" style={{fontSize:".65rem",padding:"7px 14px"}} onClick={() => {
                         const blendIdx = BLENDS.findIndex(b => b.id === r.id);
                         const cleanseIdx = CLEANSING.findIndex(c => c.id === r.id);
@@ -2895,7 +3317,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                   </div>
                 </div>
               ))}
-              <button className="btn-ghost" style={{width:"100%",marginTop:"1rem"}} onClick={resetFinder}>Try Again</button>
+              <button className="btn-ghost" style={{width:"100%",marginTop:"1rem"}} onClick={resetFinder}>{T.btn_try_again}</button>
             </>
           )}
         </div>
@@ -3137,7 +3559,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                       <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"var(--bark)"}}>${tracker.price}</div>
                     </div>
                     <button className="btn-add-c" style={{width:"100%",padding:"12px",fontSize:".74rem"}} onClick={() => addToCart({...tracker,emoji:"✦"})}>
-                      Add to Basket — ${tracker.price} · Start Your {tracker.days}-Day Cleanse
+                      {T.btn_add_basket} — ${tracker.price} · Start Your {tracker.days}-Day Cleanse
                     </button>
                   </div>
                 ) : (
@@ -3249,7 +3671,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
               </div>
               <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
                 <button className="btn-book" onClick={()=>{addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"});setBookPreview(false);}}>
-                  Add to Basket -- $24.99
+                  {T.btn_add_basket} — $24.99
                 </button>
                 <button style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.2)",color:"white",padding:"13px 24px",borderRadius:50,fontSize:".73rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif"}} onClick={()=>{setBookPreview(false);nav("recipes");}}>
                   Browse All Recipes Free
@@ -3301,7 +3723,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         ) : (
           <button className="btn-t go" onClick={() => { timerDoneRef.current = false; setTimerOn(true); }}>Resume</button>
         )}
-        <button className="btn-t rst" style={{borderColor:"rgba(255,255,255,.2)",color:"rgba(255,255,255,.5)"}} onClick={dismissTimer}>Close</button>
+        <button className="btn-t rst" style={{borderColor:"rgba(255,255,255,.2)",color:"rgba(255,255,255,.5)"}} onClick={dismissTimer}>{T.btn_close}</button>
         <button
           onClick={() => { dismissTimer(); window.open("https://2amcompanion.com","_blank"); }}
           style={{background:"rgba(196,137,58,.15)",border:"1px solid rgba(196,137,58,.4)",color:"rgba(196,137,58,.9)",padding:"8px 16px",borderRadius:50,fontSize:".7rem",letterSpacing:".08em",cursor:"pointer",fontFamily:"Jost,sans-serif",whiteSpace:"nowrap"}}>
@@ -3427,14 +3849,14 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         <div className="overlay" onClick={()=>setCartOpen(false)}/>
         <div className="drawer">
           <div className="drw-head">
-            <span className="drw-title">Your Ritual Basket {cartCount>0&&`(${cartCount})`}</span>
+            <span className="drw-title">{T.cart_title} {cartCount>0&&`(${cartCount})`}</span>
             <button className="drw-close" onClick={()=>setCartOpen(false)}>✕</button>
           </div>
           <div className="drw-items">
             {/* Cart items — always at top */}
             <div className="drw-cart-list">
               {cart.length===0?(
-                <div className="empty"><div className="empty-icon">🍵</div><div className="empty-msg">Your Ritual Basket is empty</div><div className="empty-sub">Add some blends to begin your ritual.</div></div>
+                <div className="empty"><div className="empty-icon">🍵</div><div className="empty-msg">{T.cart_empty}</div><div className="empty-sub">{T.cart_empty_sub}</div></div>
               ):cart.map(item=>(
                 <div key={item.id} className="ditem">
                   <div className="ditem-icon">{item.emoji||"✦"}</div>
@@ -3571,7 +3993,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 </button>
               </div>
             )}
-            <div className="d-sub"><span className="d-sub-l">Subtotal</span><span className="d-sub-r">${cartTotal.toFixed(2)}</span></div>
+            <div className="d-sub"><span className="d-sub-l">{T.cart_subtotal}</span><span className="d-sub-r">${cartTotal.toFixed(2)}</span></div>
             <button className="btn-chk" disabled={cart.length===0}>Continue to Checkout</button>
 
             {/* SAVE MY RITUAL */}
@@ -3685,7 +4107,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             <>
               <div className="sav-head">
                 <div className="sav-head-eye">✦ Chai Holistic · Ritual Basket</div>
-                <h3 className="sav-head-h">Save My Ritual</h3>
+                <h3 className="sav-head-h">{T.btn_save}</h3>
                 <p className="sav-head-sub">We'll email you a link that restores your entire basket — one click, no account needed.</p>
                 <button className="sav-close" onClick={()=>setSaveRitualOpen(false)}>✕</button>
               </div>
@@ -3724,7 +4146,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                   {sending ? (
                     <><span style={{display:"inline-block",animation:"spin 1s linear infinite",marginRight:6}}>◌</span> Preparing your ritual…</>
                   ) : (
-                    <>✦ Send My Ritual Link</>
+                    <>✦ {T.btn_send} My Ritual Link</>
                   )}
                 </button>
               </div>
@@ -3747,7 +4169,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
           {seasonalBlends.map(b=>(
             <span key={b.id}>
               <span className="season-banner-name">{b.name}</span>
-              <button className="btn-season" style={{marginLeft:8}} onClick={()=>addToCart({...b,emoji:"🍵"})}>Add to Basket</button>
+              <button className="btn-season" style={{marginLeft:8}} onClick={()=>addToCart({...b,emoji:"🍵"})}>{T.btn_add_basket}</button>
             </span>
           ))}
         </div>
@@ -3841,13 +4263,13 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         <div style={{maxWidth:560,margin:"0 auto",display:"flex",alignItems:"center",gap:16,background:"rgba(196,137,58,.1)",border:"1px solid rgba(196,137,58,.25)",borderRadius:20,padding:"14px 18px",flexWrap:"wrap"}}>
           <img src="/vibe-shift-ring.jpg" alt="Vibe Shift Ring" style={{width:64,height:64,borderRadius:12,objectFit:"cover",border:"2px solid rgba(196,137,58,.4)",flexShrink:0,boxShadow:"0 4px 16px rgba(0,0,0,.4)"}}/>
           <div style={{flex:1,minWidth:200}}>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"rgba(247,242,234,.9)",fontWeight:600,marginBottom:4}}>✨ Daily Affirmation</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"rgba(247,242,234,.9)",fontWeight:600,marginBottom:4}}>✨ {T.affirmation_header}</div>
             <div style={{fontFamily:"Jost,sans-serif",fontSize:".74rem",color:"rgba(247,242,234,.6)",fontWeight:300,lineHeight:1.6}}>Touch the lotus to receive today's affirmation — then press it to hear it spoken to you.</div>
           </div>
           <button onClick={()=>nav("rings")} style={{background:"linear-gradient(135deg,#C4893A,#8B5E2A)",border:"none",color:"white",borderRadius:40,padding:"9px 18px",fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap"}}>Get My Ring →</button>
         </div>
       </div>
-      <PrayerSection onNavigate={(blend) => nav("tea-library", { blend })} />
+      <PrayerSection onNavigate={(blend) => nav("tea-library", { blend })} T={T} lang={lang} />
 
       {/* ── VIBE SHIFT RING OFFER — shown near prayer section ───────────────── */}
       <div style={{
@@ -3958,7 +4380,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         <div className="sec-in">
           <div className="sh c">
             <div className="sh-eye">What Makes Us Different</div>
-            <h2 className="sh-h">Features you won't find<br/><em>anywhere else</em></h2>
+            <h2 className="sh-h">{T.sec_features}</h2>
           </div>
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:10}}>
             {[
@@ -3994,7 +4416,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         <div className="men-band-in">
           <div className="men-band-copy">
             <div className="men-band-eye">⚡ New Collection · 20 Blends</div>
-            <h2 className="men-band-h">Built for the<br/><em>Male Body.</em></h2>
+            <h2 className="men-band-h">{T.sec_mens}</h2>
             <p className="men-band-p">
               Most wellness brands weren't designed with men in mind. We fixed that. 20 blends targeting what men actually deal with — testosterone, heart health, prostate support, stress, sleep, focus, and the stuff nobody talks about.
             </p>
@@ -4143,7 +4565,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
           <div className="sh" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:12,marginBottom:"1.8rem"}}>
             <div>
               <div className="sh-eye lt">From the Book</div>
-              <h2 className="sh-h lt">The <em>Sip &amp; Heal</em> Blends</h2>
+              <h2 className="sh-h lt">{T.sec_blends}</h2>
               <p className="sh-p lt" style={{margin:0}}>Tap any blend to see the recipe. Scroll to explore.</p>
             </div>
             <button className="btn-ghost" style={{borderColor:"rgba(255,255,255,.25)",color:"rgba(255,255,255,.78)",flexShrink:0}} onClick={()=>nav("shop")}>
@@ -4201,7 +4623,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
       <div id="sec-story" className="philo">
         <div className="philo-vis"><p className="philo-quote">"Every herb was put here for a reason. Every cup is a conversation with what your body already knows."</p></div>
         <div className="philo-txt">
-          <div className="sh"><div className="sh-eye">Our Story</div><h2 className="sh-h">Rooted in <em>healing</em></h2></div>
+          <div className="sh"><div className="sh-eye">{T.sec_story_eye}</div><h2 className="sh-h">{T.sec_story}</h2></div>
           <p className="philo-p">Chai Holistic was born from a simple belief: that healing is an everyday practice, not a destination. The Sip &amp; Heal collection brings together 40 carefully crafted recipes -- for sleepless 2am nights, energized mornings, deep seasonal cleanses, and everything in between.</p>
           <p className="philo-p">Every blend uses whole herbs, sourced with intention, and packed with the same love you'd get from a grandmother who knew exactly what you needed.</p>
           <div className="philo-sig">-- Chai Holistic</div>
@@ -4214,7 +4636,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         <div className="sec-in">
           <div className="sh c">
             <div className="sh-eye">Ancient Wisdom · Modern Science</div>
-            <h2 className="sh-h">Why Tea is the <em>Greatest Gift</em><br/>the Earth Ever Gave Us</h2>
+            <h2 className="sh-h">{T.sec_why_tea}</h2>
             <p className="sh-p" style={{maxWidth:560}}>For nearly five thousand years, across every culture on earth, tea has been medicine, ritual, comfort, and communion. Here is what the ancients knew — and what science is only beginning to confirm.</p>
           </div>
 
@@ -4373,7 +4795,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
 <section id="sec-bundles" className="sec sec-linen">
         <div className="sec-in">
-          <div className="sh c"><div className="sh-eye">Best Value</div><h2 className="sh-h">Curated <em>Bundles</em></h2><p className="sh-p">Thoughtfully paired for every intention.</p></div>
+          <div className="sh c"><div className="sh-eye">{T.sec_bundles_eye}</div><h2 className="sh-h">{T.sec_bundles}</h2><p className="sh-p">{T.sec_bundles_sub}</p></div>
           <div className="bgrid">
             {BUNDLES.slice(0,3).map(b=>(
               <div key={b.id} className="bcard"
@@ -4413,7 +4835,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         <div className="sec-in">
           <div className="sh c">
             <div className="sh-eye">The Ritual Collection</div>
-            <h2 className="sh-h">Brew <em>Tools</em></h2>
+            <h2 className="sh-h">{T.sec_tools}</h2>
             <p className="sh-p">The vessel matters. Hold something beautiful in both hands and the ritual becomes medicine before the first sip.</p>
           </div>
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:16,marginBottom:"1.6rem"}}>
@@ -4460,7 +4882,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             <div style={{position:"absolute",inset:0,background:"linear-gradient(to right, rgba(12,10,8,.9) 0%, rgba(12,10,8,.55) 50%, rgba(12,10,8,.75) 100%)",zIndex:1}}/>
             <div className="sh c" style={{position:"relative",zIndex:2,padding:"40px 24px",margin:0}}>
               <div className="sh-eye" style={{color:"rgba(196,137,58,.9)"}}>spiralinterrupt.com · 2amcompanion.com</div>
-              <h2 className="sh-h lt">Vibe Shift <em>Rings</em></h2>
+              <h2 className="sh-h lt">{T.sec_rings}</h2>
               <p className="sh-p lt" style={{maxWidth:560,margin:"0 auto"}}>Precision-engineered fidget rings for overthinkers, restless hands, and anyone who thinks better while moving. Looks like jewelry. Works like a reset. And every ring ships with something more.</p>
             </div>
           </div>
@@ -4519,7 +4941,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         <div className="sec-in">
           <div className="sh c">
             <div className="sh-eye">No Thermometer Needed</div>
-            <h2 className="sh-h">Brewing Made <em>Simple</em></h2>
+            <h2 className="sh-h">{T.sec_brewing}</h2>
             <p className="sh-p">Three categories. Watch your kettle. That's all you need to brew any of our 40 blends perfectly.</p>
           </div>
           <TempGuide/>
@@ -4530,7 +4952,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
         <div className="sec-in">
           <div className="sh c">
             <div className="sh-eye">Honest Answers</div>
-            <h2 className="sh-h">Your Questions, <em>Answered</em></h2>
+            <h2 className="sh-h">{T.sec_faq}</h2>
             <p className="sh-p">We know cautious buyers have real questions. So do first-timers. We've answered them all -- honestly.</p>
           </div>
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:12,marginBottom:"2rem"}}>
@@ -4929,7 +5351,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
     <div id="sec-rec-top" className="page">
       <section className="sec">
         <div className="sec-in">
-          <div className="sh c"><div className="sh-eye">Sip &amp; Heal · Complete Guide</div><h2 className="sh-h">All <em>40 Recipes</em></h2><p className="sh-p">Click any recipe to expand steps and start your brew timer.</p></div>
+          <div className="sh c"><div className="sh-eye">{T.sec_all_recipes_eye}</div><h2 className="sh-h">{T.sec_all_recipes}</h2><p className="sh-p">{T.sec_all_recipes_sub}</p></div>
           <div style={{textAlign:"center",marginBottom:"1.5rem"}}>
             <button className="btn-finder" style={{marginRight:10}} onClick={()=>setFinderOpen(true)}>✦ Find My Tea</button>
             <button className="btn-ghost" onClick={()=>setRitualOpen(true)}>Build My Ritual</button>
@@ -5268,7 +5690,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                     <div style={{fontSize:".72rem",color:"var(--gold)",marginBottom:10}}>{blend.benefit}</div>
                     <CupValue item={blend}/>
                     <button className="btn-add" style={{marginTop:8}} onClick={()=>{ addToCart({...blend,emoji:"🍵"}); }}>
-                      Add to Basket -- ${blend.price}
+                      {T.btn_add_basket} — ${blend.price}
                     </button>
                   </div>
                 </div>
@@ -7459,7 +7881,7 @@ Thank you!`);
               }}>{cart.reduce((s,i)=>s+i.qty,0)}</div>
             </div>
             <div>
-              <div style={{fontSize:".78rem",fontWeight:600,color:"white",lineHeight:1.2}}>Your Ritual Basket</div>
+              <div style={{fontSize:".78rem",fontWeight:600,color:"white",lineHeight:1.2}}>{T.cart_title}</div>
               <div style={{fontSize:".62rem",color:"rgba(255,255,255,.75)",marginTop:1}}>{cart.length} blend{cart.length!==1?"s":""} selected</div>
             </div>
           </div>
@@ -7669,7 +8091,7 @@ Thank you!`);
               {homeSearchResults[0]?.isLoading && (
                 <div style={{padding:"36px 24px",textAlign:"center"}}>
                   <div style={{fontSize:"2.2rem",marginBottom:14,display:"inline-block",animation:"spin 1.5s linear infinite"}}>🌿</div>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"var(--bark)",marginBottom:6}}>Searching for you…</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"var(--bark)",marginBottom:6}}>{T.search_loading}</div>
                   <div style={{fontFamily:"Jost,sans-serif",fontSize:".74rem",color:"rgba(61,43,31,.4)",fontWeight:300}}>Looking up "{homeSearchQuery}"</div>
                 </div>
               )}
@@ -7679,7 +8101,7 @@ Thank you!`);
                 <div style={{padding:"28px 24px",textAlign:"center"}}>
                   <div style={{fontSize:"2.4rem",marginBottom:12}}>🌿</div>
                   <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.05rem",color:"var(--bark)",fontWeight:600,marginBottom:8}}>
-                    We don't have "{homeSearchQuery}" yet
+                    {T.search_noresult} "{homeSearchQuery}" yet
                   </div>
                   <p style={{fontFamily:"Jost,sans-serif",fontSize:".78rem",color:"rgba(61,43,31,.5)",fontWeight:300,lineHeight:1.75,maxWidth:280,margin:"0 auto 20px"}}>
                     Would you like us to let you know when we add it?
@@ -7715,7 +8137,7 @@ Thank you!`);
                 <>
                   {homeSearchResults.length > 3 && (
                     <div style={{textAlign:"center",padding:"8px 0 2px",fontFamily:"Jost,sans-serif",fontSize:".6rem",color:"rgba(61,43,31,.3)",letterSpacing:".08em"}}>
-                      scroll to see all {homeSearchResults.length} results ↓
+                      {T.search_scroll.replace('scroll', '').trim()}{homeSearchResults.length} {T.search_scroll.includes('↓')?'↓':''}
                     </div>
                   )}
                   {homeSearchResults.map((r,i)=>(

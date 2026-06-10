@@ -153,7 +153,9 @@ async function speakIntention(text) {
   }
 }
 
-export default function PrayerSection({ onNavigate }) {
+export default function PrayerSection({ onNavigate, T: TT, lang }) {
+  // Use passed T or fallback to English strings
+  const t = (key, fallback) => (TT && TT[key]) ? TT[key] : fallback;
   // phase: 0=idle, 1=hands tapped, 1.5=ring moment visible, 2=ring tapped
   const [phase, setPhase]           = useState(0);
   const [chosen, setChosen]         = useState(null);
