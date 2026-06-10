@@ -224,8 +224,8 @@ const SUPPLEMENTS = [
 
 const CATEGORIES = [
   { key: "all",      label: "All 10",           emoji: "✦" },
-  { key: "vitamin",  label: "Vitamins",          emoji: "☀️" },
-  { key: "mineral",  label: "Minerals",          emoji: "🌍" },
+  { key: "vitamin",  label: "Supplements",          emoji: "☀️" },
+  { key: "mineral",  label: "Supplements",          emoji: "🌍" },
   { key: "specialty",label: "Specialty",         emoji: "⚗️" },
   { key: "herb",     label: "Herbal Extracts",   emoji: "🌿" },
 ];
@@ -443,7 +443,7 @@ export default function SupplementsPage({ onNav }) {
           fontWeight: 700, color: "#F7F2EA",
           margin: "0 0 12px", lineHeight: 1.15,
         }}>
-          Vitamins &amp; Minerals
+          Supplements
         </h1>
         <h2 style={{
           fontFamily: "Playfair Display, serif",

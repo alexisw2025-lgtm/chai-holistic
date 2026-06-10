@@ -1699,7 +1699,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
     /* SEARCH BAR */
     .site-search-bar{padding:14px 16px 0;background:var(--linen);}
-    @media(max-width:960px){.mob-search-bar{display:block !important;}.hero{padding-top:70px;}}
+    .mob-search-bar{display:none !important;}
 
     .nav-links{display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;}
     .nav-lnk{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;white-space:nowrap;}
@@ -1717,7 +1717,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
     .btn-season:hover{background:rgba(255,255,255,.25);}
 
     /* 2AM BUTTON */
-    .twoam-btn{position:fixed;top:80px;left:16px;z-index:400;background:#1C1A17;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);padding:11px 18px;font-family:'Jost',sans-serif;font-size:.7rem;letter-spacing:.1em;cursor:pointer;border-radius:50px;transition:all .3s;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:pulse2am 3s ease-in-out infinite;}
+    .twoam-btn{position:fixed;top:116px;left:16px;z-index:400;background:#1C1A17;color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);padding:11px 18px;font-family:'Jost',sans-serif;font-size:.7rem;letter-spacing:.1em;cursor:pointer;border-radius:50px;transition:all .3s;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:pulse2am 3s ease-in-out infinite;}
     .twoam-btn:hover{background:var(--bark);color:white;border-color:rgba(255,255,255,.3);}
     div:has(> .print-tooltip):hover .print-tooltip{opacity:1 !important;}
     @keyframes pulse2am{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.3)}50%{box-shadow:0 4px 32px rgba(196,137,58,.35)}}
@@ -2469,7 +2469,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
       .rng-name{font-size:1.2rem;}
 
       /* Floating buttons */
-      .twoam-btn{top:72px;left:12px;padding:9px 14px;font-size:.64rem;}
+      .twoam-btn{top:108px;left:12px;padding:9px 14px;font-size:.64rem;}
       .back-top{bottom:72px;right:16px;width:38px;height:38px;font-size:1rem;}
       .sec-nav{right:10px;}
 
@@ -3485,45 +3485,6 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
       )}
 
       <section id="sec-hero" className="hero" style={{marginTop:seasonalBlends.length>0?0:0}}>
-        {/* Mobile-only search bar — sits at very top on mobile, hidden on desktop */}
-        <div style={{position:"absolute",top:12,left:16,right:16,zIndex:10,display:"none"}} className="mob-search-bar">
-          <div style={{display:"flex",alignItems:"center",background:"rgba(255,255,255,.9)",borderRadius:50,overflow:"hidden",border:"1.5px solid rgba(61,43,31,.2)",boxShadow:"0 2px 12px rgba(0,0,0,.12)"}}>
-            <input
-              id="mobSearchInput"
-              type="text"
-              inputMode="text"
-              enterKeyHint="search"
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-              spellCheck="false"
-              placeholder="Search teas, herbs, wellness…"
-              onKeyDown={e=>{
-                if(e.key==="Enter"){
-                  e.preventDefault();
-                  const q=(e.target.value||"").toLowerCase().trim();
-                  if(!q)return;
-                  runGlobalSearch(q);
-                  e.target.blur();
-                }
-              }}
-              style={{flex:1,background:"none",border:"none",outline:"none",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:"16px",fontWeight:300,padding:"12px 14px",minWidth:0}}
-            />
-            <button
-              onMouseDown={e=>{
-                e.preventDefault();
-                const inp=document.getElementById('mobSearchInput');
-                const q=(inp?.value||"").toLowerCase().trim();
-                if(!q)return;
-                runGlobalSearch(q);
-                inp?.blur();
-              }}
-              style={{background:"var(--bark)",border:"none",color:"white",padding:"12px 18px",fontFamily:"Jost,sans-serif",fontSize:".68rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0}}>
-              🔍
-            </button>
-          </div>
-          {/* results shown in global overlay below */}
-        </div>
         <div className="hero-orb a"/><div className="hero-orb b"/>
         <div className="hero-inner">
           <div>
@@ -6963,7 +6924,7 @@ Thank you!`);
 
       {/* ── Mobile slide-down menu ── */}
       <div className={`mob-menu${mobMenuOpen?" open":""}`}>
-        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's Wellness"],["supplements","💊 Vitamins & Minerals"],["ancestral","🌿 Ancestral Teas"],["herbs","📖 Herb Archive"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's Wellness"],["supplements","💊 Supplements"],["ancestral","🌿 Ancestral Teas"],["herbs","📖 Herb Archive"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
           <div key={p} className="mob-lnk" onClick={()=>{nav(p);setMobMenuOpen(false);}}>
             <span>{l}{p==="men"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--gold)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="supplements"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--sage-d)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="ancestral"&&<span style={{marginLeft:8,fontSize:".48rem",background:"#6A4A2A",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}</span>
             <span style={{color:"var(--dust)"}}>›</span>
@@ -7125,7 +7086,7 @@ Thank you!`);
             <div>
               <div className="ft-col-h">Shop</div>
               <span className="ft-lnk" style={{color:"var(--gold)",fontWeight:500}} onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}>📖 Sip &amp; Heal Book -- $24.99</span>
-              {[["Tea Blends","shop"],["Cleansing Blends","shop"],["Individual Herbs","shop"],["Bundle & Save","shop"],["⚡ Men's Wellness","men"],["💊 Vitamins & Minerals","supplements"],["🌿 Ancestral Teas","ancestral"],["📖 Herb Archive","herbs"],["Vibe Shift Rings","rings"]].map(([l,p])=><span key={l} className="ft-lnk" onClick={()=>nav(p)}>{l}</span>)}
+              {[["Tea Blends","shop"],["Cleansing Blends","shop"],["Individual Herbs","shop"],["Bundle & Save","shop"],["⚡ Men's Wellness","men"],["💊 Supplements","supplements"],["🌿 Ancestral Teas","ancestral"],["📖 Herb Archive","herbs"],["Vibe Shift Rings","rings"]].map(([l,p])=><span key={l} className="ft-lnk" onClick={()=>nav(p)}>{l}</span>)}
             </div>
             <div>
               <div className="ft-col-h">Features</div>
