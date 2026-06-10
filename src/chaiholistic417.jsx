@@ -1156,9 +1156,8 @@ export default function ChaiHolistic() {
     if (!q) return;
     const ql = q.toLowerCase().trim();
     setHomeSearchQuery(q);
-    setHomeSearchResults([]); // clear first
 
-    // ── Step 1: Search everything we have ─────────────────────────────────────
+    // ── Step 1: Search everything we have locally ─────────────────────────────
     const localResults = searchAll(ql);
 
     if (localResults.length > 0) {
@@ -1166,73 +1165,77 @@ export default function ChaiHolistic() {
       return;
     }
 
-    // ── Step 2: Nothing found locally — show loading, hit web + AI ───────────
-    setHomeSearchResults([{id:"loading", name:"Searching the web for you…", desc:"Finding the best information on this topic", emoji:"🔍", color:"#2A3A2A", type:"Loading", typeColor:"#4A6B4A", isLoading:true}]);
+    // ── Step 2: Nothing local — show loading then hit Railway AI ─────────────
+    setHomeSearchResults([{
+      id:"loading", isLoading:true,
+      name:"Searching for you…", desc:`Looking up information on "${q}"`,
+      emoji:"🔍", color:"#2A3A2A", type:"", typeColor:""
+    }]);
 
     try {
-      // Use Anthropic API directly for herb/wellness knowledge
-      const aiRes = await fetch("https://api.anthropic.com/v1/messages", {
+      const aiRes = await fetch("https://web-production-4c84.up.railway.app/amara-chat", {
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
-          model:"claude-sonnet-4-20250514",
-          max_tokens:500,
+          system:`You are a wellness knowledge assistant for Chai Holistic, a herbal tea brand. 
+Answer ONLY with valid JSON. No markdown, no code fences, no explanation outside the JSON.`,
           messages:[{
             role:"user",
-            content:`You are a helpful assistant for Chai Holistic, a wellness tea brand. Someone searched for: "${q}".
+            content:`Someone searched for: "${q}" on the Chai Holistic website.
 
-Tell them briefly what this herb/ingredient/wellness topic is (2-3 sentences), what it's known for health-wise, and what they could use at Chai Holistic that relates to it.
+Give them useful information about this herb, ingredient, or wellness topic.
+Also suggest one related product or section from Chai Holistic.
 
-Respond ONLY with valid JSON, no markdown, no code blocks:
-{
-  "title": "Name or short title",
-  "summary": "2-3 sentence explanation of what this is and its health benefits",
-  "source": "Based on traditional herbal medicine and published nutritional research",
-  "related_suggestion": "One specific Chai Holistic product or category that relates to this, e.g. Ginger Root herb or Golden Healer blend or Men's Wellness collection",
-  "related_emoji": "one emoji",
-  "related_type": "Tea Blend or Herb or Collection",
-  "related_page": "shop or herbs or men or ancestral or supplements"
-}`
+Respond ONLY with this exact JSON structure:
+{"title":"${q}","summary":"2-3 sentences about what this is and its main health benefits","source":"Traditional herbal medicine and published research","related_name":"a specific related Chai Holistic product or section name","related_desc":"one sentence on why it relates","related_emoji":"🌿","related_page":"shop"}`
           }]
         })
       });
+
+      if (!aiRes.ok) throw new Error("AI unavailable");
       const aiData = await aiRes.json();
-      const rawText = aiData.content?.[0]?.text||"{}";
-      const info = JSON.parse(rawText.replace(/```json|```/g,"").trim());
+      const rawText = (aiData.reply||aiData.content?.[0]?.text||"{}");
+      const clean = rawText.replace(/```json|```/g,"").trim();
+      const info = JSON.parse(clean);
 
       const webResults = [];
 
-      // AI knowledge card
       if (info.summary) {
         webResults.push({
           id:"ai-info",
-          name: info.title || q,
+          name: info.title||q,
           desc: info.summary,
+          sub: info.source||"",
           emoji:"🌐", color:"#1A3A4A",
           type:"General Info", typeColor:"#1A5A6B",
           isWebResult:true,
-          source: info.source,
-          action:()=>{}  // info only, no nav
+          action:()=>{}
         });
       }
-
-      // Related Chai Holistic suggestion
-      if (info.related_suggestion) {
+      if (info.related_name) {
         webResults.push({
           id:"ai-related",
-          name: info.related_suggestion,
-          desc: "We have something related at Chai Holistic — tap to explore",
+          name: info.related_name,
+          desc: info.related_desc||"Related at Chai Holistic — tap to explore",
           emoji: info.related_emoji||"🌿",
           color:"#2A4A2D",
-          type: info.related_type||"Related",
-          typeColor:"#3A6B2A",
+          type:"Chai Holistic", typeColor:"#3A6B2A",
           action:()=>nav(info.related_page||"shop")
         });
       }
 
-      setHomeSearchResults(webResults.length > 0 ? webResults : [{
+      setHomeSearchResults(
+        webResults.length > 0 ? webResults :
+        [{id:"no-result", isNoResult:true, name:q, desc:"", emoji:"", color:"", type:"", typeColor:""}]
+      );
+
+    } catch(err) {
+      console.warn("AI search failed:", err);
+      setHomeSearchResults([{
         id:"no-result", isNoResult:true, name:q, desc:"", emoji:"", color:"", type:"", typeColor:""
       }]);
+    }
+  };
 
     } catch(err) {
       // Railway unavailable — show graceful no-results
@@ -7352,38 +7355,38 @@ Thank you!`);
 
       {/* ── GLOBAL SEARCH RESULTS OVERLAY (mobile + any search) ────────────── */}
 
-      {homeSearchResults.length > 0 && (
+      {(homeSearchResults.length > 0 || (homeSearchQuery && homeSearchResults.length === 0)) && (
         <>
           <div
-            onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");}}
+            onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
             style={{position:"fixed",inset:0,zIndex:1050,background:"rgba(0,0,0,.4)",backdropFilter:"blur(2px)"}}
           />
           <div style={{
             position:"fixed",bottom:0,left:0,right:0,zIndex:1051,
             background:"white",
             borderRadius:"20px 20px 0 0",
-            maxHeight:"75vh",
+            maxHeight:"78vh",
             display:"flex",flexDirection:"column",
             boxShadow:"0 -8px 40px rgba(0,0,0,.2)",
             animation:"slideUp .3s cubic-bezier(.34,1.2,.64,1)",
           }}>
             {/* Handle + header */}
-            <div style={{padding:"12px 20px 0",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(61,43,31,.08)"}}>
-              <div style={{display:"flex",alignItems:"center",gap:8}}>
-                <div style={{width:36,height:4,borderRadius:2,background:"rgba(61,43,31,.15)",margin:"0 auto"}}/>
-              </div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",fontWeight:600}}>
-                {homeSearchResults.length} result{homeSearchResults.length!==1?"s":""} for "{homeSearchQuery}"
+            <div style={{padding:"12px 20px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(61,43,31,.08)",flexShrink:0}}>
+              <div style={{width:36,height:4,borderRadius:2,background:"rgba(61,43,31,.12)"}}/>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"var(--bark)",fontWeight:600,flex:1,textAlign:"center",margin:"0 12px"}}>
+                {homeSearchResults[0]?.isLoading ? `Searching for "${homeSearchQuery}"…` :
+                 homeSearchResults[0]?.isNoResult ? `Nothing found for "${homeSearchQuery}"` :
+                 `${homeSearchResults.length} result${homeSearchResults.length!==1?"s":""} for "${homeSearchQuery}"`}
               </div>
               <button
-                onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");const i=document.getElementById('mobSearchInput');if(i)i.value="";const n=document.getElementById('navSearchInput');if(n)n.value="";}}
-                style={{background:"rgba(61,43,31,.08)",border:"none",borderRadius:"50%",width:30,height:30,cursor:"pointer",fontSize:".85rem",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--bark)"}}>✕</button>
+                onClick={()=>{setHomeSearchResults([]);setHomeSearchQuery("");if(searchInputRef.current)searchInputRef.current.value="";}}
+                style={{background:"rgba(61,43,31,.08)",border:"none",borderRadius:"50%",width:30,height:30,cursor:"pointer",fontSize:".85rem",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--bark)",flexShrink:0}}>✕</button>
             </div>
-            {/* Results list — scrollable */}
-            <div style={{overflowY:"auto",flex:1,padding:"8px 0 env(safe-area-inset-bottom,0)",maxHeight:"55vh"}}>
-              {homeSearchResults.length > 4 && !homeSearchResults[0]?.isLoading && (
-                <div style={{textAlign:"center",padding:"4px 0 8px",fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"rgba(61,43,31,.35)",letterSpacing:".08em"}}>
-                  {homeSearchResults.filter(r=>!r.isNoResult).length} results · scroll to see all
+            {/* Results list — scrollable with momentum */}
+            <div style={{overflowY:"auto",flex:1,WebkitOverflowScrolling:"touch",padding:"4px 0 env(safe-area-inset-bottom,16px)"}}>
+              {homeSearchResults.length > 3 && !homeSearchResults[0]?.isLoading && !homeSearchResults[0]?.isNoResult && (
+                <div style={{textAlign:"center",padding:"6px 0 2px",fontFamily:"Jost,sans-serif",fontSize:".6rem",color:"rgba(61,43,31,.3)",letterSpacing:".08em"}}>
+                  {homeSearchResults.length} results · scroll for more ↓
                 </div>
               )}
               {homeSearchResults[0]?.isLoading ? (
