@@ -2486,61 +2486,25 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
     }
   `;
 
-  // --- 2AM OVERLAY — now the Prayer Experience ---------------------------------
-  const TwoAMOverlay = () => {
-    return (
-      <div className="twoam-ov" style={{background:"#060a08",flexDirection:"column",padding:0,overflow:"auto"}}>
-        {/* Close button */}
-        <button
-          onClick={close2AM}
-          style={{
-            position:"fixed",top:16,right:16,zIndex:800,
-            width:36,height:36,borderRadius:"50%",
-            background:"rgba(255,255,255,.08)",
-            border:"1px solid rgba(255,255,255,.15)",
-            color:"rgba(255,255,255,.6)",cursor:"pointer",
-            fontSize:".9rem",display:"flex",alignItems:"center",justifyContent:"center",
-            transition:"all .2s",
-          }}
-          onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.18)";}}
-          onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.08)";}}
-        >✕</button>
-        {/* Full prayer section */}
-        <PrayerSection onNavigate={(blend)=>{ close2AM(); nav("tea-library",{blend}); }}/>
-        {/* Tea offer below */}
-        <div style={{
-          maxWidth:480,margin:"0 auto",padding:"0 20px 48px",textAlign:"center",
-        }}>
-          <div style={{
-            background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",
-            borderRadius:20,padding:"22px 24px",marginBottom:16,
-          }}>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",marginBottom:6}}>
-              Can't sleep?
-            </div>
-            <div style={{fontSize:".78rem",color:"rgba(255,255,255,.4)",fontWeight:300,lineHeight:1.7,marginBottom:16}}>
-              This blend was made for exactly this moment.
-            </div>
-            {(()=>{const blend=BLENDS.find(b=>b.id==="m2");return blend?(
-              <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
-                <div style={{width:48,height:48,borderRadius:10,background:"linear-gradient(135deg,#4A3728,#2A1A10)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.4rem",flexShrink:0}}>🍵</div>
-                <div style={{textAlign:"left",flex:1}}>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:2}}>2AM Reset</div>
-                  <div style={{fontSize:".68rem",color:"rgba(255,255,255,.4)"}}>Cinnamon · Cardamom · Ginger · Cloves</div>
-                </div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"var(--gold)",flexShrink:0}}>${blend.price}</div>
-              </div>
-            ):null;})()}
-            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-              <button className="btn-twoam gold" style={{flex:1}} onClick={()=>{const b=BLENDS.find(b=>b.id==="m2");if(b)addToCart({...b,emoji:"🍵"});close2AM();}}>Add to Basket</button>
-              <button className="btn-twoam" style={{flex:1}} onClick={()=>{close2AM();window.open("https://2amcompanion.com","_blank");}}>2amcompanion.com ↗</button>
-            </div>
-          </div>
-          <button className="btn-twoam" style={{width:"100%"}} onClick={close2AM}>← Back to Chai Holistic</button>
-        </div>
-      </div>
-    );
-  };
+  // --- 2AM OVERLAY — pure prayer experience, nothing commercial ───────────────
+  const TwoAMOverlay = () => (
+    <div className="twoam-ov" style={{background:"#060a08",flexDirection:"column",padding:0,overflow:"auto",position:"relative"}}>
+      {/* Quiet close — top right, unobtrusive */}
+      <button
+        onClick={close2AM}
+        style={{
+          position:"fixed",top:14,right:14,zIndex:800,
+          width:34,height:34,borderRadius:"50%",
+          background:"rgba(255,255,255,.06)",
+          border:"1px solid rgba(255,255,255,.1)",
+          color:"rgba(255,255,255,.45)",cursor:"pointer",
+          fontSize:".85rem",display:"flex",alignItems:"center",justifyContent:"center",
+        }}
+      >✕</button>
+      {/* The prayer section fills everything */}
+      <PrayerSection onNavigate={(blend)=>{ close2AM(); nav("tea-library",{blend}); }}/>
+    </div>
+  );
 
   // --- TEA FINDER MODAL -----------------------------------------------------
   const TeaFinderModal = () => {

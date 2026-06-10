@@ -428,9 +428,9 @@ export default function PrayerSection({ onNavigate }) {
           transform: translate(-50%,-50%);
           border-radius: 50%; pointer-events: none;
         }
-        .rs-or1 { width:74px;  height:74px;  border:1.5px solid rgba(74,160,120,.35); animation:rs-orb 4.2s ease-in-out 0s   infinite; }
-        .rs-or2 { width:98px;  height:98px;  border:1px solid rgba(74,160,120,.22);   animation:rs-orb 4.2s ease-in-out .75s infinite; }
-        .rs-or3 { width:122px; height:122px; border:1px solid rgba(74,160,120,.1);    animation:rs-orb 4.2s ease-in-out 1.5s infinite; }
+        .rs-or1 { width:86px;  height:86px;  border:1.5px solid rgba(74,160,120,.4);  animation:rs-orb 4.2s ease-in-out 0s   infinite; }
+        .rs-or2 { width:110px; height:110px; border:1px solid rgba(74,160,120,.25);  animation:rs-orb 4.2s ease-in-out .75s infinite; }
+        .rs-or3 { width:134px; height:134px; border:1px solid rgba(74,160,120,.12);  animation:rs-orb 4.2s ease-in-out 1.5s infinite; }
         @keyframes rs-orb {
           0%   { transform:translate(-50%,-50%) scale(1);    opacity:0; }
           20%  { opacity:.8; }
@@ -455,7 +455,7 @@ export default function PrayerSection({ onNavigate }) {
         .rs-hands {
           position: absolute; top:50%; left:50%;
           transform: translate(-50%,-50%);
-          font-size: 56px; line-height:1; display:block; user-select:none;
+          font-size: 52px; line-height:1; display:block; user-select:none;
           filter:drop-shadow(0 2px 8px rgba(0,0,0,.45)) drop-shadow(0 0 16px rgba(192,136,48,.2));
           animation:rs-handsFloat 5s ease-in-out infinite;
           transition:filter .3s ease; z-index:1;
@@ -854,7 +854,7 @@ export default function PrayerSection({ onNavigate }) {
               <div className="rs-burst rs-br4"/>
 
               <span className="rs-hands" style={{filter:"drop-shadow(0 0 12px rgba(74,160,120,.7))",animation:"rs-lotus-breathe 3.5s ease-in-out infinite"}}>🪷</span>
-              <span className="rs-tap-hint">✦ tap to receive your affirmation</span>
+              <span className="rs-tap-hint">✦ tap the lotus to receive your affirmation</span>
             </div>
 
             {/* Ring (phase 1.5+) */}
