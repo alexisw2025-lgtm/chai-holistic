@@ -1237,11 +1237,6 @@ Respond ONLY with this exact JSON structure:
     }
   };
 
-    } catch(err) {
-      // Railway unavailable — show graceful no-results
-      setHomeSearchResults([{id:"no-result", isNoResult:true, name:q, desc:"", emoji:"", color:"", type:"", typeColor:""}]);
-    }
-  };
   const [teaCardModal, setTeaCardModal] = useState(null);
   const [saveRitualOpen, setSaveRitualOpen] = useState(false);
   const [blendFilter, setBlendFilter] = useState("All");
