@@ -1399,7 +1399,7 @@ export default function SeaMossPage({ onAddToCart }) {
               fontFamily: "'Playfair Display', serif",
               fontSize: "1.3rem", color: "white",
               fontWeight: 400, marginBottom: 20,
-            }>{T.sm_how_to_use || "How to Use Sea Moss Gel Daily"}</h3>
+            }}>{T.sm_how_to_use || "How to Use Sea Moss Gel Daily"}</h3>
             <div style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
