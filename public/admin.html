@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Chai Holistic — Admin</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+  :root {
+    --bg:      #0a0f0a;
+    --surface: #111811;
+    --card:    #161e16;
+    --border:  rgba(255,255,255,.07);
+    --gold:    #c08830;
+    --goldL:   #deb96a;
+    --green:   #2aaa85;
+    --greenD:  #1a6a55;
+    --red:     #c84040;
+    --redL:    #ff6060;
+    --text:    #f0ede6;
+    --muted:   rgba(240,237,230,.45);
+    --font:    'Georgia', 'Times New Roman', serif;
+    --mono:    'Courier New', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 15px; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+  }
+
+  /* ── Lock screen ────────────────────────────────────── */
+  #lock {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px; z-index: 9999;
+  }
+  #lock h1 { font-size: 1.5rem; font-weight: 400; letter-spacing: .12em; color: var(--goldL); }
+  #lock p  { font-size: .78rem; color: var(--muted); font-family: sans-serif; }
+  #lock input {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 12px 20px; border-radius: 8px;
+    font-size: 1rem; width: 280px; text-align: center;
+    outline: none; letter-spacing: .15em;
+    font-family: var(--mono);
+  }
+  #lock input:focus { border-color: var(--gold); }
+  #lock button {
+    background: var(--gold); color: #0a0f0a;
+    border: none; padding: 12px 32px; border-radius: 8px;
+    font-size: .9rem; cursor: pointer; font-weight: 600;
+    letter-spacing: .08em; font-family: sans-serif;
+  }
+  #lock .err { color: var(--redL); font-size: .78rem; font-family: sans-serif; }
+
+  /* ── App shell ──────────────────────────────────────── */
+  #app { display: none; }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 58px; position: sticky; top: 0; z-index: 100;
+  }
+  header h1 { font-size: 1rem; font-weight: 400; color: var(--goldL); letter-spacing: .1em; }
+  header span { font-size: .7rem; color: var(--muted); font-family: sans-serif; }
+
+  /* ── Tabs ───────────────────────────────────────────── */
+  nav.tabs {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex; gap: 0; padding: 0 2rem;
+  }
+  nav.tabs button {
+    background: none; border: none; color: var(--muted);
+    padding: 14px 20px; font-family: sans-serif; font-size: .78rem;
+    letter-spacing: .08em; text-transform: uppercase; cursor: pointer;
+    border-bottom: 2px solid transparent; transition: all .18s;
+  }
+  nav.tabs button:hover { color: var(--text); }
+  nav.tabs button.active { color: var(--goldL); border-bottom-color: var(--gold); }
+
+  /* ── Main content ───────────────────────────────────── */
+  .tab-panel { display: none; padding: 2rem; max-width: 1300px; margin: 0 auto; }
+  .tab-panel.active { display: block; }
+
+  /* ── Stats bar ──────────────────────────────────────── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px; margin-bottom: 2rem;
+  }
+  .stat {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+  }
+  .stat .val { font-size: 1.7rem; color: var(--goldL); }
+  .stat .lbl { font-size: .68rem; color: var(--muted); font-family: sans-serif;
+    text-transform: uppercase; letter-spacing: .1em; margin-top: 4px; }
+
+  /* ── Toolbar ────────────────────────────────────────── */
+  .toolbar {
+    display: flex; gap: 10px; align-items: center;
+    flex-wrap: wrap; margin-bottom: 1.2rem;
+  }
+  .toolbar input[type="text"] {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 8px 16px; border-radius: 8px;
+    font-size: .82rem; font-family: sans-serif; outline: none;
+    flex: 1; min-width: 180px;
+  }
+  .toolbar input:focus { border-color: var(--gold); }
+  .toolbar select {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 8px 14px; border-radius: 8px;
+    font-size: .82rem; font-family: sans-serif; cursor: pointer; outline: none;
+  }
+  .toolbar select:focus { border-color: var(--gold); }
+
+  /* ── Buttons ────────────────────────────────────────── */
+  .btn {
+    border: none; border-radius: 8px; padding: 8px 18px;
+    font-size: .78rem; letter-spacing: .07em; text-transform: uppercase;
+    font-family: sans-serif; cursor: pointer; font-weight: 600;
+    transition: all .15s; white-space: nowrap;
+  }
+  .btn-gold  { background: var(--gold); color: #0a0f0a; }
+  .btn-gold:hover { background: var(--goldL); }
+  .btn-green { background: var(--greenD); color: #b8fff0; }
+  .btn-green:hover { background: var(--green); color: #0a0f0a; }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--goldL); }
+  .btn-red   { background: transparent; color: var(--redL); border: 1px solid rgba(200,64,64,.3); }
+  .btn-red:hover { background: rgba(200,64,64,.15); }
+  .btn-sm    { padding: 5px 12px; font-size: .68rem; }
+
+  /* ── Product table ──────────────────────────────────── */
+  .tbl-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-family: sans-serif; font-size: .8rem;
+  }
+  thead th {
+    background: var(--card); padding: 10px 14px;
+    text-align: left; color: var(--muted);
+    font-size: .65rem; letter-spacing: .12em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background .12s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,.02); }
+  tbody td { padding: 10px 14px; vertical-align: middle; }
+
+  /* ── Inline edit fields ─────────────────────────────── */
+  td input[type="number"], td input[type="text"] {
+    background: rgba(255,255,255,.05); border: 1px solid var(--border);
+    color: var(--text); padding: 5px 10px; border-radius: 6px;
+    font-size: .8rem; font-family: sans-serif; outline: none; width: 90px;
+  }
+  td input[type="number"]:focus, td input[type="text"]:focus { border-color: var(--gold); }
+  td input[type="number"].wide { width: 70px; }
+
+  /* ── Stock badge ────────────────────────────────────── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 50px; font-size: .67rem;
+    font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+  }
+  .badge.in  { background: rgba(42,170,133,.15); color: #2aaa85; }
+  .badge.out { background: rgba(200,64,64,.15);  color: var(--redL); }
+  .badge::before { content: '●'; font-size: .5rem; }
+
+  /* ── Toggle switch ──────────────────────────────────── */
+  .tog { position: relative; display: inline-block; width: 40px; height: 22px; cursor: pointer; }
+  .tog input { opacity: 0; width: 0; height: 0; }
+  .tog .slider {
+    position: absolute; inset: 0; background: rgba(200,64,64,.35);
+    border-radius: 50px; transition: background .2s;
+  }
+  .tog .slider::before {
+    content: ''; position: absolute;
+    height: 16px; width: 16px; left: 3px; bottom: 3px;
+    background: white; border-radius: 50%; transition: transform .2s;
+  }
+  .tog input:checked + .slider { background: var(--greenD); }
+  .tog input:checked + .slider::before { transform: translateX(18px); }
+
+  /* ── Category chip ──────────────────────────────────── */
+  .cat {
+    display: inline-block; padding: 2px 9px; border-radius: 50px;
+    font-size: .62rem; letter-spacing: .08em; text-transform: uppercase;
+    font-weight: 600;
+  }
+  .cat-tea       { background: rgba(42,100,42,.25); color: #6fdd6f; }
+  .cat-tea_cleanse { background: rgba(42,80,100,.3); color: #7dd4f0; }
+  .cat-tea_mens  { background: rgba(80,60,120,.3); color: #c0a0ff; }
+  .cat-ring      { background: rgba(192,136,48,.2); color: var(--goldL); }
+  .cat-bundle    { background: rgba(140,80,40,.25); color: #ffb07a; }
+  .cat-tool      { background: rgba(80,80,80,.3); color: #b0b0b0; }
+
+  /* ── Save indicator ─────────────────────────────────── */
+  .save-row {
+    opacity: 0; transition: opacity .3s;
+    color: var(--green); font-size: .7rem; font-family: sans-serif;
+  }
+  .save-row.show { opacity: 1; }
+
+  /* ── Modal ──────────────────────────────────────────── */
+  .modal-bg {
+    position: fixed; inset: 0; background: rgba(0,0,0,.7);
+    backdrop-filter: blur(6px); z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .modal {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px; max-width: 520px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal h2 { font-size: 1.1rem; font-weight: 400; color: var(--goldL); margin-bottom: 20px; }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: .68rem; color: var(--muted);
+    font-family: sans-serif; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+  .field input, .field select, .field textarea {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); padding: 10px 14px; border-radius: 8px;
+    font-size: .85rem; font-family: sans-serif; outline: none;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+  /* ── Shopify panel ──────────────────────────────────── */
+  .shopify-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px; margin-bottom: 20px;
+  }
+  .shopify-card h2 { font-size: 1rem; color: var(--goldL); margin-bottom: 8px; }
+  .shopify-card p  { font-size: .82rem; color: var(--muted); font-family: sans-serif;
+    line-height: 1.65; margin-bottom: 16px; }
+  .shopify-card code {
+    background: rgba(255,255,255,.05); padding: 2px 8px; border-radius: 4px;
+    font-family: var(--mono); font-size: .78rem; color: var(--goldL);
+  }
+  .step {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+    font-family: sans-serif; font-size: .82rem; color: var(--muted);
+    line-height: 1.6;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(192,136,48,.15); color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .72rem; font-weight: 700;
+  }
+  .export-preview {
+    background: rgba(0,0,0,.3); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px; margin-top: 12px;
+    font-family: var(--mono); font-size: .7rem; color: var(--muted);
+    overflow-x: auto; white-space: pre; max-height: 200px; overflow-y: auto;
+  }
+
+  /* ── Toast ──────────────────────────────────────────── */
+  #toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--greenD); color: white;
+    padding: 12px 20px; border-radius: 10px;
+    font-family: sans-serif; font-size: .82rem;
+    transform: translateY(80px); opacity: 0;
+    transition: all .25s; z-index: 9998; pointer-events: none;
+  }
+  #toast.show { transform: translateY(0); opacity: 1; }
+  #toast.err  { background: var(--red); }
+
+  /* ── Empty state ────────────────────────────────────── */
+  .empty { text-align: center; padding: 60px 0; color: var(--muted); font-family: sans-serif; }
+  .empty .icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+  /* ── Bulk action bar ─────────────────────────────────── */
+  .bulk-bar {
+    background: var(--card); border: 1px solid var(--gold);
+    border-radius: 10px; padding: 10px 16px;
+    display: none; align-items: center; gap: 12px;
+    margin-bottom: 12px; font-family: sans-serif; font-size: .8rem;
+  }
+  .bulk-bar.show { display: flex; }
+  .bulk-bar span { color: var(--goldL); }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 700px) {
+    .tab-panel { padding: 1rem; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    nav.tabs button { padding: 12px 12px; font-size: .68rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOCK SCREEN ══════════════ -->
+<div id="lock">
+  <div style="font-size:2rem;">☕</div>
+  <h1>Chai Holistic Admin</h1>
+  <p>Enter your admin password to continue</p>
+  <input type="password" id="pw-input" placeholder="••••••••••" onkeydown="if(event.key==='Enter')unlock()"/>
+  <button onclick="unlock()">Enter</button>
+  <div id="pw-err" class="err" style="display:none">Incorrect password. Try again.</div>
+</div>
+
+<!-- ══════════════ APP ══════════════ -->
+<div id="app">
+
+<header>
+  <h1>☕ Chai Holistic — Admin</h1>
+  <span id="last-sync">Loading…</span>
+</header>
+
+<nav class="tabs">
+  <button class="active" onclick="showTab('inventory')">📦 Inventory</button>
+  <button onclick="showTab('pricing')">💰 Pricing</button>
+  <button onclick="showTab('shopify')">🛍 Shopify Export</button>
+  <button onclick="showTab('settings')">⚙️ Settings</button>
+</nav>
+
+<!-- ══════ INVENTORY TAB ══════ -->
+<div id="tab-inventory" class="tab-panel active">
+
+  <div class="stats" id="inv-stats">
+    <div class="stat"><div class="val" id="st-total">—</div><div class="lbl">Total Products</div></div>
+    <div class="stat"><div class="val" id="st-instock">—</div><div class="lbl">In Stock</div></div>
+    <div class="stat"><div class="val" id="st-outstock" style="color:var(--redL)">—</div><div class="lbl">Out of Stock</div></div>
+    <div class="stat"><div class="val" id="st-cats">—</div><div class="lbl">Categories</div></div>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" id="inv-search" placeholder="Search products…" oninput="renderInventory()"/>
+    <select id="inv-cat" onchange="renderInventory()">
+      <option value="">All categories</option>
+      <option value="tea">Teas</option>
+      <option value="tea_cleanse">Cleanse Teas</option>
+      <option value="tea_mens">Men's Teas</option>
+      <option value="ring">Rings</option>
+      <option value="bundle">Bundles</option>
+      <option value="tool">Brew Tools</option>
+    </select>
+    <select id="inv-status" onchange="renderInventory()">
+      <option value="">All status</option>
+      <option value="in">In stock</option>
+      <option value="out">Out of stock</option>
+    </select>
+    <button class="btn btn-ghost btn-sm" onclick="markAllInStock()">✓ All In Stock</button>
+    <button class="btn btn-gold btn-sm" onclick="openAddModal()">+ Add Product</button>
+  </div>
+
+  <div id="bulk-bar" class="bulk-bar">
+    <span id="bulk-count">0 selected</span>
+    <button class="btn btn-green btn-sm" onclick="bulkStock(true)">Mark In Stock</button>
+    <button class="btn btn-red btn-sm" onclick="bulkStock(false)">Mark Out of Stock</button>
+    <button class="btn btn-ghost btn-sm" onclick="clearSelection()">Clear</button>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="chk-all" onchange="toggleAll(this)"/></th>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Compare</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Save</th>
+        </tr>
+      </thead>
+      <tbody id="inv-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════ PRICING TAB ══════ -->
+<div id="tab-pricing" class="tab-panel">
+
+  <div style="margin-bottom:1.5rem;">
+    <p style="font-family:sans-serif;font-size:.85rem;color:var(--muted);line-height:1.7;">
+      Update prices here. Changes are saved to Supabase and reflected on the live site within seconds.
+      Use <strong style="color:var(--goldL)">Compare Price</strong> to show a crossed-out original price — great for sales.
+    </p>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" id="price-search" placeholder="Search products…" oninput="renderPricing()"/>
+    <select id="price-cat" onchange="renderPricing()">
+      <option value="">All categories</option>
+      <option value="tea">Teas</option>
+      <option value="tea_cleanse">Cleanse Teas</option>
+      <option value="tea_mens">Men's Teas</option>
+      <option value="ring">Rings</option>
+      <option value="bundle">Bundles</option>
+      <option value="tool">Brew Tools</option>
+    </select>
+    <button class="btn btn-ghost btn-sm" onclick="clearAllComparePrices()">Clear All Sale Prices</button>
+    <button class="btn btn-gold btn-sm" onclick="savePricingBatch()">💾 Save All Changes</button>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Current Price ($)</th>
+          <th>Compare Price ($)<br/><small style="font-weight:400;color:var(--muted)">Leave blank = no sale</small></th>
+          <th>Sale?</th>
+          <th>Save</th>
+        </tr>
+      </thead>
+      <tbody id="price-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════ SHOPIFY TAB ══════ -->
+<div id="tab-shopify" class="tab-panel">
+
+  <div class="shopify-card">
+    <h2>🛍 Shopify CSV Export</h2>
+    <p>
+      When you're ready to set up Shopify, export your full product catalog as a Shopify-ready CSV.
+      Upload it directly to <code>Shopify Admin → Products → Import</code> and all 81 products
+      will be created with correct prices, SKUs, and descriptions in one click.
+    </p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-gold" onclick="exportShopifyCSV()">⬇ Download Shopify CSV</button>
+      <button class="btn btn-ghost" onclick="previewShopifyCSV()">👁 Preview CSV</button>
+    </div>
+    <div id="csv-preview" class="export-preview" style="display:none"></div>
+  </div>
+
+  <div class="shopify-card">
+    <h2>📋 How to set up Shopify</h2>
+    <div class="step"><div class="step-num">1</div><div>Go to <strong>shopify.com</strong> and create a new store. Choose the <strong>Basic plan ($39/mo)</strong> — it includes everything you need.</div></div>
+    <div class="step"><div class="step-num">2</div><div>In your Shopify Admin, go to <strong>Products → Import</strong> and upload the CSV you downloaded above. All 81 products will be created with prices and SKUs.</div></div>
+    <div class="step"><div class="step-num">3</div><div>Set up <strong>Shopify Payments</strong> (free, powered by Stripe). Go to Settings → Payments. This gives you 0% transaction fees on your plan.</div></div>
+    <div class="step"><div class="step-num">4</div><div>Install the <strong>Buy Button</strong> channel from the Shopify App Store (free). This generates embed codes you can add to your existing chaiholistic.com site.</div></div>
+    <div class="step"><div class="step-num">5</div><div>Paste the Buy Button embed codes into your React components where the "Add to Basket" buttons are. Your beautiful custom site stays — Shopify handles the checkout.</div></div>
+    <div class="step"><div class="step-num">6</div><div>Add your Shopify product IDs back here under Settings → enter them in the <code>shopify_id</code> column. Future CSV exports will keep products synced.</div></div>
+  </div>
+
+  <div class="shopify-card">
+    <h2>💳 Shopify Payments setup</h2>
+    <p>Once Shopify Payments is active, you'll accept Visa, Mastercard, Amex, Apple Pay, Google Pay, and Shop Pay with zero additional transaction fees on the Basic plan. Processing fee is 2.9% + 30¢ per transaction — standard for all major processors.</p>
+    <div class="step"><div class="step-num">✓</div><div>Go to <strong>Settings → Payments → Shopify Payments → Complete account setup</strong>. You'll need your business bank account and EIN (or SSN for sole proprietor).</div></div>
+  </div>
+</div>
+
+<!-- ══════ SETTINGS TAB ══════ -->
+<div id="tab-settings" class="tab-panel">
+  <div class="shopify-card" style="max-width:600px;">
+    <h2>⚙️ Supabase Connection</h2>
+    <p>These values come from your Supabase project. They're already set via your Netlify environment variables — enter them here to connect the admin tool directly.</p>
+    <div class="field">
+      <label>Supabase URL</label>
+      <input type="text" id="sb-url" placeholder="https://xxxx.supabase.co" oninput="saveSettings()"/>
+    </div>
+    <div class="field">
+      <label>Supabase Anon Key</label>
+      <input type="text" id="sb-key" placeholder="eyJ…" oninput="saveSettings()"/>
+    </div>
+    <div class="field">
+      <label>Admin Password (change this)</label>
+      <input type="password" id="admin-pw" placeholder="New password"/>
+    </div>
+    <button class="btn btn-gold" onclick="saveAdminPassword()">Save Password</button>
+  </div>
+
+  <div class="shopify-card" style="max-width:600px;margin-top:16px;">
+    <h2>🗄️ Database Setup</h2>
+    <p>First time using this admin tool? You need to create the products table in Supabase. Copy the SQL below and run it in your Supabase SQL Editor.</p>
+    <button class="btn btn-green" onclick="downloadSQL()">⬇ Download Setup SQL</button>
+    <button class="btn btn-ghost" style="margin-left:8px;" onclick="testConnection()">🔗 Test Connection</button>
+    <div id="conn-status" style="margin-top:12px;font-family:sans-serif;font-size:.8rem;"></div>
+  </div>
+
+  <div class="shopify-card" style="max-width:600px;margin-top:16px;">
+    <h2>📲 How to add admin.html to your site</h2>
+    <div class="step"><div class="step-num">1</div><div>Place <code>admin.html</code> in your <code>public/</code> folder and push via GitHub Desktop.</div></div>
+    <div class="step"><div class="step-num">2</div><div>Access it at <code>chaiholistic.com/admin.html</code> — it's password-protected so no one else can use it.</div></div>
+    <div class="step"><div class="step-num">3</div><div>Bookmark it on your phone. The admin tool is fully mobile-responsive.</div></div>
+    <div class="step"><div class="step-num">4</div><div>To integrate inventory with your React site, add the <code>useInventory</code> hook (in the download package) to any component that renders products.</div></div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- ══════ ADD/EDIT MODAL ══════ -->
+<div id="modal" class="modal-bg" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h2 id="modal-title">Add Product</h2>
+    <div class="field-row">
+      <div class="field">
+        <label>Emoji</label>
+        <input type="text" id="m-emoji" placeholder="🌿"/>
+      </div>
+      <div class="field">
+        <label>SKU</label>
+        <input type="text" id="m-sku" placeholder="CH-TEA-EXAMPLE"/>
+      </div>
+    </div>
+    <div class="field">
+      <label>Product Name</label>
+      <input type="text" id="m-name" placeholder="Morning Rise"/>
+    </div>
+    <div class="field">
+      <label>Tagline / Benefit</label>
+      <input type="text" id="m-tagline" placeholder="Energize · Focus · Uplift"/>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Category</label>
+        <select id="m-cat">
+          <option value="tea">Tea Blend</option>
+          <option value="tea_cleanse">Cleanse Tea</option>
+          <option value="tea_mens">Men's Tea</option>
+          <option value="ring">Ring</option>
+          <option value="bundle">Bundle</option>
+          <option value="tool">Brew Tool</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Array Key</label>
+        <select id="m-arr">
+          <option value="BLENDS">BLENDS</option>
+          <option value="CLEANSING">CLEANSING</option>
+          <option value="MEN_BLENDS">MEN_BLENDS</option>
+          <option value="RINGS">RINGS</option>
+          <option value="BUNDLES">BUNDLES</option>
+          <option value="BREW_TOOLS">BREW_TOOLS</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Price ($)</label>
+        <input type="number" id="m-price" step="0.01" placeholder="17.99"/>
+      </div>
+      <div class="field">
+        <label>Compare Price ($)</label>
+        <input type="number" id="m-compare" step="0.01" placeholder="Optional"/>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Stock Qty</label>
+        <input type="number" id="m-qty" placeholder="50"/>
+      </div>
+      <div class="field">
+        <label>In Stock?</label>
+        <select id="m-stock">
+          <option value="true">In Stock</option>
+          <option value="false">Out of Stock</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="saveModal()">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════════════════════
+const DEFAULT_PW = 'chai2026admin'; // Change this after first login
+let SUPABASE_URL = '';
+let SUPABASE_KEY = '';
+let products = [];
+let selected = new Set();
+let editingId = null;
+
+// ══════════════════════════════════════════════════════════
+//  LOCK / AUTH
+// ══════════════════════════════════════════════════════════
+function unlock() {
+  const pw = document.getElementById('pw-input').value;
+  const stored = localStorage.getItem('chai_admin_pw') || DEFAULT_PW;
+  if (pw === stored) {
+    document.getElementById('lock').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadSettings();
+    init();
+  } else {
+    document.getElementById('pw-err').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+  }
+}
+
+function saveAdminPassword() {
+  const pw = document.getElementById('admin-pw').value;
+  if (!pw || pw.length < 6) { toast('Password must be at least 6 characters', true); return; }
+  localStorage.setItem('chai_admin_pw', pw);
+  toast('Password updated');
+  document.getElementById('admin-pw').value = '';
+}
+
+// ══════════════════════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════════════════════
+function loadSettings() {
+  const url = localStorage.getItem('chai_sb_url') || '';
+  const key = localStorage.getItem('chai_sb_key') || '';
+  document.getElementById('sb-url').value = url;
+  document.getElementById('sb-key').value = key;
+  SUPABASE_URL = url;
+  SUPABASE_KEY = key;
+}
+
+function saveSettings() {
+  SUPABASE_URL = document.getElementById('sb-url').value.trim();
+  SUPABASE_KEY = document.getElementById('sb-key').value.trim();
+  localStorage.setItem('chai_sb_url', SUPABASE_URL);
+  localStorage.setItem('chai_sb_key', SUPABASE_KEY);
+}
+
+async function testConnection() {
+  const el = document.getElementById('conn-status');
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    el.innerHTML = '<span style="color:var(--redL)">❌ Enter Supabase URL and key first.</span>';
+    return;
+  }
+  el.innerHTML = '<span style="color:var(--muted)">Testing…</span>';
+  try {
+    const res = await sbFetch('GET', '/rest/v1/products?select=count&limit=1');
+    if (res.ok) {
+      el.innerHTML = '<span style="color:var(--green)">✅ Connected to Supabase successfully.</span>';
+    } else {
+      const err = await res.json();
+      el.innerHTML = `<span style="color:var(--redL)">❌ ${err.message || 'Connection failed'}</span>`;
+    }
+  } catch(e) {
+    el.innerHTML = `<span style="color:var(--redL)">❌ ${e.message}</span>`;
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  SUPABASE API
+// ══════════════════════════════════════════════════════════
+function sbFetch(method, path, body) {
+  return fetch(SUPABASE_URL + path, {
+    method,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': method === 'POST' ? 'return=representation' : 'return=minimal',
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+}
+
+async function fetchProducts() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    // Use local seed data if no Supabase connection
+    return getLocalProducts();
+  }
+  try {
+    const res = await sbFetch('GET', '/rest/v1/products?select=*&order=category,name');
+    if (!res.ok) throw new Error('Fetch failed');
+    return await res.json();
+  } catch(e) {
+    console.warn('Supabase unavailable, using local data:', e);
+    return getLocalProducts();
+  }
+}
+
+async function upsertProduct(product) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    // Update local only
+    const idx = products.findIndex(p => p.sku === product.sku);
+    if (idx >= 0) products[idx] = { ...products[idx], ...product };
+    saveLocal();
+    return true;
+  }
+  const res = await sbFetch('PATCH',
+    `/rest/v1/products?sku=eq.${encodeURIComponent(product.sku)}`,
+    product
+  );
+  return res.ok;
+}
+
+async function insertProduct(product) {
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    product.id = 'local-' + Date.now();
+    products.push(product);
+    saveLocal();
+    return true;
+  }
+  const res = await sbFetch('POST', '/rest/v1/products', product);
+  return res.ok;
+}
+
+// ══════════════════════════════════════════════════════════
+//  LOCAL FALLBACK (works without Supabase)
+// ══════════════════════════════════════════════════════════
+function getLocalProducts() {
+  const saved = localStorage.getItem('chai_products_local');
+  if (saved) return JSON.parse(saved);
+  return SEED_PRODUCTS;
+}
+
+function saveLocal() {
+  localStorage.setItem('chai_products_local', JSON.stringify(products));
+}
+
+// ══════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════
+async function init() {
+  document.getElementById('last-sync').textContent = 'Loading products…';
+  products = await fetchProducts();
+  document.getElementById('last-sync').textContent =
+    `${products.length} products · ${new Date().toLocaleTimeString()}`;
+  updateStats();
+  renderInventory();
+  renderPricing();
+}
+
+function updateStats() {
+  const inStock  = products.filter(p => p.in_stock).length;
+  const outStock = products.filter(p => !p.in_stock).length;
+  const cats     = new Set(products.map(p => p.category)).size;
+  document.getElementById('st-total').textContent   = products.length;
+  document.getElementById('st-instock').textContent  = inStock;
+  document.getElementById('st-outstock').textContent = outStock;
+  document.getElementById('st-cats').textContent     = cats;
+}
+
+// ══════════════════════════════════════════════════════════
+//  INVENTORY RENDER
+// ══════════════════════════════════════════════════════════
+function getFiltered(searchId, catId, statusId) {
+  const q   = document.getElementById(searchId)?.value.toLowerCase() || '';
+  const cat = document.getElementById(catId)?.value || '';
+  const sts = document.getElementById(statusId)?.value || '';
+  return products.filter(p => {
+    const matchQ   = !q   || p.name.toLowerCase().includes(q) || (p.sku||'').toLowerCase().includes(q);
+    const matchCat = !cat || p.category === cat;
+    const matchSts = !sts || (sts === 'in' ? p.in_stock : !p.in_stock);
+    return matchQ && matchCat && matchSts;
+  });
+}
+
+function renderInventory() {
+  const rows = getFiltered('inv-search', 'inv-cat', 'inv-status');
+  const body = document.getElementById('inv-body');
+  if (!rows.length) {
+    body.innerHTML = `<tr><td colspan="8"><div class="empty"><div class="icon">🔍</div>No products match your filters.</div></td></tr>`;
+    return;
+  }
+  body.innerHTML = rows.map(p => {
+    const chk = selected.has(p.sku) ? 'checked' : '';
+    return `
+    <tr id="row-${p.sku}">
+      <td><input type="checkbox" ${chk} onchange="toggleSelect('${p.sku}',this)"/></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.3rem">${p.emoji||'🌿'}</span>
+          <div>
+            <div style="font-weight:500;color:var(--text)">${p.name}</div>
+            <div style="font-size:.68rem;color:var(--muted);font-family:sans-serif">${p.sku}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="cat cat-${p.category}">${catLabel(p.category)}</span></td>
+      <td><strong style="color:var(--goldL)">$${(+p.price).toFixed(2)}</strong></td>
+      <td style="color:var(--muted)">${p.compare_price ? '$'+p.compare_price : '—'}</td>
+      <td>
+        <input type="number" class="wide" id="qty-${p.sku}" value="${p.stock_qty||0}"
+          min="0" onchange="qtyChanged('${p.sku}')"/>
+      </td>
+      <td>
+        <label class="tog">
+          <input type="checkbox" ${p.in_stock ? 'checked' : ''}
+            onchange="stockToggle('${p.sku}',this)"/>
+          <span class="slider"></span>
+        </label>
+        <span class="badge ${p.in_stock ? 'in' : 'out'}" id="badge-${p.sku}" style="margin-left:8px">
+          ${p.in_stock ? 'In stock' : 'Out of stock'}
+        </span>
+      </td>
+      <td>
+        <span class="save-row" id="saved-${p.sku}">✓ Saved</span>
+        <button class="btn btn-ghost btn-sm" onclick="openEditModal('${p.sku}')">Edit</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+//  PRICING RENDER
+// ══════════════════════════════════════════════════════════
+function renderPricing() {
+  const rows = getFiltered('price-search', 'price-cat', '');
+  const body = document.getElementById('price-body');
+  body.innerHTML = rows.map(p => {
+    const onSale = p.compare_price && p.compare_price > p.price;
+    return `
+    <tr id="prow-${p.sku}">
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.2rem">${p.emoji||'🌿'}</span>
+          <div>
+            <div style="font-weight:500">${p.name}</div>
+            <div style="font-size:.65rem;color:var(--muted);font-family:sans-serif">${p.tagline||''}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="cat cat-${p.category}">${catLabel(p.category)}</span></td>
+      <td>
+        <input type="number" id="price-${p.sku}" value="${p.price}" step="0.01" min="0"
+          style="width:80px;" onchange="markDirty('${p.sku}')"/>
+      </td>
+      <td>
+        <input type="number" id="compare-${p.sku}" value="${p.compare_price||''}"
+          step="0.01" min="0" placeholder="—"
+          style="width:80px;" onchange="markDirty('${p.sku}')"/>
+      </td>
+      <td>
+        ${onSale
+          ? `<span class="badge in">On Sale</span><br/>
+             <span style="font-size:.65rem;color:var(--muted);font-family:sans-serif">
+               Save $${(p.compare_price - p.price).toFixed(2)}
+             </span>`
+          : '<span style="color:var(--muted);font-family:sans-serif;font-size:.75rem">—</span>'}
+      </td>
+      <td>
+        <span class="save-row" id="psaved-${p.sku}">✓ Saved</span>
+        <button class="btn btn-green btn-sm" id="pbtn-${p.sku}" style="display:none"
+          onclick="savePriceRow('${p.sku}')">Save</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function markDirty(sku) {
+  const btn = document.getElementById(`pbtn-${sku}`);
+  if (btn) btn.style.display = 'inline-block';
+}
+
+async function savePriceRow(sku) {
+  const p = products.find(x => x.sku === sku);
+  if (!p) return;
+  const newPrice   = parseFloat(document.getElementById(`price-${sku}`).value);
+  const newCompare = parseFloat(document.getElementById(`compare-${sku}`).value) || null;
+  p.price = newPrice;
+  p.compare_price = newCompare;
+  const ok = await upsertProduct({ sku, price: newPrice, compare_price: newCompare });
+  if (ok) {
+    document.getElementById(`pbtn-${sku}`).style.display = 'none';
+    flashSaved(`psaved-${sku}`);
+    toast(`${p.name} price updated`);
+    updateStats();
+  } else {
+    toast('Save failed — check Supabase connection', true);
+  }
+}
+
+async function savePricingBatch() {
+  const dirty = document.querySelectorAll('[id^="pbtn-"]');
+  let count = 0;
+  for (const btn of dirty) {
+    if (btn.style.display !== 'none') {
+      const sku = btn.id.replace('pbtn-', '');
+      await savePriceRow(sku);
+      count++;
+    }
+  }
+  if (count === 0) toast('No unsaved changes');
+  else toast(`${count} price${count>1?'s':''} saved`);
+}
+
+function clearAllComparePrices() {
+  if (!confirm('Remove all sale/compare prices? This ends all active sales.')) return;
+  products.forEach(p => { p.compare_price = null; });
+  saveLocal();
+  renderPricing();
+  toast('All sale prices cleared');
+}
+
+// ══════════════════════════════════════════════════════════
+//  STOCK ACTIONS
+// ══════════════════════════════════════════════════════════
+async function stockToggle(sku, checkbox) {
+  const p = products.find(x => x.sku === sku);
+  if (!p) return;
+  p.in_stock = checkbox.checked;
+  const ok = await upsertProduct({ sku, in_stock: p.in_stock });
+  const badge = document.getElementById(`badge-${sku}`);
+  if (badge) {
+    badge.className = `badge ${p.in_stock ? 'in' : 'out'}`;
+    badge.textContent = p.in_stock ? 'In stock' : 'Out of stock';
+  }
+  if (ok) { flashSaved(`saved-${sku}`); updateStats(); }
+  else toast('Save failed', true);
+}
+
+async function qtyChanged(sku) {
+  const p = products.find(x => x.sku === sku);
+  if (!p) return;
+  const qty = parseInt(document.getElementById(`qty-${sku}`).value) || 0;
+  p.stock_qty = qty;
+  p.in_stock = qty > 0;
+  const ok = await upsertProduct({ sku, stock_qty: qty, in_stock: qty > 0 });
+  if (ok) { flashSaved(`saved-${sku}`); updateStats(); }
+}
+
+async function markAllInStock() {
+  if (!confirm(`Mark all ${products.length} products as in stock?`)) return;
+  products.forEach(p => { p.in_stock = true; });
+  saveLocal();
+  // Batch update in Supabase if connected
+  if (SUPABASE_URL && SUPABASE_KEY) {
+    await sbFetch('PATCH', '/rest/v1/products?id=neq.00000000-0000-0000-0000-000000000000',
+      { in_stock: true });
+  }
+  renderInventory();
+  updateStats();
+  toast('All products marked in stock');
+}
+
+// ══════════════════════════════════════════════════════════
+//  BULK SELECTION
+// ══════════════════════════════════════════════════════════
+function toggleSelect(sku, cb) {
+  if (cb.checked) selected.add(sku);
+  else selected.delete(sku);
+  updateBulkBar();
+}
+
+function toggleAll(cb) {
+  const visible = getFiltered('inv-search','inv-cat','inv-status');
+  visible.forEach(p => {
+    if (cb.checked) selected.add(p.sku);
+    else selected.delete(p.sku);
+  });
+  renderInventory();
+  updateBulkBar();
+}
+
+function clearSelection() {
+  selected.clear();
+  renderInventory();
+  updateBulkBar();
+}
+
+function updateBulkBar() {
+  const bar = document.getElementById('bulk-bar');
+  if (selected.size > 0) {
+    bar.classList.add('show');
+    document.getElementById('bulk-count').textContent = `${selected.size} selected`;
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+async function bulkStock(inStock) {
+  for (const sku of selected) {
+    const p = products.find(x => x.sku === sku);
+    if (p) {
+      p.in_stock = inStock;
+      await upsertProduct({ sku, in_stock: inStock });
+    }
+  }
+  selected.clear();
+  renderInventory();
+  updateStats();
+  toast(`${inStock ? 'In stock' : 'Out of stock'} for selected products`);
+}
+
+// ══════════════════════════════════════════════════════════
+//  ADD / EDIT MODAL
+// ══════════════════════════════════════════════════════════
+function openAddModal() {
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'Add Product';
+  ['m-emoji','m-sku','m-name','m-tagline','m-price','m-compare','m-qty'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('m-stock').value = 'true';
+  document.getElementById('modal').style.display = 'flex';
+}
+
+function openEditModal(sku) {
+  const p = products.find(x => x.sku === sku);
+  if (!p) return;
+  editingId = sku;
+  document.getElementById('modal-title').textContent = `Edit: ${p.name}`;
+  document.getElementById('m-emoji').value   = p.emoji || '';
+  document.getElementById('m-sku').value     = p.sku;
+  document.getElementById('m-name').value    = p.name;
+  document.getElementById('m-tagline').value = p.tagline || '';
+  document.getElementById('m-cat').value     = p.category;
+  document.getElementById('m-arr').value     = p.array_key || 'BLENDS';
+  document.getElementById('m-price').value   = p.price;
+  document.getElementById('m-compare').value = p.compare_price || '';
+  document.getElementById('m-qty').value     = p.stock_qty || 0;
+  document.getElementById('m-stock').value   = p.in_stock ? 'true' : 'false';
+  document.getElementById('modal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+  editingId = null;
+}
+
+async function saveModal() {
+  const product = {
+    sku:           document.getElementById('m-sku').value.trim().toUpperCase(),
+    name:          document.getElementById('m-name').value.trim(),
+    emoji:         document.getElementById('m-emoji').value.trim(),
+    tagline:       document.getElementById('m-tagline').value.trim(),
+    category:      document.getElementById('m-cat').value,
+    array_key:     document.getElementById('m-arr').value,
+    price:         parseFloat(document.getElementById('m-price').value) || 0,
+    compare_price: parseFloat(document.getElementById('m-compare').value) || null,
+    stock_qty:     parseInt(document.getElementById('m-qty').value) || 0,
+    in_stock:      document.getElementById('m-stock').value === 'true',
+  };
+  if (!product.name || !product.sku) { toast('Name and SKU are required', true); return; }
+
+  let ok;
+  if (editingId) {
+    ok = await upsertProduct(product);
+    if (ok) {
+      const idx = products.findIndex(p => p.sku === editingId);
+      if (idx >= 0) products[idx] = { ...products[idx], ...product };
+    }
+  } else {
+    ok = await insertProduct(product);
+  }
+
+  if (ok) {
+    closeModal();
+    renderInventory();
+    renderPricing();
+    updateStats();
+    toast(editingId ? 'Product updated' : 'Product added');
+  } else {
+    toast('Save failed — check connection', true);
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  SHOPIFY CSV EXPORT
+// ══════════════════════════════════════════════════════════
+function buildShopifyCSV() {
+  const headers = [
+    'Handle','Title','Body (HTML)','Vendor','Type','Tags',
+    'Published','Option1 Name','Option1 Value',
+    'Variant SKU','Variant Grams','Variant Inventory Tracker',
+    'Variant Inventory Qty','Variant Inventory Policy',
+    'Variant Fulfillment Service','Variant Price','Variant Compare At Price',
+    'Variant Requires Shipping','Variant Taxable','Image Src',
+    'Status'
+  ];
+
+  const rows = products.map(p => {
+    const handle = p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const type   = catLabel(p.category);
+    const tags   = [p.category, 'chai-holistic', p.tagline].filter(Boolean).join(', ');
+    const status = p.in_stock ? 'active' : 'draft';
+    return [
+      handle,
+      p.name,
+      `<p>${p.tagline || ''}</p>`,
+      'Chai Holistic',
+      type,
+      tags,
+      'TRUE',
+      'Title','Default Title',
+      p.sku || '',
+      '85',  // ~3oz tea in grams
+      'shopify',
+      p.stock_qty || 0,
+      'deny',
+      'manual',
+      p.price.toFixed(2),
+      p.compare_price ? p.compare_price.toFixed(2) : '',
+      'TRUE','TRUE',
+      '',    // image src — to be added manually
+      status
+    ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
+  });
+
+  return [headers.join(','), ...rows].join('\n');
+}
+
+function exportShopifyCSV() {
+  const csv  = buildShopifyCSV();
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `chai-holistic-shopify-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast(`Exported ${products.length} products as Shopify CSV`);
+}
+
+function previewShopifyCSV() {
+  const el = document.getElementById('csv-preview');
+  if (el.style.display === 'block') { el.style.display = 'none'; return; }
+  const lines = buildShopifyCSV().split('\n').slice(0, 6);
+  el.textContent = lines.join('\n') + '\n… (' + products.length + ' total rows)';
+  el.style.display = 'block';
+}
+
+// ══════════════════════════════════════════════════════════
+//  SQL DOWNLOAD
+// ══════════════════════════════════════════════════════════
+function downloadSQL() {
+  fetch('chai_products_schema.sql')
+    .then(r => r.ok ? r.text() : Promise.reject('not found'))
+    .then(sql => {
+      const blob = new Blob([sql], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'chai_products_schema.sql';
+      a.click();
+    })
+    .catch(() => toast('SQL file not found — download it from the zip package', true));
+}
+
+// ══════════════════════════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════════════════════════
+function catLabel(cat) {
+  const m = { tea:'Tea Blend', tea_cleanse:'Cleanse Tea', tea_mens:"Men's Tea",
+              ring:'Ring', bundle:'Bundle', tool:'Brew Tool' };
+  return m[cat] || cat;
+}
+
+function flashSaved(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+function toast(msg, isErr = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show' + (isErr ? ' err' : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.className = '', 3000);
+}
+
+function showTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════
+//  SEED PRODUCTS (fallback when Supabase not connected)
+//  All 81 products pre-loaded — works offline
+// ══════════════════════════════════════════════════════════
+const SEED_PRODUCTS = [
+  // ── Teas (BLENDS) ──
+  {sku:"CH-TEA-MORNINGRISE",    name:"Morning Rise",                     category:"tea",         array_key:"BLENDS",    price:17.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌅", tagline:"Greet the day with intention"},
+  {sku:"CH-TEA-GRANDMOTHERS",   name:"Grandmother's Cerasee",            category:"tea",         array_key:"BLENDS",    price:16.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌿", tagline:"The most important herb in the yard"},
+  {sku:"CH-TEA-CERASEEGINGE",   name:"Cerasee & Ginger Blend",           category:"tea",         array_key:"BLENDS",    price:17.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌿", tagline:"Caribbean bush medicine meets warming ginger"},
+  {sku:"CH-TEA-CERASEEBLOOD",   name:"Cerasee Blood Cleanse",            category:"tea",         array_key:"BLENDS",    price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌿", tagline:"A comprehensive blood and liver support protocol"},
+  {sku:"CH-TEA-2AMRESET",       name:"2AM Reset",                        category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌙", tagline:"For restless nights and racing minds"},
+  {sku:"CH-TEA-IMMUNITYSHIEL",  name:"Immunity Shield",                  category:"tea",         array_key:"BLENDS",    price:21.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🛡️", tagline:"Full-spectrum immune protection"},
+  {sku:"CH-TEA-GOLDENHEALER",   name:"Golden Healer",                    category:"tea",         array_key:"BLENDS",    price:20.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"✨", tagline:"Golden medicine in every cup"},
+  {sku:"CH-TEA-LIVERANDLOVE",   name:"Liver & Love",                     category:"tea",         array_key:"BLENDS",    price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"❤️", tagline:"For the organ that does everything"},
+  {sku:"CH-TEA-DEEPLIVERCLE",   name:"Deep Liver Cleanse",               category:"tea",         array_key:"BLENDS",    price:22.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌿", tagline:"A thorough cleanse for a heavy load"},
+  {sku:"CH-TEA-FULLBODYDETOX",  name:"Full Body Detox",                  category:"tea",         array_key:"BLENDS",    price:24.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌊", tagline:"The complete reset"},
+  {sku:"CH-TEA-BLOODPURIFIER",  name:"Blood Purifier",                   category:"tea",         array_key:"BLENDS",    price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🔴", tagline:"Cleanse and renew your blood"},
+  {sku:"CH-TEA-KIDNEYFLUSH",    name:"Kidney Flush",                     category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💧", tagline:"Gentle support for your hardest-working organs"},
+  {sku:"CH-TEA-KIDNEYSTONE",    name:"Kidney Stone Support",             category:"tea",         array_key:"BLENDS",    price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💎", tagline:"Dissolve, flush, protect"},
+  {sku:"CH-TEA-URINARYTRACT",   name:"Urinary Tract Clear",              category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌊", tagline:"Soothe, cleanse, and restore"},
+  {sku:"CH-TEA-NIGHTFLOWRES",   name:"Night Flow Reset",                 category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌙", tagline:"Nighttime urinary and calm support"},
+  {sku:"CH-TEA-DREAMCATCHER",   name:"Dream Catcher",                    category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🔮", tagline:"Drift into deep, restoring sleep"},
+  {sku:"CH-TEA-CALMWITHIN",     name:"Calm Within",                      category:"tea",         array_key:"BLENDS",    price:17.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🕊️", tagline:"Quiet the noise. Find your center."},
+  {sku:"CH-TEA-HEARTOPENER",    name:"Heart Opener",                     category:"tea",         array_key:"BLENDS",    price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"❤️", tagline:"Love, circulation, and the heart that holds it all"},
+  {sku:"CH-TEA-STRESSARMOR",    name:"Stress Armor",                     category:"tea",         array_key:"BLENDS",    price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🛡️", tagline:"Build real physiological stress resistance"},
+  {sku:"CH-TEA-GUTANDGLOW",     name:"Gut & Glow",                       category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"✨", tagline:"Heal from the inside out"},
+  {sku:"CH-TEA-GUTRESET",       name:"Gut Reset",                        category:"tea",         array_key:"BLENDS",    price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌱", tagline:"Restore your gut to its natural harmony"},
+  {sku:"CH-TEA-LYMPHMOVER",     name:"Lymph Mover",                      category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💚", tagline:"Keep the current flowing"},
+  {sku:"CH-TEA-BLOODBUILDER",   name:"Blood Builder",                    category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🔴", tagline:"Iron-rich nourishment for your blood"},
+  {sku:"CH-TEA-SACREDWOMB",     name:"Sacred Womb",                      category:"tea",         array_key:"BLENDS",    price:20.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌸", tagline:"Nourish the sacred feminine"},
+  {sku:"CH-TEA-FERTILITYBLOOM", name:"Fertility Bloom",                  category:"tea",         array_key:"BLENDS",    price:21.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌺", tagline:"Bloom into your fullness"},
+  {sku:"CH-TEA-PSADEFENSE",     name:"PSA Defense Blend",                category:"tea",         array_key:"BLENDS",    price:21.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🛡️", tagline:"Prostate health from the inside out"},
+  {sku:"CH-TEA-TESTOSTERON",    name:"Testosterone & Prostate Balance",  category:"tea",         array_key:"BLENDS",    price:21.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"⚡", tagline:"Hormonal balance and prostate protection"},
+  {sku:"CH-TEA-POST50MENS",     name:"Post-50 Men's Foundation",         category:"tea",         array_key:"BLENDS",    price:22.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🏔️", tagline:"Built for the wisdom years"},
+  {sku:"CH-TEA-SKINDEEP",       name:"Skin Deep",                        category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"✨", tagline:"Clear skin starts within"},
+  {sku:"CH-TEA-LIVERBILEFLOW",  name:"Liver Bile Flow",                  category:"tea",         array_key:"BLENDS",    price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💛", tagline:"Keep your bile flowing, keep your body clean"},
+  {sku:"CH-TEA-ANCESTRALFIRE",  name:"Ancestral Fire",                   category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🔥", tagline:"The warmth of ancestral medicine"},
+  {sku:"CH-TEA-ANCESTRALGROU",  name:"Ancestral Grounding Blend",        category:"tea",         array_key:"BLENDS",    price:17.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌍", tagline:"Rooted in African botanical wisdom"},
+  {sku:"CH-TEA-STARDUSTPINEA",  name:"Stardust Pineal Activation",       category:"tea",         array_key:"BLENDS",    price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"✨", tagline:"Nourishes neural pathways and awakens the mind"},
+  // ── Cleanse Teas (CLEANSING) ──
+  {sku:"CH-CLE-LIVERANDLOVE",   name:"Liver & Love",                     category:"tea_cleanse", array_key:"CLEANSING", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"❤️", tagline:"For the organ that does everything"},
+  {sku:"CH-CLE-KIDNEYFLUSH",    name:"Kidney Flush",                     category:"tea_cleanse", array_key:"CLEANSING", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💧", tagline:"Gentle support for your hardest-working organs"},
+  {sku:"CH-CLE-DEEPLIVERCLE",   name:"Deep Liver Cleanse",               category:"tea_cleanse", array_key:"CLEANSING", price:21.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌿", tagline:"A thorough cleanse for a heavy load"},
+  {sku:"CH-CLE-FULLBODYDETOX",  name:"Full Body Detox",                  category:"tea_cleanse", array_key:"CLEANSING", price:24.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌊", tagline:"The complete reset"},
+  {sku:"CH-CLE-BLOODPURIFIER",  name:"Blood Purifier",                   category:"tea_cleanse", array_key:"CLEANSING", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🔴", tagline:"Cleanse and renew your blood"},
+  {sku:"CH-CLE-LIVERBILEFLOW",  name:"Liver Bile Flow",                  category:"tea_cleanse", array_key:"CLEANSING", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💛", tagline:"Keep your bile flowing"},
+  {sku:"CH-CLE-LYMPHMOVER",     name:"Lymph Mover",                      category:"tea_cleanse", array_key:"CLEANSING", price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💚", tagline:"Keep the current flowing"},
+  {sku:"CH-CLE-GUTANDGLOW",     name:"Gut & Glow",                       category:"tea_cleanse", array_key:"CLEANSING", price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"✨", tagline:"Heal from the inside out"},
+  {sku:"CH-CLE-GUTRESET",       name:"Gut Reset",                        category:"tea_cleanse", array_key:"CLEANSING", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌱", tagline:"Restore your gut to its natural harmony"},
+  {sku:"CH-CLE-SKINDEEP",       name:"Skin Deep",                        category:"tea_cleanse", array_key:"CLEANSING", price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"✨", tagline:"Clear skin starts within"},
+  // ── Men's Teas ──
+  {sku:"CH-MEN-IRONWILLMORN",   name:"Iron Will Morning",                category:"tea_mens",    array_key:"MEN_BLENDS", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"⚡", tagline:"Rise with strength and purpose"},
+  {sku:"CH-MEN-DEEPRECHARG",    name:"Deep Recharge Sleep",              category:"tea_mens",    array_key:"MEN_BLENDS", price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌙", tagline:"Restore deeply. Wake ready."},
+  {sku:"CH-MEN-ALPHABRAINFO",   name:"Alpha Brain Focus",                category:"tea_mens",    array_key:"MEN_BLENDS", price:20.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🧠", tagline:"Cognitive edge without the crash"},
+  {sku:"CH-MEN-PROSTATEDEF",    name:"Prostate Defense",                 category:"tea_mens",    array_key:"MEN_BLENDS", price:21.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🛡️", tagline:"Daily prostate protection"},
+  {sku:"CH-MEN-TESTOSTERON",    name:"Testosterone Boost",               category:"tea_mens",    array_key:"MEN_BLENDS", price:22.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💪", tagline:"Natural hormonal support"},
+  {sku:"CH-MEN-BLOODFLOWMA",    name:"Blood Flow Max",                   category:"tea_mens",    array_key:"MEN_BLENDS", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"❤️", tagline:"Circulation, vitality, performance"},
+  {sku:"CH-MEN-ANCESTRALST",    name:"Ancestral Strength",               category:"tea_mens",    array_key:"MEN_BLENDS", price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🔥", tagline:"Rooted in the knowledge of fathers"},
+  {sku:"CH-MEN-GUTREPAIRMENS",  name:"Gut Repair Men's",                 category:"tea_mens",    array_key:"MEN_BLENDS", price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌱", tagline:"Gut health built for a man's biology"},
+  {sku:"CH-MEN-CORTISOLDEFE",   name:"Cortisol Defense",                 category:"tea_mens",    array_key:"MEN_BLENDS", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🧘", tagline:"Break the stress cycle"},
+  {sku:"CH-MEN-KIDNEYSHIELD",   name:"Kidney Shield",                    category:"tea_mens",    array_key:"MEN_BLENDS", price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💎", tagline:"Protect your most vital filters"},
+  {sku:"CH-MEN-METABOLISMFI",   name:"Metabolism Fire",                  category:"tea_mens",    array_key:"MEN_BLENDS", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🔥", tagline:"Burn clean. Move strong."},
+  {sku:"CH-MEN-HEARTWARRIOR",   name:"Heart Warrior",                    category:"tea_mens",    array_key:"MEN_BLENDS", price:20.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"❤️", tagline:"For the heart that carries everything"},
+  {sku:"CH-MEN-LIBIDOPRIME",    name:"Libido Prime",                     category:"tea_mens",    array_key:"MEN_BLENDS", price:22.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌋", tagline:"Vitality, drive, and energy restored"},
+  {sku:"CH-MEN-JOINTRECOVE",    name:"Joint Recovery",                   category:"tea_mens",    array_key:"MEN_BLENDS", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💪", tagline:"Move without limits"},
+  {sku:"CH-MEN-IMMUNEFORTIF",   name:"Immune Fortify",                   category:"tea_mens",    array_key:"MEN_BLENDS", price:20.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🛡️", tagline:"Fortify from within"},
+  {sku:"CH-MEN-LIVERCLEANS",    name:"Liver Cleanse Men's",              category:"tea_mens",    array_key:"MEN_BLENDS", price:21.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌿", tagline:"Heavy detox for a heavy load"},
+  {sku:"CH-MEN-MINDFULNESST",   name:"Mindfulness Tea",                  category:"tea_mens",    array_key:"MEN_BLENDS", price:17.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🧘", tagline:"Presence. Calm. Clarity."},
+  {sku:"CH-MEN-LONGEVITYFOR",   name:"Longevity Formula",                category:"tea_mens",    array_key:"MEN_BLENDS", price:23.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🏔️", tagline:"Built for the long game"},
+  {sku:"CH-MEN-MUSCLERECOVE",   name:"Muscle Recovery",                  category:"tea_mens",    array_key:"MEN_BLENDS", price:19.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"💪", tagline:"Repair, restore, return"},
+  {sku:"CH-MEN-MORNINGPOWER",   name:"Morning Power Blend",              category:"tea_mens",    array_key:"MEN_BLENDS", price:18.99, compare_price:null, in_stock:true, stock_qty:50, emoji:"🌅", tagline:"Start the day with intention and fire"},
+  // ── Rings ──
+  {sku:"CH-RIN-THESPIRAL",      name:"The Spiral",   category:"ring",   array_key:"RINGS",      price:38.00, compare_price:null, in_stock:true, stock_qty:20, emoji:"💍", tagline:"Where motion meets intention"},
+  {sku:"CH-RIN-THESAGE",        name:"The Sage",     category:"ring",   array_key:"RINGS",      price:52.00, compare_price:null, in_stock:true, stock_qty:15, emoji:"💍", tagline:"Grounded in ancient wisdom"},
+  {sku:"CH-RIN-THEANCHOR",      name:"The Anchor",   category:"ring",   array_key:"RINGS",      price:44.00, compare_price:null, in_stock:true, stock_qty:15, emoji:"💍", tagline:"Stay rooted when the storm comes"},
+  {sku:"CH-RIN-THERITUAL",      name:"The Ritual",   category:"ring",   array_key:"RINGS",      price:48.00, compare_price:null, in_stock:true, stock_qty:15, emoji:"💍", tagline:"A daily ceremony on your finger"},
+  {sku:"CH-RIN-THEGUARDIAN",    name:"The Guardian", category:"ring",   array_key:"RINGS",      price:56.00, compare_price:null, in_stock:true, stock_qty:10, emoji:"💍", tagline:"Protection carried with you"},
+  {sku:"CH-RIN-THEVISIONARI",   name:"The Visionary",category:"ring",   array_key:"RINGS",      price:62.00, compare_price:null, in_stock:true, stock_qty:10, emoji:"💍", tagline:"See further. Live deeper."},
+  // ── Bundles ──
+  {sku:"CH-BUN-CLEANSEBUNDL",   name:"The Cleanse Bundle",               category:"bundle",      array_key:"BUNDLES",   price:49.99, compare_price:null, in_stock:true, stock_qty:30, emoji:"🌊", tagline:"Full body reset — 3 teas + guide"},
+  {sku:"CH-BUN-MORNINGEVENIN",  name:"Morning & Evening Ritual",         category:"bundle",      array_key:"BUNDLES",   price:44.99, compare_price:null, in_stock:true, stock_qty:30, emoji:"☀️", tagline:"Start and end every day intentionally"},
+  {sku:"CH-BUN-BLENDSYOUROWN",  name:"Blend-Your-Own Starter",           category:"bundle",      array_key:"BUNDLES",   price:39.99, compare_price:null, in_stock:true, stock_qty:25, emoji:"🌿", tagline:"Everything you need to begin"},
+  {sku:"CH-BUN-GIFTSETSUPRE",   name:"Gift Set Supreme",                 category:"bundle",      array_key:"BUNDLES",   price:74.99, compare_price:null, in_stock:true, stock_qty:20, emoji:"🎁", tagline:"The gift that keeps on healing"},
+  {sku:"CH-BUN-SEAMOSSKIT",     name:"Sea Moss Gel Kit",                 category:"bundle",      array_key:"BUNDLES",   price:34.99, compare_price:null, in_stock:true, stock_qty:25, emoji:"🌊", tagline:"Everything you need to make sea moss gel"},
+  {sku:"CH-BUN-RINGTEASTARTE",  name:"Ring + Tea Starter Set",           category:"bundle",      array_key:"BUNDLES",   price:64.99, compare_price:null, in_stock:true, stock_qty:20, emoji:"💍", tagline:"The complete Chai Holistic ritual"},
+  // ── Brew Tools ──
+  {sku:"CH-TOO-CARVEDWOODCU",   name:"Carved Wood Cup",                  category:"tool",        array_key:"BREW_TOOLS",price:34.00, compare_price:null, in_stock:true, stock_qty:15, emoji:"🪵", tagline:"Handcarved ritual vessel"},
+  {sku:"CH-TOO-MATTECERAMICC",  name:"Matte Ceramic Cup",                category:"tool",        array_key:"BREW_TOOLS",price:28.00, compare_price:null, in_stock:true, stock_qty:20, emoji:"☕", tagline:"Clean. Calm. Intentional."},
+  {sku:"CH-TOO-DOUBLEWALLGLA",  name:"Double-Wall Glass Cup",            category:"tool",        array_key:"BREW_TOOLS",price:24.00, compare_price:null, in_stock:true, stock_qty:20, emoji:"🌿", tagline:"Watch the herbs steep"},
+  {sku:"CH-TOO-BAMBOOINFUSE",   name:"Bamboo Infuser Set",               category:"tool",        array_key:"BREW_TOOLS",price:22.00, compare_price:null, in_stock:true, stock_qty:25, emoji:"🎋", tagline:"Sustainable. Simple. Sacred."},
+  {sku:"CH-TOO-TEAKETTLE",      name:"Ritual Kettle",                    category:"tool",        array_key:"BREW_TOOLS",price:44.00, compare_price:null, in_stock:true, stock_qty:10, emoji:"🫖", tagline:"The ceremony begins here"},
+  {sku:"CH-TOO-TEASPOONJARS",   name:"Measuring Spoon & Storage Jar Set",category:"tool",        array_key:"BREW_TOOLS",price:18.00, compare_price:null, in_stock:true, stock_qty:30, emoji:"🥄", tagline:"Precision in your practice"},
+];
+</script>
+</body>
+</html>
