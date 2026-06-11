@@ -1317,7 +1317,7 @@ export default function HerbApothecary() {
         {search && (
           <div style={{marginTop:12,fontFamily:"Jost,sans-serif"}}>
             <div style={{fontSize:".72rem",color:"rgba(255,255,255,.35)",marginBottom: filtered.length>0 ? 8 : 0}}>
-              {filtered.length === 0 ? {T.herb_no_results || "No herbs found. Try a different search term."} : `${filtered.length} herb${filtered.length!==1?"s":""} found`}
+              {filtered.length === 0 ? (T.herb_no_results || "No herbs found. Try a different search term.") : (filtered.length + " herb" + (filtered.length!==1?"s":"") + " found")}
             </div>
             {filtered.length === 0 && (
               <div style={{fontSize:".7rem",color:"rgba(196,137,58,.55)",fontStyle:"italic",cursor:"pointer",textDecoration:"underline",textDecorationStyle:"dotted"}}

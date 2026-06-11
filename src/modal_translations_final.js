@@ -1,11 +1,6 @@
 /**
  * modal_translations_final.js
  * Chai Holistic — Full recipe modal content for all 5 languages
- * 
- * Usage in SeaMossPage, JellyPage, MocktailsPage:
- *   import { getModalContent } from "./modal_translations_final";
- *   const t = getModalContent("seamoss", recipe.id, lang);
- *   if (t) { use t.description, t.tip, t.steps, t.benefits, etc. }
  */
 sm1: {
   es: { description:"Aquí comienza todo. Musgo marino puro, remojado toda la noche y licuado con agua de manantial hasta obtener un gel sedoso e inodoro que se convierte en la base de cada receta.", tip:"Usa siempre agua de manantial — el agua del grifo contiene cloro y flúor que pueden interferir con el contenido mineral del musgo.", shelfLife:"Refrigera en frasco sellado hasta 3 semanas. Congela en bandejas de hielo hasta 3 meses.", dailyUse:"Añade 1–2 cucharadas a tu batido, jugo o té matutino. Sin sabor ni olor.", benefits:["102 minerales y vitaminas","Apoyo tiroideo","Salud intestinal","Sistema inmunológico","Producción de colágeno","Antiinflamatorio"], steps:["Enjuaga bien el musgo bajo agua fría corriente.","Coloca en tazón de vidrio cubierto con agua de manantial — triplicará su tamaño.","Refrigera toda la noche (8–12 horas).","Escurre y enjuaga.","Licúa con ½ taza de agua fresca durante 1–2 minutos.","Vierte en frasco de vidrio y refrigera.","Usa 1–2 cucharadas diarias."] },
@@ -320,18 +315,13 @@ m16: {
 },
 };
 
-// ─── Combined lookup ─────────────────────────────────────────────────────────
+// ─── Combined lookup ──────────────────────────────────────
 const ALL_MODAL_TRANS = {
   seamoss: { ...SM_TRANS, ...SM_TRANS_2 },
   jelly: JELLY_TRANS,
   mocktails: MOCKTAIL_TRANS,
 };
 
-/**
- * Get translated modal content for a recipe.
- * Returns null for English (component uses original data).
- * Returns translated fields object for other languages.
- */
 export function getModalContent(section, id, lang) {
   if (!lang || lang === 'en') return null;
   return ALL_MODAL_TRANS[section]?.[id]?.[lang] || null;

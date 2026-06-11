@@ -1298,7 +1298,7 @@ export default function SeaMossPage({ onAddToCart }) {
               ))}
             </div>
             <div style={{ flexShrink: 0, textAlign: "center" }}>
-              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.35)", marginBottom: 6 }>{T.sm_want_spare || "Want a spare?"}</div>
+              <div style={{ fontSize: ".6rem", color: "rgba(255,255,255,.35)", marginBottom: 6 }}>{T.sm_want_spare || "Want a spare?"}</div>
               <button
                 onClick={() => onAddToCart && onAddToCart({ id: "shaker_extra", name: "Extra Shaker Bottle", price: 8, emoji: "🥤" })}
                 style={{ background: "rgba(26,138,106,.15)", border: "1px solid rgba(26,138,106,.4)", color: "#2aaa85", padding: "8px 18px", borderRadius: 50, fontSize: ".68rem", letterSpacing: ".08em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif", cursor: "pointer", whiteSpace: "nowrap" }}>
