@@ -1888,6 +1888,7 @@ const HERO_NEW_SECTIONS = [
 const BLEND_EMOJIS_HERO = {"Morning":"🌅","Evening":"🌙","Seasonal":"🌺","Wellness":"🌿"};
 
 function HeroCards({ onNav, onOpenRecipe }) {
+const { T, lang } = useLang();
 const [indices, setIndices] = useState([0, 3, 7]);
 const [newIdx, setNewIdx] = useState(0);
 const [hoveredCard, setHoveredCard] = useState(null);
