@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useLang } from "./LangContext";
 import { getTLBlend } from "./tea_library_translations";
 import { createClient } from "@supabase/supabase-js";
@@ -519,10 +519,17 @@ function NavBtn({ onClick, disabled, children }) {
 export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart }) {
   const { T: TL, lang } = useLang();
   // Overlay translated content on a blend object
+  // Memoize all translated blends so they update whenever lang changes
+  const translatedBlends = useMemo(() => {
+    return BLENDS.map(b => {
+      if (!lang || lang === "en") return b;
+      const t = getTLBlend(b.n, lang);
+      return t ? { ...b, ...t } : b;
+    });
+  }, [lang]);
+
   const tr = (b) => {
-    if (!lang || lang === "en") return b;
-    const t = getTLBlend(b.n, lang);
-    return t ? { ...b, ...t } : b;
+    return translatedBlends.find(tb => tb.n === b.n) || b;
   };
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");

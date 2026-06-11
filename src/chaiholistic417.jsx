@@ -8159,9 +8159,9 @@ Thank you!`);
         {page==="home"&&<Home/>}
         {page==="shop"&&<Shop/>}
         {page==="recipes"&&<Recipes/>}
-        {page==="mocktails"&&<MocktailsPage/>}
-        {page==="jelly"&&<JellyPage onAddToCart={addToCart}/>}
-        {page==="seamoss"&&<SeaMossPage onAddToCart={addToCart}/>}
+        {page==="mocktails"&&<MocktailsPage key={lang}/>}
+        {page==="jelly"&&<JellyPage key={lang} onAddToCart={addToCart}/>}
+        {page==="seamoss"&&<SeaMossPage key={lang} onAddToCart={addToCart}/>}
         {page==="rings"&&<Rings/>}
 
       {/* RINGS PAGE — MOBILE STICKY CUSTOMIZE BAR */}
@@ -8177,12 +8177,12 @@ Thank you!`);
           </button>
         </div>
       )}
-        {page==="faq"&&<FAQPage/>}
-        {page==="men"&&<MensWellness onNav={nav} onAddToCart={addToCart}/>}
+        {page==="faq"&&<FAQPage key={lang}/>}
+        {page==="men"&&<MensWellness key={lang} onNav={nav} onAddToCart={addToCart}/>}
         {page==="supplements"&&<SupplementsPage onNav={nav}/>}
-        {page==="ancestral"&&<AncestralTeas onNav={nav}/>}
-        {page==="herbs"&&<HerbApothecary/>}
-        {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart}/>}
+        {page==="ancestral"&&<AncestralTeas key={lang} onNav={nav}/>}
+        {page==="herbs"&&<HerbApothecary key={lang}/>}
+        {page==="tea-library"&&<TeaLibrary key={lang} deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart}/>}
       </div>
 
       {/* 2AM OVERLAY   floats on top; page underneath stays mounted */}
