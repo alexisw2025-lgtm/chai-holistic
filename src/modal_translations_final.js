@@ -1,7 +1,12 @@
 /**
  * modal_translations_final.js
  * Chai Holistic — Full recipe modal content for all 5 languages
+ *
+ * Usage: import { getModalContent } from "./modal_translations_final";
+ *        const t = getModalContent("seamoss", "sm1", lang);
  */
+
+const SM_TRANS = {
 sm1: {
   es: { description:"Aquí comienza todo. Musgo marino puro, remojado toda la noche y licuado con agua de manantial hasta obtener un gel sedoso e inodoro que se convierte en la base de cada receta.", tip:"Usa siempre agua de manantial — el agua del grifo contiene cloro y flúor que pueden interferir con el contenido mineral del musgo.", shelfLife:"Refrigera en frasco sellado hasta 3 semanas. Congela en bandejas de hielo hasta 3 meses.", dailyUse:"Añade 1–2 cucharadas a tu batido, jugo o té matutino. Sin sabor ni olor.", benefits:["102 minerales y vitaminas","Apoyo tiroideo","Salud intestinal","Sistema inmunológico","Producción de colágeno","Antiinflamatorio"], steps:["Enjuaga bien el musgo bajo agua fría corriente.","Coloca en tazón de vidrio cubierto con agua de manantial — triplicará su tamaño.","Refrigera toda la noche (8–12 horas).","Escurre y enjuaga.","Licúa con ½ taza de agua fresca durante 1–2 minutos.","Vierte en frasco de vidrio y refrigera.","Usa 1–2 cucharadas diarias."] },
   fr: { description:"C'est ici que tout commence. De la mousse marine pure, trempée toute la nuit et mixée avec de l'eau de source pour obtenir un gel soyeux et inodore.", tip:"Utilisez toujours de l'eau de source — l'eau du robinet contient du chlore et du fluor.", shelfLife:"Réfrigérer dans un bocal hermétique jusqu'à 3 semaines. Congeler dans des bacs à glaçons jusqu'à 3 mois.", dailyUse:"Ajoutez 1–2 c. à soupe à votre smoothie, jus ou thé du matin.", benefits:["102 minéraux et vitamines","Soutien thyroïdien","Santé intestinale","Système immunitaire","Production de collagène","Anti-inflammatoire"], steps:["Rincez soigneusement la mousse sous l'eau froide.","Placez dans un bol en verre couvert d'eau de source — elle va tripler de volume.","Réfrigérez toute la nuit (8–12 heures).","Égouttez et rincez.","Mixez avec ½ tasse d'eau fraîche pendant 1–2 minutes.","Versez dans un bocal et réfrigérez.","Utilisez 1–2 c. à soupe par jour."] },
@@ -59,6 +64,8 @@ sm8: {
   jm: { description:"Soursop — di Caribbean fruit weh generations have used fi immune support — combined wid sea moss creates a gel weh honour ancestral tradition.", tip:"Use fresh or frozen soursop pulp — avoid canned juice weh have added sugars.", shelfLife:"Refrigerate up to 10 days.", dailyUse:"2 tablespoon straight or inna a smoothie wid coconut milk.", benefits:["Immune support","Anti-inflammatory","Vitamin C","Ancestral wellness","102 minerals"] },
 },
 };
+
+const SM_TRANS_2 = {
 sm9: {
   es: { description:"Los arándanos tienen una de las puntuaciones ORAC más altas de cualquier fruta. Esos mismos compuestos que protegen la fruta también protegen las células cerebrales del estrés oxidativo.", tip:"Los arándanos silvestres tienen mayor densidad antioxidante. Busca arándanos silvestres congelados.", shelfLife:"Refrigera hasta 10 días.", dailyUse:"2 cucharadas por la mañana, especialmente antes del trabajo mental.", benefits:["Antocianinas","Salud cerebral","Memoria","Antioxidante","Vitamina C"] },
   fr: { description:"Les myrtilles ont l'un des scores ORAC les plus élevés. Ces composés protègent également les cellules cérébrales du stress oxydatif.", tip:"Les myrtilles sauvages ont une densité antioxydante plus élevée. Cherchez des myrtilles sauvages surgelées.", shelfLife:"Réfrigérer jusqu'à 10 jours.", dailyUse:"2 c. à soupe le matin, surtout avant un travail mental.", benefits:["Anthocyanes","Santé cérébrale","Mémoire","Antioxydant","Vitamine C"] },
@@ -109,6 +116,8 @@ sm15: {
   jm: { description:"Pure cacao and ashwagandha are two of di most powerful adaptogens. Cacao open di heart and lift di mood. Ashwagandha lower cortisol and build real stress resistance.", tip:"Use raw cacao, not processed cocoa powder — processed cocoa lost most of its flavonoids.", shelfLife:"Refrigerate up to 2 weeks.", dailyUse:"2 tablespoon straight or inna a ceremonial cacao smoothie.", benefits:["Adaptogenic ashwagandha","Cacao flavonoids","Stress resistance","Mood","Cardiovascular health","102 minerals"] },
 },
 };
+
+const JELLY_TRANS = {
 sj1: {
   es: { description:"Uno de los postres de bienestar más queridos de Asia — sedoso, refrescante y profundamente desintoxicante. Consumido durante siglos para enfriar el cuerpo y apoyar la digestión. Ligeramente amargo, perfectamente equilibrado con leche de coco y miel.", tip:"El ligero amargor es intencional — la leche de coco y la miel lo equilibran perfectamente.", shelfLife:"Refrigera hasta 5 días.", serving:"Sirve frío en un tazón con leche de coco, miel cruda y fruta fresca.", benefits:["Refrescante y desintoxicante","Apoyo digestivo","Antioxidante","Apoyo a la presión arterial"] },
   fr: { description:"L'un des desserts de bien-être les plus appréciés d'Asie — soyeux, rafraîchissant et profondément détoxifiant. Consommé depuis des siècles pour rafraîchir le corps et soutenir la digestion.", tip:"L'amertume légère est intentionnelle — le lait de coco et le miel l'équilibrent parfaitement.", shelfLife:"Réfrigérer jusqu'à 5 jours.", serving:"Servir froid dans un bol avec lait de coco, miel cru et fruits frais.", benefits:["Rafraîchissant et détoxifiant","Soutien digestif","Antioxydant","Soutien de la tension artérielle"] },
@@ -201,6 +210,8 @@ sj13: {
   jm: { description:"Peppermint and aloe vera are two of di best gut healers. Peppermint menthol relax intestinal muscles and relieve IBS spasms. Aloe vera heal di gut lining.", tip:"Use pure aloe vera gel — avoid products wid additives or preservatives.", shelfLife:"Refrigerate up to 7 days.", serving:"Serve very cold wid cucumber water and a slice of lime.", benefits:["Gut healing","IBS relief","Probiotic","Hydrating"] },
 },
 };
+
+const MOCKTAIL_TRANS = {
 m1: {
   es: { description:"Cúrcuma, jengibre y miel se unen en un elixir dorado que calienta desde adentro. La pimienta negra activa la curcumina para el máximo beneficio. Tu medicina diaria, hecha hermosa.", tip:"Añade un chorrito de agua con gas y sirve sobre hielo triturado para un golden fizz.", benefits:["Antiinflamatorio","Apoyo hepático","Ayuda digestiva","Refuerzo inmunológico"], steps:["Calienta el agua o leche de coco — no hiervas.","Añade cúrcuma, jengibre y pimienta negra. Bate hasta que quede suave.","Incorpora la miel y el jugo de limón.","Sirve sobre hielo para versión fría o bebe tibio.","Decora con una rama de canela o rodaja de limón."] },
   fr: { description:"Curcuma, gingembre et miel se réunissent dans un élixir doré qui réchauffe de l'intérieur. Le poivre noir active la curcumine pour un bénéfice maximum.", tip:"Ajoutez un trait d'eau pétillante et servez sur glace pilée pour un golden fizz.", benefits:["Anti-inflammatoire","Soutien hépatique","Aide digestive","Renforcement immunitaire"], steps:["Chauffez l'eau ou lait de coco — ne pas bouillir.","Ajoutez curcuma, gingembre et poivre. Fouettez jusqu'à consistance lisse.","Incorporez le miel et le jus de citron.","Versez sur glace pour version froide ou buvez chaud.","Garnissez d'un bâton de cannelle ou d'une rondelle de citron."] },
@@ -314,6 +325,7 @@ m16: {
   jm: { description:"Coconut kefir is one of di most potent probiotics available — wid more than 30 strains of beneficial bacteria. Combined wid coconut ice cream it's both a dessert and a probiotic supplement.", tip:"Use coconut kefir prepared wid real kefir grains for di greatest probiotic potency.", benefits:["Probiotic","Gut health","Healthy fats","Calcium"], steps:["Cool di coconut kefir completely.","Serve in a tall glass over ice.","Slowly add sparkling water or ginger kombucha.","Add a scoop of coconut ice cream on top.","Garnish wid lavender flowers or fresh herbs."] },
 },
 };
+
 
 // ─── Combined lookup ──────────────────────────────────────
 const ALL_MODAL_TRANS = {

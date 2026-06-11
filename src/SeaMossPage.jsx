@@ -1367,7 +1367,7 @@ export default function SeaMossPage({ onAddToCart }) {
             <div style={{
               fontFamily: "'Playfair Display', serif",
               fontSize: "1.2rem", color: "white", marginBottom: 8,
-            }>{T.sm_no_results || "No recipes found"}</div>
+            }}>{T.sm_no_results || "No recipes found"}</div>
             <div style={{ fontSize: ".85rem" }}>{T.sm_no_results_sub || "Try clearing your search or filters."}</div>
           </div>
         ) : (
