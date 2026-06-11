@@ -1169,12 +1169,12 @@ function detectLang() {
 
 // ── Simple flag + label map — independent of LANGS object ──────────────────
 const LANG_FLAGS = {
-  en: { flag:"🇺🇸", label:"English",  short:"EN" },
-  es: { flag:"🇪🇸", label:"Español",  short:"ES" },
-  fr: { flag:"🇫🇷", label:"Français", short:"FR" },
-  pt: { flag:"🇧🇷", label:"Português",short:"PT" },
-  ht: { flag:"🇭🇹", label:"Kreyòl",   short:"HT" },
-  jm: { flag:"🇯🇲", label:"Patwa",    short:"JM" },
+  en: { img:"https://flagcdn.com/24x18/us.png", label:"English",   short:"EN" },
+  es: { img:"https://flagcdn.com/24x18/es.png", label:"Español",   short:"ES" },
+  fr: { img:"https://flagcdn.com/24x18/fr.png", label:"Français",  short:"FR" },
+  pt: { img:"https://flagcdn.com/24x18/br.png", label:"Português", short:"PT" },
+  ht: { img:"https://flagcdn.com/24x18/ht.png", label:"Kreyòl",    short:"HT" },
+  jm: { img:"https://flagcdn.com/24x18/jm.png", label:"Patwa",     short:"JM" },
 };
 
 const MEN_BLENDS = [
@@ -8102,8 +8102,10 @@ Thank you!`);
               onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,.6)";e.currentTarget.style.boxShadow="0 0 0 3px rgba(196,137,58,.12)";}}
               onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(61,43,31,.2)";e.currentTarget.style.boxShadow="0 1px 8px rgba(0,0,0,.07)";}}
               title="Change language">
-              <span style={{fontSize:"1.3rem",lineHeight:1,fontFamily:"'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif"}}>{LANG_FLAGS[lang]?.flag||"🌐"}</span>
-              <span style={{fontWeight:600,marginLeft:2}}>{LANG_FLAGS[lang]?.short||"EN"}</span>
+              {LANG_FLAGS[lang]?.img
+                ? <img src={LANG_FLAGS[lang].img} alt={lang} style={{width:24,height:18,borderRadius:2,objectFit:"cover",display:"block",flexShrink:0}}/>
+                : <span>🌐</span>}
+              <span style={{fontWeight:600}}>{LANG_FLAGS[lang]?.short||"EN"}</span>
             </button>
             {langOpen&&(
               <>
@@ -8114,7 +8116,9 @@ Thank you!`);
                       style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",cursor:"pointer",background:lang===code?"rgba(196,137,58,.08)":"transparent",borderBottom:"1px solid rgba(61,43,31,.06)",transition:"background .15s"}}
                       onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.08)"}
                       onMouseLeave={e=>e.currentTarget.style.background=lang===code?"rgba(196,137,58,.08)":"transparent"}>
-                      <span style={{fontSize:"1.4rem",fontFamily:"'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif",lineHeight:1,width:24,textAlign:"center"}}>{lf.flag}</span>
+                      {lf.img
+                        ? <img src={lf.img} alt={code} style={{width:28,height:21,borderRadius:2,objectFit:"cover",flexShrink:0}}/>
+                        : <span style={{width:28,textAlign:"center"}}>🌐</span>}
                       <div style={{flex:1}}>
                         <div style={{fontFamily:"'Playfair Display',serif",fontSize:".85rem",color:"var(--bark)",fontWeight:600}}>{lf.label}</div>
                         <div style={{fontSize:".62rem",color:"rgba(61,43,31,.4)",fontFamily:"Jost,sans-serif",letterSpacing:".08em"}}>{lf.short}</div>
