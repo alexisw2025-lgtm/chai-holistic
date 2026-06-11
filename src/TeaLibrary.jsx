@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useLang } from "./LangContext";
+import { getTLBlend } from "./tea_library_translations";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
@@ -517,6 +518,12 @@ function NavBtn({ onClick, disabled, children }) {
 
 export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart }) {
   const { T: TL, lang } = useLang();
+  // Overlay translated content on a blend object
+  const tr = (b) => {
+    if (!lang || lang === "en") return b;
+    const t = getTLBlend(b.n, lang);
+    return t ? { ...b, ...t } : b;
+  };
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [modalIdx, setModalIdx] = useState(null);
@@ -652,7 +659,7 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
           ) : (
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(310px, 1fr))", gap:18 }}>
               {filtered.map((blend, i) => (
-                <BlendCard key={blend.n} blend={blend} onClick={() => openModal(i)} />
+                <BlendCard key={blend.n} blend={tr(blend)} onClick={() => openModal(i)} />
               ))}
             </div>
           )}
@@ -662,7 +669,7 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
       {/* ── Modal ── */}
       {modalIdx !== null && (
         <BlendModal
-          blend={filtered[modalIdx]}
+          blend={tr(filtered[modalIdx])}
           onClose={closeModal}
           onPrev={prevModal}
           onNext={nextModal}
