@@ -180,6 +180,151 @@ const CONCERN_OPTIONS = [
   "Blood sugar", "Longevity", "Spiritual wellness", "Nothing specific",
 ];
 
+// ─── Wellness Modal Translations ─────────────────────────────────────────────
+const WM_TRANS = {
+  es: {
+    report_title: "Informe Sip & Heal",
+    report_sub: "¿A dónde enviamos tu Informe Sip & Heal?",
+    step_name: "Primero, ¿cómo te llamas?",
+    step_goal: "¿Cuál es tu principal objetivo de bienestar?",
+    step_energy: "¿Cómo está tu nivel de energía actualmente?",
+    step_stress: "¿Cuál es tu nivel de estrés actual?",
+    step_sleep: "¿Cómo es tu calidad de sueño?",
+    step_focus: "¿Cómo está tu claridad mental?",
+    step_time: "¿Cuándo prefieres tomar tu té?",
+    step_concerns: "¿Hay algo más en lo que te gustaría trabajar?",
+    btn_next: "Siguiente",
+    btn_back: "Atrás",
+    btn_generate: "Obtener Mi Informe",
+    generating: "Creando tu informe personalizado...",
+    goals: {sleep:"Mejor Sueño",stress:"Estrés y Ansiedad",energy:"Energía Natural",focus:"Enfoque y Claridad",digestion:"Digestión e Intestino",immunity:"Apoyo Inmunológico",hormone:"Equilibrio Hormonal",skin:"Piel y Belleza",cleanse:"Desintoxicación",anxiety:"Ansiedad y Calma",heart:"Corazón y Emoción",joints:"Articulaciones"},
+    goals_sub: {sleep:"Conciliar el sueño más rápido",stress:"Calmar el sistema nervioso",energy:"Sin bajones de cafeína",focus:"Mente aguda, pensamiento claro",digestion:"Aliviar, curar, restaurar",immunity:"Construye tus defensas",hormone:"Apoyo de ciclo y estado de ánimo",skin:"Brilla desde adentro",cleanse:"Reinicio completo del cuerpo",anxiety:"Aquieta la mente",heart:"Corazón emocional y físico",joints:"Muévete con facilidad"},
+    energy: ["Muy Bajo","Bajo","Moderado","Bueno","Excelente"],
+    stress: ["Abrumado","Alto","Moderado","Manejable","Mínimo"],
+    sleep: ["Terrible","Inquieto","Aceptable","Bueno","Excelente"],
+    focus: ["Niebla Mental","Disperso","Moderado","Bueno","Agudo"],
+    time: {morning:"Persona matutina",evening:"Relajación vespertina",both:"Mañana y Noche",anytime:"Durante todo el día"},
+    time_sub: {morning:"Quiero un ritual matutino",evening:"El final del día es mi momento",both:"Quiero un ritual diario completo",anytime:"El té siempre es bienvenido"},
+    concerns: {"Inflammation":"Inflamación","Hormones":"Hormonas","Liver health":"Salud del hígado","Weight management":"Control de peso","Mood support":"Apoyo emocional","Nervous system":"Sistema nervioso","Seasonal allergies":"Alergias estacionales","Respiratory":"Respiratorio","Blood sugar":"Azúcar en sangre","Longevity":"Longevidad","Spiritual wellness":"Bienestar espiritual","Nothing specific":"Nada específico"},
+    name_placeholder: "Tu nombre",
+    email_placeholder: "tu@email.com",
+    select_all: "Selecciona todo lo que aplique",
+  },
+  fr: {
+    report_title: "Rapport Sip & Heal",
+    report_sub: "Où envoyons-nous votre Rapport Sip & Heal ?",
+    step_name: "D'abord, comment vous appelez-vous ?",
+    step_goal: "Quel est votre principal objectif de bien-être ?",
+    step_energy: "Quel est votre niveau d'énergie actuel ?",
+    step_stress: "Quel est votre niveau de stress actuel ?",
+    step_sleep: "Quelle est la qualité de votre sommeil ?",
+    step_focus: "Comment est votre clarté mentale ?",
+    step_time: "Quand préférez-vous prendre votre thé ?",
+    step_concerns: "Y a-t-il autre chose sur lequel vous souhaiteriez travailler ?",
+    btn_next: "Suivant",
+    btn_back: "Retour",
+    btn_generate: "Obtenir Mon Rapport",
+    generating: "Création de votre rapport personnalisé...",
+    goals: {sleep:"Meilleur Sommeil",stress:"Stress & Anxiété",energy:"Énergie Naturelle",focus:"Focus & Clarté",digestion:"Digestion & Intestin",immunity:"Soutien Immunitaire",hormone:"Équilibre Hormonal",skin:"Peau & Beauté",cleanse:"Détoxification",anxiety:"Anxiété & Calme",heart:"Cœur & Émotion",joints:"Articulations"},
+    goals_sub: {sleep:"S'endormir plus vite",stress:"Calmer le système nerveux",energy:"Sans chutes de caféine",focus:"Esprit vif, pensée claire",digestion:"Apaiser, guérir, restaurer",immunity:"Renforcez vos défenses",hormone:"Soutien du cycle et de l'humeur",skin:"Brillez de l'intérieur",cleanse:"Réinitialisation complète",anxiety:"Apaisez l'esprit",heart:"Cœur émotionnel et physique",joints:"Bougez facilement"},
+    energy: ["Très Faible","Faible","Modéré","Bon","Excellent"],
+    stress: ["Débordé","Élevé","Modéré","Gérable","Minimal"],
+    sleep: ["Terrible","Agité","Passable","Bon","Excellent"],
+    focus: ["Brouillard Mental","Dispersé","Modéré","Bon","Vif"],
+    time: {morning:"Lève-tôt",evening:"Détente du soir",both:"Matin & Soir",anytime:"Toute la journée"},
+    time_sub: {morning:"Je veux un rituel matinal",evening:"La fin de journée est mon moment",both:"Je veux un rituel quotidien complet",anytime:"Le thé est toujours bienvenu"},
+    concerns: {"Inflammation":"Inflammation","Hormones":"Hormones","Liver health":"Santé du foie","Weight management":"Gestion du poids","Mood support":"Soutien émotionnel","Nervous system":"Système nerveux","Seasonal allergies":"Allergies saisonnières","Respiratory":"Respiratoire","Blood sugar":"Glycémie","Longevity":"Longévité","Spiritual wellness":"Bien-être spirituel","Nothing specific":"Rien de spécifique"},
+    name_placeholder: "Votre prénom",
+    email_placeholder: "votre@email.com",
+    select_all: "Sélectionnez tout ce qui s'applique",
+  },
+  pt: {
+    report_title: "Relatório Sip & Heal",
+    report_sub: "Para onde enviamos seu Relatório Sip & Heal?",
+    step_name: "Primeiro, qual é o seu nome?",
+    step_goal: "Qual é o seu principal objetivo de bem-estar?",
+    step_energy: "Como está seu nível de energia atualmente?",
+    step_stress: "Qual é o seu nível de estresse atual?",
+    step_sleep: "Como é a qualidade do seu sono?",
+    step_focus: "Como está sua clareza mental?",
+    step_time: "Quando você prefere tomar seu chá?",
+    step_concerns: "Há mais alguma coisa em que você gostaria de trabalhar?",
+    btn_next: "Próximo",
+    btn_back: "Voltar",
+    btn_generate: "Obter Meu Relatório",
+    generating: "Criando seu relatório personalizado...",
+    goals: {sleep:"Melhor Sono",stress:"Estresse e Ansiedade",energy:"Energia Natural",focus:"Foco e Clareza",digestion:"Digestão e Intestino",immunity:"Suporte Imunológico",hormone:"Equilíbrio Hormonal",skin:"Pele e Beleza",cleanse:"Desintoxicação",anxiety:"Ansiedade e Calma",heart:"Coração e Emoção",joints:"Articulações"},
+    goals_sub: {sleep:"Adormecer mais rápido",stress:"Acalmar o sistema nervoso",energy:"Sem quedas de cafeína",focus:"Mente aguçada, pensamento claro",digestion:"Aliviar, curar, restaurar",immunity:"Construa suas defesas",hormone:"Suporte de ciclo e humor",skin:"Brilhe por dentro",cleanse:"Reset completo do corpo",anxiety:"Acalme a mente",heart:"Coração emocional e físico",joints:"Mova-se com facilidade"},
+    energy: ["Muito Baixa","Baixa","Moderada","Boa","Excelente"],
+    stress: ["Sobrecarregado","Alto","Moderado","Gerenciável","Mínimo"],
+    sleep: ["Terrível","Agitado","Aceitável","Bom","Excelente"],
+    focus: ["Névoa Mental","Disperso","Moderado","Bom","Aguçado"],
+    time: {morning:"Pessoa matinal",evening:"Relaxamento noturno",both:"Manhã e Noite",anytime:"Durante todo o dia"},
+    time_sub: {morning:"Quero um ritual matinal",evening:"O fim do dia é meu momento",both:"Quero um ritual diário completo",anytime:"Chá é sempre bem-vindo"},
+    concerns: {"Inflammation":"Inflamação","Hormones":"Hormônios","Liver health":"Saúde do fígado","Weight management":"Controle de peso","Mood support":"Suporte emocional","Nervous system":"Sistema nervoso","Seasonal allergies":"Alergias sazonais","Respiratory":"Respiratório","Blood sugar":"Açúcar no sangue","Longevity":"Longevidade","Spiritual wellness":"Bem-estar espiritual","Nothing specific":"Nada específico"},
+    name_placeholder: "Seu nome",
+    email_placeholder: "seu@email.com",
+    select_all: "Selecione tudo que se aplica",
+  },
+  ht: {
+    report_title: "Rapò Sip & Heal",
+    report_sub: "Ki kote nou voye Rapò Sip & Heal ou?",
+    step_name: "Premyèman, ki jan ou rele?",
+    step_goal: "Ki objektif byenèt prensipal ou?",
+    step_energy: "Kijan nivo enèji ou ye kounye a?",
+    step_stress: "Ki nivo stres ou kounye a?",
+    step_sleep: "Kijan kalite dòmi ou ye?",
+    step_focus: "Kijan klète mantal ou ye?",
+    step_time: "Ki lè ou prefere bwè tè ou?",
+    step_concerns: "Eske gen lòt bagay ou ta renmen travay sou li?",
+    btn_next: "Kontinye",
+    btn_back: "Retounen",
+    btn_generate: "Jwenn Rapò Mwen",
+    generating: "Ap kreye rapò pèsonalize ou...",
+    goals: {sleep:"Pi Bon Dòmi",stress:"Stres ak Anxiete",energy:"Enèji Natirèl",focus:"Fokis ak Klète",digestion:"Dijestion ak Trip",immunity:"Sipò Iminite",hormone:"Ekilibre Ormonal",skin:"Po ak Bote",cleanse:"Detoksifikasyon",anxiety:"Anxiete ak Kàlm",heart:"Kè ak Emosyon",joints:"Jwenti ak Enflamasyon"},
+    goals_sub: {sleep:"Dòmi pi vit",stress:"Kalman sistèm nève",energy:"San bès kafeyèn",focus:"Lespri kout, panse klè",digestion:"Soulaje, geri, restore",immunity:"Konstwi defans ou",hormone:"Sipò sik ak emosyon",skin:"Klere depi anndan",cleanse:"Reyajisteman kò konplè",anxiety:"Kalman lespri",heart:"Kè emosyon ak fizik",joints:"Deplase ak fasilite"},
+    energy: ["Trè Ba","Ba","Modere","Bon","Ekselan"],
+    stress: ["Depase","Wo","Modere","Jerable","Minimòm"],
+    sleep: ["Terib","Enkyè","Akseptab","Bon","Ekselan"],
+    focus: ["Bwouya Mantal","Dispers","Modere","Bon","Kout"],
+    time: {morning:"Moun maten",evening:"Rilaks aswè",both:"Maten ak Aswè",anytime:"Pandan tout jounen"},
+    time_sub: {morning:"Mwen vle yon ritiyèl maten",evening:"Fen jounen se moman pa m",both:"Mwen vle yon ritiyèl chak jou konplè",anytime:"Tè toujou byenveni"},
+    concerns: {"Inflammation":"Enflamasyon","Hormones":"Omon","Liver health":"Sante Fwa","Weight management":"Kontwòl Pwa","Mood support":"Sipò Emosyon","Nervous system":"Sistèm Nève","Seasonal allergies":"Alèji Sezonye","Respiratory":"Respiratwa","Blood sugar":"Sik San","Longevity":"Lonjevite","Spiritual wellness":"Byenèt Espiritèl","Nothing specific":"Anyen Espesifik"},
+    name_placeholder: "Non ou",
+    email_placeholder: "ou@imèl.com",
+    select_all: "Chwazi tout sa ki aplike",
+  },
+  jm: {
+    report_title: "Sip & Heal Report",
+    report_sub: "Weh wi send yuh Sip & Heal Report?",
+    step_name: "First, what's yuh name?",
+    step_goal: "What's yuh main wellness goal?",
+    step_energy: "How is yuh energy level right now?",
+    step_stress: "What is yuh current stress level?",
+    step_sleep: "How is yuh sleep quality?",
+    step_focus: "How is yuh mental clarity?",
+    step_time: "When yuh prefer fi drink yuh tea?",
+    step_concerns: "Is there anything else yuh want to work on?",
+    btn_next: "Next",
+    btn_back: "Back",
+    btn_generate: "Get Mi Report",
+    generating: "Creating yuh personalised report...",
+    goals: {sleep:"Better Sleep",stress:"Stress & Anxiety",energy:"Natural Energy",focus:"Focus & Clarity",digestion:"Digestion & Gut",immunity:"Immune Support",hormone:"Hormone Balance",skin:"Skin & Beauty",cleanse:"Detox & Cleanse",anxiety:"Anxiety & Calm",heart:"Heart & Emotion",joints:"Joints & Inflammation"},
+    goals_sub: {sleep:"Fall asleep faster",stress:"Calm di nervous system",energy:"Without caffeine crashes",focus:"Sharp mind, clear thinking",digestion:"Soothe, heal, restore",immunity:"Build yuh defenses",hormone:"Cycle & mood support",skin:"Glow from di inside out",cleanse:"Full body reset",anxiety:"Quiet di mind",heart:"Emotional & physical heart",joints:"Move wid ease"},
+    energy: ["Very Low","Low","Moderate","Good","Excellent"],
+    stress: ["Overwhelmed","High","Moderate","Manageable","Minimal"],
+    sleep: ["Terrible","Restless","Okay","Good","Excellent"],
+    focus: ["Brain Fog","Scattered","Moderate","Good","Sharp"],
+    time: {morning:"Morning person",evening:"Evening wind-down",both:"Morning & Evening",anytime:"Throughout di day"},
+    time_sub: {morning:"Mi want a morning ritual",evening:"End of day is mi time",both:"Mi want a full daily ritual",anytime:"Tea always welcome"},
+    concerns: {"Inflammation":"Inflammation","Hormones":"Hormones","Liver health":"Liver health","Weight management":"Weight management","Mood support":"Mood support","Nervous system":"Nervous system","Seasonal allergies":"Seasonal allergies","Respiratory":"Respiratory","Blood sugar":"Blood sugar","Longevity":"Longevity","Spiritual wellness":"Spiritual wellness","Nothing specific":"Nothing specific"},
+    name_placeholder: "Yuh name",
+    email_placeholder: "yuh@email.com",
+    select_all: "Select all weh apply",
+  },
+};
+const getWM = (lang) => WM_TRANS[lang] || null;
+
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function ProgressBar({ step, total }) {
@@ -284,7 +429,7 @@ function ScaleRow({ options, value, onChange }) {
               fontSize: ".68rem", fontFamily: "'Jost', sans-serif",
               color: sel ? C.goldLt : "rgba(255,255,255,.6)",
               fontWeight: sel ? 600 : 400, letterSpacing: ".02em"
-            }}>{opt.label}</div>
+            }}>{(wm?.goals?.[opt.value]) || opt.label}</div>
           </button>
         );
       })}
@@ -492,6 +637,16 @@ function SipReportCard({ name, rxBlends, ritual, goal, onClose }) {
 // ─── Main modal ───────────────────────────────────────────────────────────────
 export default function WellnessProfileModal({ open, onClose }) {
   const { T, lang } = useLang();
+  const wm = getWM(lang);
+  const stepTitle = (step) => {
+    if (!wm) return step.title;
+    const keyMap = {
+      name:"step_name", goal:"step_goal", energy:"step_energy",
+      stress:"step_stress", sleep:"step_sleep", focus:"step_focus",
+      time:"step_time", concerns:"step_concerns", email:"report_sub"
+    };
+    return wm[keyMap[step.id]] || step.title;
+  };
   const [stepIdx, setStepIdx] = useState(0);
   const [answers, setAnswers] = useState({
     name: "", email: "", goal: "", energy: "", stress: "",
@@ -724,8 +879,8 @@ export default function WellnessProfileModal({ open, onClose }) {
           <OptionCard
             key={opt.value}
             emoji={opt.emoji}
-            label={opt.label}
-            sub={opt.sub}
+            label={(wm?.goals?.[opt.value]) || opt.label}
+            sub={(wm?.goals_sub?.[opt.value] || wm?.time_sub?.[opt.value]) || opt.sub}
             selected={answers.goal === opt.value}
             onClick={() => set("goal", opt.value)}
             small
@@ -745,8 +900,8 @@ export default function WellnessProfileModal({ open, onClose }) {
           <OptionCard
             key={opt.value}
             emoji={opt.emoji}
-            label={opt.label}
-            sub={opt.sub}
+            label={(wm?.goals?.[opt.value]) || opt.label}
+            sub={(wm?.goals_sub?.[opt.value] || wm?.time_sub?.[opt.value]) || opt.sub}
             selected={answers.time === opt.value}
             onClick={() => set("time", opt.value)}
           />
@@ -877,7 +1032,7 @@ export default function WellnessProfileModal({ open, onClose }) {
               fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
               color: "white", fontWeight: 400,
               marginBottom: 20, marginTop: 0, lineHeight: 1.3
-            }}>{currentStep.title}</h3>
+            }}>{stepTitle(currentStep)}</h3>
           )}
 
           {/* Step content */}
