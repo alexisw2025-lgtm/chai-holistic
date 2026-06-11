@@ -1166,6 +1166,17 @@ function detectLang() {
   } catch { return 'en'; }
 }
 
+
+// ── Simple flag + label map — independent of LANGS object ──────────────────
+const LANG_FLAGS = {
+  en: { flag:"🇺🇸", label:"English",  short:"EN" },
+  es: { flag:"🇪🇸", label:"Español",  short:"ES" },
+  fr: { flag:"🇫🇷", label:"Français", short:"FR" },
+  pt: { flag:"🇧🇷", label:"Português",short:"PT" },
+  ht: { flag:"🇭🇹", label:"Kreyòl",   short:"HT" },
+  jm: { flag:"🇯🇲", label:"Patwa",    short:"JM" },
+};
+
 const MEN_BLENDS = [
   { id:"men1",  name:"Iron Will Morning",        tagline:"Rise with purpose and power",               price:19.99, color:"#2A1A0A", benefit:"Energy · Drive · Focus",         ingredients:["Ashwagandha Root","Rhodiola Rosea","Ginger Root","Black Pepper","Cinnamon"],           steepMin:8, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil — boil then wait 60 sec", desc:"A commanding morning blend built on ashwagandha and rhodiola — two of the most studied adaptogens for male energy, resilience, and mental sharpness.", affirmation:"I rise with intention. Today I build.", warning:"Contains Rhodiola. Avoid if on SSRIs or MAOIs." },
   { id:"men2",  name:"Deep Recharge Sleep",      tagline:"Testosterone-restoring deep sleep",          price:18.99, color:"#1A1A3A", benefit:"Deep Sleep · Recovery · Hormones",ingredients:["Valerian Root","Passionflower","Ashwagandha Root","Chamomile","Lemon Balm"],           steepMin:10, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Gentle Heat — steam rising, not boiling", desc:"Quality sleep is where testosterone is produced. This blend targets the deep, restorative stages of sleep that most men are chronically missing.", affirmation:"Rest is not weakness. Rest is where I rebuild.", warning:"Contains Valerian Root. Do not drive after use. Not for use during pregnancy." },
@@ -8084,30 +8095,31 @@ Thank you!`);
           </div>
           {/* Language selector — next to search bar */}
           <div style={{position:"relative",flexShrink:0}}>
+            <div style={{fontSize:".52rem",color:"rgba(61,43,31,.45)",fontFamily:"Jost,sans-serif",letterSpacing:".1em",textTransform:"uppercase",textAlign:"center",marginBottom:3}}>Language</div>
             <button
               onClick={()=>setLangOpen(o=>!o)}
               style={{background:"white",border:"1.5px solid rgba(61,43,31,.2)",borderRadius:50,padding:"8px 14px",cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"Jost,sans-serif",fontSize:".72rem",color:"var(--bark)",letterSpacing:".06em",transition:"all .2s",boxShadow:"0 1px 8px rgba(0,0,0,.07)",whiteSpace:"nowrap",height:44}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,.6)";e.currentTarget.style.boxShadow="0 0 0 3px rgba(196,137,58,.12)";}}
               onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(61,43,31,.2)";e.currentTarget.style.boxShadow="0 1px 8px rgba(0,0,0,.07)";}}
               title="Change language">
-              <span style={{fontSize:"1.1rem",lineHeight:1}}>{LANGS[lang]?.flag||"🌐"}</span>
-              <span style={{fontWeight:600}}>{(lang==="en"?"EN":lang==="es"?"ES":lang==="fr"?"FR":lang==="pt"?"PT":lang==="ht"?"HT":lang==="jm"?"JM":(lang||"EN").toUpperCase())}</span>
+              <span style={{fontSize:"1.3rem",lineHeight:1,fontFamily:"'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif"}}>{LANG_FLAGS[lang]?.flag||"🌐"}</span>
+              <span style={{fontWeight:600,marginLeft:2}}>{LANG_FLAGS[lang]?.short||"EN"}</span>
             </button>
             {langOpen&&(
               <>
                 <div onClick={()=>setLangOpen(false)} style={{position:"fixed",inset:0,zIndex:498}}/>
                 <div style={{position:"absolute",top:"calc(100% + 8px)",right:0,zIndex:499,background:"white",border:"1px solid rgba(61,43,31,.12)",borderRadius:14,boxShadow:"0 8px 32px rgba(0,0,0,.15)",overflow:"hidden",minWidth:180}}>
-                  {Object.values(LANGS).map(l=>(
-                    <div key={l.code} onClick={()=>switchLang(l.code)}
-                      style={{display:"flex",alignItems:"center",gap:10,padding:"11px 16px",cursor:"pointer",background:lang===l.code?"rgba(196,137,58,.08)":"transparent",borderBottom:"1px solid rgba(61,43,31,.06)",transition:"background .15s"}}
+                  {Object.entries(LANG_FLAGS).map(([code, lf])=>(
+                    <div key={code} onClick={()=>switchLang(code)}
+                      style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",cursor:"pointer",background:lang===code?"rgba(196,137,58,.08)":"transparent",borderBottom:"1px solid rgba(61,43,31,.06)",transition:"background .15s"}}
                       onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.08)"}
-                      onMouseLeave={e=>e.currentTarget.style.background=lang===l.code?"rgba(196,137,58,.08)":"transparent"}>
-                      <span style={{fontSize:"1.2rem"}}>{l.flag}</span>
+                      onMouseLeave={e=>e.currentTarget.style.background=lang===code?"rgba(196,137,58,.08)":"transparent"}>
+                      <span style={{fontSize:"1.4rem",fontFamily:"'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif",lineHeight:1,width:24,textAlign:"center"}}>{lf.flag}</span>
                       <div style={{flex:1}}>
-                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:".85rem",color:"var(--bark)",fontWeight:600}}>{l.name}</div>
-                        <div style={{fontSize:".65rem",color:"rgba(61,43,31,.4)",fontFamily:"Jost,sans-serif",letterSpacing:".05em"}}>{l.code.toUpperCase()}</div>
+                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:".85rem",color:"var(--bark)",fontWeight:600}}>{lf.label}</div>
+                        <div style={{fontSize:".62rem",color:"rgba(61,43,31,.4)",fontFamily:"Jost,sans-serif",letterSpacing:".08em"}}>{lf.short}</div>
                       </div>
-                      {lang===l.code&&<span style={{color:"var(--gold)",fontSize:".85rem",fontWeight:700}}>✓</span>}
+                      {lang===code&&<span style={{color:"var(--gold)",fontSize:".9rem",fontWeight:700}}>✓</span>}
                     </div>
                   ))}
                 </div>
