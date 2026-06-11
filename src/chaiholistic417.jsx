@@ -5091,13 +5091,15 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 <div className="b-tile-visual" style={{background:`linear-gradient(155deg,${b.color} 0%,${b.color}99 55%,#1C1A17 100%)`}}>
                   <img src={b.photo} alt={b.name} className="b-tile-photo"/>
                   <div className="b-tile-visual-grad"/>
-                  <div className="b-tile-occ-badge">{b.occasion}</div>
+                  <div className="b-tile-occ-badge">{T["occ_"+b.occasion?.toLowerCase()]||b.occasion}</div>
                   {isExp && <button className="b-tile-close" onClick={e=>{e.stopPropagation();setBlendExpanded(null);}}>✕</button>}
                 </div>
                 <div className="b-tile-body">
-                  <div className="b-name">{b.name}</div>
-                  <div className="b-tag">{b.tagline}</div>
-                  <div className="b-ben">{b.benefit}</div>
+                  {(()=>{const _bmt=getBlendModal(b.id,lang);return(<>
+                  <div className="b-name">{getBlendName(b.name,lang)||b.name}</div>
+                  <div className="b-tag">{_bmt?.tagline||b.tagline}</div>
+                  <div className="b-ben">{_bmt?.benefit||b.benefit}</div>
+                  </>);})()}
                   {isExp && (
                     <div className="b-tile-recipe">
                       <div className="b-recipe-desc">{b.desc}</div>
@@ -5942,15 +5944,15 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 const idx=`w${i}`;const isOpen=activeRecipe===idx;
                 return(
                   <div key={r.id} data-recipe={idx} className="rcard" onClick={()=>setActiveRecipe(idx)}>
-                    <div className="rcard-hover-desc">{r.desc}</div>
+                    {(()=>{const _rdt=getBlendModal(r.id,lang);return <div className="rcard-hover-desc">{_rdt?.desc||r.desc}</div>;})()}
                     <div className="rcard-head">
                       <div className="rcard-icon">{BLEND_EMOJIS[r.id]||"🍵"}</div>
                       <div>
-                        <div className="rcard-name">{r.name}</div>
-                        <div className="rcard-tag-sm">{r.occasion} · {r.steepMin} min</div>
+                        <div className="rcard-name">{getBlendName(r.name,lang)||r.name}</div>
+                        <div className="rcard-tag-sm">{T["occ_"+r.occasion?.toLowerCase()]||r.occasion} · {r.steepMin} min</div>
                       </div>
                     </div>
-                    <div className="rcard-meta"><span className="rtag occ">{r.mood}</span><span className="rtag time">{r.price}</span></div>
+                    {(()=>{const _rmt=getBlendModal(r.id,lang);return(<div className="rcard-meta"><span className="rtag occ">{_rmt?.benefit||r.mood}</span><span className="rtag time">{r.price}</span></div>);})()}
                   </div>
                 );
               })}
@@ -5963,12 +5965,12 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 const idx=`c${i}`;const isOpen=activeRecipe===idx;
                 return(
                   <div key={r.id} data-recipe={idx} className="rcard" onClick={()=>setActiveRecipe(idx)} style={isOpen?{borderColor:"#8B3A2A"}:{}}>
-                    <div className="rcard-hover-desc">{r.desc}</div>
+                    {(()=>{const _rdt=getBlendModal(r.id,lang);return <div className="rcard-hover-desc">{_rdt?.desc||r.desc}</div>;})()}
                     <div className="rcard-head">
                       <div className="rcard-icon" style={{background:"#F5E0DC"}}>🌿</div>
                       <div>
-                        <div className="rcard-name" style={{color:"#8B3A2A"}}>{r.name}</div>
-                        <div className="rcard-tag-sm" style={{color:"#8B3A2A"}}>{r.organ} · {r.steepMin} min</div>
+                        <div className="rcard-name" style={{color:"#8B3A2A"}}>{getBlendName(r.name,lang)||r.name}</div>
+                        <div className="rcard-tag-sm" style={{color:"#8B3A2A"}}>{T["occ_"+r.organ?.toLowerCase()]||r.organ} · {r.steepMin} min</div>
                       </div>
                     </div>
                     <div className="rcard-meta"><span className="rtag" style={{background:"#F5E0DC",color:"#8B3A2A"}}>{r.mood}</span><span className="rtag time">{r.price}</span></div>
