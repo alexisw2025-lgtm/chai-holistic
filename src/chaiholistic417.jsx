@@ -8036,38 +8036,38 @@ Thank you!`);
             🌿 Sip &amp; Seek
           </span>
         </div>
-        {/* Language selector */}
-        <div className="lang-sel" style={{position:"relative"}}>
-          <button
-            onClick={()=>setLangOpen(o=>!o)}
-            style={{background:"none",border:"1px solid rgba(61,43,31,.18)",borderRadius:50,padding:"5px 10px",cursor:"pointer",display:"flex",alignItems:"center",gap:5,fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"var(--bark)",letterSpacing:".06em",transition:"all .2s"}}
-            onMouseEnter={e=>e.currentTarget.style.borderColor="rgba(196,137,58,.5)"}
-            onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(61,43,31,.18)"}
-            title="Change language">
-            <span style={{fontSize:".9rem"}}>{LANGS[lang]?.flag||"🌐"}</span>
-            <span>{LANGS[lang]?.code?.toUpperCase()||"EN"}</span>
-          </button>
-          {langOpen&&(
-            <>
-              <div onClick={()=>setLangOpen(false)} style={{position:"fixed",inset:0,zIndex:498}}/>
-              <div style={{position:"absolute",top:"calc(100% + 8px)",right:0,zIndex:499,background:"white",border:"1px solid rgba(61,43,31,.12)",borderRadius:14,boxShadow:"0 8px 32px rgba(0,0,0,.15)",overflow:"hidden",minWidth:170}}>
-                {Object.values(LANGS).map(l=>(
-                  <div key={l.code} onClick={()=>switchLang(l.code)}
-                    style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",cursor:"pointer",background:lang===l.code?"rgba(196,137,58,.08)":"transparent",borderBottom:"1px solid rgba(61,43,31,.06)",transition:"background .15s"}}
-                    onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.08)"}
-                    onMouseLeave={e=>e.currentTarget.style.background=lang===l.code?"rgba(196,137,58,.08)":"transparent"}>
-                    <span style={{fontSize:"1.1rem"}}>{l.flag}</span>
-                    <div>
-                      <div style={{fontFamily:"'Playfair Display',serif",fontSize:".82rem",color:"var(--bark)",fontWeight:600}}>{l.name}</div>
-                    </div>
-                    {lang===l.code&&<span style={{marginLeft:"auto",color:"var(--gold)",fontSize:".75rem"}}>✓</span>}
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
         <div className="nav-right">
+          {/* Language selector — inside nav-right so always visible */}
+          <div style={{position:"relative"}}>
+            <button
+              onClick={()=>setLangOpen(o=>!o)}
+              style={{background:"none",border:"1px solid rgba(61,43,31,.18)",borderRadius:50,padding:"5px 10px",cursor:"pointer",display:"flex",alignItems:"center",gap:5,fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"var(--bark)",letterSpacing:".06em",transition:"all .2s"}}
+              onMouseEnter={e=>e.currentTarget.style.borderColor="rgba(196,137,58,.5)"}
+              onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(61,43,31,.18)"}
+              title="Change language">
+              <span style={{fontSize:".9rem"}}>{LANGS[lang]?.flag||"🌐"}</span>
+              <span>{LANGS[lang]?.code?.toUpperCase()||"EN"}</span>
+            </button>
+            {langOpen&&(
+              <>
+                <div onClick={()=>setLangOpen(false)} style={{position:"fixed",inset:0,zIndex:498}}/>
+                <div style={{position:"absolute",top:"calc(100% + 8px)",right:0,zIndex:499,background:"white",border:"1px solid rgba(61,43,31,.12)",borderRadius:14,boxShadow:"0 8px 32px rgba(0,0,0,.15)",overflow:"hidden",minWidth:170}}>
+                  {Object.values(LANGS).map(l=>(
+                    <div key={l.code} onClick={()=>switchLang(l.code)}
+                      style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",cursor:"pointer",background:lang===l.code?"rgba(196,137,58,.08)":"transparent",borderBottom:"1px solid rgba(61,43,31,.06)",transition:"background .15s"}}
+                      onMouseEnter={e=>e.currentTarget.style.background="rgba(196,137,58,.08)"}
+                      onMouseLeave={e=>e.currentTarget.style.background=lang===l.code?"rgba(196,137,58,.08)":"transparent"}>
+                      <span style={{fontSize:"1.1rem"}}>{l.flag}</span>
+                      <div>
+                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:".82rem",color:"var(--bark)",fontWeight:600}}>{l.name}</div>
+                      </div>
+                      {lang===l.code&&<span style={{marginLeft:"auto",color:"var(--gold)",fontSize:".75rem"}}>✓</span>}
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
           <button className="cart-btn" onClick={()=>{ if(cart.length>0){setPreBasket(true);}else{setCartOpen(true);} }}>
             Basket {cartCount>0&&<span className="cart-badge">{cartCount}</span>}
           </button>
