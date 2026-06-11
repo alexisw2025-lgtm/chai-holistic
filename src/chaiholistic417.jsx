@@ -9,6 +9,8 @@ import HerbApothecary from "./HerbApothecary";
 import JellyPage from "./JellyPage";
 import SeaMossPage from "./SeaMossPage";
 import { LangProvider, useLang } from "./LangContext";
+import { useInventory } from "./useInventory";
+import { useShopify } from "./useShopify";
 import { getBlendName, getHerbName } from "./translations_content";
 import imgSre1 from "./rings/scre1.jpg";
 import imgScre2 from "./rings/scre2.jpg";
@@ -1917,6 +1919,8 @@ export default function ChaiHolistic() {
   const [lang, setLang] = useState(() => detectLang());
   const [langOpen, setLangOpen] = useState(false);
   const T = new Proxy(LANGS[lang] || LANGS.en, { get: (obj, key) => obj[key] ?? LANGS.en[key] ?? key });
+  const { getPrice, isOutOfStock, formatPrice } = useInventory();
+  const { addToShopifyCart, removeFromShopifyCart, goToCheckout, configured: shopifyReady, loading: shopifyLoading, lines: shopifyLines, total: shopifyTotal, itemCount: shopifyCount } = useShopify();
   const switchLang = (code) => { setLang(code); setLangOpen(false); try{localStorage.setItem('chai_lang',code);}catch{} };
   const [homeSearchQuery, setHomeSearchQuery] = useState("");
   const [homeSearchResults, setHomeSearchResults] = useState([]);
@@ -2521,8 +2525,13 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
     }
   }, []);
   const addToCart = (item, type="blend") => {
+    // Always update local cart for immediate UI feedback
     setCart(p => { const ex = p.find(i=>i.id===item.id); return ex ? p.map(i=>i.id===item.id?{...i,qty:i.qty+1}:i) : [...p,{...item,qty:1,type}]; });
     toast(`✦ ${item.name} ${T.toast_added}`);
+    // Also sync to Shopify cart in background (when configured)
+    if (shopifyReady) {
+      addToShopifyCart(item, 1).catch(e => console.warn("[Shopify addToCart]", e));
+    }
   };
   useEffect(() => { if (typeof window !== "undefined") { window._chaiNav = (p) => nav(p); } });
   const removeItem = id => setCart(p => p.filter(i => i.id !== id));
@@ -2609,8 +2618,8 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // Ritual builder add to cart
   const addRitualToCart = () => {
-    if (ritual.morning) addToCart({...ritual.morning, emoji:"🌅"});
-    if (ritual.evening) addToCart({...ritual.evening, emoji:"🌙"});
+    if (ritual.morning) addToCart({...ritual.morning, emoji:"🌅", price:getPrice(ritual.morning.name,ritual.morning.price)});
+    if (ritual.evening) addToCart({...ritual.evening, emoji:"🌙", price:getPrice(ritual.evening.name,ritual.evening.price)});
     ritual.extras.forEach(e => addToCart({...e, emoji:"✦"}));
     setRitualOpen(false);
     toast("✦ Your daily ritual has been added!");
@@ -3657,7 +3666,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                     <div className="finder-result-desc">{r.desc}</div>
                     {r && r.warning ? <div className="warn-block" style={{marginTop:8}}><strong>⚠ Safety Note</strong>{r.warning}</div> : null}
                     <div style={{display:"flex",gap:"8px",marginTop:"10px",flexWrap:"wrap"}}>
-                      <button className="btn-add" onClick={() => { addToCart({...r,emoji:"🍵"}); setFinderOpen(false); resetFinder(); }}>{T.btn_add_basket} — ${r.price.toFixed(2)}</button>
+                      <button className="btn-add" disabled={isOutOfStock(r.name)} onClick={() => { if(!isOutOfStock(r.name)){addToCart({...r,emoji:"🍵",price:getPrice(r.name,r.price)}); setFinderOpen(false); resetFinder();}}} style={isOutOfStock(r.name)?{opacity:.4,cursor:"not-allowed"}:{}}>{isOutOfStock(r.name)?(T.out_of_stock||"Out of Stock"):`${T.btn_add_basket} — $${getPrice(r.name,r.price).toFixed(2)}`}</button>
                       <button className="btn-ghost" style={{fontSize:".65rem",padding:"7px 14px"}} onClick={() => {
                         const blendIdx = BLENDS.findIndex(b => b.id === r.id);
                         const cleanseIdx = CLEANSING.findIndex(c => c.id === r.id);
@@ -3756,7 +3765,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                         if (nowSelected) scrollToSection("ritual-evening");
                       }}>
                       <div className="ritual-opt-name">{b.name}</div>
-                      <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${b.price}</div>
+                      <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${getPrice(b.name,b.price).toFixed(2)}</div>
                     </div>
                   );
                 })}
@@ -3781,7 +3790,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                         if (nowSelected) scrollToSection("ritual-addons");
                       }}>
                       <div className="ritual-opt-name">{b.name}</div>
-                      <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${b.price}</div>
+                      <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${getPrice(b.name,b.price).toFixed(2)}</div>
                     </div>
                   );
                 })}
@@ -3797,7 +3806,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                     className={`ritual-opt ${ritual.extras.find(e=>e.id===b.id)?"selected":""}`}
                     onClick={() => setRitual(p=>({...p,extras:p.extras.find(e=>e.id===b.id)?p.extras.filter(e=>e.id!==b.id):[...p.extras,b]}))}>
                     <div className="ritual-opt-name">{b.name}</div>
-                    <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${b.price}</div>
+                    <div className="ritual-opt-tag">{b.benefit.split("·")[0].trim()} · ${getPrice(b.name,b.price).toFixed(2)}</div>
                   </div>
                 ))}
               </div>
@@ -3816,19 +3825,19 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 {ritual.morning && (
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",borderBottom:"1px solid var(--dust)"}}>
                     <span style={{fontSize:".8rem",color:"var(--bark)"}}>🌅 {ritual.morning.name}</span>
-                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${ritual.morning.price}</span>
+                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${getPrice(ritual.morning.name,ritual.morning.price).toFixed(2)}</span>
                   </div>
                 )}
                 {ritual.evening && (
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",borderBottom:"1px solid var(--dust)"}}>
                     <span style={{fontSize:".8rem",color:"var(--bark)"}}>🌙 {ritual.evening.name}</span>
-                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${ritual.evening.price}</span>
+                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${getPrice(ritual.evening.name,ritual.evening.price).toFixed(2)}</span>
                   </div>
                 )}
                 {ritual.extras.map(e => (
                   <div key={e.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",borderBottom:"1px solid var(--dust)"}}>
                     <span style={{fontSize:".8rem",color:"var(--bark)"}}>✦ {e.name}</span>
-                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${e.price}</span>
+                    <span style={{fontSize:".78rem",color:"var(--bark)",fontWeight:500}}>${getPrice(e.name,e.price).toFixed(2)}</span>
                   </div>
                 ))}
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",paddingTop:8}}>
@@ -4301,7 +4310,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                           <div style={{fontFamily:"'Playfair Display',serif",fontSize:".84rem",color:"var(--bark)",lineHeight:1.2,marginBottom:2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{t.name}</div>
                           <div style={{fontSize:".64rem",color:"#9A8A78",fontStyle:"italic",marginBottom:5,lineHeight:1.3}}>{t.tagline}</div>
                           <div style={{display:"flex",alignItems:"center",gap:8}}>
-                            <span style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",fontWeight:500}}>${t.price.toFixed(2)}</span>
+                            <span style={{fontFamily:"'Playfair Display',serif",fontSize:".9rem",color:"var(--bark)",fontWeight:500}}>${getPrice(t.name,t.price).toFixed(2)}</span>
                             <span style={{fontSize:".58rem",color:"var(--sage-d)",background:"rgba(74,114,80,.08)",padding:"2px 7px",borderRadius:50,border:"1px solid rgba(74,114,80,.18)"}}>{t.material}</span>
                           </div>
                         </div>
@@ -4331,7 +4340,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                             style={{width:"100%",background:"var(--gold)",color:"white",border:"none",padding:"10px",fontFamily:"'Jost',sans-serif",fontSize:".66rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",borderRadius:50}}
                             onMouseEnter={e=>{e.currentTarget.style.background="var(--bark)";}}
                             onMouseLeave={e=>{e.currentTarget.style.background="var(--gold)";}}>
-                            Add {t.name} to Cart — ${t.price.toFixed(2)}
+                            {isOutOfStock(t.name)?(T.out_of_stock||"Out of Stock"):`Add ${t.name} to Cart — $${getPrice(t.name,t.price).toFixed(2)}`}
                           </button>
                         </div>
                       )}
@@ -4372,7 +4381,20 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
               </div>
             )}
             <div className="d-sub"><span className="d-sub-l">{T.cart_subtotal}</span><span className="d-sub-r">${cartTotal.toFixed(2)}</span></div>
-            <button className="btn-chk" disabled={cart.length===0}>Continue to Checkout</button>
+            <button className="btn-chk"
+              disabled={cart.length===0 || shopifyLoading}
+              onClick={()=>{
+                if (shopifyReady) {
+                  // Shopify configured: go to Shopify checkout
+                  goToCheckout();
+                } else {
+                  // Shopify not yet configured: show setup message
+                  alert("Checkout coming soon! Set up Shopify to enable live payments.");
+                }
+              }}
+              style={shopifyLoading ? {opacity:.7,cursor:"wait"} : {}}>
+              {shopifyLoading ? "Preparing checkout…" : shopifyReady ? (T.cart_checkout||"Proceed to Checkout") : "Checkout (Coming Soon)"}
+            </button>
 
             {/* SAVE MY RITUAL */}
             {cart.length > 0 && (
@@ -4981,8 +5003,15 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                     </div>
                   )}
                   <div className="b-foot">
-                    <span className="b-price">${b.price}</span>
-                    <button className="btn-tile" onClick={e=>{e.stopPropagation();addToCart({...b,emoji:BLEND_EMOJIS[b.id]||"🍵"});}}>Add to Basket</button>
+                    <span className="b-price">
+                      {formatPrice(b.name,b.price).compare&&<span style={{textDecoration:"line-through",opacity:.45,fontSize:".75rem",marginRight:4}}>${formatPrice(b.name,b.price).compare}</span>}
+                      ${getPrice(b.name,b.price).toFixed(2)}
+                    </span>
+                    <button className="btn-tile" disabled={isOutOfStock(b.name)}
+                      onClick={e=>{e.stopPropagation();if(!isOutOfStock(b.name))addToCart({...b,emoji:BLEND_EMOJIS[b.id]||"🍵",price:getPrice(b.name,b.price)});}}
+                      style={isOutOfStock(b.name)?{opacity:.4,cursor:"not-allowed"}:{}}>
+                      {isOutOfStock(b.name)?(T.out_of_stock||"Out of Stock"):"Add to Basket"}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -5195,8 +5224,18 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                   <div className="bcard-lbl">What's inside</div>
                   <ul className="bcard-list">{b.includes.map(x=><li key={x}>{x}</li>)}</ul>
                   <div className="bcard-foot">
-                    <div><div className="bcard-price">${b.price}</div><div className="bcard-save">Save ${b.savings.toFixed(2)}</div></div>
-                    <button className="btn-bundle" onClick={e=>{e.stopPropagation();addToCart({...b});}}>Add Bundle</button>
+                    <div>
+                      <div className="bcard-price">
+                        {formatPrice(b.name,b.price).compare&&<span style={{textDecoration:"line-through",opacity:.45,fontSize:"1rem",marginRight:4}}>${formatPrice(b.name,b.price).compare}</span>}
+                        ${getPrice(b.name,b.price).toFixed(2)}
+                      </div>
+                      <div className="bcard-save">Save ${b.savings.toFixed(2)}</div>
+                    </div>
+                    <button className="btn-bundle" disabled={isOutOfStock(b.name)}
+                      onClick={e=>{e.stopPropagation();if(!isOutOfStock(b.name))addToCart({...b,price:getPrice(b.name,b.price)});}}
+                      style={isOutOfStock(b.name)?{opacity:.4,cursor:"not-allowed"}:{}}>
+                      {isOutOfStock(b.name)?(T.out_of_stock||"Out of Stock"):"Add Bundle"}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -5237,8 +5276,8 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                   <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"var(--bark)",marginBottom:3}}>{t.name}</div>
                   <div style={{fontSize:".72rem",fontStyle:"italic",color:"#8A7A6A",marginBottom:10,fontWeight:300}}>{t.tagline}</div>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                    <span style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"var(--bark)"}}>${t.price.toFixed(2)}</span>
-                    <button className="btn-add" style={{fontSize:".62rem"}} onClick={e=>{e.stopPropagation();addToCart({...t,type:"tool"});}}>+ Add</button>
+                    <span style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"var(--bark)"}}>${getPrice(t.name,t.price).toFixed(2)}</span>
+                    <button className="btn-add" style={{fontSize:".62rem",...(isOutOfStock(t.name)?{opacity:.4,cursor:"not-allowed"}:{})}} disabled={isOutOfStock(t.name)} onClick={e=>{e.stopPropagation();if(!isOutOfStock(t.name))addToCart({...t,type:"tool",price:getPrice(t.name,t.price)});}}>+ Add</button>
                   </div>
                 </div>
               </div>
@@ -5527,7 +5566,11 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             {/* FOOT */}
             <div className="bm-foot">
               <div>
-                <div className="bm-price">${blend.price.toFixed(2)}</div>
+                <div className="bm-price">
+                  {formatPrice(blend.name,blend.price).compare&&<span style={{textDecoration:"line-through",opacity:.45,fontSize:".9rem",marginRight:6}}>${formatPrice(blend.name,blend.price).compare}</span>}
+                  ${getPrice(blend.name,blend.price).toFixed(2)}
+                  {formatPrice(blend.name,blend.price).onSale&&<span style={{background:"rgba(200,80,40,.15)",color:"#e06040",fontSize:".6rem",padding:"2px 8px",borderRadius:50,marginLeft:8,fontFamily:"sans-serif",letterSpacing:".08em",textTransform:"uppercase"}}>Sale</span>}
+                </div>
                 <div className="bm-cup-note">{blend.oz || 2}oz bag · approx {cupsTotal} cups</div>
               </div>
               <div style={{display:"flex",gap:8,marginLeft:"auto",flexWrap:"wrap",justifyContent:"flex-end"}}>
@@ -5538,12 +5581,15 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                   }}>
                   See Recipe
                 </button>
-                <button className="btn-add" style={{fontSize:".72rem",padding:"10px 22px"}}
+                <button className="btn-add" style={{fontSize:".72rem",padding:"10px 22px",...(isOutOfStock(blend.name)?{opacity:.4,cursor:"not-allowed"}:{})}}
+                  disabled={isOutOfStock(blend.name)}
                   onClick={()=>{
-                    addToCart({...blend, emoji:"🍵"});
-                    onClose();
+                    if(!isOutOfStock(blend.name)){
+                      addToCart({...blend, emoji:"🍵", price:getPrice(blend.name,blend.price)});
+                      onClose();
+                    }
                   }}>
-                  Add to Basket
+                  {isOutOfStock(blend.name)?(T.out_of_stock||"Out of Stock"):"Add to Basket"}
                 </button>
               </div>
             </div>
@@ -5591,8 +5637,15 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                     <span style={{color:tempIcon(b.steepTemp).color,fontWeight:500}}>{tempIcon(b.steepTemp).icon} {tempIcon(b.steepTemp).label}</span>
                   </div>
                   <div className="pcard-foot">
-                    <span className="pcard-price">${b.price}</span>
-                    <button className="btn-add" onClick={e=>{e.stopPropagation();addToCart({...b,emoji:"🍵"});}}>Add to Basket</button>
+                    <span className="pcard-price">
+                      {formatPrice(b.name,b.price).compare&&<span style={{textDecoration:"line-through",opacity:.45,fontSize:".8rem",marginRight:4}}>${formatPrice(b.name,b.price).compare}</span>}
+                      ${getPrice(b.name,b.price).toFixed(2)}
+                    </span>
+                    <button className="btn-add" disabled={isOutOfStock(b.name)}
+                      onClick={e=>{e.stopPropagation();if(!isOutOfStock(b.name))addToCart({...b,emoji:"🍵",price:getPrice(b.name,b.price)});}}
+                      style={isOutOfStock(b.name)?{opacity:.4,cursor:"not-allowed"}:{}}>
+                      {isOutOfStock(b.name)?(T.out_of_stock||"Out of Stock"):"Add to Basket"}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -5623,10 +5676,17 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                     <span style={{color:tempIcon(c.steepTemp).color,fontWeight:500}}>{tempIcon(c.steepTemp).icon} {tempIcon(c.steepTemp).label}</span>
                   </div>
                   <div className="ccard-foot">
-                    <span className="ccard-price">${c.price}</span>
+                    <span className="ccard-price">
+                      {formatPrice(c.name,c.price).compare&&<span style={{textDecoration:"line-through",opacity:.45,fontSize:".8rem",marginRight:4}}>${formatPrice(c.name,c.price).compare}</span>}
+                      ${getPrice(c.name,c.price).toFixed(2)}
+                    </span>
                     <div style={{display:"flex",gap:6}}>
                       <button className="btn-track" onClick={()=>{setActiveTracker(c.id);setTrackerOpen(true);}}>Track</button>
-                      <button className="btn-add-c" onClick={()=>addToCart({...c,emoji:"✦"})}>Add</button>
+                      <button className="btn-add-c" disabled={isOutOfStock(c.name)}
+                        onClick={()=>{if(!isOutOfStock(c.name))addToCart({...c,emoji:"✦",price:getPrice(c.name,c.price)});}}
+                        style={isOutOfStock(c.name)?{opacity:.4,cursor:"not-allowed"}:{}}>
+                        {isOutOfStock(c.name)?(T.out_of_stock||"Out of Stock"):"Add"}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -5652,8 +5712,15 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 <div className="hcard-benefit">{h.benefit}</div>
                 {h.pairs&&<div className="hcard-pairs">Pairs well with: {h.pairs.slice(0,2).join(", ")}</div>}
                 <div className="hcard-foot">
-                  <span className="hcard-price">${h.price}<span style={{fontSize:".64rem",color:"#8A7A6A"}}> / 2oz</span></span>
-                  <button className="btn-herb" onClick={e=>{e.stopPropagation();addToCart({...h});}}>+ Add</button>
+                  <span className="hcard-price">
+                    {formatPrice(h.name,h.price).compare&&<span style={{textDecoration:"line-through",opacity:.45,fontSize:".7rem",marginRight:3}}>${formatPrice(h.name,h.price).compare}</span>}
+                    ${getPrice(h.name,h.price).toFixed(2)}<span style={{fontSize:".64rem",color:"#8A7A6A"}}> / 2oz</span>
+                  </span>
+                  <button className="btn-herb" disabled={isOutOfStock(h.name)}
+                    onClick={e=>{e.stopPropagation();if(!isOutOfStock(h.name))addToCart({...h,price:getPrice(h.name,h.price)});}}
+                    style={isOutOfStock(h.name)?{opacity:.4,cursor:"not-allowed"}:{}}>
+                    {isOutOfStock(h.name)?"Out":"+ Add"}
+                  </button>
                 </div>
               </div>
             ))}
@@ -5672,8 +5739,18 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                   <div className="bcard-lbl">What's inside</div>
                   <ul className="bcard-list">{b.includes.map(x=><li key={x}>{x}</li>)}</ul>
                   <div className="bcard-foot">
-                    <div><div className="bcard-price">${b.price}</div><div className="bcard-save">Save ${b.savings.toFixed(2)}</div></div>
-                    <button className="btn-bundle" onClick={()=>addToCart({...b})}>Add Bundle</button>
+                    <div>
+                      <div className="bcard-price">
+                        {formatPrice(b.name,b.price).compare&&<span style={{textDecoration:"line-through",opacity:.45,fontSize:"1rem",marginRight:4}}>${formatPrice(b.name,b.price).compare}</span>}
+                        ${getPrice(b.name,b.price).toFixed(2)}
+                      </div>
+                      <div className="bcard-save">Save ${b.savings.toFixed(2)}</div>
+                    </div>
+                    <button className="btn-bundle" disabled={isOutOfStock(b.name)}
+                      onClick={()=>{if(!isOutOfStock(b.name))addToCart({...b,price:getPrice(b.name,b.price)});}}
+                      style={isOutOfStock(b.name)?{opacity:.4,cursor:"not-allowed"}:{}}>
+                      {isOutOfStock(b.name)?(T.out_of_stock||"Out of Stock"):"Add Bundle"}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -5710,8 +5787,15 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                   </div>
                   <div className="tcard-care">{t.care}</div>
                   <div className="tcard-foot">
-                    <span className="tcard-price">${t.price.toFixed(2)}</span>
-                    <button className="btn-tool" onClick={()=>addToCart({...t,type:"tool"})}>Add to Basket</button>
+                    <span className="tcard-price">
+                      {formatPrice(t.name,t.price).compare&&<span style={{textDecoration:"line-through",opacity:.45,fontSize:".8rem",marginRight:4}}>${formatPrice(t.name,t.price).compare}</span>}
+                      ${getPrice(t.name,t.price).toFixed(2)}
+                    </span>
+                    <button className="btn-tool" disabled={isOutOfStock(t.name)}
+                      onClick={()=>{if(!isOutOfStock(t.name))addToCart({...t,type:"tool",price:getPrice(t.name,t.price)});}}
+                      style={isOutOfStock(t.name)?{opacity:.4,cursor:"not-allowed"}:{}}>
+                      {isOutOfStock(t.name)?(T.out_of_stock||"Out of Stock"):"Add to Basket"}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -6512,7 +6596,7 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
         ...ring,
         id: `${ring.id}-${selectedDesign.id}-${selectedSize}`,
         name: `${ring.name}`,
-        price: ring.price + linkCharge,
+        price: getPrice(ring.name, ring.price) + linkCharge,
         subtitle: `${selectedDesign.name} · ${rcOuterColor?rcOuterColor.name:""} / ${rcInnerColor?rcInnerColor.name:""} · Size ${selectedSize}`,
         material: `${selectedDesign.name} · Outer: ${rcOuterColor?rcOuterColor.name:""} · Inner: ${rcInnerColor?rcInnerColor.name:""} · ${rcFreq?rcFreq.hz+"Hz ":""} Meridian Infused · Size ${selectedSize}`,
         companionLink: rcPrayerLink,
@@ -6586,7 +6670,10 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
                   </div>
                 )}
               </div>
-              <div style={{marginLeft:"auto",fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"var(--gold)",flexShrink:0}}>${ring.price.toFixed(2)}</div>
+              <div style={{marginLeft:"auto",fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"var(--gold)",flexShrink:0}}>
+                {formatPrice(ring.name,ring.price).compare&&<span style={{textDecoration:"line-through",opacity:.45,fontSize:".9rem",marginRight:6}}>${formatPrice(ring.name,ring.price).compare}</span>}
+                ${getPrice(ring.name,ring.price).toFixed(2)}
+              </div>
             </div>
 
             {/* Step indicator */}
@@ -7204,7 +7291,7 @@ Thank you!`);
                   disabled={!rcOrderConfirmed}
                   onClick={handleAddToCart}
                   style={{background:rcOrderConfirmed?"var(--gold)":"rgba(255,255,255,.08)",color:"white",border:"none",padding:"13px 28px",borderRadius:50,fontSize:".76rem",fontFamily:"Jost,sans-serif",letterSpacing:".1em",textTransform:"uppercase",cursor:rcOrderConfirmed?"pointer":"default",transition:"all .2s",opacity:rcOrderConfirmed?1:.45,boxShadow:rcOrderConfirmed?"0 4px 20px rgba(196,137,58,.4)":"none"}}>
-                  Add to Basket — ${(ring.price + (rcPrayerLink&&rcPrayerLink.type==='custom'?6:0)).toFixed(2)}
+                  Add to Basket — ${(getPrice(ring.name,ring.price) + (rcPrayerLink&&rcPrayerLink.type==='custom'?6:0)).toFixed(2)}
                 </button>
               ) : null}
             </div>
@@ -8325,18 +8412,20 @@ Thank you!`);
                     <div style={{fontSize:".62rem",color:"var(--sage-d,#4A7250)",background:"rgba(74,114,80,.08)",display:"inline-block",padding:"2px 8px",borderRadius:20}}>{b.benefit.split("·")[0].trim()}</div>
                   </div>
                   <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:6,flexShrink:0}}>
-                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"#C4893A",fontWeight:600}}>${b.price}</div>
+                    <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"#C4893A",fontWeight:600}}>${getPrice(b.name,b.price).toFixed(2)}</div>
                     <button
-                      onClick={()=>{ addToCart({...b,emoji:"🍵"}); }}
+                      disabled={isOutOfStock(b.name)}
+                      onClick={()=>{ if(!isOutOfStock(b.name)) addToCart({...b,emoji:"🍵",price:getPrice(b.name,b.price)}); }}
                       style={{
-                        background:"#C4893A",color:"white",border:"none",
+                        background:isOutOfStock(b.name)?"#ccc":"#C4893A",color:"white",border:"none",
                         padding:"6px 14px",borderRadius:40,
                         fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",
-                        fontFamily:"Jost,sans-serif",cursor:"pointer",fontWeight:600,
+                        fontFamily:"Jost,sans-serif",cursor:isOutOfStock(b.name)?"not-allowed":"pointer",fontWeight:600,
+                        opacity:isOutOfStock(b.name)?.5:1,
                       }}
-                      onMouseEnter={e=>e.currentTarget.style.background="#8B5E2A"}
-                      onMouseLeave={e=>e.currentTarget.style.background="#C4893A"}
-                    >+ Add</button>
+                      onMouseEnter={e=>{if(!isOutOfStock(b.name))e.currentTarget.style.background="#8B5E2A"}}
+                      onMouseLeave={e=>{if(!isOutOfStock(b.name))e.currentTarget.style.background="#C4893A"}}
+                    >{isOutOfStock(b.name)?"Out":"+ Add"}</button>
                   </div>
                 </div>
               ))}
