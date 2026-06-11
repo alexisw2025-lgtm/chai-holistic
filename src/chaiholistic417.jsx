@@ -7493,7 +7493,7 @@ Thank you!`);
       </div>
     </div>
   );
-  }
+  };
   const TempGuide = () => {
     const { T, lang } = useLang();
     return (
