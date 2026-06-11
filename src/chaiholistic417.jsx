@@ -3319,6 +3319,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
     /* ── HAMBURGER MENU ── */
     .ham-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:600;}
+    .lang-sel{display:flex!important;}
     .ham-btn span{display:block;width:22px;height:2px;background:var(--bark);border-radius:2px;transition:all .3s;}
     .mob-menu{display:none;position:fixed;inset:0;top:74px;background:rgba(247,242,234,.98);backdrop-filter:blur(20px);z-index:490;padding:24px 2rem;overflow-y:auto;flex-direction:column;gap:0;}
     .mob-menu.open{display:flex;}
@@ -8036,7 +8037,7 @@ Thank you!`);
           </span>
         </div>
         {/* Language selector */}
-        <div style={{position:"relative"}}>
+        <div className="lang-sel" style={{position:"relative"}}>
           <button
             onClick={()=>setLangOpen(o=>!o)}
             style={{background:"none",border:"1px solid rgba(61,43,31,.18)",borderRadius:50,padding:"5px 10px",cursor:"pointer",display:"flex",alignItems:"center",gap:5,fontFamily:"Jost,sans-serif",fontSize:".62rem",color:"var(--bark)",letterSpacing:".06em",transition:"all .2s"}}

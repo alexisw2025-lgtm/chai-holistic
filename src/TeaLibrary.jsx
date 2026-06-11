@@ -8,7 +8,7 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-// ─── Design tokens (mirror parent app palette) ─────────────────────────────
+// ─── Design tokens (mirror parent app palette) ─── v2 ──────────────────────
 const T = {
   forest:    "#0d1a11",
   fern:      "#173322",
