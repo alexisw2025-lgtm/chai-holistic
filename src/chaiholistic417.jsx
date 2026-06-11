@@ -11,6 +11,8 @@ import SeaMossPage from "./SeaMossPage";
 import { LangProvider, useLang } from "./LangContext";
 import { useInventory } from "./useInventory";
 import { useShopify } from "./useShopify";
+import { getBlendModal } from "./blend_modal_translations";
+import Translate, { useTranslation } from "./Translate";
 import { getBlendName, getHerbName } from "./translations_content";
 import imgSre1 from "./rings/scre1.jpg";
 import imgScre2 from "./rings/scre2.jpg";
@@ -5412,6 +5414,9 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
   // --- BLEND DETAIL MODAL ---------------------------------------------------
   const BlendModal = ({ blend, onClose }) => {
     if (!blend) return null;
+    // Apply translation overlay
+    const bmT = getBlendModal(blend.id, lang);
+    const b = bmT ? { ...blend, ...bmT } : blend;
     const emoji = BLEND_EMOJIS[blend.id] || "🍵";
     const tempInfo = tempIcon(blend.steepTemp);
     const cupsTotal = (blend.oz || 2) * (blend.cupsPerOz || 10);
@@ -5435,7 +5440,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
     return (
       <div className="bm-ov" onClick={handleBackdrop}>
-        <div className="bm" role="dialog" aria-modal="true" aria-label={blend.name}>
+        <div className="bm" role="dialog" aria-modal="true" aria-label={b.name}>
           {/* HERO IMAGE */}
           <div className="bm-hero" style={{background:`linear-gradient(145deg,${blend.color} 0%,${blend.color}aa 60%,#1C1A17 100%)`}}>
             <img src={blend.photo} alt={blend.name} className="bm-hero-img" onError={e=>{e.currentTarget.style.opacity=0;}}/>
@@ -5451,15 +5456,15 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
           <div className="bm-body">
             {/* Title */}
             <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,marginBottom:4}}>
-              <h2 className="bm-name">{emoji} {blend.name}</h2>
+              <h2 className="bm-name">{emoji} {b.name}</h2>
               <div style={{fontSize:"1.6rem",flexShrink:0,opacity:.65}}></div>
             </div>
-            <div className="bm-tagline">"{blend.tagline}"</div>
-            <p className="bm-desc">{blend.desc}</p>
+            <div className="bm-tagline">"{b.tagline}"</div>
+            <p className="bm-desc">{b.desc}</p>
 
             {/* BENEFIT TAGS */}
             <div className="bm-section-lbl">Benefits</div>
-            <div className="bm-benefit">{blend.benefit}</div>
+            <div className="bm-benefit">{b.benefit}</div>
 
             {/* INGREDIENTS */}
             <div className="bm-section-lbl">What's Inside</div>
@@ -7504,7 +7509,7 @@ Thank you!`);
             <div className="sh c">
               <div className="sh-eye">Honest Answers</div>
               <h2 className="sh-h">Frequently Asked <em>Questions</em></h2>
-              <p className="sh-p">We know you have questions -- and we believe you deserve real, honest answers. No marketing speak. Just the truth about our herbs, our blends, and our brand.</p>
+              <p className="sh-p"><Translate>We know you have questions -- and we believe you deserve real, honest answers. No marketing speak. Just the truth about our herbs, our blends, and our brand.</Translate></p>
             </div>
 
             {/* Temperature Guide */}
@@ -7525,7 +7530,7 @@ Thank you!`);
               <div key={cat.cat} style={{marginBottom:"2rem"}}>
                 <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:"1rem",paddingBottom:"8px",borderBottom:"2px solid var(--sage-p)"}}>
                   <span style={{fontSize:"1.2rem"}}>{cat.icon}</span>
-                  <span style={{fontFamily:"'Playfair Display',serif",fontSize:"1.15rem",color:"var(--bark)",fontWeight:500}}>{cat.cat}</span>
+                  <span style={{fontFamily:"'Playfair Display',serif",fontSize:"1.15rem",color:"var(--bark)",fontWeight:500}}><Translate>{cat.cat}</Translate></span>
                 </div>
                 {cat.qs.map((item,qi) => {
                   const key = `${ci}-${qi}`;
@@ -7533,12 +7538,12 @@ Thank you!`);
                   return (
                     <div key={key} style={{border:"1px solid var(--dust)",borderRadius:16,marginBottom:10,overflow:"hidden",transition:"all .2s"}}>
                       <div style={{padding:"16px 20px",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",background:isOpen?"var(--sage-p)":"white",transition:"background .2s"}} onClick={()=>setOpenQ(isOpen?null:key)}>
-                        <span style={{fontFamily:"'Playfair Display',serif",fontSize:".98rem",color:"var(--bark)",fontWeight:500,flex:1,paddingRight:16,lineHeight:1.4}}>{item.q}</span>
+                        <span style={{fontFamily:"'Playfair Display',serif",fontSize:".98rem",color:"var(--bark)",fontWeight:500,flex:1,paddingRight:16,lineHeight:1.4}}><Translate>{item.q}</Translate></span>
                         <span style={{color:"var(--sage-d)",fontWeight:500,fontSize:"1.2rem",transition:"transform .3s",transform:isOpen?"rotate(45deg)":"rotate(0deg)",flexShrink:0}}>+</span>
                       </div>
                       {isOpen && (
                         <div style={{padding:"16px 20px 20px",background:"white",borderTop:"1px solid var(--sage-p)"}}>
-                          <p style={{fontSize:".84rem",color:"#5A5040",lineHeight:1.75,fontWeight:300}}>{item.a}</p>
+                          <p style={{fontSize:".84rem",color:"#5A5040",lineHeight:1.75,fontWeight:300}}><Translate>{item.a}</Translate></p>
                         </div>
                       )}
                     </div>
@@ -8012,7 +8017,6 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          <span style={{fontSize:".55rem",color:"var(--gold)",fontFamily:"monospace",opacity:.7}}>[{lang}]</span>
           {(()=>{const navItems=[["home","🏠 "+T.nav_home],["shop",T.nav_shop],["recipes","🍵 "+T.nav_recipes],["men","⚡ "+T.nav_men],["supplements","💊 "+T.nav_supplements],["ancestral","🌿 "+T.nav_ancestral],["herbs","🌿 "+T.nav_herbs],["mocktails","🍹 "+T.nav_mocktails],["jelly","🌊 "+T.nav_jelly],["seamoss","🌿 "+T.nav_seamoss],["rings","__RING_IMG__"],["faq",T.nav_faq],["tea-library","📚 "+T.nav_library]];return navItems})().map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>
               {l==="__RING_IMG__" ? (
@@ -8047,7 +8051,7 @@ Thank you!`);
               onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(61,43,31,.18)"}
               title="Change language">
               <span style={{fontSize:".9rem"}}>{LANGS[lang]?.flag||"🌐"}</span>
-              <span>{LANGS[lang]?.code?.toUpperCase()||"EN"}</span>
+              <span style={{minWidth:16}}>{(lang||"en").toUpperCase()}</span>
             </button>
             {langOpen&&(
               <>
