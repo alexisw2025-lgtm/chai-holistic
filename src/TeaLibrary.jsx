@@ -530,7 +530,6 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
 
   const tr = (b) => {
     const found = translatedBlends.find(tb => tb.n === b.n) || b;
-    if (b.n === 1) console.log("[TeaLib tr] lang="+lang+" name="+found.name);
     return found;
   };
   const [search, setSearch] = useState("");

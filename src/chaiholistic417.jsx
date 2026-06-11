@@ -12,6 +12,7 @@ import { LangProvider, useLang } from "./LangContext";
 import { useInventory } from "./useInventory";
 import { useShopify } from "./useShopify";
 import { getBlendModal } from "./blend_modal_translations";
+import { getFAQTranslations } from "./faq_translations";
 import Translate, { useTranslation } from "./Translate";
 import { getBlendName, getHerbName } from "./translations_content";
 import imgSre1 from "./rings/scre1.jpg";
@@ -7511,6 +7512,10 @@ Thank you!`);
   const FAQPage = () => {
     const [openQ, setOpenQ] = useState(null);
     const [activeCat, setActiveCat] = useState("All");
+    const faqT = getFAQTranslations(lang);
+    const faqCat = (cat) => faqT?.cats?.[cat] || cat;
+    const faqQ = (idx) => faqT?.qs?.[idx] || null;
+    const faqA = (idx) => faqT?.as?.[idx] || null;
     const cats = ["All", ...FAQ_CATEGORIES.map(c => c.cat)];
     const filtered = activeCat === "All" ? FAQ_CATEGORIES : FAQ_CATEGORIES.filter(c => c.cat === activeCat);
     return (
@@ -7520,7 +7525,7 @@ Thank you!`);
             <div className="sh c">
               <div className="sh-eye">Honest Answers</div>
               <h2 className="sh-h">Frequently Asked <em>Questions</em></h2>
-              <p className="sh-p"><Translate>We know you have questions -- and we believe you deserve real, honest answers. No marketing speak. Just the truth about our herbs, our blends, and our brand.</Translate></p>
+              <p className="sh-p">{lang&&lang!=="en"?(lang==="es"?"Sabemos que tienes preguntas — y creemos que mereces respuestas reales y honestas.":lang==="fr"?"Nous savons que vous avez des questions — et vous méritez des réponses honnêtes.":lang==="pt"?"Sabemos que você tem perguntas — e você merece respostas reais e honestas.":lang==="ht"?"Nou konnen ou gen kesyon — epi ou merite repons reyèl ak onèt.":"We know you have questions — and we believe you deserve real, honest answers."):"We know you have questions -- and we believe you deserve real, honest answers. No marketing speak. Just the truth about our herbs, our blends, and our brand."}</p>
             </div>
 
             {/* Temperature Guide */}
@@ -7541,20 +7546,22 @@ Thank you!`);
               <div key={cat.cat} style={{marginBottom:"2rem"}}>
                 <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:"1rem",paddingBottom:"8px",borderBottom:"2px solid var(--sage-p)"}}>
                   <span style={{fontSize:"1.2rem"}}>{cat.icon}</span>
-                  <span style={{fontFamily:"'Playfair Display',serif",fontSize:"1.15rem",color:"var(--bark)",fontWeight:500}}><Translate>{cat.cat}</Translate></span>
+                  <span style={{fontFamily:"'Playfair Display',serif",fontSize:"1.15rem",color:"var(--bark)",fontWeight:500}}>{faqCat(cat.cat)}</span>
                 </div>
                 {cat.qs.map((item,qi) => {
+                  // Calculate global question index for translation lookup
+                  const globalQIdx = filtered.slice(0, filtered.indexOf(cat)).reduce((sum,c)=>sum+c.qs.length,0)+qi;
                   const key = `${ci}-${qi}`;
                   const isOpen = openQ === key;
                   return (
                     <div key={key} style={{border:"1px solid var(--dust)",borderRadius:16,marginBottom:10,overflow:"hidden",transition:"all .2s"}}>
                       <div style={{padding:"16px 20px",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",background:isOpen?"var(--sage-p)":"white",transition:"background .2s"}} onClick={()=>setOpenQ(isOpen?null:key)}>
-                        <span style={{fontFamily:"'Playfair Display',serif",fontSize:".98rem",color:"var(--bark)",fontWeight:500,flex:1,paddingRight:16,lineHeight:1.4}}><Translate>{item.q}</Translate></span>
+                        <span style={{fontFamily:"'Playfair Display',serif",fontSize:".98rem",color:"var(--bark)",fontWeight:500,flex:1,paddingRight:16,lineHeight:1.4}}>{faqQ(globalQIdx)||item.q}</span>
                         <span style={{color:"var(--sage-d)",fontWeight:500,fontSize:"1.2rem",transition:"transform .3s",transform:isOpen?"rotate(45deg)":"rotate(0deg)",flexShrink:0}}>+</span>
                       </div>
                       {isOpen && (
                         <div style={{padding:"16px 20px 20px",background:"white",borderTop:"1px solid var(--sage-p)"}}>
-                          <p style={{fontSize:".84rem",color:"#5A5040",lineHeight:1.75,fontWeight:300}}><Translate>{item.a}</Translate></p>
+                          <p style={{fontSize:".84rem",color:"#5A5040",lineHeight:1.75,fontWeight:300}}>{faqA(globalQIdx)||item.a}</p>
                         </div>
                       )}
                     </div>
@@ -8159,9 +8166,9 @@ Thank you!`);
         {page==="home"&&<Home/>}
         {page==="shop"&&<Shop/>}
         {page==="recipes"&&<Recipes/>}
-        {page==="mocktails"&&<MocktailsPage key={lang}/>}
-        {page==="jelly"&&<JellyPage key={lang} onAddToCart={addToCart}/>}
-        {page==="seamoss"&&<SeaMossPage key={lang} onAddToCart={addToCart}/>}
+        {page==="mocktails"&&<MocktailsPage/>}
+        {page==="jelly"&&<JellyPage onAddToCart={addToCart}/>}
+        {page==="seamoss"&&<SeaMossPage onAddToCart={addToCart}/>}
         {page==="rings"&&<Rings/>}
 
       {/* RINGS PAGE — MOBILE STICKY CUSTOMIZE BAR */}
@@ -8177,12 +8184,12 @@ Thank you!`);
           </button>
         </div>
       )}
-        {page==="faq"&&<FAQPage key={lang}/>}
-        {page==="men"&&<MensWellness key={lang} onNav={nav} onAddToCart={addToCart}/>}
+        {page==="faq"&&<FAQPage/>}
+        {page==="men"&&<MensWellness onNav={nav} onAddToCart={addToCart}/>}
         {page==="supplements"&&<SupplementsPage onNav={nav}/>}
-        {page==="ancestral"&&<AncestralTeas key={lang} onNav={nav}/>}
-        {page==="herbs"&&<HerbApothecary key={lang}/>}
-        {page==="tea-library"&&<TeaLibrary key={lang} deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart}/>}
+        {page==="ancestral"&&<AncestralTeas onNav={nav}/>}
+        {page==="herbs"&&<HerbApothecary/>}
+        {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart}/>}
       </div>
 
       {/* 2AM OVERLAY   floats on top; page underneath stays mounted */}
