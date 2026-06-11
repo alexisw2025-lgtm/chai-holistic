@@ -1966,9 +1966,11 @@ return (
               pointerEvents:"none",
               whiteSpace:"normal",
             }}>
-              <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>{blend.occasion} · {blend.steepMin} min steep</div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:5}}>{blend.name}</div>
-              <div style={{fontSize:".72rem",color:"rgba(255,255,255,.55)",fontStyle:"italic",marginBottom:10,lineHeight:1.55}}>{blend.tagline}</div>
+              {(()=>{const _ttp=getBlendModal(blend.id,lang);return(<>
+              <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:5}}>{T["occ_"+blend.occasion?.toLowerCase()]||blend.occasion} · {blend.steepMin} min steep</div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:".95rem",color:"white",marginBottom:5}}>{getBlendName(blend.name,lang)||blend.name}</div>
+              <div style={{fontSize:".72rem",color:"rgba(255,255,255,.55)",fontStyle:"italic",marginBottom:10,lineHeight:1.55}}>{_ttp?.tagline||blend.tagline}</div>
+              </>);})()}
               <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:10}}>
                 {blend.ingredients.slice(0,3).map(h=>(
                   <span key={h} style={{background:"rgba(255,255,255,.08)",borderRadius:20,padding:"2px 9px",fontSize:".6rem",color:"rgba(255,255,255,.6)"}}>{h}</span>
@@ -3775,7 +3777,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                     <div className="finder-result-name">{r.name}</div>
                     <div className="finder-result-benefit">{r.benefit}</div>
                     <div className="finder-result-desc">{r.desc}</div>
-                    {r && r.warning ? <div className="warn-block" style={{marginTop:8}}><strong>⚠ Safety Note</strong>{r.warning}</div> : null}
+                    {r && r.warning ? <div className="warn-block" style={{marginTop:8}}><strong>⚠ {lang==="es"?"Nota de Seguridad":lang==="fr"?"Note de Sécurité":lang==="pt"?"Nota de Segurança":lang==="ht"?"Nòt Sekirite":"Safety Note"}</strong>{r.warning}</div> : null}
                     <div style={{display:"flex",gap:"8px",marginTop:"10px",flexWrap:"wrap"}}>
                       <button className="btn-add" disabled={isOutOfStock(r.name)} onClick={() => { if(!isOutOfStock(r.name)){addToCart({...r,emoji:"🍵",price:getPrice(r.name,r.price)}); setFinderOpen(false); resetFinder();}}} style={isOutOfStock(r.name)?{opacity:.4,cursor:"not-allowed"}:{}}>{isOutOfStock(r.name)?(T.out_of_stock||"Out of Stock"):`${T.btn_add_basket} — $${getPrice(r.name,r.price).toFixed(2)}`}</button>
                       <button className="btn-ghost" style={{fontSize:".65rem",padding:"7px 14px"}} onClick={() => {
@@ -4027,7 +4029,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                     <span>⏱ {tracker.steepMin} min steep</span>
                     <span style={{color:tempIcon(tracker.steepTemp).color,fontWeight:500}}>{tempIcon(tracker.steepTemp).icon} {tempIcon(tracker.steepTemp).label}</span>
                   </div>
-                  {tracker.warning && <div className="warn-block" style={{marginTop:10}}><strong>⚠ Safety Note</strong>{tracker.warning}</div>}
+                  {tracker.warning && <div className="warn-block" style={{marginTop:10}}><strong>⚠ {lang==="es"?"Nota de Seguridad":lang==="fr"?"Note de Sécurité":lang==="pt"?"Nota de Segurança":lang==="ht"?"Nòt Sekirite":"Safety Note"}</strong>{tracker.warning}</div>}
                 </div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1rem",color:"var(--bark)",marginBottom:8}}>Your Progress</div>
                 <div className="tracker-progress-bar"><div className="tracker-progress-fill" style={{width:`${pct}%`}}/></div>
@@ -5573,11 +5575,11 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             <p className="bm-desc">{b.desc}</p>
 
             {/* BENEFIT TAGS */}
-            <div className="bm-section-lbl">Benefits</div>
+            <div className="bm-section-lbl">{lang==="es"?"Beneficios":lang==="fr"?"Bénéfices":lang==="pt"?"Benefícios":lang==="ht"?"Benefis":"Benefits"}</div>
             <div className="bm-benefit">{b.benefit}</div>
 
             {/* INGREDIENTS */}
-            <div className="bm-section-lbl">What's Inside</div>
+            <div className="bm-section-lbl">{lang==="es"?"Ingredientes":lang==="fr"?"Ingrédients":lang==="pt"?"Ingredientes":lang==="ht"?"Engredyan":"What's Inside"}</div>
             <div className="bm-ingr-wrap">
               {blend.ingredients.map(ing => (
                 <span key={ing} className="bm-ingr-chip">{ing}</span>
@@ -5585,18 +5587,18 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             </div>
 
             {/* BREW GUIDE */}
-            <div className="bm-section-lbl">Brewing Guide</div>
+            <div className="bm-section-lbl">{lang==="es"?"Guía de Preparación":lang==="fr"?"Guide de Préparation":lang==="pt"?"Guia de Preparo":lang==="ht"?"Gid Prepare":"Brewing Guide"}</div>
             <div className="bm-brew">
               <div className="bm-brew-tile">
-                <div className="bm-brew-lbl">Steep Time</div>
+                <div className="bm-brew-lbl">{lang==="es"?"Tiempo de Infusión":lang==="fr"?"Temps d'Infusion":lang==="pt"?"Tempo de Infusão":lang==="ht"?"Tan Enfizyon":"Steep Time"}</div>
                 <div className="bm-brew-val">⏱ {blend.steepMin} minutes</div>
               </div>
               <div className="bm-brew-tile">
-                <div className="bm-brew-lbl">Serving Size</div>
+                <div className="bm-brew-lbl">{lang==="es"?"Porción":lang==="fr"?"Portion":lang==="pt"?"Porção":lang==="ht"?"Pòsyon":"Serving Size"}</div>
                 <div className="bm-brew-val">{blend.servingSize || "1 tsp"}</div>
               </div>
               <div className="bm-brew-tile" style={{gridColumn:"span 2"}}>
-                <div className="bm-brew-lbl">Water Temperature</div>
+                <div className="bm-brew-lbl">{lang==="es"?"Temperatura del Agua":lang==="fr"?"Température de l'Eau":lang==="pt"?"Temperatura da Água":lang==="ht"?"Tanperati Dlo":"Water Temperature"}</div>
                 <div className="bm-brew-val">
                   <span style={{color:tempInfo.color,marginRight:6}}>{tempInfo.icon}</span>
                   {blend.steepTemp}
@@ -5607,14 +5609,14 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             {/* BEST FOR */}
             {blend.mood && (
               <>
-                <div className="bm-section-lbl">Best For</div>
+                <div className="bm-section-lbl">{lang==="es"?"Mejor Para":lang==="fr"?"Idéal Pour":lang==="pt"?"Melhor Para":lang==="ht"?"Pi Bon Pou":"Best For"}</div>
                 <div className="bm-brew" style={{marginBottom:18}}>
                   <div className="bm-brew-tile">
-                    <div className="bm-brew-lbl">When You Feel</div>
+                    <div className="bm-brew-lbl">{lang==="es"?"Cuando Te Sientes":lang==="fr"?"Quand Vous Ressentez":lang==="pt"?"Quando Você Sente":lang==="ht"?"Lè Ou Santi":"When You Feel"}</div>
                     <div className="bm-brew-val">{blend.mood}</div>
                   </div>
                   <div className="bm-brew-tile">
-                    <div className="bm-brew-lbl">Time of Day</div>
+                    <div className="bm-brew-lbl">{lang==="es"?"Hora del Día":lang==="fr"?"Moment de la Journée":lang==="pt"?"Hora do Dia":lang==="ht"?"Lè Nan Jounen":"Time of Day"}</div>
                     <div className="bm-brew-val" style={{textTransform:"capitalize"}}>{blend.time}</div>
                   </div>
                 </div>
@@ -5637,7 +5639,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             {/* WARNING */}
             {blend.warning && (
               <div className="bm-warn">
-                <strong>⚠ Safety Note</strong>
+                <strong>⚠ {lang==="es"?"Nota de Seguridad":lang==="fr"?"Note de Sécurité":lang==="pt"?"Nota de Segurança":lang==="ht"?"Nòt Sekirite":"Safety Note"}</strong>
                 {blend.warning}
               </div>
             )}
@@ -5748,7 +5750,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                   <div className="pcard-ingr"><strong>Ingredients</strong>{b.ingredients.join(" · ")}</div>
                   <div className="pcard-benefit">{bmt?.benefit||b.benefit}</div>
                   </>);})()}
-                  {b.warning && <div className="warn-block"><strong>⚠ Safety Note</strong>{b.warning}</div>}
+                  {b.warning && <div className="warn-block"><strong>⚠ {lang==="es"?"Nota de Seguridad":lang==="fr"?"Note de Sécurité":lang==="pt"?"Nota de Segurança":lang==="ht"?"Nòt Sekirite":"Safety Note"}</strong>{b.warning}</div>}
                   <div style={{fontSize:".66rem",color:"#8A7A6A",marginBottom:"12px",display:"flex",alignItems:"center",gap:6}}>
                     <span>⏱ {b.steepMin} min</span>
                     <span style={{color:"rgba(0,0,0,.2)"}}>·</span>
@@ -5787,7 +5789,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                   <CupValue item={c}/>
                   <div className="ccard-protocol"><strong>Protocol</strong>{c.protocol}</div>
                   <div className="ccard-ingr"><strong>Ingredients</strong>{c.ingredients.join(" · ")}</div>
-                  {c.warning && <div className="warn-block"><strong>⚠ Safety Note</strong>{c.warning}</div>}
+                  {c.warning && <div className="warn-block"><strong>⚠ {lang==="es"?"Nota de Seguridad":lang==="fr"?"Note de Sécurité":lang==="pt"?"Nota de Segurança":lang==="ht"?"Nòt Sekirite":"Safety Note"}</strong>{c.warning}</div>}
                   <div style={{fontSize:".66rem",color:"#8A7A6A",marginBottom:"12px",display:"flex",alignItems:"center",gap:6}}>
                     <span>⏱ {c.steepMin} min · {c.days}-day protocol</span>
                     <span style={{color:"rgba(0,0,0,.2)"}}>·</span>
