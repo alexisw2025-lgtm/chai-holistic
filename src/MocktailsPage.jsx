@@ -11,6 +11,7 @@
 
 import { useState } from "react";
 import { useLang } from "./LangContext";
+import { getModalContent } from "./modal_translations_final";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const C = {
@@ -1070,6 +1071,11 @@ function MocktailModal({ m, onClose }) {
 // ─── Main page ─────────────────────────────────────────────────────────────────
 export default function MocktailsPage() {
   const { T, lang } = useLang();
+  const tr = (item) => {
+    if (!lang || lang === "en") return item;
+    const t = getModalContent("mocktails", item.id, lang);
+    return t ? { ...item, ...t } : item;
+  };
   const [category, setCategory] = useState("All");
   const [occasion, setOccasion] = useState("All");
   const [search, setSearch]     = useState("");

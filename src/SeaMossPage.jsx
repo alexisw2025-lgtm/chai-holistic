@@ -11,7 +11,7 @@
 
 import { useState } from "react";
 import { useLang } from "./LangContext";
-import { getRecipe } from "./translations_content";
+import { getModalContent } from "./modal_translations_final";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const C = {
@@ -922,10 +922,10 @@ function isSmKitchen(ing) {
 export default function SeaMossPage({ onAddToCart }) {
   const { T, lang } = useLang();
   // Overlay translated content onto recipe objects
-  const tr = (recipe) => {
-    if (!lang || lang === "en") return recipe;
-    const t = getRecipe("seamoss", recipe.id, lang);
-    return { ...recipe, ...t };
+  const tr = (item) => {
+    if (!lang || lang === "en") return item;
+    const t = getModalContent("seamoss", item.id, lang);
+    return t ? { ...item, ...t } : item;
   };
   const [category, setCategory] = useState("All");
   const [search, setSearch]     = useState("");

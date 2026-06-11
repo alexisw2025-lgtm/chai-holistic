@@ -10,7 +10,7 @@
 
 import { useState } from "react";
 import { useLang } from "./LangContext";
-import { getRecipe } from "./translations_content";
+import { getModalContent } from "./modal_translations_final";
 
 const C = {
   forest:  "#0d1a11",
@@ -637,10 +637,10 @@ function isKitchenIngredient(ing) {
 
 export default function JellyPage({ onAddToCart }) {
   const { T, lang } = useLang();
-  const tr = (jelly) => {
-    if (!lang || lang === "en") return jelly;
-    const t = getRecipe("jelly", jelly.id, lang);
-    return { ...jelly, ...t };
+  const tr = (item) => {
+    if (!lang || lang === "en") return item;
+    const t = getModalContent("jelly", item.id, lang);
+    return t ? { ...item, ...t } : item;
   };
   const [category, setCategory] = useState("All");
   const [search, setSearch]     = useState("");
