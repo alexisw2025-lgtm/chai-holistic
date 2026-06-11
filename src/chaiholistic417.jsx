@@ -5642,12 +5642,14 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
                 <div className="pcard-stripe" style={{background:b.color}}/>
                 <div className="pcard-body">
                   <div className="pcard-occ">{b.occasion}</div>
-                  <div className="pcard-name">{b.name}</div>
-                  <div className="pcard-tag">{b.tagline}</div>
-                  <div className="pcard-desc">{b.desc}</div>
+                  {(()=>{const bmt=getBlendModal(b.id,lang);return(<>
+                  <div className="pcard-name">{getBlendName(b.name,lang)||b.name}</div>
+                  <div className="pcard-tag">{bmt?.tagline||b.tagline}</div>
+                  <div className="pcard-desc">{bmt?.desc||b.desc}</div>
                   <CupValue item={b}/>
                   <div className="pcard-ingr"><strong>Ingredients</strong>{b.ingredients.join(" · ")}</div>
-                  <div className="pcard-benefit">{b.benefit}</div>
+                  <div className="pcard-benefit">{bmt?.benefit||b.benefit}</div>
+                  </>);})()}
                   {b.warning && <div className="warn-block"><strong>⚠ Safety Note</strong>{b.warning}</div>}
                   <div style={{fontSize:".66rem",color:"#8A7A6A",marginBottom:"12px",display:"flex",alignItems:"center",gap:6}}>
                     <span>⏱ {b.steepMin} min</span>
