@@ -8012,7 +8012,8 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {[["home","🏠 "+T.nav_home],["shop",T.nav_shop],["recipes","🍵 "+T.nav_recipes],["men","⚡ "+T.nav_men],["supplements","💊 "+T.nav_supplements],["ancestral","🌿 "+T.nav_ancestral],["herbs","🌿 "+T.nav_herbs],["mocktails","🍹 "+T.nav_mocktails],["jelly","🌊 "+T.nav_jelly],["seamoss","🌿 "+T.nav_seamoss],["rings","__RING_IMG__"],["faq",T.nav_faq],["tea-library","📚 "+T.nav_library]].map(([p,l])=>(
+          <span style={{fontSize:".55rem",color:"var(--gold)",fontFamily:"monospace",opacity:.7}}>[{lang}]</span>
+          {(()=>{const navItems=[["home","🏠 "+T.nav_home],["shop",T.nav_shop],["recipes","🍵 "+T.nav_recipes],["men","⚡ "+T.nav_men],["supplements","💊 "+T.nav_supplements],["ancestral","🌿 "+T.nav_ancestral],["herbs","🌿 "+T.nav_herbs],["mocktails","🍹 "+T.nav_mocktails],["jelly","🌊 "+T.nav_jelly],["seamoss","🌿 "+T.nav_seamoss],["rings","__RING_IMG__"],["faq",T.nav_faq],["tea-library","📚 "+T.nav_library]];return navItems})().map(([p,l])=>(
             <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>
               {l==="__RING_IMG__" ? (
                 <span style={{display:"inline-flex",alignItems:"center",gap:5}}>
