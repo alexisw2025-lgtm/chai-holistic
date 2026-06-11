@@ -307,6 +307,38 @@ const LANGS = {
     footer_made:"Handcrafted with love. Rooted in tradition. Made for you.",
     // Misc
     out_of_stock:"Out of Stock",
+    // Shop & temp guide
+    occ_morning:"Morning",
+    occ_evening:"Evening",
+    occ_seasonal:"Seasonal",
+    occ_wellness:"Wellness",
+    filter_all:"All",
+    shop_apothecary:"Di Apothecary",
+    shop_all_blends:"All di",
+    shop_blends_em:"Blends",
+    shop_blends_sub:"Every wellness blend from di Sip & Heal book.",
+    temp_guide_title:"No thermometer needed",
+    temp_gentle:"Gentle Heat",
+    temp_boil:"Just Off di Boil",
+    temp_full:"Full Rolling Boil",
+    temp_used_for:"Used fi",
+
+    // Shop & temp guide
+    occ_morning:"Morning",
+    occ_evening:"Evening",
+    occ_seasonal:"Seasonal",
+    occ_wellness:"Wellness",
+    filter_all:"All",
+    shop_apothecary:"The Apothecary",
+    shop_all_blends:"All Tea",
+    shop_blends_em:"Blends",
+    shop_blends_sub:"Every wellness blend from the Sip & Heal book.",
+    temp_guide_title:"No thermometer needed",
+    temp_gentle:"Gentle Heat",
+    temp_boil:"Just Off the Boil",
+    temp_full:"Full Rolling Boil",
+    temp_used_for:"Used for",
+
     in_stock:"In Stock",
     new_badge:"NEW",
     free_shipping:"Free shipping on orders over $50",
@@ -468,6 +500,22 @@ const LANGS = {
     feat_cleanse_sub:"Protocolo + temporizador",
     toast_added:"agregado a tu Cesta Ritual",
     out_of_stock:"Agotado",
+    // Shop & temp guide
+    occ_morning:"Mañana",
+    occ_evening:"Noche",
+    occ_seasonal:"Estacional",
+    occ_wellness:"Bienestar",
+    filter_all:"Todos",
+    shop_apothecary:"La Botica",
+    shop_all_blends:"Todas las",
+    shop_blends_em:"Mezclas",
+    shop_blends_sub:"Todas las mezclas de bienestar del libro Sip & Heal.",
+    temp_guide_title:"Sin termómetro necesario",
+    temp_gentle:"Calor Suave",
+    temp_boil:"Justo Fuera del Hervor",
+    temp_full:"Ebullición Completa",
+    temp_used_for:"Usado para",
+
     in_stock:"En Stock",
     new_badge:"NUEVO",
     free_shipping:"Envío gratis en pedidos mayores de $50",
@@ -622,6 +670,22 @@ const LANGS = {
     feat_cleanse_sub:"Protocole + minuteur",
     toast_added:"ajouté à votre Panier Rituel",
     out_of_stock:"Épuisé",
+    // Shop & temp guide
+    occ_morning:"Matin",
+    occ_evening:"Soir",
+    occ_seasonal:"Saisonnier",
+    occ_wellness:"Bien-être",
+    filter_all:"Tous",
+    shop_apothecary:"L'Apothicaire",
+    shop_all_blends:"Tous les",
+    shop_blends_em:"Mélanges",
+    shop_blends_sub:"Tous les mélanges de bien-être du livre Sip & Heal.",
+    temp_guide_title:"Sans thermomètre",
+    temp_gentle:"Chaleur Douce",
+    temp_boil:"Juste Hors Ébullition",
+    temp_full:"Pleine Ébullition",
+    temp_used_for:"Utilisé pour",
+
     in_stock:"En Stock",
     new_badge:"NOUVEAU",
     free_shipping:"Livraison gratuite pour les commandes de plus de 50$",
@@ -776,6 +840,22 @@ const LANGS = {
     feat_cleanse_sub:"Protocolo + cronômetro",
     toast_added:"adicionado ao seu Cesto Ritual",
     out_of_stock:"Esgotado",
+    // Shop & temp guide
+    occ_morning:"Manhã",
+    occ_evening:"Noite",
+    occ_seasonal:"Sazonal",
+    occ_wellness:"Bem-estar",
+    filter_all:"Todos",
+    shop_apothecary:"A Botica",
+    shop_all_blends:"Todas as",
+    shop_blends_em:"Misturas",
+    shop_blends_sub:"Todas as misturas de bem-estar do livro Sip & Heal.",
+    temp_guide_title:"Sem termômetro necessário",
+    temp_gentle:"Calor Suave",
+    temp_boil:"Logo Após Ferver",
+    temp_full:"Fervura Completa",
+    temp_used_for:"Usado para",
+
     in_stock:"Em Estoque",
     new_badge:"NOVO",
     free_shipping:"Frete grátis em pedidos acima de $50",
@@ -930,6 +1010,22 @@ const LANGS = {
     feat_cleanse_sub:"Pwotokòl + minutri",
     toast_added:"ajoute nan Panye Ritiyèl ou",
     out_of_stock:"Pa Disponib",
+    // Shop & temp guide
+    occ_morning:"Maten",
+    occ_evening:"Aswè",
+    occ_seasonal:"Sezonye",
+    occ_wellness:"Byenèt",
+    filter_all:"Tout",
+    shop_apothecary:"Apotekè a",
+    shop_all_blends:"Tout",
+    shop_blends_em:"Melanj yo",
+    shop_blends_sub:"Tout melanj byenèt nan liv Sip & Heal la.",
+    temp_guide_title:"Pa bezwen tèmomèt",
+    temp_gentle:"Chalè Dou",
+    temp_boil:"Jis Apre Bouyi",
+    temp_full:"Bouyi Konplè",
+    temp_used_for:"Itilize pou",
+
     in_stock:"An Stock",
     new_badge:"NOUVO",
     free_shipping:"Livrezon gratis pou kòmann ki depase $50",
@@ -5628,20 +5724,20 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
             <button className="btn-ghost" onClick={()=>setRitualOpen(true)}>☀ Build My Ritual</button>
             <button className="btn-ghost" style={{borderColor:"#8B3A2A",color:"#8B3A2A"}} onClick={()=>setTrackerOpen(true)}>🌿 Cleanse Tracker</button>
           </div>
-          <div id="sec-shop-blends" className="sh c"><div className="sh-eye">The Apothecary</div><h2 className="sh-h">All Tea <em>Blends</em> <span className="cbadge">{BLENDS.length}</span></h2><p className="sh-p">Every wellness blend from the Sip &amp; Heal book.</p></div>
+          <div id="sec-shop-blends" className="sh c"><div className="sh-eye">{T.shop_apothecary||"The Apothecary"}</div><h2 className="sh-h">{T.shop_all_blends||"All Tea"} <em>{T.shop_blends_em||"Blends"}</em> <span className="cbadge">{BLENDS.length}</span></h2><p className="sh-p">{T.shop_blends_sub||"Every wellness blend from the Sip & Heal book."}</p></div>
           <div className="pills">
-            {["All","Morning","Evening","Seasonal","Wellness"].map(f=><button key={f} className={`pill ${blendFilter===f?"on":""}`} onClick={()=>setBlendFilter(f)}>{f}</button>)}
+            {[["All",T.filter_all||"All"],["Morning",T.occ_morning||"Morning"],["Evening",T.occ_evening||"Evening"],["Seasonal",T.occ_seasonal||"Seasonal"],["Wellness",T.occ_wellness||"Wellness"]].map(([v,l])=><button key={v} className={`pill ${blendFilter===v?"on":""}`} onClick={()=>setBlendFilter(v)}>{l}</button>)}
           </div>
           <div className="pgrid">
             {filteredBlends.map(b=>(
               <div key={b.id} className="pcard" onClick={()=>setSelectedBlend(b)}>
                 <div className="pcard-visual" style={{background:`linear-gradient(145deg,${b.color} 0%,${b.color}aa 60%,#2A1F15 100%)`}}>
                   <img src={b.photo} alt={b.name} className="pcard-photo"/>
-                  <div className="pcard-visual-occ">{b.occasion}</div>
+                  <div className="pcard-visual-occ">{T["occ_"+b.occasion?.toLowerCase()]||b.occasion}</div>
                 </div>
                 <div className="pcard-stripe" style={{background:b.color}}/>
                 <div className="pcard-body">
-                  <div className="pcard-occ">{b.occasion}</div>
+                  <div className="pcard-occ">{T["occ_"+b.occasion?.toLowerCase()]||b.occasion}</div>
                   {(()=>{const bmt=getBlendModal(b.id,lang);return(<>
                   <div className="pcard-name">{getBlendName(b.name,lang)||b.name}</div>
                   <div className="pcard-tag">{bmt?.tagline||b.tagline}</div>
@@ -5840,7 +5936,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
           </div>
           <div style={{marginBottom:"2rem"}}>
             <h3 id="sec-rec-wellness" style={{fontFamily:"'Playfair Display',serif",fontSize:"1.3rem",color:"var(--bark)",marginBottom:"1rem"}}>Wellness Blends <span className="cbadge">{BLENDS.length}</span></h3>
-            <div className="pills">{["All","Morning","Evening","Seasonal","Wellness"].map(f=><button key={f} className={`pill ${blendFilter===f?"on":""}`} onClick={()=>setBlendFilter(f)}>{f}</button>)}</div>
+            <div className="pills">{[["All",T.filter_all||"All"],["Morning",T.occ_morning||"Morning"],["Evening",T.occ_evening||"Evening"],["Seasonal",T.occ_seasonal||"Seasonal"],["Wellness",T.occ_wellness||"Wellness"]].map(([v,l])=><button key={v} className={`pill ${blendFilter===v?"on":""}`} onClick={()=>setBlendFilter(v)}>{l}</button>)}</div>
             <div className="rgrid">
               {filteredBlends.map((r,i)=>{
                 const idx=`w${i}`;const isOpen=activeRecipe===idx;
@@ -7382,21 +7478,21 @@ Thank you!`);
     <div style={{background:"white",border:"1px solid var(--dust)",borderRadius:20,padding:"28px",marginBottom:"2rem"}}>
       <div style={{textAlign:"center",marginBottom:"1.4rem"}}>
         <div className="sh-eye" style={{justifyContent:"center",display:"flex"}}>How to Heat Your Water</div>
-        <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"1.4rem",color:"var(--bark)"}}>No thermometer needed -- <em style={{color:"var(--sage-d)"}}>just watch the kettle</em></h3>
+        <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"1.4rem",color:"var(--bark)"}}>{T.temp_guide_title||"No thermometer needed"} -- <em style={{color:"var(--sage-d)"}}>{lang==="es"?"solo observa la tetera":lang==="fr"?"regardez juste la bouilloire":lang==="pt"?"apenas observe a chaleira":lang==="ht"?"jis gade bouya a":"just watch the kettle"}</em></h3>
       </div>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:14}}>
         {[
-          { icon:"🌿", label:"Gentle Heat", temp:"~195°F", color:"#4A7250", bg:"#EBF2EC",
-            look:"Steam rising. Tiny bubbles forming at the bottom -- but the water has NOT broken into a boil yet.",
-            tip:"Pour the moment you see steady steam. Perfect for delicate chamomile, lavender, passionflower, and lemon balm.",
+          { icon:"🌿", label:T.temp_gentle||"Gentle Heat", temp:"~195°F", color:"#4A7250", bg:"#EBF2EC",
+            look:lang==="es"?"Vapor subiendo. Burbujas pequeñas en el fondo — pero el agua NO ha llegado a hervir aún.":lang==="fr"?"Vapeur qui monte. Petites bulles au fond — mais l'eau n'a PAS encore bouilli.":lang==="pt"?"Vapor subindo. Bolhas pequenas no fundo — mas a água ainda NÃO ferveu.":lang==="ht"?"Vapè k ap monte. Ti boul nan fon — men dlo a PA bouyi ankò.":"Steam rising. Tiny bubbles forming at the bottom -- but the water has NOT broken into a boil yet.",
+            tip:lang==="es"?"Vierte en cuanto veas vapor constante. Perfecto para manzanilla, lavanda y melisa.":lang==="fr"?"Versez dès que vous voyez de la vapeur régulière. Parfait pour la camomille, la lavande et la mélisse.":lang==="pt"?"Despeje assim que ver vapor constante. Perfeito para camomila, lavanda e melissa.":lang==="ht"?"Vide depi ou wè vapè regilye. Pafè pou kamomil, lavann ak meliz.":"Pour the moment you see steady steam. Perfect for delicate chamomile, lavender, passionflower, and lemon balm.",
             blends:"Chamomile & Calm, Lavender Moon, Valerian Rest, Lemon Balm Dreams, Sleepy Spice, Skullcap Serenity, Gut Reset" },
-          { icon:"⏱", label:"Just Off the Boil", temp:"~200-205°F", color:"#C4893A", bg:"#FFF8EE",
-            look:"Full boil reached. Remove from heat. Count to 60. Then pour -- you'll still see vigorous steam.",
-            tip:"The sweet spot for most roots, seeds, and adaptogen blends. Hot enough to extract, cool enough to protect.",
-            blends:"Most blends -- all roots, seeds, wellness blends, and all 10 cleansing protocols" },
-          { icon:"🔥", label:"Full Rolling Boil", temp:"~210°F", color:"#8B2A2A", bg:"#FFF0EE",
-            look:"A vigorous, roaring boil -- the whole surface bubbling strongly.",
-            tip:"Pour immediately at full boil. Spices and tough roots need this heat to fully release their power.",
+          { icon:"⏱", label:T.temp_boil||"Just Off the Boil", temp:"~200-205°F", color:"#C4893A", bg:"#FFF8EE",
+            look:lang==="es"?"Hervor completo. Retire del fuego. Cuente 60 segundos. Luego vierta.":lang==="fr"?"Ébullition complète. Retirez du feu. Comptez 60 secondes. Puis versez.":lang==="pt"?"Fervura completa. Retire do fogo. Conte 60 segundos. Então despeje.":lang==="ht"?"Bouyi konplè. Retire nan dife. Konte 60 segonn. Epi vide.":"Full boil reached. Remove from heat. Count to 60. Then pour -- you'll still see vigorous steam.",
+            tip:lang==="es"?"El punto ideal para la mayoría de raíces, semillas y mezclas adaptogénicas.":lang==="fr"?"Le point idéal pour la plupart des racines, graines et mélanges adaptogènes.":lang==="pt"?"O ponto ideal para a maioria das raízes, sementes e misturas adaptogênicas.":lang==="ht"?"Pi bon pwen pou pifò rasin, grenn ak melanj adaptojèn.":"The sweet spot for most roots, seeds, and adaptogen blends. Hot enough to extract, cool enough to protect.",
+            blends:lang==="es"?"La mayoría de mezclas — todas las raíces, semillas y los 10 protocolos de limpieza":lang==="fr"?"La plupart des mélanges — toutes les racines, graines et les 10 protocoles purifiants":lang==="pt"?"A maioria das misturas — todas as raízes, sementes e os 10 protocolos de limpeza":lang==="ht"?"Pifò melanj — tout rasin, grenn ak 10 pwotokòl netwayaj":"Most blends -- all roots, seeds, wellness blends, and all 10 cleansing protocols" },
+          { icon:"🔥", label:T.temp_full||"Full Rolling Boil", temp:"~210°F", color:"#8B2A2A", bg:"#FFF0EE",
+            look:lang==="es"?"Un hervor vigoroso y rugiente — toda la superficie burbujeando con fuerza.":lang==="fr"?"Une ébullition vigoureuse et bouillonnante — toute la surface bouillant fortement.":lang==="pt"?"Uma fervura vigorosa e rugindo — toda a superfície borbulhando fortemente.":lang==="ht"?"Yon bouyi vigoureu — tout sifas la bouyi fò.":"A vigorous, roaring boil -- the whole surface bubbling strongly.",
+            tip:lang==="es"?"Vierte inmediatamente a hervor completo. Las especias necesitan este calor para liberar todo su poder.":lang==="fr"?"Versez immédiatement à pleine ébullition. Les épices ont besoin de cette chaleur pour libérer toute leur puissance.":lang==="pt"?"Despeje imediatamente na fervura completa. As especiarias precisam desse calor para liberar todo seu poder.":lang==="ht"?"Vide imedyatman nan bouyi konplè. Epis yo bezwen chalè sa a pou libere tout pisans yo.":"Pour immediately at full boil. Spices and tough roots need this heat to fully release their power.",
             blends:"Ginger Lemon Sunrise, Black Pepper Chai, Morning Rise, Elderberry Shield, Autumn Harvest, Winter Warmth" },
         ].map(t => (
           <div key={t.label} style={{background:t.bg,borderRadius:16,padding:"18px",border:`1.5px solid ${t.color}22`}}>
@@ -7406,7 +7502,7 @@ Thank you!`);
             <div style={{fontSize:".78rem",color:"#3D2B1F",lineHeight:1.55,marginBottom:8,fontWeight:500}}>{t.look}</div>
             <div style={{fontSize:".74rem",color:"#6A5F50",lineHeight:1.55,marginBottom:10,fontWeight:300}}>{t.tip}</div>
             <div style={{fontSize:".66rem",color:t.color,borderTop:`1px solid ${t.color}33`,paddingTop:8,lineHeight:1.4,opacity:.85}}>
-              <strong>Used for:</strong> {t.blends}
+              <strong>{T.temp_used_for||"Used for"}:</strong> {t.blends}
             </div>
           </div>
         ))}
