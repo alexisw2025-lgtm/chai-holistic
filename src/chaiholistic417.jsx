@@ -3580,6 +3580,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
   ];
 
   const TwoAMOverlay = () => {
+    const { T, lang } = useLang();
     const [prayerPlaying, setPrayerPlaying] = React.useState(false);
     const [prayerSpoken, setPrayerSpoken] = React.useState(false);
 
@@ -3740,6 +3741,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- TEA FINDER MODAL -----------------------------------------------------
   const TeaFinderModal = () => {
+    const { T, lang } = useLang();
     return (
     <div className="modal-ov" onClick={() => setFinderOpen(false)} style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
       <div id="tea-finder-modal" className="modal" onClick={e => e.stopPropagation()}>
@@ -3828,6 +3830,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- RITUAL BUILDER MODAL -------------------------------------------------
   const RitualBuilderModal = () => {
+    const { T, lang } = useLang();
     const morningBlends = BLENDS.filter(b => b.occasion === "Morning");
     const eveningBlends = BLENDS.filter(b => b.occasion === "Evening");
     const extras = [...BLENDS.filter(b=>b.occasion==="Wellness"), ...CLEANSING.slice(0,4)];
@@ -3974,6 +3977,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- CLEANSE TRACKER MODAL ------------------------------------------------
   const CleanseTrackerModal = () => {
+    const { T, lang } = useLang();
     const tracker = activeTracker ? CLEANSING.find(cl=>cl.id===activeTracker) : null;
     const checkedCount = tracker ? Array.from({length:tracker.days},(_,i)=>checkedDays[`${tracker.id}-${i}`]).filter(Boolean).length : 0;
     const pct = tracker ? Math.round(checkedCount/tracker.days*100) : 0;
@@ -4077,6 +4081,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- BOOK PREVIEW MODAL ---------------------------------------------------
   const BookPreviewModal = () => {
+    const { T, lang } = useLang();
     const samples = [
       BLENDS.find(b=>b.id==="m2"), // 2AM Reset
       BLENDS.find(b=>b.id==="e1"), // Chamomile & Calm
@@ -4186,6 +4191,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- LARGE TIMER OVERLAY --------------------------------------------------
   const LargeTimerOverlay = () => {
+    const { T, lang } = useLang();
     return (
     <div className="timer-overlay">
       <div className="timer-overlay-name">{timerBlendName}</div>
@@ -4236,6 +4242,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- TEA READY SCREEN -----------------------------------------------------
   const TeaReadyScreen = () => {
+    const { T, lang } = useLang();
     return (
     <div className="timer-ready-msg">
       <div className="timer-ready-emoji">🍵</div>
@@ -4265,6 +4272,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- BOOK CTA INLINE -----------------------------------------------------
   const BookCTA = () => {
+    const { T, lang } = useLang();
     return (
     <div className="recipe-book-cta" style={{alignItems:"center",gap:16}}>
       <BookCoverMockup size="sm" onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}/>
@@ -4327,6 +4335,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- CART DRAWER ----------------------------------------------------------
   const CartDrawer = () => {
+    const { T, lang } = useLang();
     const suggestions = BUNDLES.filter(b=>!cart.find(i=>i.id===b.id)).slice(0,2);
     const hasTeaInCart = cart.some(i=>i.type==="blend"||i.type==="herb"||(!i.type&&i.oz));
     const hasCleanseInCart = cart.some(i=>i.type==="cleanse"||(i.organ));
@@ -4536,6 +4545,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- SAVE MY RITUAL MODAL -------------------------------------------------
   const SaveRitualModal = () => {
+    const { T, lang } = useLang();
     const [email, setEmail] = React.useState("");
     const [sending, setSending] = React.useState(false);
     const [sent, setSent] = React.useState(false);
@@ -4673,6 +4683,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
   // --- HOME -----------------------------------------------------------------
 
   const Home = () => {
+    const { T, lang } = useLang();
     return (
     <div>
       {/* SEASONAL BANNER */}
@@ -5525,6 +5536,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- BLEND DETAIL MODAL ---------------------------------------------------
   const BlendModal = ({ blend, onClose }) => {
+    const { T, lang } = useLang();
     if (!blend) return null;
     // Apply translation overlay
     const bmT = getBlendModal(blend.id, lang);
@@ -5719,6 +5731,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- SHOP -----------------------------------------------------------------
   const Shop = () => {
+    const { T, lang } = useLang();
     return (
     <div id="sec-shop-top" className="page">
       <section className="sec">
@@ -5929,6 +5942,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // --- RECIPES --------------------------------------------------------------
   const Recipes = () => {
+    const { T, lang } = useLang();
     return (
     <div id="sec-rec-top" className="page">
       <section className="sec">
@@ -5995,6 +6009,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
 
   // ── Recipe detail modal ────────────────────────────────────────────────────
   const RecipeModal = () => {
+    const { T, lang } = useLang();
     if (!activeRecipe) return null;
     const isClean = activeRecipe.startsWith('c');
     const idx = parseInt(activeRecipe.slice(1));
@@ -6219,6 +6234,7 @@ Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Colle
   };
 
   const IntentionEngine = () => {
+    const { T, lang } = useLang();
     const [localText, setLocalText] = useState("");
     const step = INTENTION_STEPS[intentionStep];
     const progress = Math.min(intentionStep / INTENTION_STEPS.length, 1);
@@ -7423,6 +7439,7 @@ Thank you!`);
 
   // --- WELCOME MODAL --------------------------------------------------------
   const WelcomeModal = () => {
+    const { T, lang } = useLang();
     return (
     <div style={{position:"fixed",inset:0,background:"rgba(10,10,8,.92)",zIndex:900,display:"flex",alignItems:"center",justifyContent:"center",padding:"1.5rem",backdropFilter:"blur(8px)",animation:"fadeInWelcome .8s ease"}}>
       <style>{`@keyframes fadeInWelcome{from{opacity:0}to{opacity:1}}`}</style>
@@ -7478,6 +7495,7 @@ Thank you!`);
   );
   }
   const TempGuide = () => {
+    const { T, lang } = useLang();
     return (
     <div style={{background:"white",border:"1px solid var(--dust)",borderRadius:20,padding:"28px",marginBottom:"2rem"}}>
       <div style={{textAlign:"center",marginBottom:"1.4rem"}}>
@@ -7612,6 +7630,7 @@ Thank you!`);
 
   // --- FAQ PAGE -------------------------------------------------------------
   const FAQPage = () => {
+    const { T, lang } = useLang();
     const [openQ, setOpenQ] = useState(null);
     const [activeCat, setActiveCat] = useState("All");
     const faqT = getFAQTranslations(lang);
@@ -7686,6 +7705,7 @@ Thank you!`);
 
   // --- RINGS ----------------------------------------------------------------
   const Rings = () => {
+    const { T, lang } = useLang();
     return (
     <div className="page">
       <section id="sec-rings-top" className="sec sec-dark">
