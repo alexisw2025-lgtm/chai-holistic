@@ -1609,10 +1609,12 @@ function MensWellness({ onNav, onAddToCart }) {
             {/* Color band */}
             <div style={{height:6, background:`linear-gradient(90deg, ${blend.color}, rgba(196,137,58,.6))`}} />
             <div style={{padding:"20px 20px 16px"}}>
-              <div style={{fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6,fontFamily:"Jost,sans-serif"}}>{blend.benefit}</div>
-              <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.1rem",fontWeight:600,color:"#F7F2EA",marginBottom:4}}>{blend.name}</div>
-              <div style={{fontSize:".8rem",fontStyle:"italic",color:"rgba(247,242,234,.55)",marginBottom:12,fontFamily:"Jost,sans-serif"}}>{blend.tagline}</div>
-              <p style={{fontSize:".78rem",color:"rgba(247,242,234,.7)",lineHeight:1.65,marginBottom:14,fontFamily:"Jost,sans-serif"}}>{blend.desc}</p>
+              {(()=>{const _mbt=getBlendModal(blend.id,lang);return(<>
+              <div style={{fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6,fontFamily:"Jost,sans-serif"}}>{_mbt?.benefit||blend.benefit}</div>
+              <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.1rem",fontWeight:600,color:"#F7F2EA",marginBottom:4}}>{getBlendName(blend.name,lang)||blend.name}</div>
+              <div style={{fontSize:".8rem",fontStyle:"italic",color:"rgba(247,242,234,.55)",marginBottom:12,fontFamily:"Jost,sans-serif"}}>{_mbt?.tagline||blend.tagline}</div>
+              <p style={{fontSize:".78rem",color:"rgba(247,242,234,.7)",lineHeight:1.65,marginBottom:14,fontFamily:"Jost,sans-serif"}}>{_mbt?.desc||blend.desc}</p>
+              </>);})()}
               <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:14}}>
                 {blend.ingredients.map(herb=>(
                   <span key={herb} style={{background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",borderRadius:20,padding:"3px 10px",fontSize:".63rem",color:"rgba(247,242,234,.65)",fontFamily:"Jost,sans-serif"}}>{herb}</span>
@@ -1779,13 +1781,15 @@ function MensWellness({ onNav, onAddToCart }) {
             <div style={{padding:"24px 24px 0"}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:16}}>
                 <div>
-                  <div style={{fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6,fontFamily:"Jost,sans-serif"}}>{selected.benefit}</div>
-                  <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.35rem",fontWeight:700,color:"#F7F2EA"}}>{selected.name}</div>
-                  <div style={{fontSize:".82rem",fontStyle:"italic",color:"rgba(247,242,234,.55)",marginTop:4,fontFamily:"Jost,sans-serif"}}>{selected.tagline}</div>
+                  {(()=>{const _smbt=getBlendModal(selected.id,lang);return(<>
+                  <div style={{fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:6,fontFamily:"Jost,sans-serif"}}>{_smbt?.benefit||selected.benefit}</div>
+                  <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.35rem",fontWeight:700,color:"#F7F2EA"}}>{getBlendName(selected.name,lang)||selected.name}</div>
+                  <div style={{fontSize:".82rem",fontStyle:"italic",color:"rgba(247,242,234,.55)",marginTop:4,fontFamily:"Jost,sans-serif"}}>{_smbt?.tagline||selected.tagline}</div>
+                  </>);})()}
                 </div>
                 <button onClick={()=>setSelected(null)} style={{background:"rgba(255,255,255,.08)",border:"none",color:"rgba(247,242,234,.6)",borderRadius:"50%",width:34,height:34,fontSize:"1.1rem",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginLeft:12}}>✕</button>
               </div>
-              <p style={{fontSize:".85rem",color:"rgba(247,242,234,.8)",lineHeight:1.75,marginBottom:20,fontFamily:"Jost,sans-serif"}}>{selected.desc}</p>
+              <p style={{fontSize:".85rem",color:"rgba(247,242,234,.8)",lineHeight:1.75,marginBottom:20,fontFamily:"Jost,sans-serif"}}>{(()=>{const _sd=getBlendModal(selected.id,lang);return _sd?.desc||selected.desc;})()}</p>
 
               <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:12,padding:"16px",marginBottom:16}}>
                 <div style={{fontSize:".62rem",letterSpacing:".16em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:10,fontFamily:"Jost,sans-serif"}}>Ingredients</div>
