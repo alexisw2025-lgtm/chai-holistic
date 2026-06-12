@@ -3870,6 +3870,30 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
           Have a Vibe Shift Ring? Touch it to your phone anytime to hear today's prayer — no screen needed.
         </div>
 
+        {/* Choose a prayer link */}
+        <button
+          onClick={()=>window.open('/prayer.html','_blank')}
+          style={{
+            marginTop:28,
+            background:"rgba(196,137,58,0.1)",
+            border:"1px solid rgba(196,137,58,0.3)",
+            color:"rgba(196,137,58,0.85)",
+            borderRadius:50,
+            padding:"10px 24px",
+            fontFamily:"Jost,sans-serif",
+            fontSize:".68rem",
+            letterSpacing:".12em",
+            textTransform:"uppercase",
+            cursor:"pointer",
+            transition:"all .2s",
+            position:"relative",zIndex:1,
+          }}
+          onMouseEnter={e=>{e.currentTarget.style.background="rgba(196,137,58,0.2)";e.currentTarget.style.borderColor="rgba(196,137,58,0.6)";}}
+          onMouseLeave={e=>{e.currentTarget.style.background="rgba(196,137,58,0.1)";e.currentTarget.style.borderColor="rgba(196,137,58,0.3)";}}
+        >
+          ✦ &nbsp;Choose a prayer by mood
+        </button>
+
         <style>{`
           @keyframes twoamOrbit { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
           @keyframes twoamPulse { 0%{transform:scale(1);opacity:.5} 100%{transform:scale(1.7);opacity:0} }
@@ -9186,7 +9210,7 @@ Thank you!`);
           <defs>
             <path id="amaraOrbitPath" d="M 43,43 m -34,0 a 34,34 0 1,1 68,0 a 34,34 0 1,1 -68,0" />
           </defs>
-          <text style={{fontSize:"6.2px",fontFamily:"Jost,sans-serif",fontWeight:600,letterSpacing:"3.1px",fill:"rgba(196,137,58,.82)",textTransform:"uppercase"}}>
+          <text style={{fontSize:"7.5px",fontFamily:"Jost,sans-serif",fontWeight:600,letterSpacing:"2.8px",fill:"rgba(196,137,58,.82)",textTransform:"uppercase"}}>
             <textPath href="#amaraOrbitPath">ASK AMARA ✦ FIND YOUR BLEND ✦ ASK AMARA ✦ FIND YOUR BLEND ✦ </textPath>
           </text>
         </svg>
@@ -9382,7 +9406,7 @@ Thank you!`);
       <style>{`
         @keyframes amaraOrbit {
           from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
+          to   { transform: rotate(-360deg); }
         }
         @keyframes amaraSlide {
           from { opacity:0; transform:translateY(20px) scale(.97); }
