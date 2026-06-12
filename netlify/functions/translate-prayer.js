@@ -33,19 +33,36 @@ exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers, body: '' };
   if (event.httpMethod !== 'POST') return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
 
-  let prompt;
+  let title, theme, stanzas, targetLang;
   try {
-    const parsed = JSON.parse(event.body);
-    prompt = parsed.prompt;
+    const body = JSON.parse(event.body);
+    title = body.title;
+    theme = body.theme;
+    stanzas = body.stanzas;
+    targetLang = body.targetLang;
   } catch (e) {
-    console.error('Body parse error:', e.message);
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'Invalid JSON body' }) };
   }
 
-  if (!prompt) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing prompt' }) };
+  if (!stanzas || !targetLang) {
+    return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing stanzas or targetLang' }) };
+  }
+
+  // Build a clear, structured prompt
+  const prompt = `Translate this Catholic prayer to ${targetLang}.
+
+Title: ${title}
+Theme: ${theme}
+Stanzas (${stanzas.length} items):
+${stanzas.map((s, i) => `[${i}]: ${s}`).join('\n')}
+
+Respond with ONLY a JSON object in this exact format, no other text:
+{"title":"translated title","theme":"translated theme","stanzas":["stanza 0","stanza 1","stanza 2"]}
+
+Keep the same number of stanzas (${stanzas.length}). Preserve line breaks as \\n within each stanza string.`;
 
   const reqBody = JSON.stringify({
-    model: 'claude-haiku-4-5',
+    model: 'claude-haiku-4-5-20251001',
     max_tokens: 2000,
     messages: [{ role: 'user', content: prompt }],
   });
@@ -69,42 +86,42 @@ exports.handler = async (event) => {
   console.log('Anthropic status:', result.status);
 
   if (result.status !== 200) {
-    console.error('Anthropic non-200:', result.body);
-    return { statusCode: 502, headers, body: JSON.stringify({ error: 'Anthropic error', detail: result.body }) };
+    console.error('Anthropic error:', result.body.slice(0, 300));
+    return { statusCode: 502, headers, body: JSON.stringify({ error: 'Anthropic error', detail: result.body.slice(0, 300) }) };
   }
 
   let anthropicData;
   try {
     anthropicData = JSON.parse(result.body);
   } catch (e) {
-    console.error('Anthropic response parse error:', e.message, result.body.slice(0, 200));
     return { statusCode: 502, headers, body: JSON.stringify({ error: 'Bad Anthropic response' }) };
   }
 
   const rawText = anthropicData.content.map(c => c.text || '').join('');
-  console.log('Raw AI response (first 300 chars):', rawText.slice(0, 300));
+  console.log('Raw AI response:', rawText.slice(0, 400));
 
-  // Strip markdown fences and extract JSON
+  // Strip markdown fences
   let clean = rawText.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-  // Sometimes the model adds text before the JSON — find the first [ or {
-  const jsonStart = Math.min(
-    clean.indexOf('[') === -1 ? Infinity : clean.indexOf('['),
-    clean.indexOf('{') === -1 ? Infinity : clean.indexOf('{')
-  );
-  if (jsonStart > 0) clean = clean.slice(jsonStart);
+  // Find first { in case model adds preamble
+  const start = clean.indexOf('{');
+  if (start > 0) clean = clean.slice(start);
 
   let parsed;
   try {
     parsed = JSON.parse(clean);
   } catch (e) {
-    console.error('JSON parse error:', e.message, 'Clean text:', clean.slice(0, 300));
+    console.error('JSON parse failed:', clean.slice(0, 300));
     return { statusCode: 500, headers, body: JSON.stringify({ error: 'JSON parse failed', raw: clean.slice(0, 200) }) };
   }
 
-  const response = Array.isArray(parsed)
-    ? { stanzas: parsed }
-    : { title: parsed.title, theme: parsed.theme, stanzas: parsed.stanzas };
-
-  console.log('Translation success, stanzas:', response.stanzas?.length);
-  return { statusCode: 200, headers, body: JSON.stringify(response) };
+  console.log('Success — stanzas returned:', parsed.stanzas ? parsed.stanzas.length : 0);
+  return {
+    statusCode: 200,
+    headers,
+    body: JSON.stringify({
+      title: parsed.title || title,
+      theme: parsed.theme || theme,
+      stanzas: parsed.stanzas || stanzas,
+    }),
+  };
 };
