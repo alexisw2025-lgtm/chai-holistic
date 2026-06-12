@@ -496,10 +496,13 @@ async function renderDailyPrayer(){
   document.getElementById('d-theme').textContent = p.theme;
   renderBody(document.getElementById('d-body'), p.stanzas);
   if(lang !== 'en'){
+    // Show subtle loading state
+    document.getElementById('d-body').style.opacity = '0.5';
     const t = await getTranslatedStanzas(dailyIdx);
     document.getElementById('d-title').textContent = t.title;
     document.getElementById('d-theme').textContent = t.theme;
     renderBody(document.getElementById('d-body'), t.stanzas);
+    document.getElementById('d-body').style.opacity = '1';
   }
 }
 
