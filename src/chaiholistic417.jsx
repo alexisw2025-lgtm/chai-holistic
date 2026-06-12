@@ -2399,7 +2399,6 @@ Respond ONLY with this exact JSON structure:
   };
 
   const [teaCardModal, setTeaCardModal] = useState(null);
-  const [ingredientModal, setIngredientModal] = useState(null);
   const [saveRitualOpen, setSaveRitualOpen] = useState(false);
   const [blendFilter, setBlendFilter] = useState("All");
   const [organFilter, setOrganFilter] = useState("All");
@@ -2453,6 +2452,7 @@ Respond ONLY with this exact JSON structure:
   });
   // 2AM mode
   const [twoAM, setTwoAM] = useState(false);
+  const [prayerOpen, setPrayerOpen] = useState(false);
 
 
   // ── AMARA — Wellness Companion ─────────────────────────────────────────────
@@ -2811,6 +2811,15 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
   const close2AM = () => {
     setTwoAM(false);
     stopTimer();
+    setTimeout(() => window.scrollTo({ top: scrollPosRef.current, behavior: "instant" }), 30);
+  };
+
+  const openPrayer = () => {
+    scrollPosRef.current = window.scrollY || document.documentElement.scrollTop || 0;
+    setPrayerOpen(true);
+  };
+  const closePrayer = () => {
+    setPrayerOpen(false);
     setTimeout(() => window.scrollTo({ top: scrollPosRef.current, behavior: "instant" }), 30);
   };
 
@@ -3877,7 +3886,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
 
         {/* Choose a prayer link */}
         <button
-          onClick={()=>window.open('/prayer.html','_blank')}
+          onClick={()=>openPrayer()}
           style={{
             marginTop:28,
             background:"rgba(196,137,58,0.1)",
@@ -4947,7 +4956,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
       {(()=>{
         const START_PATHS = [
           { icon:"🌿", label:"I want to heal",      sub:"Body, mind, or spirit — find blends and rituals built for restoration.",  action:()=>nav("shop"),          accent:"#5A8A6A", accentLight:"rgba(90,138,106,0.15)" },
-          { icon:"🙏", label:"I need to pray",       sub:"It's late. Something is heavy. A prayer is waiting for you right now.",   action:()=>open2AM(),            accent:"#C4893A", accentLight:"rgba(196,137,58,0.15)" },
+          { icon:"🙏", label:"I need to pray",       sub:"It's late. Something is heavy. A prayer is waiting for you right now.",   action:()=>openPrayer(),            accent:"#C4893A", accentLight:"rgba(196,137,58,0.15)" },
           { icon:"💪", label:"Men's wellness",       sub:"40 blends built for men — body, focus, and faith.",                       action:()=>nav("men"),           accent:"#7A6A9A", accentLight:"rgba(122,106,154,0.15)" },
           { icon:"💍", label:"Vibe Shift Rings",     sub:"Wearable intention. Each ring carries a 417Hz transformation frequency.", action:()=>nav("rings"),         accent:"#A07840", accentLight:"rgba(160,120,64,0.15)" },
           { icon:"✦",  label:"Supplements",          sub:"Carefully chosen allies for your wellness stack, paired with tea rituals.", action:()=>nav("supplements"), accent:"#6A8A7A", accentLight:"rgba(106,138,122,0.15)" },
@@ -5038,7 +5047,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                 <p style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(13px,3.2vw,15px)",fontStyle:"italic",color:"rgba(247,242,234,0.32)",marginBottom:14}}>Your ritual is waiting.</p>
                 <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
                   {[["🌿","Explore blends","shop"],["🙏","Daily prayer","__prayer__"],["💍","Vibe Shift Rings","rings"]].map(([icon,label,pg])=>(
-                    <button key={pg} onClick={()=>pg==="__prayer__"?open2AM():nav(pg)} style={{padding:"8px 18px",borderRadius:20,border:"1px solid rgba(196,137,58,0.2)",background:"transparent",fontFamily:"Jost,sans-serif",fontSize:12,color:"rgba(247,242,234,0.4)",fontWeight:300,cursor:"pointer",transition:"all 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.5)";e.currentTarget.style.color="rgba(247,242,234,0.75)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.2)";e.currentTarget.style.color="rgba(247,242,234,0.4)";}}>
+                    <button key={pg} onClick={()=>pg==="__prayer__"?openPrayer():nav(pg)} style={{padding:"8px 18px",borderRadius:20,border:"1px solid rgba(196,137,58,0.2)",background:"transparent",fontFamily:"Jost,sans-serif",fontSize:12,color:"rgba(247,242,234,0.4)",fontWeight:300,cursor:"pointer",transition:"all 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.5)";e.currentTarget.style.color="rgba(247,242,234,0.75)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.2)";e.currentTarget.style.color="rgba(247,242,234,0.4)";}}>
                       {icon}  {label}
                     </button>
                   ))}
@@ -5960,7 +5969,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                       <div style={{fontSize:".72rem",color:"var(--sage-d)",fontWeight:600,marginBottom:2}}>{s.name}</div>
                       <div style={{fontSize:".68rem",color:"#6A7A6A",lineHeight:1.5,fontWeight:300}}>{s.why}</div>
                     </div>
-                    <button onClick={()=>setIngredientModal({name:s.name,emoji:s.emoji,why:s.why,info:null,loading:false})} style={{flexShrink:0,background:"rgba(74,114,80,.1)",border:"1px solid rgba(74,114,80,.25)",color:"var(--sage-d)",borderRadius:20,padding:"4px 10px",fontSize:".6rem",letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer",whiteSpace:"nowrap"}}>
+                    <button onClick={()=>nav("supplements")} style={{flexShrink:0,background:"rgba(74,114,80,.1)",border:"1px solid rgba(74,114,80,.25)",color:"var(--sage-d)",borderRadius:20,padding:"4px 10px",fontSize:".6rem",letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer",whiteSpace:"nowrap"}}>
                       Learn More →
                     </button>
                   </div>
@@ -8548,7 +8557,7 @@ Thank you!`);
             <span style={{color:"var(--dust)"}}>›</span>
           </div>
         ))}
-        <div className="mob-lnk mob-lnk-special" onClick={()=>{open2AM();setMobMenuOpen(false);}}>
+        <div className="mob-lnk mob-lnk-special" onClick={()=>{openPrayer();setMobMenuOpen(false);}}>
           🙏 Daily Prayer <span style={{color:"var(--gold)"}}>›</span>
         </div>
         <div className="mob-lnk mob-lnk-special" onClick={()=>{setProfileOpen(true);setMobMenuOpen(false);}}>
@@ -8624,8 +8633,8 @@ Thank you!`);
       <CartDrawer/>
 
       {/* 2AM BUTTON   hidden while overlay is open */}
-      {!twoAM && (
-        <button className="twoam-btn" onClick={open2AM}>
+      {!twoAM && !prayerOpen && (
+        <button className="twoam-btn" onClick={openPrayer}>
           {isNight?T.pray_btn_night:T.pray_btn_day}
         </button>
       )}
@@ -8722,7 +8731,7 @@ Thank you!`);
               <span className="ft-lnk" onClick={()=>setTrackerOpen(true)}>🌿 Cleanse Tracker</span>
               <span className="ft-lnk" onClick={()=>nav("faq")}>FAQ &amp; Safety Guide</span>
               <span className="ft-lnk" onClick={()=>nav("faq")}>🌡 Brewing Guide</span>
-              <span className="ft-lnk" onClick={open2AM}>🌙 2AM Mode</span>
+              <span className="ft-lnk" onClick={openPrayer}>🌙 Daily Prayer</span>
             </div>
             <div>
               <div className="ft-col-h">Our Universe</div>
@@ -8901,82 +8910,69 @@ Thank you!`);
         </>
       )}
 
-      {/* ── INGREDIENT DEEP-DIVE MODAL ─────────────────────────────────────── */}
-      {ingredientModal && (() => {
-        // Auto-fetch info when modal opens and info is null
-        if(!ingredientModal.info && !ingredientModal.loading){
-          const fetchInfo = async () => {
-            setIngredientModal(prev => ({...prev, loading:true}));
-            try{
-              const res = await fetch("https://api.anthropic.com/v1/messages",{
-                method:"POST",
-                headers:{"Content-Type":"application/json"},
-                body: JSON.stringify({
-                  model:"claude-sonnet-4-6",
-                  max_tokens:1000,
-                  messages:[{role:"user",content:`You are a warm, knowledgeable herbalist and wellness guide for Chai Holistic, a faith-rooted tea brand. Provide a concise, engaging deep-dive on the supplement/herb: "${ingredientModal.name}".
-
-Include:
-1. What it is (2 sentences)
-2. Key health benefits (3-4 bullet points, each 1 sentence)
-3. How it pairs with herbal tea rituals (1-2 sentences)
-4. One practical tip or dosage note
-
-Keep the tone warm and educational, not clinical. No markdown headers — use plain text with line breaks. Max 200 words.`}]
-                })
-              });
-              const data = await res.json();
-              const info = data.content.map(c=>c.type==="text"?c.text:"").join("");
-              setIngredientModal(prev => ({...prev, info, loading:false}));
-            }catch(e){
-              setIngredientModal(prev => ({...prev, info:"Information temporarily unavailable. Please visit our Supplements page for details.", loading:false}));
-            }
-          };
-          fetchInfo();
-        }
-        return (
-          <>
-            <div onClick={()=>setIngredientModal(null)} style={{position:"fixed",inset:0,zIndex:3000,background:"rgba(0,0,0,.7)",backdropFilter:"blur(6px)"}}/>
-            <div style={{position:"fixed",inset:0,zIndex:3001,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
-              <div style={{background:"linear-gradient(160deg,#FAF6EF,#F2EDE2)",border:"1px solid rgba(196,137,58,.25)",borderRadius:24,width:"100%",maxWidth:480,boxShadow:"0 32px 80px rgba(0,0,0,.4)",position:"relative",overflow:"hidden",maxHeight:"85vh",overflowY:"auto"}}>
-                {/* Top accent */}
-                <div style={{position:"absolute",top:0,left:0,right:0,height:3,background:"linear-gradient(90deg,transparent,var(--gold),transparent)"}}/>
-                <button onClick={()=>setIngredientModal(null)} style={{position:"absolute",top:14,right:14,width:32,height:32,borderRadius:"50%",background:"rgba(0,0,0,.1)",border:"none",cursor:"pointer",fontSize:".9rem",display:"flex",alignItems:"center",justifyContent:"center",color:"#3A2E22",zIndex:1}}>✕</button>
-                {/* Header */}
-                <div style={{padding:"28px 28px 18px",borderBottom:"1px solid rgba(196,137,58,.12)"}}>
-                  <div style={{fontSize:"2rem",marginBottom:8}}>{ingredientModal.emoji}</div>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.25rem",color:"var(--bark)",fontWeight:700,lineHeight:1.3,marginBottom:8}}>{ingredientModal.name}</div>
-                  <div style={{fontSize:".75rem",color:"#7A6A58",lineHeight:1.6,fontFamily:"Jost,sans-serif",fontStyle:"italic"}}>{ingredientModal.why}</div>
-                </div>
-                {/* Body */}
-                <div style={{padding:"18px 28px 24px"}}>
-                  {ingredientModal.loading ? (
-                    <div style={{display:"flex",alignItems:"center",gap:10,color:"var(--gold)",fontFamily:"Jost,sans-serif",fontSize:".8rem"}}>
-                      <div style={{width:16,height:16,border:"2px solid rgba(196,137,58,.3)",borderTopColor:"var(--gold)",borderRadius:"50%",animation:"spin .8s linear infinite"}}/>
-                      Loading ingredient details…
-                    </div>
-                  ) : (
-                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".82rem",color:"#5A4A3A",lineHeight:1.85,whiteSpace:"pre-wrap",fontWeight:300}}>
-                      {ingredientModal.info}
-                    </div>
-                  )}
-                </div>
-                {/* Footer CTA */}
-                <div style={{padding:"0 28px 24px",display:"flex",gap:10}}>
-                  <button onClick={()=>setIngredientModal(null)} style={{flex:1,background:"rgba(196,137,58,.12)",border:"1px solid rgba(196,137,58,.3)",color:"var(--bark)",borderRadius:14,padding:"11px",fontFamily:"Jost,sans-serif",fontSize:".68rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600}}>
-                    ← Back to Tea Card
-                  </button>
-                  <button onClick={()=>{setIngredientModal(null);nav("supplements");}} style={{flex:1,background:"linear-gradient(135deg,var(--bark),#3A2A18)",color:"white",border:"none",borderRadius:14,padding:"11px",fontFamily:"Jost,sans-serif",fontSize:".68rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600}}>
-                    View Supplements →
-                  </button>
-                </div>
-              </div>
-            </div>
-          </>
-        );
-      })()}
-
       {/* ── TEA CARD MODAL ───────────────────────────────────────────────── */}
+      {/* ── PRAYER MODAL OVERLAY ─────────────────────────────────────────────── */}
+      {prayerOpen && (
+        <>
+          {/* Backdrop — blurred main site */}
+          <div
+            onClick={closePrayer}
+            style={{
+              position:"fixed",inset:0,zIndex:1800,
+              background:"rgba(5,8,5,0.75)",
+              backdropFilter:"blur(8px)",
+              WebkitBackdropFilter:"blur(8px)",
+              animation:"fadeIn .3s ease",
+            }}
+          />
+          {/* Prayer sheet — slides up */}
+          <div style={{
+            position:"fixed",bottom:0,left:0,right:0,zIndex:1801,
+            height:"92vh",
+            borderRadius:"24px 24px 0 0",
+            overflow:"hidden",
+            boxShadow:"0 -20px 80px rgba(0,0,0,0.6)",
+            animation:"slideUp .35s cubic-bezier(.34,1.1,.64,1)",
+            display:"flex",flexDirection:"column",
+          }}>
+            {/* Handle bar + close */}
+            <div style={{
+              background:"#0A0F0B",
+              padding:"12px 20px 0",
+              display:"flex",alignItems:"center",justifyContent:"space-between",
+              flexShrink:0,
+              borderBottom:"1px solid rgba(196,137,58,0.12)",
+            }}>
+              <div style={{
+                fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",
+                color:"rgba(196,137,58,0.6)",fontFamily:"Jost,sans-serif",fontWeight:300,
+              }}>2AM Companion · Daily Prayer</div>
+              <button
+                onClick={closePrayer}
+                style={{
+                  background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",
+                  color:"rgba(255,255,255,0.6)",borderRadius:"50%",
+                  width:32,height:32,cursor:"pointer",fontSize:"1rem",
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  transition:"all .2s",marginBottom:8,
+                }}
+                onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.12)";e.currentTarget.style.color="white";}}
+                onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.06)";e.currentTarget.style.color="rgba(255,255,255,0.6)";}}
+              >✕</button>
+            </div>
+            {/* iframe loads prayer.html */}
+            <iframe
+              src="/prayer.html"
+              style={{flex:1,border:"none",width:"100%",background:"#0A0F0B"}}
+              title="Daily Prayer"
+            />
+          </div>
+          <style>{`
+            @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+          `}</style>
+        </>
+      )}
+
       {teaCardModal && (
         <>
           <div onClick={()=>setTeaCardModal(null)} style={{position:"fixed",inset:0,zIndex:2000,background:"rgba(0,0,0,.65)",backdropFilter:"blur(6px)"}}/>
