@@ -3733,7 +3733,12 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
       try {
         const res = await fetch("https://web-production-3fad2.up.railway.app/speak-intention", {
           method:"POST", headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({text: displayVoice, voice:"alloy"})
+          body:JSON.stringify({text: displayVoice, voice: (() => {
+            const l = localStorage.getItem('chai_lang') || 'en';
+            if (l === 'en') return 'onyx';
+            if (['es','fr','pt'].includes(l)) return 'nova';
+            return 'alloy';
+          })()})
         });
         if (!res.ok) throw new Error("TTS unavailable");
         const blob = await res.blob();
