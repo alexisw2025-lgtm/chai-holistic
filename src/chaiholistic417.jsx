@@ -2508,7 +2508,100 @@ HOW TO RESPOND:
 - End meaningful exchanges with a quiet affirmation rooted in: you are enough.
 
 WHAT YOU KNOW:
-Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Collection (Jamaican cerasee, Ayurvedic herbs), Cleansing Protocols (liver, kidney, lymph, gut, blood), Men's Wellness (20 blends for testosterone, prostate, heart, mind, recovery), and the Sip & Rise book (45 blends, 11 chapters). Also: individual herbs, sea moss gel kits, herb jelly kits, and Vibe Shift fidget rings using the Meridian Infusion Frequency process. The 2AM Companion is a prayer/reflection app at 2amcompanion.com.`;
+Chai Holistic carries 40+ herbal tea blends: Morning & Everyday, Ancestral Collection (Jamaican cerasee, Ayurvedic herbs), Cleansing Protocols (liver, kidney, lymph, gut, blood), Men's Wellness (20 blends for testosterone, prostate, heart, mind, recovery), and the Sip & Rise book (45 blends, 11 chapters). Also: individual herbs, sea moss gel kits, herb jelly kits, and Vibe Shift fidget rings using the Meridian Infusion Frequency process. The 2AM Companion is a prayer/reflection app at 2amcompanion.com.
+
+BLEND CATALOG (use exact blend IDs when recommending):
+Morning: m1=Morning Rise, m2=2AM Reset, m3=Cinnamon & Cloves, m4=Ginger Lemon Sunrise, m5=Tulsi Awakening, m6=Black Pepper Chai, m7=Lemongrass Lift, m8=Ashwagandha Morning
+Evening: e1=Chamomile & Calm, e2=Sleepy Spice, e3=Lemon Balm Dreams, e4=Rose & Hibiscus, e5=Valerian Rest, e6=Lavender Moon, e7=Peppermint Night, e8=Skullcap Serenity
+Seasonal: s1=Turmeric Tonic, s2=Elderberry Shield, s3=Autumn Harvest, s4=Spring Cleanse, s5=Winter Warmth, s6=Summer Hibiscus, s7=Adaptogen Blend
+Wellness: w1=Digestive Peace, w2=Heart's Ease, w3=Brain Boost, w4=Hormone Harmony, w5=Bone & Joint, w6=Skin Glow, w7=Stress Less
+Cleansing: c1=Liver & Love, c2=Kidney Flush, c3=Deep Liver Cleanse, c4=Kidney Stone Support, c5=Lymph Mover, c6=Gut Reset, c7=Blood Purifier, c8=Full Body Detox, c9=Liver Bile Flow, c10=Urinary Tract Clear
+Ancestral: cerasee=Grandmother's Cerasee, cerasee-ginger=Cerasee & Ginger Blend, cerasee-cleanse=Cerasee Blood Cleanse
+
+BLEND RECOMMENDATION FORMAT:
+When you recommend a specific blend from our catalog, tag it at the end of your message using this exact format (one per line, after your message):
+[[BLEND:blendId]]
+Example: If recommending Stress Less, end your message with:
+[[BLEND:w7]]
+You may recommend up to 2 blends per response. Only use blend IDs from the catalog above. Do not include the tag mid-sentence — place it on its own line after your full response.`;
+
+  // ── AMARA BLEND CARD ──────────────────────────────────────────────────────
+  const AmaraBlendCard = ({ blendId }) => {
+    const allBlends = [...BLENDS, ...MEN_BLENDS];
+    const blend = allBlends.find(b => b.id === blendId);
+    const [expanded, setExpanded] = React.useState(false);
+    if (!blend) return null;
+    return (
+      <div style={{
+        marginTop:10, borderRadius:14,
+        background:"linear-gradient(135deg,rgba(196,137,58,.13),rgba(196,137,58,.05))",
+        border:"1px solid rgba(196,137,58,.3)",
+        overflow:"hidden", fontFamily:"Jost,sans-serif",
+      }}>
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 13px 8px 13px"}}>
+          {blend.photo && (
+            <img src={blend.photo} alt={blend.name}
+              style={{width:42,height:42,borderRadius:9,objectFit:"cover",flexShrink:0,border:"1px solid rgba(196,137,58,.25)"}}
+              onError={e=>{e.target.style.display="none";}}
+            />
+          )}
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"#F7F2EA",fontWeight:700,lineHeight:1.2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{blend.name}</div>
+            <div style={{fontSize:".62rem",color:"rgba(196,137,58,.85)",marginTop:2,fontWeight:400,lineHeight:1.3}}>{blend.tagline}</div>
+          </div>
+          <div style={{fontSize:".78rem",color:"rgba(196,137,58,.9)",fontWeight:700,flexShrink:0}}>${blend.price?.toFixed(2)}</div>
+        </div>
+        {blend.benefit && (
+          <div style={{padding:"0 13px 8px 13px",display:"flex",flexWrap:"wrap",gap:4}}>
+            {blend.benefit.split("\xb7").map((b,i)=>(
+              <span key={i} style={{fontSize:".55rem",letterSpacing:".1em",textTransform:"uppercase",background:"rgba(196,137,58,.12)",border:"1px solid rgba(196,137,58,.2)",color:"rgba(196,137,58,.8)",borderRadius:20,padding:"2px 7px"}}>{b.trim()}</span>
+            ))}
+          </div>
+        )}
+        {expanded && blend.ingredients && (
+          <div style={{padding:"0 13px 10px 13px"}}>
+            <div style={{fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",color:"rgba(255,255,255,.35)",marginBottom:5}}>Ingredients</div>
+            <div style={{fontSize:".72rem",color:"rgba(240,235,224,.7)",lineHeight:1.7}}>{blend.ingredients.join(" \xb7 ")}</div>
+            {blend.warning && (
+              <div style={{marginTop:7,fontSize:".62rem",color:"rgba(220,150,50,.7)",lineHeight:1.5,borderTop:"1px solid rgba(196,137,58,.15)",paddingTop:7}}>{blend.warning}</div>
+            )}
+          </div>
+        )}
+        <div style={{display:"flex",gap:6,padding:"0 10px 10px 10px"}}>
+          <button
+            onClick={()=>setSelectedBlend(blend)}
+            style={{flex:1,background:"rgba(196,137,58,.18)",border:"1px solid rgba(196,137,58,.35)",color:"rgba(196,137,58,.95)",borderRadius:8,padding:"7px 0",fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:600,transition:"all .18s"}}
+            onMouseEnter={e=>{e.currentTarget.style.background="rgba(196,137,58,.3)";}}
+            onMouseLeave={e=>{e.currentTarget.style.background="rgba(196,137,58,.18)";}}
+          >View Blend</button>
+          <button
+            onClick={()=>addToCart(blend)}
+            style={{flex:1,background:"linear-gradient(135deg,rgba(196,137,58,.85),rgba(160,104,40,.85))",border:"none",color:"#0A0F0B",borderRadius:8,padding:"7px 0",fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700,transition:"all .18s"}}
+            onMouseEnter={e=>{e.currentTarget.style.opacity=".85";}}
+            onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}
+          >+ Basket</button>
+          <button
+            onClick={()=>setExpanded(p=>!p)}
+            style={{width:32,background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",color:"rgba(255,255,255,.5)",borderRadius:8,padding:"7px 0",fontSize:".7rem",cursor:"pointer",transition:"all .18s",flexShrink:0}}
+            onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.13)";}}
+            onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.06)";}}
+            title="Learn More"
+          >{expanded ? "\u25b2" : "\u25bc"}</button>
+        </div>
+      </div>
+    );
+  };
+
+  const parseAmaraMessage = (text) => {
+    const blendTagRegex = /\[\[BLEND:([^\]]+)\]\]/g;
+    const blendIds = [];
+    let match;
+    while ((match = blendTagRegex.exec(text)) !== null) {
+      blendIds.push(match[1].trim());
+    }
+    const cleanText = text.replace(/\[\[BLEND:[^\]]+\]\]/g, "").trim();
+    return { cleanText, blendIds };
+  };
 
   const openAmara = () => {
     setAmaraOpen(true);
@@ -9004,34 +9097,40 @@ Thank you!`);
               display:"flex", flexDirection:"column", gap:14,
               scrollbarWidth:"thin", scrollbarColor:"rgba(196,137,58,.2) transparent",
             }}>
-              {amaraMessages.map((m, i) => (
-                <div key={i} style={{
-                  display:"flex",
-                  justifyContent: m.role === "user" ? "flex-end" : "flex-start",
-                  alignItems:"flex-end", gap:8,
-                }}>
-                  {m.role === "assistant" && (
-                    <div style={{width:26,height:26,borderRadius:"50%",background:"linear-gradient(135deg,#4A7250,#2A4A30)",border:"1px solid rgba(196,137,58,.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:".7rem",flexShrink:0,marginBottom:2}}>🌿</div>
-                  )}
-                  <div style={{
-                    maxWidth:"78%",
-                    padding: m.role === "user" ? "10px 14px" : "12px 16px",
-                    borderRadius: m.role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
-                    background: m.role === "user"
-                      ? "linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,104,40,.9))"
-                      : "rgba(255,255,255,.05)",
-                    border: m.role === "user" ? "none" : "1px solid rgba(196,137,58,.15)",
-                    fontSize:".82rem",
-                    color: m.role === "user" ? "#0A0F0B" : "rgba(240,235,224,.88)",
-                    fontFamily:"Jost,sans-serif",
-                    fontWeight: m.role === "user" ? 600 : 300,
-                    lineHeight:1.7,
-                    whiteSpace:"pre-wrap",
+              {amaraMessages.map((m, i) => {
+                const parsed = m.role === "assistant" ? parseAmaraMessage(m.text) : { cleanText: m.text, blendIds: [] };
+                return (
+                  <div key={i} style={{
+                    display:"flex",
+                    justifyContent: m.role === "user" ? "flex-end" : "flex-start",
+                    alignItems:"flex-end", gap:8,
                   }}>
-                    {m.text}
+                    {m.role === "assistant" && (
+                      <div style={{width:26,height:26,borderRadius:"50%",background:"linear-gradient(135deg,#4A7250,#2A4A30)",border:"1px solid rgba(196,137,58,.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:".7rem",flexShrink:0,marginBottom:2}}>🌿</div>
+                    )}
+                    <div style={{
+                      maxWidth:"78%",
+                      padding: m.role === "user" ? "10px 14px" : "12px 16px",
+                      borderRadius: m.role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
+                      background: m.role === "user"
+                        ? "linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,104,40,.9))"
+                        : "rgba(255,255,255,.05)",
+                      border: m.role === "user" ? "none" : "1px solid rgba(196,137,58,.15)",
+                      fontSize:".82rem",
+                      color: m.role === "user" ? "#0A0F0B" : "rgba(240,235,224,.88)",
+                      fontFamily:"Jost,sans-serif",
+                      fontWeight: m.role === "user" ? 600 : 300,
+                      lineHeight:1.7,
+                      whiteSpace:"pre-wrap",
+                    }}>
+                      {parsed.cleanText}
+                      {parsed.blendIds.map(id => (
+                        <AmaraBlendCard key={id} blendId={id} />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {amaraLoading && (
                 <div style={{display:"flex",alignItems:"flex-end",gap:8}}>
