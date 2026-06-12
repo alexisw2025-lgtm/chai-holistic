@@ -2330,7 +2330,7 @@ export default function ChaiHolistic() {
     }]);
 
     try {
-      const aiRes = await fetch("https://web-production-4c84.up.railway.app/amara-chat", {
+      const aiRes = await fetch("https://web-production-3fad2.up.railway.app/amara-chat", {
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
@@ -2630,7 +2630,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     setAmaraLoading(true);
     const currentLang = localStorage.getItem('chai_lang') || lang || 'en';
     try {
-      const res = await fetch("https://web-production-4c84.up.railway.app/amara-chat", {
+      const res = await fetch("https://web-production-3fad2.up.railway.app/amara-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -3698,7 +3698,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
       if (prayerPlaying) return;
       setPrayerPlaying(true);
       try {
-        const res = await fetch("https://web-production-4c84.up.railway.app/speak-intention", {
+        const res = await fetch("https://web-production-3fad2.up.railway.app/speak-intention", {
           method:"POST", headers:{"Content-Type":"application/json"},
           body:JSON.stringify({text: today.voice, voice:"alloy"})
         });
@@ -4691,7 +4691,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
 
       // Send via Railway + Resend
       try {
-        const res = await fetch("https://web-production-4c84.up.railway.app/save-ritual", {
+        const res = await fetch("https://web-production-3fad2.up.railway.app/save-ritual", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -8992,7 +8992,7 @@ Thank you!`);
                       onClick={async()=>{
                         if(!reqHerb.trim())return;
                         try {
-                          await fetch("https://web-production-4c84.up.railway.app/herb-request",{
+                          await fetch("https://web-production-3fad2.up.railway.app/herb-request",{
                             method:"POST",headers:{"Content-Type":"application/json"},
                             body:JSON.stringify({herb:reqHerb,goal:reqGoal,name:reqName,email:reqEmail})
                           });
