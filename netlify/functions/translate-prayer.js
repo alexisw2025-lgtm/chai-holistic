@@ -48,12 +48,17 @@ exports.handler = async (event) => {
     const data = await response.json();
     const text = data.content.map(c => c.text || '').join('');
     const clean = text.replace(/```json|```/g, '').trim();
-    const stanzas = JSON.parse(clean);
+    const parsed = JSON.parse(clean);
+
+    // parsed may be { title, theme, stanzas } or just an array (legacy)
+    const result = Array.isArray(parsed)
+      ? { stanzas: parsed }
+      : { title: parsed.title, theme: parsed.theme, stanzas: parsed.stanzas };
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ stanzas }),
+      body: JSON.stringify(result),
     };
   } catch (err) {
     console.error('translate-prayer error:', err);
