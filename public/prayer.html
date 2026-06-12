@@ -494,11 +494,12 @@ async function renderDailyPrayer(){
   document.getElementById('d-num').textContent = T('prayer_label') + (dailyIdx+1) + T('of') + PRAYERS.length;
   document.getElementById('d-title').textContent = p.title;
   document.getElementById('d-theme').textContent = p.theme;
-  // Show English immediately while translation loads
   renderBody(document.getElementById('d-body'), p.stanzas);
   if(lang !== 'en'){
-    const stanzas = await getTranslatedStanzas(dailyIdx);
-    renderBody(document.getElementById('d-body'), stanzas);
+    const t = await getTranslatedStanzas(dailyIdx);
+    document.getElementById('d-title').textContent = t.title;
+    document.getElementById('d-theme').textContent = t.theme;
+    renderBody(document.getElementById('d-body'), t.stanzas);
   }
 }
 
@@ -513,23 +514,38 @@ async function getTranslatedStanzas(idx){
   const key = lang + ':' + idx;
   if(translationCache[key]) return translationCache[key];
   const p = PRAYERS[idx];
-  const langNames = {es:'Spanish',fr:'French',pt:'Portuguese',ht:'Haitian Creole',jm:'Jamaican Patois (Patwa) — write it authentically the way a Jamaican would naturally speak and write it, using real Patwa spelling, grammar and phrasing'};
+  const langNames = {
+    es:'Spanish', fr:'French', pt:'Portuguese',
+    ht:'Haitian Creole',
+    jm:'Jamaican Patois (Patwa) — write it authentically the way a Jamaican would naturally speak and write it, using real Patwa spelling, grammar and phrasing'
+  };
   const targetLang = langNames[lang] || 'English';
-  const prompt = `Translate the following Catholic prayer stanzas to ${targetLang}. Return ONLY a JSON array of translated strings, one per stanza, preserving line breaks (\\n) exactly. Do not add any preamble or markdown.\n\n${JSON.stringify(p.stanzas)}`;
+
+  // Translate stanzas + title + theme in one call
+  const payload = { title: p.title, theme: p.theme, stanzas: p.stanzas };
+  const prompt = 'Translate the following prayer data to ' + targetLang + '. Return ONLY a JSON object with keys "title" (string), "theme" (string), and "stanzas" (array of strings). Preserve line breaks as \\n inside strings. No preamble, no markdown.\n\n' + JSON.stringify(payload);
+
   try{
     const res = await fetch('/.netlify/functions/translate-prayer',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ prompt })
     });
-    if(!res.ok) throw new Error('translate failed');
+    if(!res.ok) throw new Error('translate failed ' + res.status);
     const data = await res.json();
-    const stanzas = data.stanzas || p.stanzas;
-    translationCache[key] = stanzas;
-    return stanzas;
+    // data.stanzas is the array from the Netlify function
+    // But we also want title/theme — Netlify function returns the full parsed object
+    const result = {
+      title:  data.title  || p.title,
+      theme:  data.theme  || p.theme,
+      stanzas: data.stanzas || p.stanzas
+    };
+    translationCache[key] = result;
+    return result;
   }catch(e){
-    console.error('Translation failed',e);
-    return p.stanzas; // fallback to English
+    console.error('Translation failed', e);
+    // Return English fallback as same shape
+    return { title: p.title, theme: p.theme, stanzas: p.stanzas };
   }
 }
 
@@ -586,11 +602,11 @@ async function openOverlay(idx){
   stopAudio();
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
-  // Translate overlay body if needed
   if(lang !== 'en'){
-    const stanzas = await getTranslatedStanzas(idx);
-    renderBody(document.getElementById('o-body'), stanzas);
-    document.getElementById('o-num').textContent = T('prayer_label') + (idx+1) + T('of') + PRAYERS.length;
+    const t = await getTranslatedStanzas(idx);
+    document.getElementById('o-title').textContent = t.title;
+    document.getElementById('o-theme').textContent = t.theme;
+    renderBody(document.getElementById('o-body'), t.stanzas);
   }
 }
 
@@ -616,10 +632,12 @@ async function handlePlay(player){
 async function playTTS(idx, player){
   isTTSLoading = true;
   setUI(player, 'loading');
-  // Get stanzas (translated if needed, translation also uses API but that's separate)
   let stanzas = PRAYERS[idx].stanzas;
   if(lang !== 'en'){
-    try{ stanzas = await getTranslatedStanzas(idx); }catch(e){ stanzas = PRAYERS[idx].stanzas; }
+    try{
+      const t = await getTranslatedStanzas(idx);
+      stanzas = t.stanzas;
+    }catch(e){ /* fallback to English */ }
   }
   const text = stanzas.join('\n\n');
   speakWithBrowser(text, player);
