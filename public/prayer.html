@@ -933,7 +933,7 @@ function speakWithBrowser(text, player){
 
   let chunkIdx = 0;
   function speakNext(){
-    if(chunkIdx >= chunks.length || !isPlaying){ stopAudio(); return; }\
+    if(chunkIdx >= chunks.length || !isPlaying){ stopAudio(); return; }
     const utt = new SpeechSynthesisUtterance(chunks[chunkIdx++]);
     utt.rate = 0.82;
     utt.pitch = 0.95;
