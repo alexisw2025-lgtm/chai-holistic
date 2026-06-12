@@ -517,19 +517,14 @@ async function getTranslatedStanzas(idx){
   const targetLang = langNames[lang] || 'English';
   const prompt = `Translate the following Catholic prayer stanzas to ${targetLang}. Return ONLY a JSON array of translated strings, one per stanza, preserving line breaks (\\n) exactly. Do not add any preamble or markdown.\n\n${JSON.stringify(p.stanzas)}`;
   try{
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
+    const res = await fetch('https://web-production-4c84.up.railway.app/translate-prayer',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        messages:[{role:'user',content:prompt}]
-      })
+      body: JSON.stringify({ prompt })
     });
+    if(!res.ok) throw new Error('translate failed');
     const data = await res.json();
-    const text = data.content.map(c=>c.text||'').join('');
-    const clean = text.replace(/```json|```/g,'').trim();
-    const stanzas = JSON.parse(clean);
+    const stanzas = data.stanzas || p.stanzas;
     translationCache[key] = stanzas;
     return stanzas;
   }catch(e){
@@ -619,41 +614,18 @@ async function handlePlay(player){
 }
 
 async function playTTS(idx, player){
-  const cacheKey = lang + ':' + idx;
-  // Use cached audio blob URL if available
-  if(ttsCache[cacheKey]){
-    playUrl(ttsCache[cacheKey], player);
-    return;
-  }
   isTTSLoading = true;
   setUI(player, 'loading');
-  try{
-    // Get stanzas (translated if needed)
-    let stanzas = PRAYERS[idx].stanzas;
-    if(lang !== 'en') stanzas = await getTranslatedStanzas(idx);
-    const text = stanzas.join('\n\n');
-
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        messages:[{role:'user', content:`Please read this prayer aloud slowly and reverently, in a warm and calming voice:\n\n${text}`}]
-      })
-    });
-    const data = await res.json();
-    // Anthropic text response — use browser Speech Synthesis as TTS
-    const spokenText = data.content.map(c=>c.type==='text'?c.text:'').join('') || text;
-    speakWithBrowser(spokenText, player, cacheKey);
-  }catch(e){
-    console.error('TTS error',e);
-    isTTSLoading = false;
-    setUI(player,'idle');
+  // Get stanzas (translated if needed, translation also uses API but that's separate)
+  let stanzas = PRAYERS[idx].stanzas;
+  if(lang !== 'en'){
+    try{ stanzas = await getTranslatedStanzas(idx); }catch(e){ stanzas = PRAYERS[idx].stanzas; }
   }
+  const text = stanzas.join('\n\n');
+  speakWithBrowser(text, player);
 }
 
-function speakWithBrowser(text, player, cacheKey){
+function speakWithBrowser(text, player){
   window.speechSynthesis.cancel();
   const utt = new SpeechSynthesisUtterance(text);
   utt.rate = 0.82;
