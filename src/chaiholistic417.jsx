@@ -302,6 +302,7 @@ const LANGS = {
     // Amara
     amara_placeholder:"Ask Amara anything…",
     amara_greeting:"Hello, beautiful soul. I'm Amara — your wellness companion here at Chai Holistic.",
+    mq_items:["Morning Rituals","Evening Calm","Liver Cleanse","Kidney Flush","Men\'s Wellness","Vibe Shift Rings","Tea Finder","Ritual Builder","Cleanse Tracker","Herb Pairing Guide","Sip & Heal · 40 Recipes"],
     // Footer
     footer_tagline:"You are good enough the way you are.",
     footer_made:"Handcrafted with love. Rooted in tradition. Made for you.",
@@ -537,6 +538,7 @@ const LANGS = {
     search_placeholder:"Buscar tés, hierbas o metas de bienestar…",
     // Amara
     amara_greeting:"Hola, alma bella. Soy Amara — tu compañera de bienestar en Chai Holistic.",
+    mq_items:["Rituales Matutinos","Calma Vespertina","Limpieza Hepática","Limpieza Renal","Bienestar Masculino","Anillos Vibe Shift","Buscador de Té","Constructor de Ritual","Rastreador de Limpieza","Guía de Hierbas","Sip & Heal · 40 Recetas"],
     // SeaMoss page
     sm_search_placeholder:"Buscar por sabor o beneficio...",
     sm_no_results:"No se encontraron recetas",
@@ -707,6 +709,7 @@ const LANGS = {
     search_placeholder:"Rechercher des thés, herbes ou objectifs bien-être…",
     // Amara
     amara_greeting:"Bonjour, belle âme. Je suis Amara — votre accompagnatrice bien-être chez Chai Holistic.",
+    mq_items:["Rituels Matinaux","Calme du Soir","Nettoyage du Foie","Nettoyage des Reins","Bien-être Masculin","Bagues Vibe Shift","Chercheur de Thé","Constructeur de Rituel","Suivi de Nettoyage","Guide des Herbes","Sip & Heal · 40 Recettes"],
     // SeaMoss page
     sm_search_placeholder:"Rechercher par saveur ou bénéfice...",
     sm_no_results:"Aucune recette trouvée",
@@ -877,6 +880,7 @@ const LANGS = {
     search_placeholder:"Pesquisar chás, ervas ou objetivos de bem-estar…",
     // Amara
     amara_greeting:"Olá, bela alma. Sou Amara — sua companheira de bem-estar na Chai Holistic.",
+    mq_items:["Rituais Matinais","Calma Vespertina","Limpeza do Fígado","Limpeza dos Rins","Bem-estar Masculino","Anéis Vibe Shift","Buscador de Chá","Construtor de Ritual","Rastreador de Limpeza","Guia de Ervas","Sip & Heal · 40 Receitas"],
     // SeaMoss page
     sm_search_placeholder:"Buscar por sabor ou benefício...",
     sm_no_results:"Nenhuma receita encontrada",
@@ -1047,6 +1051,7 @@ const LANGS = {
     search_placeholder:"Chèche tè, zèb, oswa objektif byenèt…",
     // Amara
     amara_greeting:"Bonjou, bèl nanm. Mwen se Amara — konpayon byenèt ou nan Chai Holistic.",
+    mq_items:["Rityèl Maten","Kalm Aswè","Netwayaj Fwa","Netwayaj Ren","Byenèt Gason","Bag Vibe Shift","Jwenn Tè","Bati Rityèl","Swiv Netwayaj","Gid Zèb","Sip & Heal · 40 Resèt"],
     // SeaMoss page
     sm_search_placeholder:"Chèche pa gou oswa benefis...",
     sm_no_results:"Pa gen resèt jwenn",
@@ -1112,6 +1117,7 @@ const LANGS = {
     nav_seamoss:"Sea Moss",
     pray_btn_night:"🙏 Pray wid mi",
     amara_placeholder:"Ask Amara anyting…",
+    mq_items:["Morning Rituals","Evening Calm","Liver Cleanse","Kidney Flush","Men Wellness","Vibe Shift Rings","Tea Finder","Ritual Builder","Cleanse Tracker","Herb Pairing Guide","Sip & Heal · 40 Recipe"],
     tagline:"Yuh good enough just as yuh be.",
     btn_add_basket:"Add to Basket",
     btn_shop_now:"Shop Now",
@@ -2627,7 +2633,8 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           system: AMARA_SYSTEM,
-          messages: newMessages.map(m => ({ role: m.role, content: m.text }))
+          messages: newMessages.map(m => ({ role: m.role, content: m.text })),
+          lang: lang
         })
       });
       if (!res.ok) {
@@ -4869,9 +4876,11 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
 
       <div className="mq">
         <div className="mq-track">
-          {[...Array(2)].map((_,p)=>["Morning Rituals","Evening Calm","Liver Cleanse","Kidney Flush","⚡ Men's Wellness","Vibe Shift Rings","Tea Finder","Ritual Builder","Cleanse Tracker","Herb Pairing Guide","Sip &amp; Heal · 40 Recipes"].map((t,i)=>(
-            <div key={`${p}-${i}`} className="mq-item" style={{cursor:"pointer"}} onClick={()=>{const m={"Morning Rituals":()=>{nav("shop");setBlendFilter("Morning");},"Evening Calm":()=>{nav("shop");setBlendFilter("Evening");},"Liver Cleanse":()=>nav("shop"),"Kidney Flush":()=>nav("shop"),"⚡ Men's Wellness":()=>nav("men"),"Vibe Shift Rings":()=>nav("rings"),"Tea Finder":()=>setFinderOpen(true),"Ritual Builder":()=>setRitualOpen(true),"Cleanse Tracker":()=>setTrackerOpen(true),"Herb Pairing Guide":()=>nav("shop"),"Sip &amp; Heal · 40 Recipes":()=>nav("recipes")};const a=m[t];if(a)a();}}><span>✦</span>{t}</div>
-          )))}
+          {[...Array(2)].map((_,p)=>(T.mq_items||["Morning Rituals","Evening Calm","Liver Cleanse","Kidney Flush","⚡ Men's Wellness","Vibe Shift Rings","Tea Finder","Ritual Builder","Cleanse Tracker","Herb Pairing Guide","Sip & Heal · 40 Recipes"]).map((t,i)=>{
+            const navMap={"Morning Rituals":()=>{nav("shop");setBlendFilter("Morning");},"Rituales Matutinos":()=>{nav("shop");setBlendFilter("Morning");},"Rituels Matinaux":()=>{nav("shop");setBlendFilter("Morning");},"Rituais Matinais":()=>{nav("shop");setBlendFilter("Morning");},"Rityèl Maten":()=>{nav("shop");setBlendFilter("Morning");},"Evening Calm":()=>{nav("shop");setBlendFilter("Evening");},"Calma Vespertina":()=>{nav("shop");setBlendFilter("Evening");},"Calme du Soir":()=>{nav("shop");setBlendFilter("Evening");},"Kalm Aswè":()=>{nav("shop");setBlendFilter("Evening");},"Liver Cleanse":()=>nav("shop"),"Limpieza Hepática":()=>nav("shop"),"Nettoyage du Foie":()=>nav("shop"),"Limpeza do Fígado":()=>nav("shop"),"Netwayaj Fwa":()=>nav("shop"),"Kidney Flush":()=>nav("shop"),"Limpieza Renal":()=>nav("shop"),"Nettoyage des Reins":()=>nav("shop"),"Limpeza dos Rins":()=>nav("shop"),"Netwayaj Ren":()=>nav("shop"),"Men's Wellness":()=>nav("men"),"Men Wellness":()=>nav("men"),"Bienestar Masculino":()=>nav("men"),"Bien-être Masculin":()=>nav("men"),"Bem-estar Masculino":()=>nav("men"),"Byenèt Gason":()=>nav("men"),"Vibe Shift Rings":()=>nav("rings"),"Anillos Vibe Shift":()=>nav("rings"),"Bagues Vibe Shift":()=>nav("rings"),"Anéis Vibe Shift":()=>nav("rings"),"Bag Vibe Shift":()=>nav("rings"),"Tea Finder":()=>setFinderOpen(true),"Buscador de Té":()=>setFinderOpen(true),"Chercheur de Thé":()=>setFinderOpen(true),"Buscador de Chá":()=>setFinderOpen(true),"Jwenn Tè":()=>setFinderOpen(true),"Ritual Builder":()=>setRitualOpen(true),"Constructor de Ritual":()=>setRitualOpen(true),"Constructeur de Rituel":()=>setRitualOpen(true),"Construtor de Ritual":()=>setRitualOpen(true),"Bati Rityèl":()=>setRitualOpen(true),"Cleanse Tracker":()=>setTrackerOpen(true),"Rastreador de Limpieza":()=>setTrackerOpen(true),"Suivi de Nettoyage":()=>setTrackerOpen(true),"Rastreador de Limpeza":()=>setTrackerOpen(true),"Swiv Netwayaj":()=>setTrackerOpen(true),"Herb Pairing Guide":()=>nav("shop"),"Guía de Hierbas":()=>nav("shop"),"Guide des Herbes":()=>nav("shop"),"Guia de Ervas":()=>nav("shop"),"Gid Zèb":()=>nav("shop")};
+            const action=navMap[t]||null;
+            return <div key={`${p}-${i}`} className="mq-item" style={{cursor:"pointer"}} onClick={()=>{if(action)action();}}><span>✦</span>{t}</div>;
+          }))}
         </div>
       </div>
 
@@ -9013,25 +9022,46 @@ Thank you!`);
         </>
       )}
       {/* ── AMARA FLOATING BUTTON ────────────────────────────────────────── */}
-      <button
-        onClick={openAmara}
-        style={{
-          position:"fixed", bottom: cart.length>0 && !cartOpen && !preBasket ? 78 : 28, right:24, zIndex:1200,
-          width:58, height:58, borderRadius:"50%",
-          background:"linear-gradient(135deg,#C4893A,#8B5E2A)",
-          border:"2px solid rgba(196,137,58,.5)",
-          boxShadow:"0 4px 24px rgba(196,137,58,.35), 0 2px 8px rgba(0,0,0,.4)",
-          cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center",
-          flexDirection:"column", gap:1,
-          transition:"transform .2s, box-shadow .2s",
-        }}
-        onMouseEnter={e=>{e.currentTarget.style.transform="scale(1.08)";e.currentTarget.style.boxShadow="0 6px 32px rgba(196,137,58,.5), 0 2px 8px rgba(0,0,0,.4)";}}
-        onMouseLeave={e=>{e.currentTarget.style.transform="scale(1)";e.currentTarget.style.boxShadow="0 4px 24px rgba(196,137,58,.35), 0 2px 8px rgba(0,0,0,.4)";}}
-        title="Talk to Amara"
-      >
-        <span style={{fontSize:"1.3rem", lineHeight:1}}>🌿</span>
-        <span style={{fontSize:".42rem",letterSpacing:".1em",textTransform:"uppercase",color:"rgba(255,255,255,.85)",fontFamily:"Jost,sans-serif",fontWeight:600,marginTop:2}}>Amara</span>
-      </button>
+      <div style={{
+        position:"fixed",
+        bottom: cart.length>0 && !cartOpen && !preBasket ? 68 : 18,
+        right:14, zIndex:1200,
+        width:86, height:86,
+        display:"flex", alignItems:"center", justifyContent:"center",
+      }}>
+        {/* Rotating orbital ring */}
+        <svg
+          viewBox="0 0 86 86"
+          style={{position:"absolute",top:0,left:0,width:86,height:86,animation:"amaraOrbit 14s linear infinite",pointerEvents:"none"}}
+        >
+          <defs>
+            <path id="amaraOrbitPath" d="M 43,43 m -34,0 a 34,34 0 1,1 68,0 a 34,34 0 1,1 -68,0" />
+          </defs>
+          <text style={{fontSize:"6.2px",fontFamily:"Jost,sans-serif",fontWeight:600,letterSpacing:"3.1px",fill:"rgba(196,137,58,.82)",textTransform:"uppercase"}}>
+            <textPath href="#amaraOrbitPath">ASK AMARA ✦ FIND YOUR BLEND ✦ ASK AMARA ✦ FIND YOUR BLEND ✦ </textPath>
+          </text>
+        </svg>
+        {/* Core button */}
+        <button
+          onClick={openAmara}
+          style={{
+            width:58, height:58, borderRadius:"50%",
+            background:"linear-gradient(135deg,#C4893A,#8B5E2A)",
+            border:"2px solid rgba(196,137,58,.5)",
+            boxShadow:"0 4px 24px rgba(196,137,58,.35), 0 2px 8px rgba(0,0,0,.4)",
+            cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center",
+            flexDirection:"column", gap:1,
+            transition:"transform .2s, box-shadow .2s",
+            flexShrink:0,
+          }}
+          onMouseEnter={e=>{e.currentTarget.style.transform="scale(1.08)";e.currentTarget.style.boxShadow="0 6px 32px rgba(196,137,58,.5), 0 2px 8px rgba(0,0,0,.4)";}}
+          onMouseLeave={e=>{e.currentTarget.style.transform="scale(1)";e.currentTarget.style.boxShadow="0 4px 24px rgba(196,137,58,.35), 0 2px 8px rgba(0,0,0,.4)";}}
+          title="Talk to Amara"
+        >
+          <span style={{fontSize:"1.3rem", lineHeight:1}}>🌿</span>
+          <span style={{fontSize:".42rem",letterSpacing:".1em",textTransform:"uppercase",color:"rgba(255,255,255,.85)",fontFamily:"Jost,sans-serif",fontWeight:600,marginTop:2}}>Amara</span>
+        </button>
+      </div>
 
       {/* ── AMARA CHAT PANEL ─────────────────────────────────────────────── */}
       {amaraOpen && (
@@ -9201,6 +9231,10 @@ Thank you!`);
       )}
 
       <style>{`
+        @keyframes amaraOrbit {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
         @keyframes amaraSlide {
           from { opacity:0; transform:translateY(20px) scale(.97); }
           to   { opacity:1; transform:translateY(0) scale(1); }
