@@ -209,7 +209,6 @@ const WM_TRANS = {
     name_placeholder: "Tu nombre",
     email_placeholder: "tu@email.com",
     select_all: "Selecciona todo lo que aplique",
-    step_label: "Paso {n} de {t}", email_label: "Correo electrónico", email_gift_text: "Te enviaremos tu", report_eyebrow: "Tu Informe Personal", your_blends: "Tus Mezclas",
   },
   fr: {
     report_title: "Rapport Sip & Heal",
@@ -238,7 +237,6 @@ const WM_TRANS = {
     name_placeholder: "Votre prénom",
     email_placeholder: "votre@email.com",
     select_all: "Sélectionnez tout ce qui s'applique",
-    step_label: "Étape {n} sur {t}", email_label: "Adresse e-mail", email_gift_text: "Nous vous enverrons votre", report_eyebrow: "Votre Rapport Personnel", your_blends: "Vos Mélanges",
   },
   pt: {
     report_title: "Relatório Sip & Heal",
@@ -267,7 +265,6 @@ const WM_TRANS = {
     name_placeholder: "Seu nome",
     email_placeholder: "seu@email.com",
     select_all: "Selecione tudo que se aplica",
-    step_label: "Passo {n} de {t}", email_label: "Endereço de e-mail", email_gift_text: "Enviaremos o seu", report_eyebrow: "Seu Relatório Pessoal", your_blends: "Suas Misturas",
   },
   ht: {
     report_title: "Rapò Sip & Heal",
@@ -296,7 +293,6 @@ const WM_TRANS = {
     name_placeholder: "Non ou",
     email_placeholder: "ou@imèl.com",
     select_all: "Chwazi tout sa ki aplike",
-    step_label: "Etap {n} nan {t}", email_label: "Adrès imèl", email_gift_text: "Nou ap voye", report_eyebrow: "Rapò Pèsonèl Ou", your_blends: "Melanj Ou Yo",
   },
   jm: {
     report_title: "Sip & Heal Report",
@@ -325,18 +321,14 @@ const WM_TRANS = {
     name_placeholder: "Yuh name",
     email_placeholder: "yuh@email.com",
     select_all: "Select all weh apply",
-    step_label: "Step {n} of {t}", email_label: "Email address", email_gift_text: "Wi'll email yuh", report_eyebrow: "Yuh Personal Report", your_blends: "Yuh Blends",
   },
 };
 const getWM = (lang) => WM_TRANS[lang] || null;
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function ProgressBar({ step, total, wm }) {
+function ProgressBar({ step, total }) {
   const pct = Math.round((step / (total - 1)) * 100);
-  const stepLabel = wm?.step_label
-    ? wm.step_label.replace("{n}", step).replace("{t}", total - 2)
-    : `Step ${step} of ${total - 2}`;
   return (
     <div style={{ marginBottom: 24 }}>
       <div style={{
@@ -355,7 +347,7 @@ function ProgressBar({ step, total, wm }) {
         fontSize: ".6rem", letterSpacing: ".12em", textTransform: "uppercase",
         color: "rgba(192,136,48,.55)", marginTop: 6, textAlign: "right"
       }}>
-        {stepLabel}
+        Step {step} of {total - 2}
       </div>
     </div>
   );
@@ -506,7 +498,7 @@ function NavButton({ label, onClick, disabled, variant = "primary" }) {
 }
 
 // ─── Result card ──────────────────────────────────────────────────────────────
-function SipReportCard({ name, rxBlends, ritual, goal, onClose, wm }) {
+function SipReportCard({ name, rxBlends, ritual, goal, onClose }) {
   const goalObj = GOAL_OPTIONS.find(g => g.value === goal) || {};
   return (
     <div style={{ animation: "fadeSlideUp .5s ease" }}>
@@ -522,7 +514,7 @@ function SipReportCard({ name, rxBlends, ritual, goal, onClose, wm }) {
         <div style={{
           fontSize: ".6rem", letterSpacing: ".2em", textTransform: "uppercase",
           color: `rgba(192,136,48,.7)`, marginBottom: 8
-        }}>{wm?.report_eyebrow || "Your Personal Sip Report"}</div>
+        }}>Your Personal Sip Report</div>
         <h2 style={{
           fontFamily: "'Playfair Display', serif",
           fontSize: "clamp(1.4rem, 3vw, 1.9rem)",
@@ -547,7 +539,7 @@ function SipReportCard({ name, rxBlends, ritual, goal, onClose, wm }) {
         <div style={{
           fontSize: ".6rem", letterSpacing: ".14em", textTransform: "uppercase",
           color: "rgba(255,255,255,.4)", marginBottom: 12
-        }}>{wm?.your_blends || "Your Blends"}</div>
+        }}>Your Blends</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {rxBlends.map((blend, i) => (
             <div key={blend} style={{
@@ -765,7 +757,6 @@ export default function WellnessProfileModal({ open, onClose }) {
               concerns:   answers.concerns,
               rx_blends:  rx.rxBlends || [],
               rx_ritual:  rx.ritual   || "",
-              lang:       lang || "en",
             }),
           });
         } catch (emailErr) {
@@ -852,7 +843,7 @@ export default function WellnessProfileModal({ open, onClose }) {
     );
 
     if (s === "result") return (
-      <SipReportCard wm={wm}
+      <SipReportCard
         name={answers.name}
         rxBlends={result?.rxBlends || []}
         ritual={result?.ritual || ""}
@@ -935,7 +926,7 @@ export default function WellnessProfileModal({ open, onClose }) {
           );
         })}
         <p style={{ width: "100%", fontSize: ".72rem", color: "rgba(255,255,255,.3)", marginTop: 8 }}>
-          {wm?.select_all || "Select all that apply — or skip and tap Continue."}
+          Select all that apply — or skip and tap Continue.
         </p>
       </div>
     );
@@ -943,11 +934,11 @@ export default function WellnessProfileModal({ open, onClose }) {
     if (s === "email") return (
       <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         <InputField
-          label={wm?.email_label || "Email address"}
+          label="Email address"
           type="email"
           value={answers.email}
           onChange={v => set("email", v)}
-          placeholder={wm?.email_placeholder || "you@example.com"}
+          placeholder="you@example.com"
           autoFocus
         />
         <div style={{
@@ -958,7 +949,7 @@ export default function WellnessProfileModal({ open, onClose }) {
         }}>
           <span style={{ fontSize: "1rem", flexShrink: 0 }}>🎁</span>
           <p style={{ fontSize: ".72rem", color: "rgba(255,255,255,.5)", margin: 0, lineHeight: 1.7 }}>
-            {wm?.email_gift_text || "We'll email you a personalized"} <strong style={{ color: C.goldLt }}>{wm?.report_title || "Sip & Heal Report"}</strong>{wm?.email_gift_text ? '' : ' — your custom blend guide, daily intention, and wellness ritual. Free, always.'}
+            We'll email you a personalized <strong style={{ color: C.goldLt }}>Sip &amp; Heal Report</strong> — your custom blend guide, daily intention, and wellness ritual. Free, always.
           </p>
         </div>
         {error && (
@@ -1031,7 +1022,7 @@ export default function WellnessProfileModal({ open, onClose }) {
 
           {/* Progress (not on intro/result) */}
           {showNav && (
-            <ProgressBar step={stepNum} total={STEPS.length} wm={wm} />
+            <ProgressBar step={stepNum} total={STEPS.length} />
           )}
 
           {/* Step title */}
@@ -1060,9 +1051,9 @@ export default function WellnessProfileModal({ open, onClose }) {
               )}
               <NavButton
                 label={
-                  saving ? (wm?.generating?.split(".")?.[0] || "Saving…")
-                  : currentStep.id === "email" ? (wm?.btn_generate || "Get My Sip & Heal Report ✦")
-                  : (wm?.btn_next ? `${wm.btn_next} →` : "Continue →")
+                  saving ? "Saving…"
+                  : currentStep.id === "email" ? "Get My Sip & Heal Report ✦"
+                  : "Continue →"
                 }
                 onClick={handleNext}
                 disabled={!canAdvance() || saving}
