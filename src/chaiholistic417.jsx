@@ -4918,7 +4918,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
       {(()=>{
         const START_PATHS = [
           { icon:"🌿", label:"I want to heal",      sub:"Body, mind, or spirit — find blends and rituals built for restoration.",  action:()=>nav("shop"),          accent:"#5A8A6A", accentLight:"rgba(90,138,106,0.15)" },
-          { icon:"🙏", label:"I need to pray",       sub:"It's late. Something is heavy. A prayer is waiting for you right now.",   action:()=>nav("prayer"),        accent:"#C4893A", accentLight:"rgba(196,137,58,0.15)" },
+          { icon:"🙏", label:"I need to pray",       sub:"It's late. Something is heavy. A prayer is waiting for you right now.",   action:()=>open2AM(),            accent:"#C4893A", accentLight:"rgba(196,137,58,0.15)" },
           { icon:"💪", label:"Men's wellness",       sub:"40 blends built for men — body, focus, and faith.",                       action:()=>nav("men"),           accent:"#7A6A9A", accentLight:"rgba(122,106,154,0.15)" },
           { icon:"💍", label:"Vibe Shift Rings",     sub:"Wearable intention. Each ring carries a 417Hz transformation frequency.", action:()=>nav("rings"),         accent:"#A07840", accentLight:"rgba(160,120,64,0.15)" },
           { icon:"✦",  label:"Supplements",          sub:"Carefully chosen allies for your wellness stack, paired with tea rituals.", action:()=>nav("supplements"), accent:"#6A8A7A", accentLight:"rgba(106,138,122,0.15)" },
@@ -5008,8 +5008,8 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
               <div style={{textAlign:"center",marginTop:44,paddingTop:32,borderTop:"1px solid rgba(196,137,58,0.1)"}}>
                 <p style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(13px,3.2vw,15px)",fontStyle:"italic",color:"rgba(247,242,234,0.32)",marginBottom:14}}>Your ritual is waiting.</p>
                 <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-                  {[["🌿","Explore blends","shop"],["🙏","Daily prayer","prayer"],["💍","Vibe Shift Rings","rings"]].map(([icon,label,pg])=>(
-                    <button key={pg} onClick={()=>nav(pg)} style={{padding:"8px 18px",borderRadius:20,border:"1px solid rgba(196,137,58,0.2)",background:"transparent",fontFamily:"Jost,sans-serif",fontSize:12,color:"rgba(247,242,234,0.4)",fontWeight:300,cursor:"pointer",transition:"all 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.5)";e.currentTarget.style.color="rgba(247,242,234,0.75)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.2)";e.currentTarget.style.color="rgba(247,242,234,0.4)";}}>
+                  {[["🌿","Explore blends","shop"],["🙏","Daily prayer","__prayer__"],["💍","Vibe Shift Rings","rings"]].map(([icon,label,pg])=>(
+                    <button key={pg} onClick={()=>pg==="__prayer__"?open2AM():nav(pg)} style={{padding:"8px 18px",borderRadius:20,border:"1px solid rgba(196,137,58,0.2)",background:"transparent",fontFamily:"Jost,sans-serif",fontSize:12,color:"rgba(247,242,234,0.4)",fontWeight:300,cursor:"pointer",transition:"all 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.5)";e.currentTarget.style.color="rgba(247,242,234,0.75)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.2)";e.currentTarget.style.color="rgba(247,242,234,0.4)";}}>
                       {icon}  {label}
                     </button>
                   ))}
@@ -8519,6 +8519,9 @@ Thank you!`);
             <span style={{color:"var(--dust)"}}>›</span>
           </div>
         ))}
+        <div className="mob-lnk mob-lnk-special" onClick={()=>{open2AM();setMobMenuOpen(false);}}>
+          🙏 Daily Prayer <span style={{color:"var(--gold)"}}>›</span>
+        </div>
         <div className="mob-lnk mob-lnk-special" onClick={()=>{setProfileOpen(true);setMobMenuOpen(false);}}>
           📋 Get My Sip &amp; Heal Report <span style={{color:"var(--gold)"}}>›</span>
         </div>
