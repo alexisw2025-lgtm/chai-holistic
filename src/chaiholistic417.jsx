@@ -2614,9 +2614,18 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     setAmaraOpen(true);
     if (!amaraGreeted) {
       setAmaraGreeted(true);
+      const currentLang = localStorage.getItem('chai_lang') || lang || 'en';
+      const greetings = {
+        en: "Hello, beautiful soul. I'm Amara — your wellness companion here at Chai Holistic.\n\nI'm here whenever you need a moment to pause, to ask, or simply to be heard. No rush, no scripts.\n\nHow are you feeling today — in your body, your heart, wherever you want to start? I'm listening.",
+        es: "Hola, alma bella. Soy Amara — tu compañera de bienestar en Chai Holistic.\n\nEstoy aquí cuando necesites un momento para pausar, preguntar, o simplemente ser escuchada. Sin prisas, sin guiones.\n\n¿Cómo te sientes hoy — en tu cuerpo, tu corazón, donde quieras comenzar? Te escucho.",
+        fr: "Bonjour, belle âme. Je suis Amara — votre accompagnatrice bien-être chez Chai Holistic.\n\nJe suis là quand vous avez besoin d'un moment pour faire une pause, poser une question, ou simplement être entendue. Sans pression, sans script.\n\nComment vous sentez-vous aujourd'hui — dans votre corps, votre cœur? Je vous écoute.",
+        pt: "Olá, bela alma. Sou Amara — sua companheira de bem-estar na Chai Holistic.\n\nEstou aqui quando precisar de um momento para pausar, perguntar, ou simplesmente ser ouvida. Sem pressa, sem roteiros.\n\nComo você está se sentindo hoje — em seu corpo, seu coração? Estou ouvindo.",
+        ht: "Bonjou, bèl nanm. Mwen se Amara — konpayon byenèt ou nan Chai Holistic.\n\nMwen la lè ou bezwen yon moman pou kanpe, poze kesyon, oswa tou senpleman tande. San presyon.\n\nKijan ou santi ou jodi a — nan kò ou, nan kè ou? Mwen koute ou.",
+        jm: "Hello, beautiful soul. Mi name Amara — yuh wellness companion here at Chai Holistic.\n\nMi deh yah whenever yuh need a moment fi pause, ask, or simply be heard. No rush, no scripts.\n\nHow yuh feeling today — in yuh body, yuh heart? Mi deh yah listening."
+      };
       setAmaraMessages([{
         role: "assistant",
-        text: "Hello, beautiful soul. I'm Amara — your wellness companion here at Chai Holistic.\n\nI'm here whenever you need a moment to pause, to ask, or simply to be heard. No rush, no scripts.\n\nHow are you feeling today — in your body, your heart, wherever you want to start? I'm listening."
+        text: greetings[currentLang] || greetings.en
       }]);
     }
   };
@@ -3686,6 +3695,8 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     const { T, lang } = useLang();
     const [prayerPlaying, setPrayerPlaying] = React.useState(false);
     const [prayerSpoken, setPrayerSpoken] = React.useState(false);
+    const [translatedLines, setTranslatedLines] = React.useState(null);
+    const [translatedVoice, setTranslatedVoice] = React.useState(null);
 
     const today = (() => {
       const now = new Date();
@@ -3694,13 +3705,35 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
       return DAILY_PRAYERS[day % DAILY_PRAYERS.length];
     })();
 
+    // Translate prayer when language changes
+    React.useEffect(() => {
+      const currentLang = localStorage.getItem('chai_lang') || lang || 'en';
+      if (currentLang === 'en') { setTranslatedLines(null); setTranslatedVoice(null); return; }
+      const fullText = today.lines.join('\n') + '\n---\n' + today.voice;
+      fetch("https://web-production-3fad2.up.railway.app/translate-prayer", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ text: fullText, lang: currentLang })
+      }).then(r => r.json()).then(d => {
+        if (d.text) {
+          const parts = d.text.split('---');
+          const linesText = parts[0].trim();
+          const voiceText = parts[1] ? parts[1].trim() : d.text;
+          setTranslatedLines(linesText.split('\n').filter(l => l.trim()));
+          setTranslatedVoice(voiceText);
+        }
+      }).catch(() => {});
+    }, [lang]);
+
+    const displayLines = translatedLines || today.lines;
+    const displayVoice = translatedVoice || today.voice;
+
     const speakPrayer = async () => {
       if (prayerPlaying) return;
       setPrayerPlaying(true);
       try {
         const res = await fetch("https://web-production-3fad2.up.railway.app/speak-intention", {
           method:"POST", headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({text: today.voice, voice:"alloy"})
+          body:JSON.stringify({text: displayVoice, voice:"alloy"})
         });
         if (!res.ok) throw new Error("TTS unavailable");
         const blob = await res.blob();
@@ -3713,7 +3746,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
         const synth = window.speechSynthesis;
         if (synth) {
           synth.cancel();
-          const utt = new SpeechSynthesisUtterance(today.voice);
+          const utt = new SpeechSynthesisUtterance(displayVoice);
           utt.rate = 0.75; utt.pitch = 0.9;
           const voices = synth.getVoices();
           const preferred = ["Samantha","Karen","Moira","Google UK English Female"];
@@ -3804,7 +3837,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
         {/* Prayer lines */}
         <div style={{textAlign:"center",maxWidth:320,marginBottom:24,position:"relative",zIndex:1}}>
           <div style={{width:1,height:24,background:"linear-gradient(to bottom,transparent,rgba(192,136,48,.4),transparent)",margin:"0 auto 12px"}}/>
-          {today.lines.map((l,i)=>(
+          {displayLines.map((l,i)=>(
             <div key={i} style={{
               fontFamily:"Cormorant Garamond,serif",
               fontSize:i===1?"clamp(1.15rem,4.5vw,1.45rem)":"clamp(.95rem,3.5vw,1.15rem)",
