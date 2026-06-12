@@ -552,19 +552,19 @@ function renderFounderNote(){
   const label = T('note_label');
   const el = document.getElementById('founder-note');
   if(!el) return;
-  el.innerHTML = `
-    <div style="background:linear-gradient(160deg,rgba(196,137,58,0.07),rgba(196,137,58,0.03));border:1px solid rgba(196,137,58,0.18);border-radius:20px;padding:24px 22px;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(196,137,58,0.4),transparent);"></div>
-      <div style="font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-family:'Helvetica Neue',sans-serif;font-weight:300;margin-bottom:14px;">${label}</div>
-      ${lines.map((line, i) => `<p style="font-family:'Georgia','Times New Roman',serif;font-size:clamp(13px,3.5vw,15px);color:rgba(247,242,234,.82);line-height:1.9;margin:0 0 ${i < lines.length-1 ? '14px' : '0'};">${line}</p>`).join('')}
-      <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(196,137,58,0.12);display:flex;align-items:center;gap:12px;">
-        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,rgba(196,137,58,.3),rgba(196,137,58,.1));border:1px solid rgba(196,137,58,.3);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;">🌿</div>
-        <div>
-          <div style="font-family:'Helvetica Neue',sans-serif;font-size:.72rem;color:var(--gold);font-weight:500;letter-spacing:.05em;">Alex</div>
-          <div style="font-family:'Helvetica Neue',sans-serif;font-size:.62rem;color:rgba(247,242,234,.35);letter-spacing:.05em;">Founder, Chai Holistic</div>
-        </div>
-      </div>
-    </div>`;
+  const ps = lines.map(function(line, i){
+    return '<p style="font-family:\'Georgia\',\'Times New Roman\',serif;font-size:clamp(13px,3.5vw,15px);color:rgba(247,242,234,.82);line-height:1.9;margin:0 0 '+(i < lines.length-1 ? '14px' : '0')+';">'+ line +'</p>';
+  }).join('');
+  el.innerHTML = '<div style="background:linear-gradient(160deg,rgba(196,137,58,0.07),rgba(196,137,58,0.03));border:1px solid rgba(196,137,58,0.18);border-radius:20px;padding:24px 22px;position:relative;overflow:hidden;">'
+    + '<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(196,137,58,0.4),transparent);"></div>'
+    + '<div style="font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-family:\'Helvetica Neue\',sans-serif;font-weight:300;margin-bottom:14px;">' + label + '</div>'
+    + ps
+    + '<div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(196,137,58,0.12);display:flex;align-items:center;gap:12px;">'
+    + '<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,rgba(196,137,58,.3),rgba(196,137,58,.1));border:1px solid rgba(196,137,58,.3);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;">🌿</div>'
+    + '<div>'
+    + '<div style="font-family:\'Helvetica Neue\',sans-serif;font-size:.72rem;color:var(--gold);font-weight:500;letter-spacing:.05em;">Alex</div>'
+    + '<div style="font-family:\'Helvetica Neue\',sans-serif;font-size:.62rem;color:rgba(247,242,234,.35);letter-spacing:.05em;">Founder, Chai Holistic</div>'
+    + '</div></div></div>';
 }
 
 function applyUIStrings(){
