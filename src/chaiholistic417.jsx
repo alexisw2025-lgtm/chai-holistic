@@ -2399,6 +2399,7 @@ Respond ONLY with this exact JSON structure:
   };
 
   const [teaCardModal, setTeaCardModal] = useState(null);
+  const [ingredientModal, setIngredientModal] = useState(null);
   const [saveRitualOpen, setSaveRitualOpen] = useState(false);
   const [blendFilter, setBlendFilter] = useState("All");
   const [organFilter, setOrganFilter] = useState("All");
@@ -5959,7 +5960,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                       <div style={{fontSize:".72rem",color:"var(--sage-d)",fontWeight:600,marginBottom:2}}>{s.name}</div>
                       <div style={{fontSize:".68rem",color:"#6A7A6A",lineHeight:1.5,fontWeight:300}}>{s.why}</div>
                     </div>
-                    <button onClick={()=>nav("supplements")} style={{flexShrink:0,background:"rgba(74,114,80,.1)",border:"1px solid rgba(74,114,80,.25)",color:"var(--sage-d)",borderRadius:20,padding:"4px 10px",fontSize:".6rem",letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer",whiteSpace:"nowrap"}}>
+                    <button onClick={()=>setIngredientModal({name:s.name,emoji:s.emoji,why:s.why,info:null,loading:false})} style={{flexShrink:0,background:"rgba(74,114,80,.1)",border:"1px solid rgba(74,114,80,.25)",color:"var(--sage-d)",borderRadius:20,padding:"4px 10px",fontSize:".6rem",letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer",whiteSpace:"nowrap"}}>
                       Learn More →
                     </button>
                   </div>
@@ -8899,6 +8900,81 @@ Thank you!`);
           `}</style>
         </>
       )}
+
+      {/* ── INGREDIENT DEEP-DIVE MODAL ─────────────────────────────────────── */}
+      {ingredientModal && (() => {
+        // Auto-fetch info when modal opens and info is null
+        if(!ingredientModal.info && !ingredientModal.loading){
+          const fetchInfo = async () => {
+            setIngredientModal(prev => ({...prev, loading:true}));
+            try{
+              const res = await fetch("https://api.anthropic.com/v1/messages",{
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body: JSON.stringify({
+                  model:"claude-sonnet-4-6",
+                  max_tokens:1000,
+                  messages:[{role:"user",content:`You are a warm, knowledgeable herbalist and wellness guide for Chai Holistic, a faith-rooted tea brand. Provide a concise, engaging deep-dive on the supplement/herb: "${ingredientModal.name}".
+
+Include:
+1. What it is (2 sentences)
+2. Key health benefits (3-4 bullet points, each 1 sentence)
+3. How it pairs with herbal tea rituals (1-2 sentences)
+4. One practical tip or dosage note
+
+Keep the tone warm and educational, not clinical. No markdown headers — use plain text with line breaks. Max 200 words.`}]
+                })
+              });
+              const data = await res.json();
+              const info = data.content.map(c=>c.type==="text"?c.text:"").join("");
+              setIngredientModal(prev => ({...prev, info, loading:false}));
+            }catch(e){
+              setIngredientModal(prev => ({...prev, info:"Information temporarily unavailable. Please visit our Supplements page for details.", loading:false}));
+            }
+          };
+          fetchInfo();
+        }
+        return (
+          <>
+            <div onClick={()=>setIngredientModal(null)} style={{position:"fixed",inset:0,zIndex:3000,background:"rgba(0,0,0,.7)",backdropFilter:"blur(6px)"}}/>
+            <div style={{position:"fixed",inset:0,zIndex:3001,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px"}}>
+              <div style={{background:"linear-gradient(160deg,#FAF6EF,#F2EDE2)",border:"1px solid rgba(196,137,58,.25)",borderRadius:24,width:"100%",maxWidth:480,boxShadow:"0 32px 80px rgba(0,0,0,.4)",position:"relative",overflow:"hidden",maxHeight:"85vh",overflowY:"auto"}}>
+                {/* Top accent */}
+                <div style={{position:"absolute",top:0,left:0,right:0,height:3,background:"linear-gradient(90deg,transparent,var(--gold),transparent)"}}/>
+                <button onClick={()=>setIngredientModal(null)} style={{position:"absolute",top:14,right:14,width:32,height:32,borderRadius:"50%",background:"rgba(0,0,0,.1)",border:"none",cursor:"pointer",fontSize:".9rem",display:"flex",alignItems:"center",justifyContent:"center",color:"#3A2E22",zIndex:1}}>✕</button>
+                {/* Header */}
+                <div style={{padding:"28px 28px 18px",borderBottom:"1px solid rgba(196,137,58,.12)"}}>
+                  <div style={{fontSize:"2rem",marginBottom:8}}>{ingredientModal.emoji}</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.25rem",color:"var(--bark)",fontWeight:700,lineHeight:1.3,marginBottom:8}}>{ingredientModal.name}</div>
+                  <div style={{fontSize:".75rem",color:"#7A6A58",lineHeight:1.6,fontFamily:"Jost,sans-serif",fontStyle:"italic"}}>{ingredientModal.why}</div>
+                </div>
+                {/* Body */}
+                <div style={{padding:"18px 28px 24px"}}>
+                  {ingredientModal.loading ? (
+                    <div style={{display:"flex",alignItems:"center",gap:10,color:"var(--gold)",fontFamily:"Jost,sans-serif",fontSize:".8rem"}}>
+                      <div style={{width:16,height:16,border:"2px solid rgba(196,137,58,.3)",borderTopColor:"var(--gold)",borderRadius:"50%",animation:"spin .8s linear infinite"}}/>
+                      Loading ingredient details…
+                    </div>
+                  ) : (
+                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".82rem",color:"#5A4A3A",lineHeight:1.85,whiteSpace:"pre-wrap",fontWeight:300}}>
+                      {ingredientModal.info}
+                    </div>
+                  )}
+                </div>
+                {/* Footer CTA */}
+                <div style={{padding:"0 28px 24px",display:"flex",gap:10}}>
+                  <button onClick={()=>setIngredientModal(null)} style={{flex:1,background:"rgba(196,137,58,.12)",border:"1px solid rgba(196,137,58,.3)",color:"var(--bark)",borderRadius:14,padding:"11px",fontFamily:"Jost,sans-serif",fontSize:".68rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600}}>
+                    ← Back to Tea Card
+                  </button>
+                  <button onClick={()=>{setIngredientModal(null);nav("supplements");}} style={{flex:1,background:"linear-gradient(135deg,var(--bark),#3A2A18)",color:"white",border:"none",borderRadius:14,padding:"11px",fontFamily:"Jost,sans-serif",fontSize:".68rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600}}>
+                    View Supplements →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+      })()}
 
       {/* ── TEA CARD MODAL ───────────────────────────────────────────────── */}
       {teaCardModal && (
