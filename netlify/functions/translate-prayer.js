@@ -62,7 +62,7 @@ Respond with ONLY a JSON object in this exact format, no other text:
 Keep the same number of stanzas (${stanzas.length}). Preserve line breaks as \\n within each stanza string.`;
 
   const reqBody = JSON.stringify({
-    model: 'claude-haiku-4-5-20251001',
+    model: 'claude-3-haiku-20240307',
     max_tokens: 2000,
     messages: [{ role: 'user', content: prompt }],
   });
