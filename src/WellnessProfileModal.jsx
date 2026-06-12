@@ -247,7 +247,7 @@ const WM_TRANS = {
     step_sleep:"How is yuh sleep quality?",step_focus:"How is yuh mental clarity?",
     step_time:"When yuh prefer fi drink yuh tea?",step_concerns:"Anything else yuh want to work on?",
     report_sub:"Weh wi send yuh Sip & Heal Report?",
-    btn_next:wmT("btn_next","Next"),btn_back:wmT("btn_back","Back"),btn_generate:"Get Mi Report",
+    btn_next:"Continue",btn_back:"Back",btn_generate:"Get Mi Report",
     generating:"Creating yuh personalised report...",
     energy:["Very Low","Low","Moderate","Good","Excellent"],
     stress:["Overwhelmed","High","Moderate","Manageable","Minimal"],
