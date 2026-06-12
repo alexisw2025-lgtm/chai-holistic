@@ -113,6 +113,7 @@ body{background:var(--dark);color:var(--cream);font-family:'Georgia','Times New 
   <button class="lang-btn" onclick="setLang('fr',this)">Français</button>
   <button class="lang-btn" onclick="setLang('pt',this)">Português</button>
   <button class="lang-btn" onclick="setLang('ht',this)">Kreyòl</button>
+  <button class="lang-btn" onclick="setLang('jm',this)">Patwa</button>
 </div>
 
 <div class="tabs" style="max-width:500px;margin:20px 20px 0;">
@@ -195,6 +196,149 @@ body{background:var(--dark);color:var(--cream);font-family:'Georgia','Times New 
 <audio id="audio-el" style="display:none"></audio>
 
 <script>
+// ── UI STRING TRANSLATIONS ──────────────────────────────────────────────────
+const UI_STRINGS = {
+  en:{
+    tab_today:"🙏 Today's Prayer", tab_choose:"✦ Choose a Prayer",
+    how_feeling:"How are you feeling right now?",
+    choose_mood:"— Choose a mood —", browse_prayers:"— Browse all prayers —",
+    or_direct:"Or choose a prayer directly",
+    listen:"LISTEN TO THIS PRAYER", prev:"← Previous", next:"Next Prayer →",
+    prayers_for:'Prayers for "', no_match:"No prayers match — try a different mood.",
+    of:" of ", prayer_label:"Prayer ",
+    moods:[
+      {icon:"😔",name:"I'm grieving",sub:"Loss or pain"},
+      {icon:"😰",name:"I'm anxious",sub:"Worried or scared"},
+      {icon:"😴",name:"Can't sleep",sub:"Restless mind"},
+      {icon:"🥹",name:"I feel lonely",sub:"No one else is up"},
+      {icon:"🙌",name:"I'm grateful",sub:"Want to give thanks"},
+      {icon:"💪",name:"Need strength",sub:"Running on empty"},
+      {icon:"🤷",name:"I'm lost",sub:"Seeking direction"},
+      {icon:"❤️",name:"Need healing",sub:"Body or heart"},
+      {icon:"🕊️",name:"Let it go",sub:"Release & surrender"},
+      {icon:"🌅",name:"New beginning",sub:"Starting fresh"},
+      {icon:"🙏",name:"For someone else",sub:"Praying for others"},
+      {icon:"🌿",name:"Body & wellness",sub:"Honor this temple"},
+    ]
+  },
+  es:{
+    tab_today:"🙏 Oración de hoy", tab_choose:"✦ Elegir una oración",
+    how_feeling:"¿Cómo te sientes ahora mismo?",
+    choose_mood:"— Elige un estado de ánimo —", browse_prayers:"— Ver todas las oraciones —",
+    or_direct:"O elige una oración directamente",
+    listen:"ESCUCHAR ESTA ORACIÓN", prev:"← Anterior", next:"Siguiente →",
+    prayers_for:'Oraciones para "', no_match:"Sin resultados — intenta otro estado de ánimo.",
+    of:" de ", prayer_label:"Oración ",
+    moods:[
+      {icon:"😔",name:"Estoy de luto",sub:"Pérdida o dolor"},
+      {icon:"😰",name:"Estoy ansioso/a",sub:"Preocupado/a o asustado/a"},
+      {icon:"😴",name:"No puedo dormir",sub:"Mente inquieta"},
+      {icon:"🥹",name:"Me siento solo/a",sub:"Nadie más está despierto"},
+      {icon:"🙌",name:"Estoy agradecido/a",sub:"Quiero dar gracias"},
+      {icon:"💪",name:"Necesito fuerza",sub:"Sin energía"},
+      {icon:"🤷",name:"Estoy perdido/a",sub:"Buscando dirección"},
+      {icon:"❤️",name:"Necesito sanación",sub:"Cuerpo o corazón"},
+      {icon:"🕊️",name:"Déjalo ir",sub:"Liberación y rendición"},
+      {icon:"🌅",name:"Nuevo comienzo",sub:"Empezar de nuevo"},
+      {icon:"🙏",name:"Por alguien más",sub:"Orando por otros"},
+      {icon:"🌿",name:"Cuerpo y bienestar",sub:"Honra este templo"},
+    ]
+  },
+  fr:{
+    tab_today:"🙏 Prière du jour", tab_choose:"✦ Choisir une prière",
+    how_feeling:"Comment vous sentez-vous en ce moment ?",
+    choose_mood:"— Choisissez une humeur —", browse_prayers:"— Parcourir toutes les prières —",
+    or_direct:"Ou choisissez une prière directement",
+    listen:"ÉCOUTER CETTE PRIÈRE", prev:"← Précédent", next:"Prière suivante →",
+    prayers_for:'Prières pour "', no_match:"Aucun résultat — essayez une autre humeur.",
+    of:" sur ", prayer_label:"Prière ",
+    moods:[
+      {icon:"😔",name:"Je suis en deuil",sub:"Perte ou douleur"},
+      {icon:"😰",name:"Je suis anxieux/se",sub:"Inquiet(e) ou effrayé(e)"},
+      {icon:"😴",name:"Je n'arrive pas à dormir",sub:"Esprit agité"},
+      {icon:"🥹",name:"Je me sens seul(e)",sub:"Personne d'autre n'est éveillé"},
+      {icon:"🙌",name:"Je suis reconnaissant(e)",sub:"Vouloir rendre grâce"},
+      {icon:"💪",name:"Besoin de force",sub:"À bout de souffle"},
+      {icon:"🤷",name:"Je suis perdu(e)",sub:"En quête de direction"},
+      {icon:"❤️",name:"Besoin de guérison",sub:"Corps ou cœur"},
+      {icon:"🕊️",name:"Lâcher prise",sub:"Libération et abandon"},
+      {icon:"🌅",name:"Nouveau départ",sub:"Recommencer"},
+      {icon:"🙏",name:"Pour quelqu'un d'autre",sub:"Prier pour les autres"},
+      {icon:"🌿",name:"Corps et bien-être",sub:"Honorer ce temple"},
+    ]
+  },
+  pt:{
+    tab_today:"🙏 Oração de hoje", tab_choose:"✦ Escolher uma oração",
+    how_feeling:"Como você está se sentindo agora?",
+    choose_mood:"— Escolha um estado de espírito —", browse_prayers:"— Ver todas as orações —",
+    or_direct:"Ou escolha uma oração diretamente",
+    listen:"OUVIR ESTA ORAÇÃO", prev:"← Anterior", next:"Próxima →",
+    prayers_for:'Orações para "', no_match:"Sem resultados — tente outro estado de espírito.",
+    of:" de ", prayer_label:"Oração ",
+    moods:[
+      {icon:"😔",name:"Estou de luto",sub:"Perda ou dor"},
+      {icon:"😰",name:"Estou ansioso/a",sub:"Preocupado/a ou com medo"},
+      {icon:"😴",name:"Não consigo dormir",sub:"Mente inquieta"},
+      {icon:"🥹",name:"Sinto-me só",sub:"Ninguém mais acordado"},
+      {icon:"🙌",name:"Estou grato/a",sub:"Quero dar graças"},
+      {icon:"💪",name:"Preciso de força",sub:"Sem energia"},
+      {icon:"🤷",name:"Estou perdido/a",sub:"Buscando direção"},
+      {icon:"❤️",name:"Preciso de cura",sub:"Corpo ou coração"},
+      {icon:"🕊️",name:"Deixar ir",sub:"Libertação e entrega"},
+      {icon:"🌅",name:"Novo começo",sub:"Recomeçar"},
+      {icon:"🙏",name:"Por outra pessoa",sub:"Orando pelos outros"},
+      {icon:"🌿",name:"Corpo e bem-estar",sub:"Honrar este templo"},
+    ]
+  },
+  ht:{
+    tab_today:"🙏 Priyè jodi a", tab_choose:"✦ Chwazi yon priyè",
+    how_feeling:"Kijan ou santi ou kounye a?",
+    choose_mood:"— Chwazi yon santiman —", browse_prayers:"— Gade tout priyè yo —",
+    or_direct:"Oswa chwazi yon priyè dirèkteman",
+    listen:"KOUTE PRIYÈ SA A", prev:"← Anvan", next:"Priyè suivant →",
+    prayers_for:'Priyè pou "', no_match:"Pa gen rezilta — eseye yon lòt santiman.",
+    of:" nan ", prayer_label:"Priyè ",
+    moods:[
+      {icon:"😔",name:"M ap plenn",sub:"Pèt oswa doulè"},
+      {icon:"😰",name:"M enkyete",sub:"Pè oswa swa"},
+      {icon:"😴",name:"M pa ka dòmi",sub:"Lespri a cho"},
+      {icon:"🥹",name:"M santi m poukont mwen",sub:"Pa gen lòt ki reveye"},
+      {icon:"🙌",name:"M rekonesan",sub:"Vle remèsye"},
+      {icon:"💪",name:"Bezwen fòs",sub:"San enèji"},
+      {icon:"🤷",name:"M pèdu",sub:"Chèche direksyon"},
+      {icon:"❤️",name:"Bezwen gerizon",sub:"Kò oswa kè"},
+      {icon:"🕊️",name:"Lage l",sub:"Liberasyon ak rann tèt"},
+      {icon:"🌅",name:"Nouvo kòmansman",sub:"Rekomanse"},
+      {icon:"🙏",name:"Pou yon lòt moun",sub:"Priye pou lòt yo"},
+      {icon:"🌿",name:"Kò ak byennèt",sub:"Onore tanp sa a"},
+    ]
+  },
+  jm:{
+    tab_today:"🙏 Today Prayer", tab_choose:"✦ Pick a Prayer",
+    how_feeling:"How yuh feeling right now?",
+    choose_mood:"— Pick how yuh feel —", browse_prayers:"— Look pon all di prayers —",
+    or_direct:"Or pick one prayer straight",
+    listen:"LISTEN TO DI PRAYER", prev:"← Back", next:"Next Prayer →",
+    prayers_for:'Prayers fi "', no_match:"Nuttn nuh match — try a different mood.",
+    of:" out of ", prayer_label:"Prayer ",
+    moods:[
+      {icon:"😔",name:"Mi a grieve",sub:"Loss or pain"},
+      {icon:"😰",name:"Mi anxious",sub:"Worried or frighten"},
+      {icon:"😴",name:"Cyan sleep",sub:"Mind nuh settle"},
+      {icon:"🥹",name:"Mi feel lonely",sub:"Nobody else wake"},
+      {icon:"🙌",name:"Mi grateful",sub:"Waan give thanks"},
+      {icon:"💪",name:"Need strength",sub:"Running pon empty"},
+      {icon:"🤷",name:"Mi lost",sub:"Looking fi direction"},
+      {icon:"❤️",name:"Need healing",sub:"Body or heart"},
+      {icon:"🕊️",name:"Let it go",sub:"Release and surrender"},
+      {icon:"🌅",name:"New beginning",sub:"Start fresh"},
+      {icon:"🙏",name:"Fi somebody else",sub:"Praying fi others"},
+      {icon:"🌿",name:"Body and wellness",sub:"Honor dis temple"},
+    ]
+  }
+};
+
+// ── PRAYERS DATA ────────────────────────────────────────────────────────────
 const PRAYERS = [
   {title:"A Prayer for Peace at 2AM",theme:"Rest & Surrender",tags:["peace","rest","sleep","anxious","overwhelmed"],categories:["Peace","Rest"],stanzas:["Let us pray together...","Lord, the world is quiet now, and yet my heart is loud.\nI lay down every worry I carried through this day —\nthe ones I spoke aloud, and the ones I held alone.","You are not surprised by this hour.\nYou knew I would be here, wide awake, searching.\nSo I come to You not with perfect words,\nbut with an open and willing heart.","Let peace be the last thing I feel before I close my eyes.\nLet rest be an act of trust.\nAnd let morning find me renewed.","Amen."]},
   {title:"A Prayer for Healing",theme:"Body, Mind & Spirit",tags:["healing","sick","pain","body","recovery","health"],categories:["Healing","Body"],stanzas:["Let us pray together...","Father, You are the great healer —\nnot just of the body, but of the places inside us\nthat no doctor has ever seen.","Wherever I am broken, meet me there.\nWherever I am worn, restore me.\nWherever pain has made me afraid,\nlet Your love be the stronger voice.","I believe that healing is not just possible —\nit is already moving through me.\nI receive it now, in body, in mind, in spirit.","Thank You for every herb, every remedy,\nevery act of care I have offered to this body You gave me.\nIt is holy ground. I will treat it that way.","Amen."]},
@@ -222,113 +366,195 @@ const PRAYERS = [
   // No other code changes ever needed.
 ];
 
-const MOODS = [
-  {icon:"😔",name:"I'm grieving",sub:"Loss or pain",tags:["grief","loss","sad","mourning","heartbreak"]},
-  {icon:"😰",name:"I'm anxious",sub:"Worried or scared",tags:["anxious","anxiety","fear","worry","panic","stress"]},
-  {icon:"😴",name:"Can't sleep",sub:"Restless mind",tags:["sleep","rest","night","restless","peace"]},
-  {icon:"🥹",name:"I feel lonely",sub:"No one else is up",tags:["lonely","alone","isolated","connection"]},
-  {icon:"🙌",name:"I'm grateful",sub:"Want to give thanks",tags:["gratitude","thankful","grateful","blessings"]},
-  {icon:"💪",name:"Need strength",sub:"Running on empty",tags:["strength","tired","exhausted","courage"]},
-  {icon:"🤷",name:"I'm lost",sub:"Seeking direction",tags:["lost","direction","confused","purpose","guidance"]},
-  {icon:"❤️",name:"Need healing",sub:"Body or heart",tags:["healing","sick","pain","recovery","body"]},
-  {icon:"🕊️",name:"Let it go",sub:"Release & surrender",tags:["surrender","let go","forgiveness","release"]},
-  {icon:"🌅",name:"New beginning",sub:"Starting fresh",tags:["new beginning","fresh start","hope","change"]},
-  {icon:"🙏",name:"For someone else",sub:"Praying for others",tags:["family","loved ones","intercession","someone"]},
-  {icon:"🌿",name:"Body & wellness",sub:"Honor this temple",tags:["body","health","healing","wellness","nourishment"]},
+// ── MOOD TAGS (language-independent, used for matching) ─────────────────────
+const MOOD_TAGS = [
+  ["grief","loss","sad","mourning","heartbreak"],
+  ["anxious","anxiety","fear","worry","panic","stress"],
+  ["sleep","rest","night","restless","peace"],
+  ["lonely","alone","isolated","connection"],
+  ["gratitude","thankful","grateful","blessings"],
+  ["strength","tired","exhausted","courage"],
+  ["lost","direction","confused","purpose","guidance"],
+  ["healing","sick","pain","recovery","body"],
+  ["surrender","let go","forgiveness","release"],
+  ["new beginning","fresh start","hope","change"],
+  ["family","loved ones","intercession","someone"],
+  ["body","health","healing","wellness","nourishment"],
 ];
 
-const ALL_CATS = [...new Set(PRAYERS.flatMap(p=>p.categories))].sort();
-const RECORDING_BASE = '/prayers/';
-const TTS_ENDPOINT = 'https://web-production-4c84.up.railway.app/speak-intention';
-
-let lang='en', dailyIdx=getDailyIndex(), overlayIdx=null;
-let activePlayer=null, isPlaying=false, isTTSLoading=false;
-let activeCat=null, activeMood=null;
+// ── STATE ────────────────────────────────────────────────────────────────────
+let lang = 'en';
+let dailyIdx = getDailyIndex();
+let overlayIdx = null;
+let activePlayer = null, isPlaying = false, isTTSLoading = false;
 const audioEl = document.getElementById('audio-el');
-const rcCache = {};
+// Cache: translated prayer stanzas keyed by "lang:idx"
+const translationCache = {};
+// Cache: TTS audio URLs keyed by "lang:idx"
+const ttsCache = {};
 
 function getDailyIndex(){
-  const diff=Math.floor((new Date()-new Date('2026-01-01'))/86400000);
-  return diff%PRAYERS.length;
+  const diff = Math.floor((new Date() - new Date('2026-01-01')) / 86400000);
+  return diff % PRAYERS.length;
 }
 
-function setLang(l,btn){
-  lang=l;
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+// ── LANGUAGE SWITCH ──────────────────────────────────────────────────────────
+function setLang(l, btn){
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  stopAudio();updateDailySrc();
-}
-
-function showTab(name,btn){
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('visible'));
-  document.getElementById('tab-'+name).classList.add('visible');
   stopAudio();
+  applyUIStrings();
+  rebuildDropdowns();
+  renderDailyPrayer();
+  // Re-render open overlay if any
+  if(overlayIdx !== null && document.getElementById('overlay').classList.contains('open')){
+    openOverlay(overlayIdx);
+  }
 }
 
-function renderBody(el,stanzas){
-  el.innerHTML='';
-  stanzas.forEach((s,i)=>{
-    const p=document.createElement('p');
-    const lines=s.replace(/\n/g,'<br/>');
-    if(i===0) p.innerHTML='<span class="opening">'+lines+'</span>';
-    else if(s.trim()==='Amen.') p.innerHTML='<span class="amen">'+lines+'</span>';
-    else p.innerHTML=lines;
-    el.appendChild(p);
-  });
+function T(key){ return (UI_STRINGS[lang] || UI_STRINGS.en)[key]; }
+
+function applyUIStrings(){
+  // Tabs
+  document.querySelectorAll('.tab')[0].textContent = T('tab_today');
+  document.querySelectorAll('.tab')[1].textContent = T('tab_choose');
+  // Section labels
+  const labels = document.querySelectorAll('.select-label');
+  if(labels[0]) labels[0].textContent = T('how_feeling');
+  if(labels[1]) labels[1].textContent = T('or_direct');
+  // Audio labels
+  document.querySelectorAll('.audio-label').forEach(el => el.textContent = T('listen'));
+  // Nav buttons
+  const navBtns = document.querySelectorAll('.ghost-btn');
+  if(navBtns[0]) navBtns[0].textContent = T('prev');
+  if(navBtns[1]) navBtns[1].textContent = T('next');
+  // Prayer number label in daily view
+  const p = PRAYERS[dailyIdx];
+  document.getElementById('d-num').textContent = T('prayer_label') + (dailyIdx+1) + T('of') + PRAYERS.length;
 }
 
-function renderDailyPrayer(){
-  const p=PRAYERS[dailyIdx];
-  document.getElementById('d-num').textContent='Prayer '+(dailyIdx+1)+' of '+PRAYERS.length;
-  document.getElementById('d-title').textContent=p.title;
-  document.getElementById('d-theme').textContent=p.theme;
-  renderBody(document.getElementById('d-body'),p.stanzas);
-  updateDailySrc();
-}
-
-async function updateDailySrc(){
-  const exists=await checkRec(dailyIdx);
-  const el=document.getElementById('d-src');
-  el.textContent='';
-}
-
-function shiftDaily(dir){
-  dailyIdx=(dailyIdx+dir+PRAYERS.length)%PRAYERS.length;
-  stopAudio();renderDailyPrayer();
+// ── DROPDOWNS ────────────────────────────────────────────────────────────────
+function rebuildDropdowns(){
+  buildMoodDropdown();
+  buildPrayerDropdown();
+  // Clear results
+  document.getElementById('prayer-list').innerHTML = '';
+  document.getElementById('results-label').textContent = '';
 }
 
 function buildMoodDropdown(){
-  const sel=document.getElementById('mood-select');
-  MOODS.forEach((m,i)=>{
-    const opt=document.createElement('option');
-    opt.value=i;
-    opt.textContent=m.icon+' '+m.name+' — '+m.sub;
+  const sel = document.getElementById('mood-select');
+  sel.innerHTML = '<option value="">' + T('choose_mood') + '</option>';
+  const moods = T('moods');
+  moods.forEach((m, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = m.icon + ' ' + m.name + ' — ' + m.sub;
     sel.appendChild(opt);
   });
 }
 
 function buildPrayerDropdown(){
-  const sel=document.getElementById('prayer-select');
-  PRAYERS.forEach((p,i)=>{
-    const opt=document.createElement('option');
-    opt.value=i;
-    opt.textContent=(i+1)+'. '+p.title;
+  const sel = document.getElementById('prayer-select');
+  sel.innerHTML = '<option value="">' + T('browse_prayers') + '</option>';
+  PRAYERS.forEach((p, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = (i+1) + '. ' + p.title;
     sel.appendChild(opt);
   });
 }
 
+// ── PRAYER RENDERING ─────────────────────────────────────────────────────────
+function showTab(name, btn){
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.getElementById('tab-' + name).classList.add('visible');
+  stopAudio();
+}
+
+function renderBody(el, stanzas){
+  el.innerHTML = '';
+  stanzas.forEach((s, i) => {
+    const p = document.createElement('p');
+    const lines = s.replace(/\n/g, '<br/>');
+    const firstLine = s.split('\n')[0].trim();
+    const isAmen = /^amen\.?$/i.test(firstLine);
+    if(i === 0) p.innerHTML = '<span class="opening">' + lines + '</span>';
+    else if(isAmen) p.innerHTML = '<span class="amen">' + lines + '</span>';
+    else p.innerHTML = lines;
+    el.appendChild(p);
+  });
+}
+
+async function renderDailyPrayer(){
+  const p = PRAYERS[dailyIdx];
+  document.getElementById('d-num').textContent = T('prayer_label') + (dailyIdx+1) + T('of') + PRAYERS.length;
+  document.getElementById('d-title').textContent = p.title;
+  document.getElementById('d-theme').textContent = p.theme;
+  // Show English immediately while translation loads
+  renderBody(document.getElementById('d-body'), p.stanzas);
+  if(lang !== 'en'){
+    const stanzas = await getTranslatedStanzas(dailyIdx);
+    renderBody(document.getElementById('d-body'), stanzas);
+  }
+}
+
+function shiftDaily(dir){
+  dailyIdx = (dailyIdx + dir + PRAYERS.length) % PRAYERS.length;
+  stopAudio();
+  renderDailyPrayer();
+}
+
+// ── TRANSLATION (Anthropic API) ───────────────────────────────────────────────
+async function getTranslatedStanzas(idx){
+  const key = lang + ':' + idx;
+  if(translationCache[key]) return translationCache[key];
+  const p = PRAYERS[idx];
+  const langNames = {es:'Spanish',fr:'French',pt:'Portuguese',ht:'Haitian Creole',jm:'Jamaican Patois (Patwa) — write it authentically the way a Jamaican would naturally speak and write it, using real Patwa spelling, grammar and phrasing'};
+  const targetLang = langNames[lang] || 'English';
+  const prompt = `Translate the following Catholic prayer stanzas to ${targetLang}. Return ONLY a JSON array of translated strings, one per stanza, preserving line breaks (\\n) exactly. Do not add any preamble or markdown.\n\n${JSON.stringify(p.stanzas)}`;
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content.map(c=>c.text||'').join('');
+    const clean = text.replace(/```json|```/g,'').trim();
+    const stanzas = JSON.parse(clean);
+    translationCache[key] = stanzas;
+    return stanzas;
+  }catch(e){
+    console.error('Translation failed',e);
+    return p.stanzas; // fallback to English
+  }
+}
+
+// ── CHOOSE TAB ────────────────────────────────────────────────────────────────
 function onMoodSelect(sel){
-  if(!sel.value){document.getElementById('prayer-list').innerHTML='';document.getElementById('results-label').textContent='';return;}
+  if(!sel.value){
+    document.getElementById('prayer-list').innerHTML='';
+    document.getElementById('results-label').textContent='';
+    return;
+  }
   document.getElementById('prayer-select').value='';
-  const m=MOODS[parseInt(sel.value)];
-  const res=PRAYERS.filter(p=>p.tags.some(t=>m.tags.some(mt=>t.includes(mt)||mt.includes(t))));
-  renderList(res,'Prayers for "'+m.name+'"');
+  const moodIdx = parseInt(sel.value);
+  const tags = MOOD_TAGS[moodIdx];
+  const name = T('moods')[moodIdx].name;
+  const res = PRAYERS.filter(p => p.tags.some(t => tags.some(mt => t.includes(mt)||mt.includes(t))));
+  renderList(res, T('prayers_for') + name + '"');
 }
 
 function onPrayerSelect(sel){
-  if(!sel.value)return;
+  if(!sel.value) return;
   document.getElementById('mood-select').value='';
   document.getElementById('results-label').textContent='';
   document.getElementById('prayer-list').innerHTML='';
@@ -336,108 +562,175 @@ function onPrayerSelect(sel){
   sel.value='';
 }
 
-async function renderList(prayers,label){
-  document.getElementById('results-label').textContent=label;
-  const list=document.getElementById('prayer-list');
-  list.innerHTML='';
-  if(!prayers.length){list.innerHTML='<div class="no-results">No prayers match — try a different search or mood.</div>';return;}
-  for(let i=0;i<prayers.length;i++){
-    const p=prayers[i],idx=PRAYERS.indexOf(p);
-    const row=document.createElement('div');row.className='prayer-row';
-    const badge=document.createElement('span');badge.className='prayer-row-badge';badge.textContent='';
-    checkRec(idx).then(exists=>{if(exists){badge.className='prayer-row-badge recorded';badge.textContent='';}});
-    row.innerHTML='<div class="prayer-row-left"><div class="prayer-row-title">'+p.title+'</div><div class="prayer-row-theme">'+p.theme+'</div></div>';
-    row.appendChild(badge);
-    row.onclick=()=>openOverlay(idx);
+function renderList(prayers, label){
+  document.getElementById('results-label').textContent = label;
+  const list = document.getElementById('prayer-list');
+  list.innerHTML = '';
+  if(!prayers.length){
+    list.innerHTML = '<div class="no-results">' + T('no_match') + '</div>';
+    return;
+  }
+  prayers.forEach(p => {
+    const idx = PRAYERS.indexOf(p);
+    const row = document.createElement('div');
+    row.className = 'prayer-row';
+    row.innerHTML = '<div class="prayer-row-left"><div class="prayer-row-title">' + p.title + '</div><div class="prayer-row-theme">' + p.theme + '</div></div>';
+    row.onclick = () => openOverlay(idx);
     list.appendChild(row);
-  }
+  });
 }
 
+// ── OVERLAY ───────────────────────────────────────────────────────────────────
 async function openOverlay(idx){
-  overlayIdx=idx;const p=PRAYERS[idx];
-  document.getElementById('o-num').textContent='Prayer '+(idx+1)+' of '+PRAYERS.length;
-  document.getElementById('o-title').textContent=p.title;
-  document.getElementById('o-theme').textContent=p.theme;
-  renderBody(document.getElementById('o-body'),p.stanzas);
+  overlayIdx = idx;
+  const p = PRAYERS[idx];
+  document.getElementById('o-num').textContent = T('prayer_label') + (idx+1) + T('of') + PRAYERS.length;
+  document.getElementById('o-title').textContent = p.title;
+  document.getElementById('o-theme').textContent = p.theme;
+  renderBody(document.getElementById('o-body'), p.stanzas);
   stopAudio();
-  const exists=await checkRec(idx);
-  document.getElementById('o-src').textContent='';
   document.getElementById('overlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-
-function closeOverlay(e){if(e.target===document.getElementById('overlay'))closeOverlayDirect();}
-function closeOverlayDirect(){stopAudio();document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
-
-function recPath(idx){return RECORDING_BASE+'prayer_'+lang+'_'+String(idx+1).padStart(2,'0')+'.mp3';}
-
-async function checkRec(idx){
-  const path=recPath(idx);
-  if(rcCache[path]!==undefined)return rcCache[path];
-  try{const r=await fetch(path,{method:'HEAD'});rcCache[path]=r.ok;return r.ok;}
-  catch{rcCache[path]=false;return false;}
-}
-
-async function handlePlay(player){
-  if(isPlaying&&activePlayer===player){stopAudio();return;}
-  if(isTTSLoading)return;
-  stopAudio();activePlayer=player;
-  const idx=player==='daily'?dailyIdx:overlayIdx;
-  const exists=await checkRec(idx);
-  if(exists) playUrl(recPath(idx),player,'');
-  else await playTTS(idx,player);
-}
-
-function playUrl(url,player,srcLabel){
-  audioEl.src=url;audioEl.load();
-  audioEl.play().then(()=>{
-    isPlaying=true;setUI(player,'playing');
-    document.getElementById(player==='daily'?'d-src':'o-src').textContent=srcLabel;
-    startProg(player);
-  }).catch(e=>{console.error(e);setUI(player,'idle');});
-  audioEl.onended=()=>stopAudio();
-}
-
-async function playTTS(idx,player){
-  isTTSLoading=true;setUI(player,'loading');
-  try{
-    const res=await fetch(TTS_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({text:PRAYERS[idx].stanzas.join('\n\n'),voice:'onyx',lang:'en'})});
-    if(!res.ok)throw new Error('TTS failed');
-    const url=URL.createObjectURL(await res.blob());
-    isTTSLoading=false;playUrl(url,player,'');
-  }catch(e){
-    console.error(e);isTTSLoading=false;setUI(player,'idle');
-    document.getElementById(player==='daily'?'d-src':'o-src').textContent='';
+  document.body.style.overflow = 'hidden';
+  // Translate overlay body if needed
+  if(lang !== 'en'){
+    const stanzas = await getTranslatedStanzas(idx);
+    renderBody(document.getElementById('o-body'), stanzas);
+    document.getElementById('o-num').textContent = T('prayer_label') + (idx+1) + T('of') + PRAYERS.length;
   }
+}
+
+function closeOverlay(e){
+  if(e.target === document.getElementById('overlay')) closeOverlayDirect();
+}
+function closeOverlayDirect(){
+  stopAudio();
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── AUDIO (Anthropic TTS via browser fetch) ───────────────────────────────────
+async function handlePlay(player){
+  if(isPlaying && activePlayer === player){ stopAudio(); return; }
+  if(isTTSLoading) return;
+  stopAudio();
+  activePlayer = player;
+  const idx = player === 'daily' ? dailyIdx : overlayIdx;
+  await playTTS(idx, player);
+}
+
+async function playTTS(idx, player){
+  const cacheKey = lang + ':' + idx;
+  // Use cached audio blob URL if available
+  if(ttsCache[cacheKey]){
+    playUrl(ttsCache[cacheKey], player);
+    return;
+  }
+  isTTSLoading = true;
+  setUI(player, 'loading');
+  try{
+    // Get stanzas (translated if needed)
+    let stanzas = PRAYERS[idx].stanzas;
+    if(lang !== 'en') stanzas = await getTranslatedStanzas(idx);
+    const text = stanzas.join('\n\n');
+
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        messages:[{role:'user', content:`Please read this prayer aloud slowly and reverently, in a warm and calming voice:\n\n${text}`}]
+      })
+    });
+    const data = await res.json();
+    // Anthropic text response — use browser Speech Synthesis as TTS
+    const spokenText = data.content.map(c=>c.type==='text'?c.text:'').join('') || text;
+    speakWithBrowser(spokenText, player, cacheKey);
+  }catch(e){
+    console.error('TTS error',e);
+    isTTSLoading = false;
+    setUI(player,'idle');
+  }
+}
+
+function speakWithBrowser(text, player, cacheKey){
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate = 0.82;
+  utt.pitch = 0.95;
+  utt.volume = 1;
+  // Pick a calm voice if available
+  const voices = window.speechSynthesis.getVoices();
+  const langMap = {en:'en',es:'es',fr:'fr',pt:'pt',ht:'fr',jm:'en'}; // Haitian Creole falls back to French voice
+  const preferred = voices.find(v => v.lang.startsWith(langMap[lang]||'en') && /google|premium|enhanced/i.test(v.name))
+    || voices.find(v => v.lang.startsWith(langMap[lang]||'en'))
+    || voices[0];
+  if(preferred) utt.voice = preferred;
+  isTTSLoading = false;
+  isPlaying = true;
+  setUI(player, 'playing');
+  utt.onend = () => stopAudio();
+  utt.onerror = () => { stopAudio(); };
+  window.speechSynthesis.speak(utt);
+  // Fake progress bar using estimated duration
+  startFakeProgress(player, text.length * 55); // ~55ms per char at rate 0.82
+}
+
+function playUrl(url, player){
+  audioEl.src = url; audioEl.load();
+  audioEl.play().then(() => {
+    isPlaying = true; setUI(player, 'playing'); startProg(player);
+  }).catch(e => { console.error(e); setUI(player,'idle'); });
+  audioEl.onended = () => stopAudio();
 }
 
 function stopAudio(){
-  audioEl.pause();audioEl.currentTime=0;isPlaying=false;isTTSLoading=false;
-  if(activePlayer)setUI(activePlayer,'idle');activePlayer=null;
+  window.speechSynthesis.cancel();
+  audioEl.pause(); audioEl.currentTime = 0;
+  isPlaying = false; isTTSLoading = false;
+  if(activePlayer) setUI(activePlayer, 'idle');
+  activePlayer = null;
 }
 
-function setUI(player,state){
-  const D=player==='daily';
-  const btn=document.getElementById(D?'d-play':'o-play');
-  const icon=document.getElementById(D?'d-icon':'o-icon');
-  const prog=document.getElementById(D?'d-prog':'o-prog');
+function setUI(player, state){
+  const D = player === 'daily';
+  const btn  = document.getElementById(D?'d-play':'o-play');
+  const icon = document.getElementById(D?'d-icon':'o-icon');
+  const prog = document.getElementById(D?'d-prog':'o-prog');
   btn.classList.remove('playing','loading');
-  if(state==='playing'){btn.classList.add('playing');icon.textContent='⏸';prog.classList.add('on');}
-  else if(state==='loading'){btn.classList.add('loading');icon.innerHTML='<div class="spinner"></div>';}
-  else{icon.textContent='▶';prog.classList.remove('on');document.getElementById(D?'d-fill':'o-fill').style.width='0%';}
+  if(state==='playing'){ btn.classList.add('playing'); icon.textContent='⏸'; prog.classList.add('on'); }
+  else if(state==='loading'){ btn.classList.add('loading'); icon.innerHTML='<div class="spinner"></div>'; }
+  else{ icon.textContent='▶'; prog.classList.remove('on'); document.getElementById(D?'d-fill':'o-fill').style.width='0%'; }
 }
 
 function startProg(player){
-  const fill=document.getElementById(player==='daily'?'d-fill':'o-fill');
-  const iv=setInterval(()=>{
-    if(!isPlaying||audioEl.paused){clearInterval(iv);return;}
-    if(audioEl.duration)fill.style.width=(audioEl.currentTime/audioEl.duration*100)+'%';
+  const fill = document.getElementById(player==='daily'?'d-fill':'o-fill');
+  const iv = setInterval(()=>{
+    if(!isPlaying||audioEl.paused){ clearInterval(iv); return; }
+    if(audioEl.duration) fill.style.width = (audioEl.currentTime/audioEl.duration*100)+'%';
   },500);
 }
 
-// BOOT
-buildMoodDropdown();buildPrayerDropdown();renderDailyPrayer();
+function startFakeProgress(player, durationMs){
+  const fill = document.getElementById(player==='daily'?'d-fill':'o-fill');
+  const start = Date.now();
+  const iv = setInterval(()=>{
+    if(!isPlaying){ clearInterval(iv); return; }
+    const pct = Math.min(((Date.now()-start)/durationMs)*100, 99);
+    fill.style.width = pct + '%';
+    if(pct >= 99) clearInterval(iv);
+  },300);
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+// Preload voices for speech synthesis
+window.speechSynthesis.onvoiceschanged = () => {};
+window.speechSynthesis.getVoices();
+
+applyUIStrings();
+buildMoodDropdown();
+buildPrayerDropdown();
+renderDailyPrayer();
 </script>
 </body>
 </html>
