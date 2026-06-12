@@ -517,7 +517,7 @@ async function getTranslatedStanzas(idx){
   const targetLang = langNames[lang] || 'English';
   const prompt = `Translate the following Catholic prayer stanzas to ${targetLang}. Return ONLY a JSON array of translated strings, one per stanza, preserving line breaks (\\n) exactly. Do not add any preamble or markdown.\n\n${JSON.stringify(p.stanzas)}`;
   try{
-    const res = await fetch('https://web-production-4c84.up.railway.app/translate-prayer',{
+    const res = await fetch('/.netlify/functions/translate-prayer',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ prompt })
@@ -627,25 +627,40 @@ async function playTTS(idx, player){
 
 function speakWithBrowser(text, player){
   window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.rate = 0.82;
-  utt.pitch = 0.95;
-  utt.volume = 1;
-  // Pick a calm voice if available
+  // iOS Safari cuts off speech > ~200 chars — split into sentence chunks
+  const sentences = text.match(/[^.!?\n]+[.!?\n]*/g) || [text];
+  const chunks = [];
+  let current = '';
+  sentences.forEach(s => {
+    if((current + s).length > 180){ chunks.push(current.trim()); current = s; }
+    else current += s;
+  });
+  if(current.trim()) chunks.push(current.trim());
+
   const voices = window.speechSynthesis.getVoices();
-  const langMap = {en:'en',es:'es',fr:'fr',pt:'pt',ht:'fr',jm:'en'}; // Haitian Creole falls back to French voice
+  const langMap = {en:'en',es:'es',fr:'fr',pt:'pt',ht:'fr',jm:'en'};
   const preferred = voices.find(v => v.lang.startsWith(langMap[lang]||'en') && /google|premium|enhanced/i.test(v.name))
     || voices.find(v => v.lang.startsWith(langMap[lang]||'en'))
     || voices[0];
-  if(preferred) utt.voice = preferred;
+
   isTTSLoading = false;
   isPlaying = true;
   setUI(player, 'playing');
-  utt.onend = () => stopAudio();
-  utt.onerror = () => { stopAudio(); };
-  window.speechSynthesis.speak(utt);
-  // Fake progress bar using estimated duration
-  startFakeProgress(player, text.length * 55); // ~55ms per char at rate 0.82
+  startFakeProgress(player, text.length * 55);
+
+  let chunkIdx = 0;
+  function speakNext(){
+    if(chunkIdx >= chunks.length || !isPlaying){ stopAudio(); return; }
+    const utt = new SpeechSynthesisUtterance(chunks[chunkIdx++]);
+    utt.rate = 0.82;
+    utt.pitch = 0.95;
+    utt.volume = 1;
+    if(preferred) utt.voice = preferred;
+    utt.onend = speakNext;
+    utt.onerror = () => stopAudio();
+    window.speechSynthesis.speak(utt);
+  }
+  speakNext();
 }
 
 function playUrl(url, player){
@@ -696,8 +711,13 @@ function startFakeProgress(player, durationMs){
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
 // Preload voices for speech synthesis
-window.speechSynthesis.onvoiceschanged = () => {};
+window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
 window.speechSynthesis.getVoices();
+
+// Chrome Android bug: speechSynthesis pauses after ~15s — keep it alive
+setInterval(() => {
+  if(isPlaying && !window.speechSynthesis.speaking){ window.speechSynthesis.resume(); }
+}, 10000);
 
 applyUIStrings();
 buildMoodDropdown();
