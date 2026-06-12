@@ -676,33 +676,36 @@ async function getTranslatedStanzas(idx){
   const langNames = {
     es:'Spanish', fr:'French', pt:'Portuguese',
     ht:'Haitian Creole',
-    jm:'Jamaican Patois (Patwa) — write it authentically the way a Jamaican would naturally speak and write it, using real Patwa spelling, grammar and phrasing'
+    jm:'Jamaican Patois (Patwa) — authentic spelling and grammar, the way a Jamaican would naturally write it'
   };
-  const targetLang = langNames[lang] || 'English';
-
-  // Translate stanzas + title + theme in one call
-  const payload = { title: p.title, theme: p.theme, stanzas: p.stanzas };
-  const prompt = 'Translate the following prayer data to ' + targetLang + '. Return ONLY a JSON object with keys "title" (string), "theme" (string), and "stanzas" (array of strings). Preserve line breaks as \\n inside strings. No preamble, no markdown.\n\n' + JSON.stringify(payload);
-
+  const targetLang = langNames[lang];
+  if(!targetLang) return { title: p.title, theme: p.theme, stanzas: p.stanzas };
   try{
-    const res = await fetch('/.netlify/functions/translate-prayer',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ prompt })
+    const res = await fetch('/.netlify/functions/translate-prayer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: p.title,
+        theme: p.theme,
+        stanzas: p.stanzas,
+        targetLang: targetLang
+      })
     });
-    if(!res.ok) throw new Error('translate failed ' + res.status);
+    if(!res.ok){
+      const err = await res.text();
+      throw new Error('translate failed ' + res.status + ': ' + err.slice(0,100));
+    }
     const data = await res.json();
-    console.log('[Prayer] Netlify function raw response:', data);
+    console.log('[Prayer] Translation result:', data);
     const result = {
-      title:  data.title  || p.title,
-      theme:  data.theme  || p.theme,
-      stanzas: data.stanzas || p.stanzas
+      title:   data.title   || p.title,
+      theme:   data.theme   || p.theme,
+      stanzas: (data.stanzas && data.stanzas.length > 0) ? data.stanzas : p.stanzas
     };
     translationCache[key] = result;
     return result;
-  }catch(e){
-    console.error('Translation failed', e);
-    // Return English fallback as same shape
+  } catch(e){
+    console.error('[Prayer] Translation failed:', e.message);
     return { title: p.title, theme: p.theme, stanzas: p.stanzas };
   }
 }
