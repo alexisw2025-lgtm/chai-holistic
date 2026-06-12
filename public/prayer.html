@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<!--
+  2AM Companion · Daily Prayer
+  Chai Holistic — chaiholistic.com
+  Faith-rooted wellness. Brewed with intention.
+  © Chai Holistic. All rights reserved.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>2AM Companion · Daily Prayer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#C4893A;--gold2:#E8B96A;--gold3:rgba(196,137,58,0.15);
+  --cream:#F7F2EA;--dark:#0A0F0B;--dark2:#111810;
+  --muted:rgba(247,242,234,0.45);--border:rgba(196,137,58,0.2);
+  --card-bg:linear-gradient(160deg,rgba(20,28,20,0.95),rgba(12,18,12,0.98));
+}
+body{background:var(--dark);color:var(--cream);font-family:'Georgia','Times New Roman',serif;
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  padding-bottom:80px;overflow-x:hidden;}
+.header{width:100%;text-align:center;padding:36px 24px 24px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(196,137,58,0.07) 0%,transparent 100%);}
+.eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);
+  margin-bottom:10px;font-family:'Helvetica Neue',sans-serif;font-weight:300;}
+.header h1{font-size:clamp(22px,6vw,28px);font-style:italic;font-weight:normal;color:var(--cream);line-height:1.3;}
+.header h1 span{color:var(--gold);}
+.lang-bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:16px 20px 0;max-width:500px;width:100%;}
+.lang-btn{padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);
+  font-size:11px;font-family:'Helvetica Neue',sans-serif;cursor:pointer;transition:all .2s;letter-spacing:.5px;}
+.lang-btn.active{background:rgba(196,137,58,0.15);border-color:var(--gold);color:var(--gold);}
+.tabs{display:flex;gap:0;max-width:500px;width:100%;margin:20px 20px 0;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.tab{flex:1;padding:11px 8px;background:transparent;border:none;color:var(--muted);font-size:11px;
+  font-family:'Helvetica Neue',sans-serif;cursor:pointer;transition:all .2s;letter-spacing:.4px;text-align:center;}
+.tab.active{background:rgba(196,137,58,0.15);color:var(--gold);}
+.tab+.tab{border-left:1px solid var(--border);}
+.section{display:none;width:100%;max-width:500px;padding:20px 20px 0;}
+.section.visible{display:block;}
+.daily-card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:28px 24px 24px;position:relative;overflow:hidden;}
+.daily-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.prayer-meta{text-align:center;margin-bottom:20px;}
+.prayer-num{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-family:'Helvetica Neue',sans-serif;font-weight:300;margin-bottom:6px;}
+.prayer-title{font-size:clamp(16px,4.5vw,20px);font-style:italic;font-weight:normal;color:var(--cream);margin-bottom:4px;line-height:1.4;}
+.prayer-theme{font-size:11px;color:var(--muted);font-style:italic;font-family:'Helvetica Neue',sans-serif;}
+.divider{width:36px;height:1px;background:var(--gold);margin:14px auto;opacity:.5;}
+.prayer-body{font-size:clamp(13px,3.6vw,15px);line-height:2;color:rgba(247,242,234,.88);}
+.prayer-body p{margin-bottom:12px;}
+.prayer-body p:last-child{margin-bottom:0;}
+.opening{color:var(--gold);font-style:italic;font-size:clamp(14px,3.8vw,16px);display:block;margin-bottom:16px;}
+.amen{display:block;margin-top:18px;color:var(--gold2);font-style:italic;font-size:clamp(14px,3.8vw,16px);letter-spacing:1px;}
+.audio-row{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:24px;}
+.play-btn{width:60px;height:60px;border-radius:50%;border:1.5px solid var(--gold);background:rgba(196,137,58,.1);color:var(--gold);
+  font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;position:relative;}
+.play-btn:hover{background:rgba(196,137,58,.2);transform:scale(1.05);}
+.play-btn.playing{background:rgba(196,137,58,.25);}
+@keyframes pulse-ring{0%{transform:scale(1);opacity:.6;}100%{transform:scale(1.5);opacity:0;}}
+.play-btn.playing::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--gold);animation:pulse-ring 1.5s ease-out infinite;}
+.audio-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-family:'Helvetica Neue',sans-serif;}
+.audio-src{display:none;}
+.progress-bar{width:200px;height:2px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;display:none;}
+.progress-bar.on{display:block;}
+.progress-fill{height:100%;background:var(--gold);width:0%;transition:width .5s linear;border-radius:2px;}
+.daily-nav{display:flex;gap:10px;margin-top:16px;}
+.ghost-btn{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);
+  font-size:11px;font-family:'Helvetica Neue',sans-serif;cursor:pointer;transition:all .2s;text-align:center;}
+.ghost-btn:hover{border-color:var(--gold);color:var(--cream);}
+.select-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);
+  font-family:'Helvetica Neue',sans-serif;margin-bottom:8px;}
+.custom-select{position:relative;margin-bottom:16px;}
+.custom-select select{width:100%;padding:14px 44px 14px 16px;border-radius:14px;
+  border:1px solid var(--border);background:rgba(20,28,20,0.95);color:var(--cream);
+  font-size:14px;font-family:'Georgia','Times New Roman',serif;outline:none;
+  appearance:none;-webkit-appearance:none;cursor:pointer;transition:all .2s;line-height:1.4;}
+.custom-select select:focus{border-color:rgba(196,137,58,.55);background:rgba(255,255,255,.06);}
+.custom-select select option{background:#111810;color:#F7F2EA;}
+.select-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  pointer-events:none;color:var(--gold);font-size:12px;}
+.results-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-family:'Helvetica Neue',sans-serif;margin-bottom:10px;}
+.prayer-list{display:flex;flex-direction:column;gap:8px;}
+.prayer-row{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:14px 16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.prayer-row:hover{background:rgba(196,137,58,.08);border-color:rgba(196,137,58,.4);}
+.prayer-row-title{font-size:13px;color:var(--cream);font-style:italic;line-height:1.4;margin-bottom:2px;}
+.prayer-row-theme{font-size:10px;color:var(--muted);font-family:'Helvetica Neue',sans-serif;}
+.prayer-row-badge{font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(196,137,58,.12);color:var(--gold);font-family:'Helvetica Neue',sans-serif;white-space:nowrap;flex-shrink:0;}
+.prayer-row-badge.recorded{background:rgba(80,180,100,.1);color:#6dbf7e;}
+.no-results{text-align:center;padding:30px 0;color:var(--muted);font-size:13px;font-style:italic;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);}
+.overlay.open{display:flex;}
+.overlay-card{background:var(--dark2);border:1px solid var(--border);border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto;position:relative;}
+.overlay-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.overlay-close{position:absolute;top:16px;right:18px;background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px;}
+.overlay-close:hover{color:var(--cream);}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner{width:18px;height:18px;border:2px solid rgba(196,137,58,.3);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;}
+.footer{margin-top:40px;text-align:center;font-size:11px;color:rgba(247,242,234,.2);font-family:'Helvetica Neue',sans-serif;padding:0 20px;line-height:1.7;}
+.footer a{color:rgba(196,137,58,.4);text-decoration:none;}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">2AM Companion · Chai Holistic</div>
+  <h1>Daily <span>Prayer</span></h1>
+</div>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('en',this)">English</button>
+  <button class="lang-btn" onclick="setLang('es',this)">Español</button>
+  <button class="lang-btn" onclick="setLang('fr',this)">Français</button>
+  <button class="lang-btn" onclick="setLang('pt',this)">Português</button>
+  <button class="lang-btn" onclick="setLang('ht',this)">Kreyòl</button>
+</div>
+
+<div class="tabs" style="max-width:500px;margin:20px 20px 0;">
+  <button class="tab active" onclick="showTab('daily',this)">🙏 Today's Prayer</button>
+  <button class="tab" onclick="showTab('choose',this)">✦ Choose a Prayer</button>
+</div>
+
+<!-- DAILY -->
+<div class="section visible" id="tab-daily">
+  <div class="daily-card">
+    <div class="prayer-meta">
+      <div class="prayer-num" id="d-num">Prayer 1 of 20</div>
+      <div class="prayer-title" id="d-title">—</div>
+      <div class="prayer-theme" id="d-theme">—</div>
+    </div>
+    <div class="divider"></div>
+    <div class="prayer-body" id="d-body"></div>
+    <div class="audio-row">
+      <button class="play-btn" id="d-play" onclick="handlePlay('daily')">
+        <span id="d-icon">&#9654;</span>
+      </button>
+      <div class="audio-label">Listen to this prayer</div>
+      <div class="audio-src" id="d-src"></div>
+      <div class="progress-bar" id="d-prog"><div class="progress-fill" id="d-fill"></div></div>
+    </div>
+  </div>
+  <div class="daily-nav">
+    <button class="ghost-btn" onclick="shiftDaily(-1)">&#8592; Previous</button>
+    <button class="ghost-btn" onclick="shiftDaily(1)">Next Prayer &#8594;</button>
+  </div>
+</div>
+
+<!-- CHOOSE -->
+<div class="section" id="tab-choose">
+  <div class="select-label">How are you feeling right now?</div>
+  <div class="custom-select">
+    <select id="mood-select" onchange="onMoodSelect(this)">
+      <option value="">— Choose a mood —</option>
+    </select>
+    <span class="select-arrow">&#9660;</span>
+  </div>
+  <div class="select-label">Or choose a prayer directly</div>
+  <div class="custom-select">
+    <select id="prayer-select" onchange="onPrayerSelect(this)">
+      <option value="">— Browse all prayers —</option>
+    </select>
+    <span class="select-arrow">&#9660;</span>
+  </div>
+  <div class="results-label" id="results-label" style="margin-top:4px;"></div>
+  <div class="prayer-list" id="prayer-list"></div>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeOverlay(event)">
+  <div class="overlay-card" id="overlay-card">
+    <button class="overlay-close" onclick="closeOverlayDirect()">&#10005;</button>
+    <div class="prayer-meta">
+      <div class="prayer-num" id="o-num"></div>
+      <div class="prayer-title" id="o-title"></div>
+      <div class="prayer-theme" id="o-theme"></div>
+    </div>
+    <div class="divider"></div>
+    <div class="prayer-body" id="o-body"></div>
+    <div class="audio-row">
+      <button class="play-btn" id="o-play" onclick="handlePlay('overlay')">
+        <span id="o-icon">&#9654;</span>
+      </button>
+      <div class="audio-label">Listen to this prayer</div>
+      <div class="audio-src" id="o-src"></div>
+      <div class="progress-bar" id="o-prog"><div class="progress-fill" id="o-fill"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <a href="https://chaiholistic.com">chaiholistic.com</a><br/>
+  Faith-rooted wellness &middot; Brewed with intention
+</div>
+
+<audio id="audio-el" style="display:none"></audio>
+
+<script>
+const PRAYERS = [
+  {title:"A Prayer for Peace at 2AM",theme:"Rest & Surrender",tags:["peace","rest","sleep","anxious","overwhelmed"],categories:["Peace","Rest"],stanzas:["Let us pray together...","Lord, the world is quiet now, and yet my heart is loud.\nI lay down every worry I carried through this day —\nthe ones I spoke aloud, and the ones I held alone.","You are not surprised by this hour.\nYou knew I would be here, wide awake, searching.\nSo I come to You not with perfect words,\nbut with an open and willing heart.","Let peace be the last thing I feel before I close my eyes.\nLet rest be an act of trust.\nAnd let morning find me renewed.","Amen."]},
+  {title:"A Prayer for Healing",theme:"Body, Mind & Spirit",tags:["healing","sick","pain","body","recovery","health"],categories:["Healing","Body"],stanzas:["Let us pray together...","Father, You are the great healer —\nnot just of the body, but of the places inside us\nthat no doctor has ever seen.","Wherever I am broken, meet me there.\nWherever I am worn, restore me.\nWherever pain has made me afraid,\nlet Your love be the stronger voice.","I believe that healing is not just possible —\nit is already moving through me.\nI receive it now, in body, in mind, in spirit.","Thank You for every herb, every remedy,\nevery act of care I have offered to this body You gave me.\nIt is holy ground. I will treat it that way.","Amen."]},
+  {title:"A Prayer for Strength",theme:"Courage to Keep Going",tags:["strength","tired","exhausted","courage","keep going","struggling"],categories:["Strength","Faith"],stanzas:["Let us pray together...","God, I am tired.\nNot just in my body — though that too —\nbut tired in a way that sleep alone cannot fix.","Give me the kind of strength that rises from the inside.\nThe kind that says: not yet, not done, still here.","Remind me of the times You carried me\nwhen I was too exhausted to take another step.\nYou did not leave then. You will not leave now.","So I rise — slowly, imperfectly —\ntrusting that Your grace meets me exactly where I am.","Amen."]},
+  {title:"A Prayer of Gratitude",theme:"Counting the Gifts",tags:["gratitude","thankful","grateful","blessings","thanks"],categories:["Gratitude"],stanzas:["Let us pray together...","Lord, in the middle of everything I am waiting for,\neverything I am hoping will change,\nhelp me to see clearly what is already good.","For the breath in my lungs.\nFor the people who have stayed.\nFor the small moments that carried me through hard days.\nFor the healing already underway that I have not yet seen.","Gratitude is not pretending everything is perfect.\nIt is choosing to see You in the imperfect.","I choose that tonight.\nThank You. Simply, deeply — thank You.","Amen."]},
+  {title:"A Prayer for Anxiety",theme:"When the Mind Won't Quiet",tags:["anxiety","anxious","worry","fear","panic","stress","overwhelmed"],categories:["Peace","Healing"],stanzas:["Let us pray together...","God, my thoughts are moving faster than I can catch them.\nFear is speaking louder than faith right now,\nand I am struggling to tell them apart.","Come into this moment with me.\nSlow my breathing. Slow my thoughts.\nRemind me that You hold every tomorrow\nI am trying so hard to control tonight.","I cast this anxiety onto You —\nnot because I have no feelings,\nbut because I trust that You are bigger than all of them.","I am safe. I am held. I am not alone.","Amen."]},
+  {title:"A Prayer for Those We Love",theme:"Intercession",tags:["family","loved ones","intercession","someone else","friends","children","marriage"],categories:["Relationships"],stanzas:["Let us pray together...","Lord, tonight I bring the people on my heart to You.\nThe ones I worry about when I lie awake.\nThe ones who are fighting battles I cannot fight for them.","Cover them.\nWhere there is sickness, bring healing.\nWhere there is confusion, bring clarity.\nWhere there is loneliness, remind them they are never truly alone.","And for those who do not know how to ask for help —\nlet Your grace find them anyway.","I trust them into Your hands tonight.\nYours are steadier than mine.","Amen."]},
+  {title:"A Prayer for Direction",theme:"When You Don't Know the Way",tags:["direction","lost","confused","decision","path","guidance","purpose","next step"],categories:["Purpose","Faith"],stanzas:["Let us pray together...","Father, I have been standing at this crossroads\nlonger than I expected.\nI have prayed, I have waited, I have searched —\nand still the path is not yet clear.","Teach me that uncertainty is not the same as being lost.\nYou are the light that goes before me.\nI do not need to see the whole road —\nonly the next faithful step.","So give me that.\nOne step. One door. One clear word in the quiet.\nI will follow.","Amen."]},
+  {title:"A Prayer for Forgiveness",theme:"Releasing & Being Released",tags:["forgiveness","guilt","shame","regret","forgive","let go","hurt"],categories:["Healing","Faith"],stanzas:["Let us pray together...","God, I come honest tonight.\nThere are things I have done that I am not proud of.\nWords I cannot take back. Choices I wish were different.","I do not ask You to pretend they did not happen.\nI ask You to forgive what I cannot undo,\nand to help me forgive myself as well —\nwhich is sometimes the harder of the two.","And for those who have hurt me:\nI am not ready to feel nothing,\nbut I am willing to begin letting go.\nHelp me with that. Slowly, gently — help me.","Amen."]},
+  {title:"A Prayer for the Body",theme:"Honoring This Temple",tags:["body","health","healing","wellness","temple","nourishment"],categories:["Body","Healing"],stanzas:["Let us pray together...","Lord, this body has carried me through so much.\nIt has been tired, tested, and sometimes ignored.\nTonight I want to honor it as the gift it truly is.","Bless every organ doing its quiet work.\nBless the systems that restore me while I sleep.\nBless every remedy, every herb, every act of nourishment\nI have given to this vessel You entrusted to me.","Help me to care for it with intention —\nnot from fear, but from reverence.\nThis is holy ground.\nI will walk in it gently.","Amen."]},
+  {title:"A Prayer for Joy",theme:"When Joy Has Gone Quiet",tags:["joy","happiness","sad","depression","heavy","light","hope"],categories:["Healing","Peace"],stanzas:["Let us pray together...","Father, somewhere along the way\nI stopped expecting to feel light.\nI got so used to carrying weight\nthat I forgot what it felt like to put it down.","Restore my joy.\nNot the performance of happiness,\nbut the deep, still knowing that I am loved,\nthat life is good, that You are good.","Let me laugh again. Let me rest again.\nLet me notice beauty in small things again.","Start tonight.\nPlant something joyful in this quiet.","Amen."]},
+  {title:"A Prayer Before Sleep",theme:"Releasing the Day",tags:["sleep","night","rest","release","letting go","bedtime"],categories:["Rest","Peace"],stanzas:["Let us pray together...","Lord, I release this day back to You.\nThe things I accomplished — thank You.\nThe things I didn't — forgive me and let it go.\nThe moments that were beautiful — I hold them with gratitude.\nThe moments that were hard — I leave them here with You.","As I enter rest, guard my mind.\nLet no fear, no regret, no restless thought\ntake from me the sleep You have prepared for me.","I am Yours.\nTonight. Tomorrow. Always.","Amen."]},
+  {title:"A Prayer for Purpose",theme:"Why Am I Here",tags:["purpose","meaning","calling","lost","direction","significance","why"],categories:["Purpose","Faith"],stanzas:["Let us pray together...","God, I was made for something.\nI feel it — even when I cannot name it,\neven when the days feel ordinary and the path unclear.","Remind me that purpose is not always loud.\nSometimes it is the small act of love I offered today\nwithout knowing it mattered.\nSometimes it is the kindness I showed when I was running on empty.","Keep unfolding who I am meant to be.\nI trust that You are not finished with me yet.\nThere is more ahead. Lead me toward it.","Amen."]},
+  {title:"A Prayer for Abundance",theme:"Trusting Provision",tags:["abundance","money","provision","lack","finances","trust","enough"],categories:["Faith","Gratitude"],stanzas:["Let us pray together...","Father, I confess that sometimes fear of lack\nis louder than my faith in Your provision.\nI count what is missing instead of what is here.","Shift my eyes tonight.\nYou have never left me without what I truly needed.\nEven in the lean seasons, You were present.\nEven in the waiting, something was being prepared.","I open my hands.\nI release the grip of scarcity.\nI receive — with gratitude and expectation —\nthe abundance that flows from a generous God.","Amen."]},
+  {title:"A Prayer for Protection",theme:"Covering for the Night",tags:["protection","safe","cover","home","family","fear","night"],categories:["Protection","Rest"],stanzas:["Let us pray together...","Lord, cover this home tonight.\nCover the people sleeping under this roof.\nCover the ones I love who are far from me.","Guard us from harm — the harm we can see\nand the harm we cannot.\nLet no spirit of fear, confusion, or darkness\nfind a place here tonight.","Your presence is the greatest protection I know.\nSo I invite You in — fully, completely —\ninto every corner of this space and every corner of my heart.","We are safe in You.","Amen."]},
+  {title:"A Prayer for Grief",theme:"When Loss Has No Words",tags:["grief","loss","death","sad","mourning","missing","heartbreak","pain"],categories:["Healing","Relationships"],stanzas:["Let us pray together...","God, I am grieving something tonight.\nA person. A season. A version of my life\nthat I had to let go of before I was ready.","I don't have tidy words for this.\nSo I simply bring the ache.\nI bring the hollow feeling.\nI bring it to You because You are the only one\nwho can hold it without flinching.","Sit with me in this.\nDo not rush me past the grief.\nBut also — when the time is right —\nshow me that life is still here, and still good.","Amen."]},
+  {title:"A Prayer for New Beginnings",theme:"Starting Again",tags:["new beginning","fresh start","change","starting over","hope","new chapter"],categories:["Faith","Purpose"],stanzas:["Let us pray together...","Lord, I am beginning something.\nOr I am trying to begin again\nafter something ended that I didn't choose.","Help me not to carry the weight of what was\ninto what is being born.\nNew chapters deserve new eyes.","Give me courage for the blank page.\nGive me patience for the slow start.\nGive me faith that what You are building\nis worth the uncertainty of this moment.","I step forward.\nYou are already there.","Amen."]},
+  {title:"A Prayer for Patience",theme:"When Waiting Is the Work",tags:["patience","waiting","slow","delay","trust","timing","hope"],categories:["Faith","Peace"],stanzas:["Let us pray together...","Father, I am waiting.\nAnd I am not always doing it gracefully.","The waiting feels like delay,\nbut I know — I am trying to believe —\nthat it is really preparation.\nThat something is being formed in me\nthat could not be rushed.","Give me patience that is not just gritted teeth,\nbut genuine trust.\nThe kind that rests instead of strives.\nThe kind that says: Your timing is better than mine.","I believe that. Help me live it.","Amen."]},
+  {title:"A Prayer of Ancestral Gratitude",theme:"Honoring Those Who Came Before",tags:["ancestors","heritage","roots","family","legacy","gratitude","history"],categories:["Gratitude","Faith"],stanzas:["Let us pray together...","Lord, tonight I remember those who came before me.\nThe grandmothers who brewed remedies in small pots.\nThe healers who knew the names of plants the way\nothers know the names of prayers.\nThe ones who carried faith through hardship\nso that I could stand in this moment, whole.","I am not the beginning of this story.\nI am the continuation of something ancient and sacred.","Let the wisdom in my blood rise up in me.\nLet the prayers they prayed still echo forward.\nAnd let me be worthy of what they endured.","Amen."]},
+  {title:"A Prayer for the Lonely",theme:"When No One Else Is Awake",tags:["lonely","alone","isolated","no one","2am","midnight","connection"],categories:["Peace","Relationships"],stanzas:["Let us pray together...","God, the house is quiet and the loneliness is loud tonight.\nI feel the absence of people. The absence of connection.\nThe strange ache of being surrounded by a full life\nand still feeling alone in the middle of it.","You see me here.\nNot as a problem to be solved,\nbut as a soul worth sitting with.","Remind me that I am deeply known.\nThat there is a presence that never leaves,\nnever sleeps, never grows tired of me.","I am not alone. Not even now. Not even here.","Amen."]},
+  {title:"A Prayer of Complete Surrender",theme:"Letting Go of Everything",tags:["surrender","let go","control","release","trust","everything","overwhelmed"],categories:["Faith","Peace"],stanzas:["Let us pray together...","Lord, I give You everything tonight.\nNot because I have it all together,\nbut precisely because I do not.","I give You my plans — the ones I am holding tightly\nand the ones I have already let slip away.\nI give You my fears — named and unnamed.\nI give You my hopes — the ones I dare to speak\nand the ones too tender to say out loud.","Take all of it.\nYou are a better keeper of my life than I am.","I am Yours.\nDo with me what only You can do.","Amen."]}
+  // ADD MORE PRAYERS HERE — push new objects with same shape.
+  // Recording files auto-detected: /prayers/prayer_{lang}_{nn}.mp3
+  // nn = zero-padded index+1 (e.g. prayer 21 = prayer_en_21.mp3)
+  // No other code changes ever needed.
+];
+
+const MOODS = [
+  {icon:"😔",name:"I'm grieving",sub:"Loss or pain",tags:["grief","loss","sad","mourning","heartbreak"]},
+  {icon:"😰",name:"I'm anxious",sub:"Worried or scared",tags:["anxious","anxiety","fear","worry","panic","stress"]},
+  {icon:"😴",name:"Can't sleep",sub:"Restless mind",tags:["sleep","rest","night","restless","peace"]},
+  {icon:"🥹",name:"I feel lonely",sub:"No one else is up",tags:["lonely","alone","isolated","connection"]},
+  {icon:"🙌",name:"I'm grateful",sub:"Want to give thanks",tags:["gratitude","thankful","grateful","blessings"]},
+  {icon:"💪",name:"Need strength",sub:"Running on empty",tags:["strength","tired","exhausted","courage"]},
+  {icon:"🤷",name:"I'm lost",sub:"Seeking direction",tags:["lost","direction","confused","purpose","guidance"]},
+  {icon:"❤️",name:"Need healing",sub:"Body or heart",tags:["healing","sick","pain","recovery","body"]},
+  {icon:"🕊️",name:"Let it go",sub:"Release & surrender",tags:["surrender","let go","forgiveness","release"]},
+  {icon:"🌅",name:"New beginning",sub:"Starting fresh",tags:["new beginning","fresh start","hope","change"]},
+  {icon:"🙏",name:"For someone else",sub:"Praying for others",tags:["family","loved ones","intercession","someone"]},
+  {icon:"🌿",name:"Body & wellness",sub:"Honor this temple",tags:["body","health","healing","wellness","nourishment"]},
+];
+
+const ALL_CATS = [...new Set(PRAYERS.flatMap(p=>p.categories))].sort();
+const RECORDING_BASE = '/prayers/';
+const TTS_ENDPOINT = 'https://web-production-4c84.up.railway.app/speak-intention';
+
+let lang='en', dailyIdx=getDailyIndex(), overlayIdx=null;
+let activePlayer=null, isPlaying=false, isTTSLoading=false;
+let activeCat=null, activeMood=null;
+const audioEl = document.getElementById('audio-el');
+const rcCache = {};
+
+function getDailyIndex(){
+  const diff=Math.floor((new Date()-new Date('2026-01-01'))/86400000);
+  return diff%PRAYERS.length;
+}
+
+function setLang(l,btn){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  stopAudio();updateDailySrc();
+}
+
+function showTab(name,btn){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('visible'));
+  document.getElementById('tab-'+name).classList.add('visible');
+  stopAudio();
+}
+
+function renderBody(el,stanzas){
+  el.innerHTML='';
+  stanzas.forEach((s,i)=>{
+    const p=document.createElement('p');
+    const lines=s.replace(/\n/g,'<br/>');
+    if(i===0) p.innerHTML='<span class="opening">'+lines+'</span>';
+    else if(s.trim()==='Amen.') p.innerHTML='<span class="amen">'+lines+'</span>';
+    else p.innerHTML=lines;
+    el.appendChild(p);
+  });
+}
+
+function renderDailyPrayer(){
+  const p=PRAYERS[dailyIdx];
+  document.getElementById('d-num').textContent='Prayer '+(dailyIdx+1)+' of '+PRAYERS.length;
+  document.getElementById('d-title').textContent=p.title;
+  document.getElementById('d-theme').textContent=p.theme;
+  renderBody(document.getElementById('d-body'),p.stanzas);
+  updateDailySrc();
+}
+
+async function updateDailySrc(){
+  const exists=await checkRec(dailyIdx);
+  const el=document.getElementById('d-src');
+  el.textContent='';
+}
+
+function shiftDaily(dir){
+  dailyIdx=(dailyIdx+dir+PRAYERS.length)%PRAYERS.length;
+  stopAudio();renderDailyPrayer();
+}
+
+function buildMoodDropdown(){
+  const sel=document.getElementById('mood-select');
+  MOODS.forEach((m,i)=>{
+    const opt=document.createElement('option');
+    opt.value=i;
+    opt.textContent=m.icon+' '+m.name+' — '+m.sub;
+    sel.appendChild(opt);
+  });
+}
+
+function buildPrayerDropdown(){
+  const sel=document.getElementById('prayer-select');
+  PRAYERS.forEach((p,i)=>{
+    const opt=document.createElement('option');
+    opt.value=i;
+    opt.textContent=(i+1)+'. '+p.title;
+    sel.appendChild(opt);
+  });
+}
+
+function onMoodSelect(sel){
+  if(!sel.value){document.getElementById('prayer-list').innerHTML='';document.getElementById('results-label').textContent='';return;}
+  document.getElementById('prayer-select').value='';
+  const m=MOODS[parseInt(sel.value)];
+  const res=PRAYERS.filter(p=>p.tags.some(t=>m.tags.some(mt=>t.includes(mt)||mt.includes(t))));
+  renderList(res,'Prayers for "'+m.name+'"');
+}
+
+function onPrayerSelect(sel){
+  if(!sel.value)return;
+  document.getElementById('mood-select').value='';
+  document.getElementById('results-label').textContent='';
+  document.getElementById('prayer-list').innerHTML='';
+  openOverlay(parseInt(sel.value));
+  sel.value='';
+}
+
+async function renderList(prayers,label){
+  document.getElementById('results-label').textContent=label;
+  const list=document.getElementById('prayer-list');
+  list.innerHTML='';
+  if(!prayers.length){list.innerHTML='<div class="no-results">No prayers match — try a different search or mood.</div>';return;}
+  for(let i=0;i<prayers.length;i++){
+    const p=prayers[i],idx=PRAYERS.indexOf(p);
+    const row=document.createElement('div');row.className='prayer-row';
+    const badge=document.createElement('span');badge.className='prayer-row-badge';badge.textContent='';
+    checkRec(idx).then(exists=>{if(exists){badge.className='prayer-row-badge recorded';badge.textContent='';}});
+    row.innerHTML='<div class="prayer-row-left"><div class="prayer-row-title">'+p.title+'</div><div class="prayer-row-theme">'+p.theme+'</div></div>';
+    row.appendChild(badge);
+    row.onclick=()=>openOverlay(idx);
+    list.appendChild(row);
+  }
+}
+
+async function openOverlay(idx){
+  overlayIdx=idx;const p=PRAYERS[idx];
+  document.getElementById('o-num').textContent='Prayer '+(idx+1)+' of '+PRAYERS.length;
+  document.getElementById('o-title').textContent=p.title;
+  document.getElementById('o-theme').textContent=p.theme;
+  renderBody(document.getElementById('o-body'),p.stanzas);
+  stopAudio();
+  const exists=await checkRec(idx);
+  document.getElementById('o-src').textContent='';
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeOverlay(e){if(e.target===document.getElementById('overlay'))closeOverlayDirect();}
+function closeOverlayDirect(){stopAudio();document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+
+function recPath(idx){return RECORDING_BASE+'prayer_'+lang+'_'+String(idx+1).padStart(2,'0')+'.mp3';}
+
+async function checkRec(idx){
+  const path=recPath(idx);
+  if(rcCache[path]!==undefined)return rcCache[path];
+  try{const r=await fetch(path,{method:'HEAD'});rcCache[path]=r.ok;return r.ok;}
+  catch{rcCache[path]=false;return false;}
+}
+
+async function handlePlay(player){
+  if(isPlaying&&activePlayer===player){stopAudio();return;}
+  if(isTTSLoading)return;
+  stopAudio();activePlayer=player;
+  const idx=player==='daily'?dailyIdx:overlayIdx;
+  const exists=await checkRec(idx);
+  if(exists) playUrl(recPath(idx),player,'');
+  else await playTTS(idx,player);
+}
+
+function playUrl(url,player,srcLabel){
+  audioEl.src=url;audioEl.load();
+  audioEl.play().then(()=>{
+    isPlaying=true;setUI(player,'playing');
+    document.getElementById(player==='daily'?'d-src':'o-src').textContent=srcLabel;
+    startProg(player);
+  }).catch(e=>{console.error(e);setUI(player,'idle');});
+  audioEl.onended=()=>stopAudio();
+}
+
+async function playTTS(idx,player){
+  isTTSLoading=true;setUI(player,'loading');
+  try{
+    const res=await fetch(TTS_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:PRAYERS[idx].stanzas.join('\n\n'),voice:'onyx',lang:'en'})});
+    if(!res.ok)throw new Error('TTS failed');
+    const url=URL.createObjectURL(await res.blob());
+    isTTSLoading=false;playUrl(url,player,'');
+  }catch(e){
+    console.error(e);isTTSLoading=false;setUI(player,'idle');
+    document.getElementById(player==='daily'?'d-src':'o-src').textContent='';
+  }
+}
+
+function stopAudio(){
+  audioEl.pause();audioEl.currentTime=0;isPlaying=false;isTTSLoading=false;
+  if(activePlayer)setUI(activePlayer,'idle');activePlayer=null;
+}
+
+function setUI(player,state){
+  const D=player==='daily';
+  const btn=document.getElementById(D?'d-play':'o-play');
+  const icon=document.getElementById(D?'d-icon':'o-icon');
+  const prog=document.getElementById(D?'d-prog':'o-prog');
+  btn.classList.remove('playing','loading');
+  if(state==='playing'){btn.classList.add('playing');icon.textContent='⏸';prog.classList.add('on');}
+  else if(state==='loading'){btn.classList.add('loading');icon.innerHTML='<div class="spinner"></div>';}
+  else{icon.textContent='▶';prog.classList.remove('on');document.getElementById(D?'d-fill':'o-fill').style.width='0%';}
+}
+
+function startProg(player){
+  const fill=document.getElementById(player==='daily'?'d-fill':'o-fill');
+  const iv=setInterval(()=>{
+    if(!isPlaying||audioEl.paused){clearInterval(iv);return;}
+    if(audioEl.duration)fill.style.width=(audioEl.currentTime/audioEl.duration*100)+'%';
+  },500);
+}
+
+// BOOT
+buildMoodDropdown();buildPrayerDropdown();renderDailyPrayer();
+</script>
+</body>
+</html>
