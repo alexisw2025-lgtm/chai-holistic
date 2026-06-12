@@ -2030,6 +2030,85 @@ return (
 
 
 
+// ── AMARA HELPERS (outside main component to prevent re-render loops) ────────
+const ALL_BLENDS_COMBINED = [...BLENDS, ...MEN_BLENDS];
+
+const parseAmaraMessage = (text) => {
+  const blendTagRegex = /\[\[BLEND:([^\]]+)\]\]/g;
+  const blendIds = [];
+  let match;
+  while ((match = blendTagRegex.exec(text)) !== null) {
+    blendIds.push(match[1].trim());
+  }
+  const cleanText = text.replace(/\[\[BLEND:[^\]]+\]\]/g, "").trim();
+  return { cleanText, blendIds };
+};
+
+function AmaraBlendCard({ blendId, onViewBlend, onAddToCart }) {
+  const blend = ALL_BLENDS_COMBINED.find(b => b.id === blendId);
+  const [expanded, setExpanded] = React.useState(false);
+  if (!blend) return null;
+  return (
+    <div style={{
+      marginTop:10, borderRadius:14,
+      background:"linear-gradient(135deg,rgba(196,137,58,.13),rgba(196,137,58,.05))",
+      border:"1px solid rgba(196,137,58,.3)",
+      overflow:"hidden", fontFamily:"Jost,sans-serif",
+    }}>
+      <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 13px 8px 13px"}}>
+        {blend.photo && (
+          <img src={blend.photo} alt={blend.name}
+            style={{width:42,height:42,borderRadius:9,objectFit:"cover",flexShrink:0,border:"1px solid rgba(196,137,58,.25)"}}
+            onError={e=>{e.target.style.display="none";}}
+          />
+        )}
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"#F7F2EA",fontWeight:700,lineHeight:1.2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{blend.name}</div>
+          <div style={{fontSize:".62rem",color:"rgba(196,137,58,.85)",marginTop:2,fontWeight:400,lineHeight:1.3}}>{blend.tagline}</div>
+        </div>
+        <div style={{fontSize:".78rem",color:"rgba(196,137,58,.9)",fontWeight:700,flexShrink:0}}>${blend.price?.toFixed(2)}</div>
+      </div>
+      {blend.benefit && (
+        <div style={{padding:"0 13px 8px 13px",display:"flex",flexWrap:"wrap",gap:4}}>
+          {blend.benefit.split("·").map((b,i)=>(
+            <span key={i} style={{fontSize:".55rem",letterSpacing:".1em",textTransform:"uppercase",background:"rgba(196,137,58,.12)",border:"1px solid rgba(196,137,58,.2)",color:"rgba(196,137,58,.8)",borderRadius:20,padding:"2px 7px"}}>{b.trim()}</span>
+          ))}
+        </div>
+      )}
+      {expanded && blend.ingredients && (
+        <div style={{padding:"0 13px 10px 13px"}}>
+          <div style={{fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",color:"rgba(255,255,255,.35)",marginBottom:5}}>Ingredients</div>
+          <div style={{fontSize:".72rem",color:"rgba(240,235,224,.7)",lineHeight:1.7}}>{blend.ingredients.join(" · ")}</div>
+          {blend.warning && (
+            <div style={{marginTop:7,fontSize:".62rem",color:"rgba(220,150,50,.7)",lineHeight:1.5,borderTop:"1px solid rgba(196,137,58,.15)",paddingTop:7}}>{blend.warning}</div>
+          )}
+        </div>
+      )}
+      <div style={{display:"flex",gap:6,padding:"0 10px 10px 10px"}}>
+        <button
+          onClick={()=>onViewBlend(blend)}
+          style={{flex:1,background:"rgba(196,137,58,.18)",border:"1px solid rgba(196,137,58,.35)",color:"rgba(196,137,58,.95)",borderRadius:8,padding:"7px 0",fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:600,transition:"all .18s"}}
+          onMouseEnter={e=>{e.currentTarget.style.background="rgba(196,137,58,.3)";}}
+          onMouseLeave={e=>{e.currentTarget.style.background="rgba(196,137,58,.18)";}}
+        >View Blend</button>
+        <button
+          onClick={()=>onAddToCart(blend)}
+          style={{flex:1,background:"linear-gradient(135deg,rgba(196,137,58,.85),rgba(160,104,40,.85))",border:"none",color:"#0A0F0B",borderRadius:8,padding:"7px 0",fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700,transition:"all .18s"}}
+          onMouseEnter={e=>{e.currentTarget.style.opacity=".85";}}
+          onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}
+        >+ Basket</button>
+        <button
+          onClick={()=>setExpanded(p=>!p)}
+          style={{width:32,background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",color:"rgba(255,255,255,.5)",borderRadius:8,padding:"7px 0",fontSize:".7rem",cursor:"pointer",transition:"all .18s",flexShrink:0}}
+          onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.13)";}}
+          onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.06)";}}
+          title="Learn More"
+        >{expanded ? "▲" : "▼"}</button>
+      </div>
+    </div>
+  );
+}
+
 export default function ChaiHolistic() {
   const [page, setPage] = useState("home");
   const [cart, setCart] = useState([]);
@@ -2530,84 +2609,6 @@ When you recommend a specific blend from our catalog, tag it at the end of your 
 Example: If recommending Stress Less, end your message with:
 [[BLEND:w7]]
 You may recommend up to 2 blends per response. Only use blend IDs from the catalog above. Do not include the tag mid-sentence — place it on its own line after your full response.`;
-
-  // ── AMARA BLEND CARD ──────────────────────────────────────────────────────
-  const AmaraBlendCard = ({ blendId }) => {
-    const allBlends = [...BLENDS, ...MEN_BLENDS];
-    const blend = allBlends.find(b => b.id === blendId);
-    const [expanded, setExpanded] = React.useState(false);
-    if (!blend) return null;
-    return (
-      <div style={{
-        marginTop:10, borderRadius:14,
-        background:"linear-gradient(135deg,rgba(196,137,58,.13),rgba(196,137,58,.05))",
-        border:"1px solid rgba(196,137,58,.3)",
-        overflow:"hidden", fontFamily:"Jost,sans-serif",
-      }}>
-        <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 13px 8px 13px"}}>
-          {blend.photo && (
-            <img src={blend.photo} alt={blend.name}
-              style={{width:42,height:42,borderRadius:9,objectFit:"cover",flexShrink:0,border:"1px solid rgba(196,137,58,.25)"}}
-              onError={e=>{e.target.style.display="none";}}
-            />
-          )}
-          <div style={{flex:1,minWidth:0}}>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",color:"#F7F2EA",fontWeight:700,lineHeight:1.2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{blend.name}</div>
-            <div style={{fontSize:".62rem",color:"rgba(196,137,58,.85)",marginTop:2,fontWeight:400,lineHeight:1.3}}>{blend.tagline}</div>
-          </div>
-          <div style={{fontSize:".78rem",color:"rgba(196,137,58,.9)",fontWeight:700,flexShrink:0}}>${blend.price?.toFixed(2)}</div>
-        </div>
-        {blend.benefit && (
-          <div style={{padding:"0 13px 8px 13px",display:"flex",flexWrap:"wrap",gap:4}}>
-            {blend.benefit.split("\xb7").map((b,i)=>(
-              <span key={i} style={{fontSize:".55rem",letterSpacing:".1em",textTransform:"uppercase",background:"rgba(196,137,58,.12)",border:"1px solid rgba(196,137,58,.2)",color:"rgba(196,137,58,.8)",borderRadius:20,padding:"2px 7px"}}>{b.trim()}</span>
-            ))}
-          </div>
-        )}
-        {expanded && blend.ingredients && (
-          <div style={{padding:"0 13px 10px 13px"}}>
-            <div style={{fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",color:"rgba(255,255,255,.35)",marginBottom:5}}>Ingredients</div>
-            <div style={{fontSize:".72rem",color:"rgba(240,235,224,.7)",lineHeight:1.7}}>{blend.ingredients.join(" \xb7 ")}</div>
-            {blend.warning && (
-              <div style={{marginTop:7,fontSize:".62rem",color:"rgba(220,150,50,.7)",lineHeight:1.5,borderTop:"1px solid rgba(196,137,58,.15)",paddingTop:7}}>{blend.warning}</div>
-            )}
-          </div>
-        )}
-        <div style={{display:"flex",gap:6,padding:"0 10px 10px 10px"}}>
-          <button
-            onClick={()=>setSelectedBlend(blend)}
-            style={{flex:1,background:"rgba(196,137,58,.18)",border:"1px solid rgba(196,137,58,.35)",color:"rgba(196,137,58,.95)",borderRadius:8,padding:"7px 0",fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:600,transition:"all .18s"}}
-            onMouseEnter={e=>{e.currentTarget.style.background="rgba(196,137,58,.3)";}}
-            onMouseLeave={e=>{e.currentTarget.style.background="rgba(196,137,58,.18)";}}
-          >View Blend</button>
-          <button
-            onClick={()=>addToCart(blend)}
-            style={{flex:1,background:"linear-gradient(135deg,rgba(196,137,58,.85),rgba(160,104,40,.85))",border:"none",color:"#0A0F0B",borderRadius:8,padding:"7px 0",fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700,transition:"all .18s"}}
-            onMouseEnter={e=>{e.currentTarget.style.opacity=".85";}}
-            onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}
-          >+ Basket</button>
-          <button
-            onClick={()=>setExpanded(p=>!p)}
-            style={{width:32,background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",color:"rgba(255,255,255,.5)",borderRadius:8,padding:"7px 0",fontSize:".7rem",cursor:"pointer",transition:"all .18s",flexShrink:0}}
-            onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.13)";}}
-            onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.06)";}}
-            title="Learn More"
-          >{expanded ? "\u25b2" : "\u25bc"}</button>
-        </div>
-      </div>
-    );
-  };
-
-  const parseAmaraMessage = (text) => {
-    const blendTagRegex = /\[\[BLEND:([^\]]+)\]\]/g;
-    const blendIds = [];
-    let match;
-    while ((match = blendTagRegex.exec(text)) !== null) {
-      blendIds.push(match[1].trim());
-    }
-    const cleanText = text.replace(/\[\[BLEND:[^\]]+\]\]/g, "").trim();
-    return { cleanText, blendIds };
-  };
 
   const openAmara = () => {
     setAmaraOpen(true);
@@ -9156,7 +9157,7 @@ Thank you!`);
                     }}>
                       {parsed.cleanText}
                       {parsed.blendIds.map(id => (
-                        <AmaraBlendCard key={id} blendId={id} />
+                        <AmaraBlendCard key={id} blendId={id} onViewBlend={setSelectedBlend} onAddToCart={addToCart} />
                       ))}
                     </div>
                   </div>
