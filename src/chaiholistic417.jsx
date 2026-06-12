@@ -2627,6 +2627,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     const newMessages = [...amaraMessages, { role: "user", text }];
     setAmaraMessages(newMessages);
     setAmaraLoading(true);
+    const currentLang = localStorage.getItem('chai_lang') || lang || 'en';
     try {
       const res = await fetch("https://web-production-4c84.up.railway.app/amara-chat", {
         method: "POST",
@@ -2634,7 +2635,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
         body: JSON.stringify({
           system: AMARA_SYSTEM,
           messages: newMessages.map(m => ({ role: m.role, content: m.text })),
-          lang: lang
+          lang: currentLang
         })
       });
       if (!res.ok) {
