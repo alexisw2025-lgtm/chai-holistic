@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import { useLang } from "./LangContext";
 
 const DAILY_BLENDS = [
   { n:1,  emoji:"🌙", name:"Deep Sleep & Calm Blend",                part:"Part I",   benefit:"Calms the nervous system and guides the body into deep, restorative sleep." },
@@ -86,11 +85,87 @@ const INTENTIONS = [
 ];
 
 // ── Daily rotation: same intention for everyone on the same calendar day ──────
-function getDailyIntention() {
+
+// ── Intention Translations (30 intentions × 5 languages) ─────────────────────
+const INTENTION_TRANS = {
+  es: [
+    {lines:["Estás aquí en el momento correcto.","Algo en ti ya lo sabe.","Comienza."], voice:"Estás aquí en el momento correcto. Algo en ti ya lo sabe. Comienza."},
+    {lines:["Toma un respiro antes de esta taza.","Hoy te estás nutriendo.","Eso es suficiente."], voice:"Toma un respiro antes de esta taza. Hoy te estás nutriendo. Eso es suficiente."},
+    {lines:["El silencio no está vacío.","Está lleno de todo lo que necesitas.","Recíbelo ahora."], voice:"El silencio no está vacío. Está lleno de todo lo que necesitas. Recíbelo ahora."},
+    {lines:["Lo que tu cuerpo pide,","esta mezcla ya lo sabe.","Confía en el ritual."], voice:"Lo que tu cuerpo pide, esta mezcla ya lo sabe. Confía en el ritual."},
+    {lines:["Este momento te pertenece.","A nadie más. Solo a ti.","Respira."], voice:"Este momento te pertenece. A nadie más. Solo a ti. Respira."},
+    {lines:["La sanación ya ha comenzado.","Elegiste estar aquí.","Esa es la práctica."], voice:"La sanación ya ha comenzado. Elegiste estar aquí. Esa es la práctica."},
+    {lines:["Viniste al lugar correcto.","Todo lo que necesitas está aquí.","Déjalo entrar."], voice:"Viniste al lugar correcto. Todo lo que necesitas está aquí. Déjalo entrar."},
+    {lines:["Tu cuerpo no está roto.","Está pidiendo ser escuchado.","Esta taza eres tú escuchando."], voice:"Tu cuerpo no está roto. Está pidiendo ser escuchado. Esta taza eres tú escuchando."},
+    {lines:["El descanso no es debilidad.","Es el suelo donde crece la sanación.","Permítete descansar hoy."], voice:"El descanso no es debilidad. Es el suelo donde crece la sanación. Permítete descansar hoy."},
+    {lines:["Ya has cargado suficiente.","Por este momento, suéltalo.","El té te sostendrá."], voice:"Ya has cargado suficiente. Por este momento, suéltalo. El té te sostendrá."},
+    {lines:["Lo que cuidas, crece.","Lo que bebes con intención, sana.","Cuídate hoy."], voice:"Lo que cuidas, crece. Lo que bebes con intención, sana. Cuídate hoy."},
+    {lines:["La sanación no es un destino.","Es la decisión que tomaste","cuando llenaste la tetera."], voice:"La sanación no es un destino. Es la decisión que tomaste cuando llenaste la tetera."},
+    {lines:["Eres suficiente.","Exactamente como eres.","Ahora mismo. En este momento."], voice:"Eres suficiente. Exactamente como eres. Ahora mismo. En este momento."},
+    {lines:["Algo antiguo está en esta taza.","Generaciones de sanadores","lo pusieron aquí para ti."], voice:"Algo antiguo está en esta taza. Generaciones de sanadores lo pusieron aquí para ti."},
+    {lines:["La intención ya está establecida.","Tu cuerpo ya sabe qué hacer.","Confía en lo que está creciendo."], voice:"La intención ya está establecida. Tu cuerpo ya sabe qué hacer. Confía en lo que está creciendo."},
+    {lines:["No estás atrasado.","Estás justo a tiempo.","El ritual comienza ahora."], voice:"No estás atrasado. Estás justo a tiempo. El ritual comienza ahora."},
+    {lines:["Inhala lo que necesitas.","Exhala lo que ya no sirve.","Esta taza lleva ambos."], voice:"Inhala lo que necesitas. Exhala lo que ya no sirve. Esta taza lleva ambos."},
+    {lines:["Tus ancestros sabían algo","que la ciencia todavía está alcanzando.","Tú eres la prueba viviente."], voice:"Tus ancestros sabían algo que la ciencia todavía está alcanzando. Tú eres la prueba viviente."},
+    {lines:["Los pequeños rituales construyen vidas fuertes.","Esta taza no es pequeña.","Es todo."], voice:"Los pequeños rituales construyen vidas fuertes. Esta taza no es pequeña. Es todo."},
+    {lines:["El cuerpo habla antes que la mente.","Tu anhelo por esta taza","ya era una oración."], voice:"El cuerpo habla antes que la mente. Tu anhelo por esta taza ya era una oración."},
+    {lines:["Elegiste el bienestar hoy.","En un mundo que lo hace difícil,","eso es un acto de amor."], voice:"Elegiste el bienestar hoy. En un mundo que lo hace difícil, eso es un acto de amor."},
+    {lines:["Hay medicina en la pausa.","Antes del primer sorbo,","respira y recibe."], voice:"Hay medicina en la pausa. Antes del primer sorbo, respira y recibe."},
+    {lines:["Lo que pones en tu cuerpo","se convierte en la energía con la que caminas.","Elige con cuidado."], voice:"Lo que pones en tu cuerpo se convierte en la energía con la que caminas. Elige con cuidado."},
+    {lines:["La sanación no es lineal.","Pero aparecer cada día","es como sucede."], voice:"La sanación no es lineal. Pero aparecer cada día es como sucede."},
+    {lines:["Esta es tu medicina.","No recetada por nadie más.","Sabías lo que necesitabas."], voice:"Esta es tu medicina. No recetada por nadie más. Sabías lo que necesitabas."},
+    {lines:["El mundo seguirá moviéndose.","Esta taza no.","Por este momento, tú tampoco."], voice:"El mundo seguirá moviéndose. Esta taza no. Por este momento, tú tampoco."},
+    {lines:["Deja que el calor llegue a los lugares tensos.","Los lugares retenidos.","Los lugares que aún sanan."], voice:"Deja que el calor llegue a los lugares tensos. Los lugares retenidos. Los lugares que aún sanan."},
+    {lines:["Hoy, este es tu momento.","No se requiere ningún otro logro.","Solo esta taza. Solo tú."], voice:"Hoy, este es tu momento. No se requiere ningún otro logro. Solo esta taza. Solo tú."},
+    {lines:["Algo se está asentando en ti ahora mismo.","No lo fuerces.","Deja que la taza haga su trabajo."], voice:"Algo se está asentando en ti ahora mismo. No lo fuerces. Deja que la taza haga su trabajo."},
+    {lines:["La intención de hoy es simple:","preséntate por ti mismo","como te presentas por todos los demás."], voice:"La intención de hoy es simple: preséntate por ti mismo como te presentas por todos los demás."},
+  ],
+  fr: [
+    {lines:["Vous êtes ici au bon moment.","Quelque chose en vous le sait déjà.","Commencez."], voice:"Vous êtes ici au bon moment. Quelque chose en vous le sait déjà. Commencez."},
+    {lines:["Prenez un souffle avant cette tasse.","Vous vous nourrissez aujourd'hui.","C'est suffisant."], voice:"Prenez un souffle avant cette tasse. Vous vous nourrissez aujourd'hui. C'est suffisant."},
+    {lines:["Le silence n'est pas vide.","Il est plein de tout ce dont vous avez besoin.","Recevez-le maintenant."], voice:"Le silence n'est pas vide. Il est plein de tout ce dont vous avez besoin. Recevez-le maintenant."},
+    {lines:["Ce que votre corps demande,","ce mélange le sait déjà.","Faites confiance au rituel."], voice:"Ce que votre corps demande, ce mélange le sait déjà. Faites confiance au rituel."},
+    {lines:["Ce moment vous appartient.","À personne d'autre. Juste vous.","Respirez."], voice:"Ce moment vous appartient. À personne d'autre. Juste vous. Respirez."},
+    {lines:["La guérison a déjà commencé.","Vous avez choisi d'être présent.","C'est la pratique."], voice:"La guérison a déjà commencé. Vous avez choisi d'être présent. C'est la pratique."},
+    {lines:["Vous êtes venu au bon endroit.","Tout ce dont vous avez besoin est ici.","Laissez-le entrer."], voice:"Vous êtes venu au bon endroit. Tout ce dont vous avez besoin est ici. Laissez-le entrer."},
+    {lines:["Votre corps n'est pas brisé.","Il demande à être entendu.","Cette tasse c'est vous qui écoutez."], voice:"Votre corps n'est pas brisé. Il demande à être entendu. Cette tasse c'est vous qui écoutez."},
+    {lines:["Le repos n'est pas une faiblesse.","C'est le sol où la guérison grandit.","Laissez-vous reposer aujourd'hui."], voice:"Le repos n'est pas une faiblesse. C'est le sol où la guérison grandit. Laissez-vous reposer aujourd'hui."},
+    {lines:["Vous avez assez porté.","Pour ce moment, posez-le.","Le thé vous soutiendra."], voice:"Vous avez assez porté. Pour ce moment, posez-le. Le thé vous soutiendra."},
+    {lines:["Ce que vous cultivez, pousse.","Ce que vous buvez avec intention, guérit.","Prenez soin de vous aujourd'hui."], voice:"Ce que vous cultivez, pousse. Ce que vous buvez avec intention, guérit. Prenez soin de vous aujourd'hui."},
+    {lines:["La guérison n'est pas une destination.","C'est la décision que vous avez prise","quand vous avez rempli la bouilloire."], voice:"La guérison n'est pas une destination. C'est la décision que vous avez prise quand vous avez rempli la bouilloire."},
+    {lines:["Vous êtes assez.","Exactement comme vous êtes.","Maintenant. En ce moment."], voice:"Vous êtes assez. Exactement comme vous êtes. Maintenant. En ce moment."},
+    {lines:["Quelque chose d'ancien est dans cette tasse.","Des générations de guérisseurs","l'ont mis là pour vous."], voice:"Quelque chose d'ancien est dans cette tasse. Des générations de guérisseurs l'ont mis là pour vous."},
+    {lines:["L'intention est déjà posée.","Votre corps sait déjà quoi faire.","Faites confiance à ce qui grandit."], voice:"L'intention est déjà posée. Votre corps sait déjà quoi faire. Faites confiance à ce qui grandit."},
+    {lines:["Vous n'êtes pas en retard.","Vous êtes exactement à l'heure.","Le rituel commence maintenant."], voice:"Vous n'êtes pas en retard. Vous êtes exactement à l'heure. Le rituel commence maintenant."},
+    {lines:["Inspirez ce dont vous avez besoin.","Expirez ce qui ne vous sert plus.","Cette tasse porte les deux."], voice:"Inspirez ce dont vous avez besoin. Expirez ce qui ne vous sert plus. Cette tasse porte les deux."},
+    {lines:["Vos ancêtres savaient quelque chose","que la science est encore en train de rattraper.","Vous en êtes la preuve vivante."], voice:"Vos ancêtres savaient quelque chose que la science est encore en train de rattraper. Vous en êtes la preuve vivante."},
+    {lines:["Les petits rituels construisent de grandes vies.","Cette tasse n'est pas petite.","C'est tout."], voice:"Les petits rituels construisent de grandes vies. Cette tasse n'est pas petite. C'est tout."},
+    {lines:["Le corps parle avant l'esprit.","Votre envie de cette tasse","était déjà une prière."], voice:"Le corps parle avant l'esprit. Votre envie de cette tasse était déjà une prière."},
+    {lines:["Vous avez choisi le bien-être aujourd'hui.","Dans un monde qui le rend difficile,","c'est un acte d'amour."], voice:"Vous avez choisi le bien-être aujourd'hui. Dans un monde qui le rend difficile, c'est un acte d'amour."},
+    {lines:["Il y a de la médecine dans la pause.","Avant la première gorgée,","respirez et recevez."], voice:"Il y a de la médecine dans la pause. Avant la première gorgée, respirez et recevez."},
+    {lines:["Ce que vous mettez dans votre corps","devient l'énergie avec laquelle vous marchez.","Choisissez avec soin."], voice:"Ce que vous mettez dans votre corps devient l'énergie avec laquelle vous marchez. Choisissez avec soin."},
+    {lines:["La guérison n'est pas linéaire.","Mais se présenter chaque jour","c'est comment elle se produit."], voice:"La guérison n'est pas linéaire. Mais se présenter chaque jour c'est comment elle se produit."},
+    {lines:["C'est votre médecine.","Pas prescrite par quelqu'un d'autre.","Vous saviez ce dont vous aviez besoin."], voice:"C'est votre médecine. Pas prescrite par quelqu'un d'autre. Vous saviez ce dont vous aviez besoin."},
+    {lines:["Le monde continuera de bouger.","Cette tasse non.","Pour ce moment, vous non plus."], voice:"Le monde continuera de bouger. Cette tasse non. Pour ce moment, vous non plus."},
+    {lines:["Laissez la chaleur atteindre les endroits tendus.","Les endroits retenus.","Les endroits qui guérissent encore."], voice:"Laissez la chaleur atteindre les endroits tendus. Les endroits retenus. Les endroits qui guérissent encore."},
+    {lines:["Aujourd'hui, c'est votre moment.","Aucune autre réalisation n'est requise.","Juste cette tasse. Juste vous."], voice:"Aujourd'hui, c'est votre moment. Aucune autre réalisation n'est requise. Juste cette tasse. Juste vous."},
+    {lines:["Quelque chose se stabilise en vous maintenant.","Ne le forcez pas.","Laissez la tasse faire son travail."], voice:"Quelque chose se stabilise en vous maintenant. Ne le forcez pas. Laissez la tasse faire son travail."},
+    {lines:["L'intention d'aujourd'hui est simple:","soyez présent pour vous-même","comme vous l'êtes pour les autres."], voice:"L'intention d'aujourd'hui est simple: soyez présent pour vous-même comme vous l'êtes pour les autres."},
+  ],
+};
+
+function getIntention(idx, lang) {
+  if (!lang || lang === 'en') return INTENTIONS[idx % INTENTIONS.length];
+  const trans = INTENTION_TRANS[lang];
+  if (!trans) return INTENTIONS[idx % INTENTIONS.length];
+  return trans[idx % trans.length];
+}
+
+function getDailyIntention(lang) {
   const now   = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
   const day   = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-  return INTENTIONS[day % INTENTIONS.length];
+  return getIntention(day, lang);
 }
 
 let audioCtx = null;
@@ -154,11 +229,9 @@ async function speakIntention(text) {
   }
 }
 
-export default function PrayerSection({ onNavigate, T: TT, lang: langProp }) {
-  const { T: TC, lang: langCtx } = useLang();
-  const lang = langProp || langCtx;
-  // Use passed T prop, then context T, then fallback
-  const t = (key, fallback) => (TT && TT[key]) ? TT[key] : (TC && TC[key]) ? TC[key] : fallback;
+export default function PrayerSection({ onNavigate, T: TT, lang }) {
+  // Use passed T or fallback to English strings
+  const t = (key, fallback) => (TT && TT[key]) ? TT[key] : fallback;
   // phase: 0=idle, 1=hands tapped, 1.5=ring moment visible, 2=ring tapped
   const [phase, setPhase]           = useState(0);
   const [chosen, setChosen]         = useState(null);
@@ -212,7 +285,7 @@ export default function PrayerSection({ onNavigate, T: TT, lang: langProp }) {
   // Speak immediately on first tap — bowl + particles + voice all at once
   function onHandsTap() {
     if (phase !== 0) return;
-    const pick = getDailyIntention();
+    const pick = getDailyIntention(lang);
     setChosen(pick);
     setFiring(true);
     setActivated(true);

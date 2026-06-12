@@ -8614,7 +8614,7 @@ Thank you!`);
       {trackerOpen && <CleanseTrackerModal/>}
       {bookPreview && <BookPreviewModal/>}
 
-      <WellnessProfileModal open={profileOpen} onClose={()=>setProfileOpen(false)}/>
+      <WellnessProfileModal open={profileOpen} onClose={()=>setProfileOpen(false)} lang={lang}/>
 
       <CartDrawer/>
 
