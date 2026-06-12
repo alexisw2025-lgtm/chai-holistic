@@ -270,18 +270,10 @@ const BLEND_MODAL_TRANS = {
   jm:{name:"Stress Less",tagline:"Real adaptogenic support fi chronic stress",benefit:"Cortisol · Adaptogenic · Nervous System",desc:"Fi di chronic stress weh has become yuh default state. Ashwagandha, rhodiola and holy basil build real physiological stress resistance."},
 },
 
-};
-
-export function getBlendModal(id, lang) {
-  if (!lang || lang === 'en') return null;
-  return BLEND_MODAL_TRANS[id]?.[lang] || null;
-}
-
-export default BLEND_MODAL_TRANS;
 
 // ── MEN'S WELLNESS BLENDS ─────────────────────────────────────────────────────
 
-,"men1": {
+"men1": {
   es:{name:"Mañana de Voluntad de Hierro",tagline:"Levántate con propósito y poder",benefit:"Energía · Impulso · Enfoque",desc:"Ashwagandha, jengibre y pimienta de cayena crean la mezcla matutina más energizante de la colección para hombres. Sin cafeína. Sin colapso."},
   fr:{name:"Matin Volonté de Fer",tagline:"Levez-vous avec intention et puissance",benefit:"Énergie · Dynamisme · Focus",desc:"L'ashwagandha, le gingembre et le cayenne créent le mélange matinal le plus énergisant de la collection pour hommes."},
   pt:{name:"Manhã de Vontade de Ferro",tagline:"Levante-se com propósito e poder",benefit:"Energia · Impulso · Foco",desc:"Ashwagandha, gengibre e pimenta caiena criam a mistura matinal mais energizante da coleção masculina."},
@@ -421,3 +413,12 @@ export default BLEND_MODAL_TRANS;
   ht:{name:"Sajès Ansyen an",tagline:"Lonjevite, pwofondè ak veyari ak pisans",benefit:"Lonjevite · Antioxidan · Klète",desc:"Pou gason ki te wè anpil epi ki gen anpil pou bay ankò. Reyishi, ashwagandha ak ginkgo pou lonjevite kognitif ak pwofondè lespri."},
   jm:{name:"The Elder's Wisdom",tagline:"Longevity, depth and ageing with power",benefit:"Longevity · Antioxidants · Clarity",desc:"For di man who has seen much and still has more to give. Reishi, ashwagandha and ginkgo for cognitive longevity and depth of spirit."},
 },
+
+};
+
+export function getBlendModal(id, lang) {
+  if (!lang || lang === 'en') return null;
+  return BLEND_MODAL_TRANS[id]?.[lang] || null;
+}
+
+export default BLEND_MODAL_TRANS;
