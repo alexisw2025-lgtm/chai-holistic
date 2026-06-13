@@ -841,6 +841,8 @@ async function handlePlay(player){
   if(isPlaying && activePlayer === player){ stopAudio(); return; }
   if(isTTSLoading) return;
   stopAudio();
+  // Unlock audio context first — required on Chromebook / Chrome OS
+  await unlockAudio();
   showPrepOverlay(player);
 }
 
@@ -915,9 +917,32 @@ function getBestVoice(lang){
   return fallback;
 }
 
+// ── AUDIO UNLOCK (required for Chromebook / Chrome OS) ────────────────────────
+// Chrome OS blocks speechSynthesis until an AudioContext has been unlocked
+// by a real user gesture. We unlock silently on first play click.
+let audioUnlocked = false;
+function unlockAudio(){
+  if(audioUnlocked) return Promise.resolve();
+  return new Promise(resolve => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+      src.onended = () => { audioUnlocked = true; ctx.close(); resolve(); };
+      // Fallback in case onended doesn't fire
+      setTimeout(() => { audioUnlocked = true; resolve(); }, 300);
+    } catch(e) {
+      audioUnlocked = true;
+      resolve();
+    }
+  });
+}
+
 function speakWithBrowser(text, player){
   window.speechSynthesis.cancel();
-  // iOS Safari cuts off speech > ~200 chars — split into sentence chunks
   const sentences = text.match(/[^.!?\n]+[.!?\n]*/g) || [text];
   const chunks = [];
   let current = '';
@@ -935,6 +960,8 @@ function speakWithBrowser(text, player){
   startFakeProgress(player, text.length * 55);
 
   let chunkIdx = 0;
+  let failCount = 0;
+
   function speakNext(){
     if(chunkIdx >= chunks.length || !isPlaying){ stopAudio(); return; }
     const utt = new SpeechSynthesisUtterance(chunks[chunkIdx++]);
@@ -943,7 +970,28 @@ function speakWithBrowser(text, player){
     utt.volume = 1;
     if(preferred) utt.voice = preferred;
     utt.onend = speakNext;
-    utt.onerror = () => stopAudio();
+    utt.onerror = (e) => {
+      failCount++;
+      // On Chromebook, if first chunk fails try resuming and retrying once
+      if(failCount <= 2){
+        window.speechSynthesis.cancel();
+        setTimeout(() => {
+          window.speechSynthesis.resume();
+          const retry = new SpeechSynthesisUtterance(chunks[chunkIdx - 1] || '');
+          retry.rate = 0.82; retry.pitch = 0.95; retry.volume = 1;
+          if(preferred) retry.voice = preferred;
+          retry.onend = speakNext;
+          retry.onerror = () => stopAudio();
+          window.speechSynthesis.speak(retry);
+        }, 200);
+      } else {
+        stopAudio();
+        // Show user-friendly message for Chromebook
+        const player_label = player === 'daily' ? 'd-src' : 'o-src';
+        const el = document.getElementById(player_label);
+        if(el) { el.textContent = '⚠️ Audio unavailable on this device'; el.style.color = 'rgba(196,137,58,.6)'; el.style.fontSize = '.65rem'; }
+      }
+    };
     window.speechSynthesis.speak(utt);
   }
   speakNext();
@@ -996,9 +1044,22 @@ function startFakeProgress(player, durationMs){
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────────────────
-// Preload voices for speech synthesis
-window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
-window.speechSynthesis.getVoices();
+// Preload voices — Chromebook loads them asynchronously, wait up to 3s
+let voicesReady = false;
+function waitForVoices(){
+  return new Promise(resolve => {
+    const voices = window.speechSynthesis.getVoices();
+    if(voices.length > 0){ voicesReady = true; resolve(); return; }
+    let attempts = 0;
+    const iv = setInterval(() => {
+      const v = window.speechSynthesis.getVoices();
+      attempts++;
+      if(v.length > 0 || attempts > 30){ voicesReady = true; clearInterval(iv); resolve(); }
+    }, 100);
+  });
+}
+window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); voicesReady = true; };
+waitForVoices();
 
 // Chrome Android bug: speechSynthesis pauses after ~15s — keep it alive
 setInterval(() => {
