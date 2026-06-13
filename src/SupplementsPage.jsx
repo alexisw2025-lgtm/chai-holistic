@@ -691,6 +691,13 @@ function SupplementCard({ supp, onDetail, onBuy }) {
             </div>
           </div>
         </div>
+        {/* Trust line */}
+        <div style={{display:"flex",alignItems:"center",gap:6,marginTop:8,padding:"6px 10px",background:"rgba(196,137,58,.05)",borderRadius:8,border:"1px solid rgba(196,137,58,.1)"}}>
+          <span style={{fontSize:".65rem",color:"rgba(196,137,58,.5)"}}>↗</span>
+          <span style={{fontSize:".6rem",color:"rgba(247,242,234,.3)",fontFamily:"Jost,sans-serif",lineHeight:1.5}}>
+            Opens Amazon in a new tab · Vetted by Chai Holistic · We earn a small commission at no cost to you
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -820,11 +827,42 @@ function DetailModal({ supp, onClose, onBuy }) {
             </p>
           </div>
 
-          {/* CTA — spinning Amazon button */}
-          <div style={{display:"flex",justifyContent:"center",margin:"8px 0 16px"}}>
-            <AmazonSpinBtn onClick={onBuy}/>
+          {/* CTA — personal endorsement + spinning Amazon button */}
+          <div style={{background:"linear-gradient(135deg,rgba(196,137,58,.1),rgba(196,137,58,.05))",border:"1px solid rgba(196,137,58,.2)",borderRadius:16,padding:"16px 18px",marginBottom:16}}>
+            {/* Endorsement line */}
+            <div style={{display:"flex",alignItems:"flex-start",gap:12,marginBottom:14}}>
+              <div style={{width:36,height:36,borderRadius:"50%",background:"linear-gradient(135deg,rgba(196,137,58,.3),rgba(196,137,58,.1))",border:"1px solid rgba(196,137,58,.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1rem",flexShrink:0}}>🌿</div>
+              <div>
+                <div style={{fontSize:".6rem",letterSpacing:".15em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:4,fontWeight:600}}>Alex's Pick</div>
+                <div style={{fontSize:".78rem",color:"rgba(247,242,234,.8)",lineHeight:1.65,fontStyle:"italic",fontWeight:300}}>
+                  "This is the specific brand and form I'd use myself — and the one I'd hand to someone I care about."
+                </div>
+              </div>
+            </div>
+            {/* Price context */}
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 12px",background:"rgba(0,0,0,.2)",borderRadius:10,marginBottom:14}}>
+              <div>
+                <div style={{fontSize:".55rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.6)",marginBottom:2}}>Typical Price</div>
+                <div style={{fontSize:"1rem",fontFamily:"Playfair Display,serif",color:"rgba(196,137,58,.95)",fontWeight:600}}>{supp.price}</div>
+              </div>
+              <div style={{textAlign:"right"}}>
+                <div style={{fontSize:".55rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.3)",marginBottom:2}}>Sold by</div>
+                <div style={{fontSize:".75rem",color:"rgba(255,255,255,.6)",fontWeight:500}}>{supp.brand}</div>
+              </div>
+            </div>
+            {/* Spinning button */}
+            <div style={{display:"flex",justifyContent:"center"}}>
+              <AmazonSpinBtn onClick={onBuy}/>
+            </div>
+            {/* Trust line */}
+            <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:6,marginTop:12}}>
+              <span style={{fontSize:".6rem",color:"rgba(196,137,58,.4)"}}>↗</span>
+              <span style={{fontSize:".6rem",color:"rgba(247,242,234,.25)",fontFamily:"Jost,sans-serif",lineHeight:1.5,textAlign:"center"}}>
+                Opens Amazon in a new tab · Sourced &amp; vetted by Chai Holistic
+              </span>
+            </div>
           </div>
-          <p style={{fontSize:".6rem",color:"rgba(247,242,234,.25)",textAlign:"center",margin:"0 0 4px",lineHeight:1.6}}>
+          <p style={{fontSize:".58rem",color:"rgba(247,242,234,.2)",textAlign:"center",margin:"0 0 4px",lineHeight:1.6}}>
             Affiliate link — we earn a small commission at no cost to you.<br/>
             These statements have not been evaluated by the FDA. Not intended to diagnose, treat, cure, or prevent any disease.
           </p>
