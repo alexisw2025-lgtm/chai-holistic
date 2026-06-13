@@ -2686,6 +2686,26 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     }
   }, [amaraMessages, amaraLoading]);
 
+  // When the blend recommendation modal closes, return Amara's chat to the
+  // bottom (where the recommendation lives) — runs after React commits the
+  // DOM removal of BlendModal, so the chat panel is fully visible again.
+  useEffect(() => {
+    if (selectedBlend !== null) return;
+    if (!amaraOpen) return;
+    const scrollToBottom = () => {
+      if (amaraChatBodyRef.current) {
+        amaraChatBodyRef.current.scrollTop = amaraChatBodyRef.current.scrollHeight;
+      }
+      if (amaraEndRef.current) {
+        amaraEndRef.current.scrollIntoView({ block: 'end' });
+      }
+    };
+    // Run on next frame (after paint) and again shortly after as a fallback
+    requestAnimationFrame(() => requestAnimationFrame(scrollToBottom));
+    const t = setTimeout(scrollToBottom, 250);
+    return () => clearTimeout(t);
+  }, [selectedBlend, amaraOpen]);
+
   useEffect(() => {
     if (amaraOpen && amaraInputRef.current) setTimeout(() => amaraInputRef.current?.focus(), 300);
   }, [amaraOpen]);
@@ -8680,20 +8700,7 @@ Thank you!`);
 
       {intentionOpen && <IntentionEngine/>}
       {finderOpen && <TeaFinderModal/>}
-      {selectedBlend && <BlendModal blend={selectedBlend} onClose={()=>{
-        setSelectedBlend(null);
-        // Fire at 3 different timings to guarantee one catches after modal unmounts
-        [200, 350, 500].forEach(delay => {
-          setTimeout(()=>{
-            if(amaraChatBodyRef.current){
-              amaraChatBodyRef.current.scrollTop = amaraChatBodyRef.current.scrollHeight;
-            }
-            if(amaraEndRef.current){
-              amaraEndRef.current.scrollIntoView({block:'end'});
-            }
-          }, delay);
-        });
-      }}/>}
+      {selectedBlend && <BlendModal blend={selectedBlend} onClose={()=>setSelectedBlend(null)}/>}
 
       {saveRitualOpen && cart.length > 0 && <SaveRitualModal/>}
       {activeRecipe && <RecipeModal/>}
