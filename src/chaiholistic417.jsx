@@ -7575,7 +7575,7 @@ Thank you!`);
                     ))}
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:4}}>
-                    {[["5","49mm"],["6","51.8mm"],["7","54.4mm"],["8","57mm"],["9","59.5mm"],["10","62.1mm"],["11","64.6mm"],["12","67.2mm"]].map(([s,mm])=>(
+                    {[["5","49mm"],["6","51.8mm"],["7","54.4mm"],["8","57mm"],["9","59.5mm"],["10","62.1mm"],["11","64.6mm"],["12","67.2mm"],["13","69.7mm"],["14","72.3mm"],["15","74.8mm"]].map(([s,mm])=>(
                       <div key={s} style={{background:"rgba(0,0,0,.2)",borderRadius:6,padding:"5px 4px",textAlign:"center"}}>
                         <div style={{fontSize:".7rem",color:"rgba(196,137,58,.8)",fontWeight:600}}>US {s}</div>
                         <div style={{fontSize:".58rem",color:"rgba(255,255,255,.3)"}}>{mm}</div>
@@ -8682,7 +8682,17 @@ Thank you!`);
       {finderOpen && <TeaFinderModal/>}
       {selectedBlend && <BlendModal blend={selectedBlend} onClose={()=>{
         setSelectedBlend(null);
-        setTimeout(()=>{ if(amaraEndRef.current) amaraEndRef.current.scrollIntoView({behavior:'smooth'}); }, 100);
+        // Fire at 3 different timings to guarantee one catches after modal unmounts
+        [200, 350, 500].forEach(delay => {
+          setTimeout(()=>{
+            if(amaraChatBodyRef.current){
+              amaraChatBodyRef.current.scrollTop = amaraChatBodyRef.current.scrollHeight;
+            }
+            if(amaraEndRef.current){
+              amaraEndRef.current.scrollIntoView({block:'end'});
+            }
+          }, delay);
+        });
       }}/>}
 
       {saveRitualOpen && cart.length > 0 && <SaveRitualModal/>}
