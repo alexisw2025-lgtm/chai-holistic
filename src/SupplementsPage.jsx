@@ -695,7 +695,7 @@ function SupplementCard({ supp, onDetail, onBuy }) {
         <div style={{display:"flex",alignItems:"center",gap:6,marginTop:8,padding:"6px 10px",background:"rgba(196,137,58,.05)",borderRadius:8,border:"1px solid rgba(196,137,58,.1)"}}>
           <span style={{fontSize:".65rem",color:"rgba(196,137,58,.5)"}}>↗</span>
           <span style={{fontSize:".6rem",color:"rgba(247,242,234,.3)",fontFamily:"Jost,sans-serif",lineHeight:1.5}}>
-            Opens Amazon in a new tab · Vetted by Chai Holistic · We earn a small commission at no cost to you
+            Opens Amazon in a new tab · Sourced &amp; vetted by Chai Holistic
           </span>
         </div>
       </div>
@@ -863,7 +863,6 @@ function DetailModal({ supp, onClose, onBuy }) {
             </div>
           </div>
           <p style={{fontSize:".58rem",color:"rgba(247,242,234,.2)",textAlign:"center",margin:"0 0 4px",lineHeight:1.6}}>
-            Affiliate link — we earn a small commission at no cost to you.<br/>
             These statements have not been evaluated by the FDA. Not intended to diagnose, treat, cure, or prevent any disease.
           </p>
         </div>
