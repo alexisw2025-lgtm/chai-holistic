@@ -2452,7 +2452,6 @@ Respond ONLY with this exact JSON structure:
   });
   // 2AM mode
   const [twoAM, setTwoAM] = useState(false);
-  const [prayerOpen, setPrayerOpen] = useState(false);
 
 
   // ── AMARA — Wellness Companion ─────────────────────────────────────────────
@@ -2462,6 +2461,8 @@ Respond ONLY with this exact JSON structure:
   const [amaraLoading, setAmaraLoading] = useState(false);
   const [amaraGreeted, setAmaraGreeted] = useState(false);
   const amaraEndRef = useRef(null);
+  const amaraLastMsgRef = useRef(null);
+  const amaraChatBodyRef = useRef(null);
   const amaraInputRef = useRef(null);
 
   const timerRef = useRef(null);
@@ -2672,7 +2673,17 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
   };
 
   useEffect(() => {
-    if (amaraEndRef.current) amaraEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (!amaraMessages.length) return;
+    const lastMsg = amaraMessages[amaraMessages.length - 1];
+    if (lastMsg.role === 'assistant' && amaraLastMsgRef.current) {
+      // Scroll to top of Amara's reply so user reads from the beginning
+      setTimeout(() => {
+        amaraLastMsgRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    } else {
+      // User message — scroll to bottom as normal
+      if (amaraEndRef.current) amaraEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [amaraMessages, amaraLoading]);
 
   useEffect(() => {
@@ -2811,15 +2822,6 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
   const close2AM = () => {
     setTwoAM(false);
     stopTimer();
-    setTimeout(() => window.scrollTo({ top: scrollPosRef.current, behavior: "instant" }), 30);
-  };
-
-  const openPrayer = () => {
-    scrollPosRef.current = window.scrollY || document.documentElement.scrollTop || 0;
-    setPrayerOpen(true);
-  };
-  const closePrayer = () => {
-    setPrayerOpen(false);
     setTimeout(() => window.scrollTo({ top: scrollPosRef.current, behavior: "instant" }), 30);
   };
 
@@ -3886,7 +3888,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
 
         {/* Choose a prayer link */}
         <button
-          onClick={()=>openPrayer()}
+          onClick={()=>window.open('/prayer.html','_blank')}
           style={{
             marginTop:28,
             background:"rgba(196,137,58,0.1)",
@@ -4956,7 +4958,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
       {(()=>{
         const START_PATHS = [
           { icon:"🌿", label:"I want to heal",      sub:"Body, mind, or spirit — find blends and rituals built for restoration.",  action:()=>nav("shop"),          accent:"#5A8A6A", accentLight:"rgba(90,138,106,0.15)" },
-          { icon:"🙏", label:"I need to pray",       sub:"It's late. Something is heavy. A prayer is waiting for you right now.",   action:()=>openPrayer(),            accent:"#C4893A", accentLight:"rgba(196,137,58,0.15)" },
+          { icon:"🙏", label:"I need to pray",       sub:"It's late. Something is heavy. A prayer is waiting for you right now.",   action:()=>open2AM(),            accent:"#C4893A", accentLight:"rgba(196,137,58,0.15)" },
           { icon:"💪", label:"Men's wellness",       sub:"40 blends built for men — body, focus, and faith.",                       action:()=>nav("men"),           accent:"#7A6A9A", accentLight:"rgba(122,106,154,0.15)" },
           { icon:"💍", label:"Vibe Shift Rings",     sub:"Wearable intention. Each ring carries a 417Hz transformation frequency.", action:()=>nav("rings"),         accent:"#A07840", accentLight:"rgba(160,120,64,0.15)" },
           { icon:"✦",  label:"Supplements",          sub:"Carefully chosen allies for your wellness stack, paired with tea rituals.", action:()=>nav("supplements"), accent:"#6A8A7A", accentLight:"rgba(106,138,122,0.15)" },
@@ -5047,7 +5049,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                 <p style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(13px,3.2vw,15px)",fontStyle:"italic",color:"rgba(247,242,234,0.32)",marginBottom:14}}>Your ritual is waiting.</p>
                 <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
                   {[["🌿","Explore blends","shop"],["🙏","Daily prayer","__prayer__"],["💍","Vibe Shift Rings","rings"]].map(([icon,label,pg])=>(
-                    <button key={pg} onClick={()=>pg==="__prayer__"?openPrayer():nav(pg)} style={{padding:"8px 18px",borderRadius:20,border:"1px solid rgba(196,137,58,0.2)",background:"transparent",fontFamily:"Jost,sans-serif",fontSize:12,color:"rgba(247,242,234,0.4)",fontWeight:300,cursor:"pointer",transition:"all 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.5)";e.currentTarget.style.color="rgba(247,242,234,0.75)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.2)";e.currentTarget.style.color="rgba(247,242,234,0.4)";}}>
+                    <button key={pg} onClick={()=>pg==="__prayer__"?open2AM():nav(pg)} style={{padding:"8px 18px",borderRadius:20,border:"1px solid rgba(196,137,58,0.2)",background:"transparent",fontFamily:"Jost,sans-serif",fontSize:12,color:"rgba(247,242,234,0.4)",fontWeight:300,cursor:"pointer",transition:"all 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.5)";e.currentTarget.style.color="rgba(247,242,234,0.75)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.2)";e.currentTarget.style.color="rgba(247,242,234,0.4)";}}>
                       {icon}  {label}
                     </button>
                   ))}
@@ -8557,7 +8559,7 @@ Thank you!`);
             <span style={{color:"var(--dust)"}}>›</span>
           </div>
         ))}
-        <div className="mob-lnk mob-lnk-special" onClick={()=>{openPrayer();setMobMenuOpen(false);}}>
+        <div className="mob-lnk mob-lnk-special" onClick={()=>{open2AM();setMobMenuOpen(false);}}>
           🙏 Daily Prayer <span style={{color:"var(--gold)"}}>›</span>
         </div>
         <div className="mob-lnk mob-lnk-special" onClick={()=>{setProfileOpen(true);setMobMenuOpen(false);}}>
@@ -8620,7 +8622,12 @@ Thank you!`);
 
       {intentionOpen && <IntentionEngine/>}
       {finderOpen && <TeaFinderModal/>}
-      {selectedBlend && <BlendModal blend={selectedBlend} onClose={()=>setSelectedBlend(null)}/>}
+      {selectedBlend && <BlendModal blend={selectedBlend} onClose={()=>{
+        setSelectedBlend(null);
+        setTimeout(()=>{
+          if(amaraEndRef.current) amaraEndRef.current.scrollIntoView({behavior:'smooth'});
+        }, 100);
+      }}/>}
 
       {saveRitualOpen && cart.length > 0 && <SaveRitualModal/>}
       {activeRecipe && <RecipeModal/>}
@@ -8633,8 +8640,8 @@ Thank you!`);
       <CartDrawer/>
 
       {/* 2AM BUTTON   hidden while overlay is open */}
-      {!twoAM && !prayerOpen && (
-        <button className="twoam-btn" onClick={openPrayer}>
+      {!twoAM && (
+        <button className="twoam-btn" onClick={open2AM}>
           {isNight?T.pray_btn_night:T.pray_btn_day}
         </button>
       )}
@@ -8731,7 +8738,7 @@ Thank you!`);
               <span className="ft-lnk" onClick={()=>setTrackerOpen(true)}>🌿 Cleanse Tracker</span>
               <span className="ft-lnk" onClick={()=>nav("faq")}>FAQ &amp; Safety Guide</span>
               <span className="ft-lnk" onClick={()=>nav("faq")}>🌡 Brewing Guide</span>
-              <span className="ft-lnk" onClick={openPrayer}>🌙 Daily Prayer</span>
+              <span className="ft-lnk" onClick={open2AM}>🌙 2AM Mode</span>
             </div>
             <div>
               <div className="ft-col-h">Our Universe</div>
@@ -8911,68 +8918,6 @@ Thank you!`);
       )}
 
       {/* ── TEA CARD MODAL ───────────────────────────────────────────────── */}
-      {/* ── PRAYER MODAL OVERLAY ─────────────────────────────────────────────── */}
-      {prayerOpen && (
-        <>
-          {/* Backdrop — blurred main site */}
-          <div
-            onClick={closePrayer}
-            style={{
-              position:"fixed",inset:0,zIndex:1800,
-              background:"rgba(5,8,5,0.75)",
-              backdropFilter:"blur(8px)",
-              WebkitBackdropFilter:"blur(8px)",
-              animation:"fadeIn .3s ease",
-            }}
-          />
-          {/* Prayer sheet — slides up */}
-          <div style={{
-            position:"fixed",bottom:0,left:0,right:0,zIndex:1801,
-            height:"92vh",
-            borderRadius:"24px 24px 0 0",
-            overflow:"hidden",
-            boxShadow:"0 -20px 80px rgba(0,0,0,0.6)",
-            animation:"slideUp .35s cubic-bezier(.34,1.1,.64,1)",
-            display:"flex",flexDirection:"column",
-          }}>
-            {/* Handle bar + close */}
-            <div style={{
-              background:"#0A0F0B",
-              padding:"12px 20px 0",
-              display:"flex",alignItems:"center",justifyContent:"space-between",
-              flexShrink:0,
-              borderBottom:"1px solid rgba(196,137,58,0.12)",
-            }}>
-              <div style={{
-                fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",
-                color:"rgba(196,137,58,0.6)",fontFamily:"Jost,sans-serif",fontWeight:300,
-              }}>2AM Companion · Daily Prayer</div>
-              <button
-                onClick={closePrayer}
-                style={{
-                  background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",
-                  color:"rgba(255,255,255,0.6)",borderRadius:"50%",
-                  width:32,height:32,cursor:"pointer",fontSize:"1rem",
-                  display:"flex",alignItems:"center",justifyContent:"center",
-                  transition:"all .2s",marginBottom:8,
-                }}
-                onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.12)";e.currentTarget.style.color="white";}}
-                onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.06)";e.currentTarget.style.color="rgba(255,255,255,0.6)";}}
-              >✕</button>
-            </div>
-            {/* iframe loads prayer.html */}
-            <iframe
-              src="/prayer.html"
-              style={{flex:1,border:"none",width:"100%",background:"#0A0F0B"}}
-              title="Daily Prayer"
-            />
-          </div>
-          <style>{`
-            @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-          `}</style>
-        </>
-      )}
-
       {teaCardModal && (
         <>
           <div onClick={()=>setTeaCardModal(null)} style={{position:"fixed",inset:0,zIndex:2000,background:"rgba(0,0,0,.65)",backdropFilter:"blur(6px)"}}/>
@@ -9371,15 +9316,16 @@ Thank you!`);
             </div>
 
             {/* Messages */}
-            <div style={{
+            <div ref={amaraChatBodyRef} style={{
               flex:1, overflowY:"auto", padding:"18px 16px",
               display:"flex", flexDirection:"column", gap:14,
               scrollbarWidth:"thin", scrollbarColor:"rgba(196,137,58,.2) transparent",
             }}>
               {amaraMessages.map((m, i) => {
                 const parsed = m.role === "assistant" ? parseAmaraMessage(m.text) : { cleanText: m.text, blendIds: [] };
+                const isLastAssistant = m.role === "assistant" && i === amaraMessages.map(x=>x.role).lastIndexOf("assistant");
                 return (
-                  <div key={i} style={{
+                  <div key={i} ref={isLastAssistant ? amaraLastMsgRef : null} style={{
                     display:"flex",
                     justifyContent: m.role === "user" ? "flex-end" : "flex-start",
                     alignItems:"flex-end", gap:8,
