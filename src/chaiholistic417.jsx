@@ -7538,10 +7538,9 @@ Thank you!`);
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"white",marginBottom:6}}>Choose your ring size</div>
                 <div style={{fontSize:".74rem",color:"rgba(255,255,255,.35)",marginBottom:"1rem",fontWeight:300}}>
-                  Not sure of your size? A ring sizer is available at most jewelry stores. Our rings fit true to standard US sizing.
+                  Select your US ring size below. Need to measure? Use the guide underneath.
                 </div>
-                <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:"1.4rem"}}>
-                  {RING_SIZES.map(size=>(
+                <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:"1.2rem"}}>                  {RING_SIZES.map(size=>(
                     <div key={size}
                       onClick={()=>setSelectedSize(size)}
                       style={{
@@ -7559,6 +7558,43 @@ Thank you!`);
                     </div>
                   ))}
                 </div>
+
+                {/* How to measure at home */}
+                <div style={{background:"rgba(196,137,58,.07)",border:"1px solid rgba(196,137,58,.2)",borderRadius:14,padding:"14px 16px",marginBottom:10}}>
+                  <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.8)",marginBottom:10,fontWeight:600}}>📏 How to Measure at Home</div>
+                  <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:12}}>
+                    {[
+                      ["1","Wrap a thin strip of paper or string around the finger you plan to wear the ring on."],
+                      ["2","Mark where it overlaps, lay it flat and measure the length in millimeters."],
+                      ["3","Match your measurement to the chart below. If between sizes, always size up."],
+                    ].map(([n,t])=>(
+                      <div key={n} style={{display:"flex",gap:10,alignItems:"flex-start"}}>
+                        <div style={{width:20,height:20,borderRadius:"50%",background:"rgba(196,137,58,.2)",border:"1px solid rgba(196,137,58,.35)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:".62rem",color:"rgba(196,137,58,.9)",fontWeight:700}}>{n}</div>
+                        <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.6}}>{t}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:4}}>
+                    {[["5","49mm"],["6","51.8mm"],["7","54.4mm"],["8","57mm"],["9","59.5mm"],["10","62.1mm"],["11","64.6mm"],["12","67.2mm"]].map(([s,mm])=>(
+                      <div key={s} style={{background:"rgba(0,0,0,.2)",borderRadius:6,padding:"5px 4px",textAlign:"center"}}>
+                        <div style={{fontSize:".7rem",color:"rgba(196,137,58,.8)",fontWeight:600}}>US {s}</div>
+                        <div style={{fontSize:".58rem",color:"rgba(255,255,255,.3)"}}>{mm}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Best finger — founder's personal note */}
+                <div style={{background:"rgba(45,74,45,.25)",border:"1px solid rgba(74,114,80,.25)",borderRadius:12,padding:"12px 14px",marginBottom:10,display:"flex",gap:12,alignItems:"flex-start"}}>
+                  <div style={{fontSize:"1.2rem",flexShrink:0}}>💍</div>
+                  <div>
+                    <div style={{fontSize:".68rem",color:"rgba(74,114,80,.9)",fontWeight:600,marginBottom:3}}>Best Finger — Alex's Recommendation</div>
+                    <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.65}}>
+                      I wear mine on the <strong style={{color:"white"}}>left hand index (pointer) finger</strong>. It stays in your line of sight all day — and when you're scrolling or moving through the world it's always there, a quiet reminder of the intention you set. That's why I chose that finger, and why I think it works best.
+                    </div>
+                  </div>
+                </div>
+
                 <div style={{background:"rgba(196,137,58,.08)",border:"1px solid rgba(196,137,58,.2)",borderRadius:12,padding:"10px 14px",fontSize:".72rem",color:"rgba(255,255,255,.4)",lineHeight:1.6}}>
                   💡 <strong style={{color:"rgba(196,137,58,.7)"}}>Tip:</strong> If you're between sizes, size up. The spinning outer band works best with a comfortable, slightly loose fit.
                 </div>
@@ -7641,7 +7677,19 @@ Thank you!`);
                   Each ring is precision-engineered and Meridian Infused after printing.<br/>Allow 5-7 business days for production and shipping.
                 </div>
                 {/* Review confirmation — required before Add to Basket */}
-                <div style={{display:"flex",alignItems:"flex-start",gap:14,cursor:"pointer",background:rcOrderConfirmed?"rgba(45,74,45,.35)":"rgba(255,255,255,.03)",border:rcOrderConfirmed?"1px solid rgba(196,137,58,.5)":"1px solid rgba(255,255,255,.1)",borderRadius:14,padding:"14px 16px",transition:"all .25s",marginBottom:"0.5rem"}} onClick={()=>setRcOrderConfirmed(v=>!v)}>
+                <div style={{display:"flex",alignItems:"flex-start",gap:14,cursor:"pointer",background:rcOrderConfirmed?"rgba(45,74,45,.35)":"rgba(255,255,255,.03)",border:rcOrderConfirmed?"1px solid rgba(196,137,58,.5)":"1px solid rgba(255,255,255,.1)",borderRadius:14,padding:"14px 16px",transition:"all .25s",marginBottom:"0.5rem"}} onClick={()=>{
+                  const newVal = !rcOrderConfirmed;
+                  setRcOrderConfirmed(newVal);
+                  if(newVal){
+                    setTimeout(()=>{
+                      const btn = document.getElementById('ring-add-basket-btn');
+                      const modal = document.getElementById('ring-config-modal');
+                      if(btn && modal){
+                        modal.scrollTo({top: btn.offsetTop - 20, behavior:'smooth'});
+                      }
+                    }, 150);
+                  }
+                }}>
                   <div style={{
                       width:22,height:22,borderRadius:6,flexShrink:0,marginTop:1,
                       background:rcOrderConfirmed?"var(--gold)":"rgba(255,255,255,.06)",
@@ -7722,6 +7770,7 @@ Thank you!`);
                 </button>
               ) : step === 6 ? (
                 <button
+                  id="ring-add-basket-btn"
                   disabled={!rcOrderConfirmed}
                   onClick={handleAddToCart}
                   style={{background:rcOrderConfirmed?"var(--gold)":"rgba(255,255,255,.08)",color:"white",border:"none",padding:"13px 28px",borderRadius:50,fontSize:".76rem",fontFamily:"Jost,sans-serif",letterSpacing:".1em",textTransform:"uppercase",cursor:rcOrderConfirmed?"pointer":"default",transition:"all .2s",opacity:rcOrderConfirmed?1:.45,boxShadow:rcOrderConfirmed?"0 4px 20px rgba(196,137,58,.4)":"none"}}>
