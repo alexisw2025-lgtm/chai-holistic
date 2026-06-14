@@ -1125,18 +1125,28 @@ function speakWithBrowser(text, player){
     if(preferred) utt.voice = preferred;
     utt.onend = speakNext;
     utt.onerror = (e) => {
+      // If this error was caused by an intentional stop (speechSynthesis.cancel()
+      // via stopAudio), the browser fires 'canceled' or 'interrupted' — do NOT
+      // retry in that case, or stop will appear to "not work".
+      if (!isPlaying || (e && (e.error === 'canceled' || e.error === 'interrupted'))) {
+        return;
+      }
       failCount++;
       // On Chromebook, if first chunk fails try resuming and retrying once
       if(failCount <= 2){
         window.speechSynthesis.cancel();
         setTimeout(() => {
+          if (!isPlaying) return; // re-check — user may have stopped during the 200ms wait
           window.speechSynthesis.resume();
           const retry = new SpeechSynthesisUtterance(chunks[chunkIdx - 1] || '');
           retry.rate = 0.82; retry.pitch = 0.95; retry.volume = 1;
           retry.lang = LANG_TO_BCP47[lang] || 'en-US';
           if(preferred) retry.voice = preferred;
           retry.onend = speakNext;
-          retry.onerror = () => stopAudio();
+          retry.onerror = (e2) => {
+            if (!isPlaying || (e2 && (e2.error === 'canceled' || e2.error === 'interrupted'))) return;
+            stopAudio();
+          };
           window.speechSynthesis.speak(retry);
         }, 200);
       } else {
