@@ -2469,7 +2469,7 @@ Respond ONLY with this exact JSON structure:
 
   const timerRef = useRef(null);
   const topRef = useRef(null);
-  const [showBackTop, setShowBackTop] = useState(false);
+  const [sipToolsOpen, setSipToolsOpen] = useState(false);
   const [activeSecIdx, setActiveSecIdx] = useState(0);
   const [bookPreview, setBookPreview] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -2527,13 +2527,6 @@ Respond ONLY with this exact JSON structure:
       audioCtxRef.current = null;
     }
   };
-
-  // Show back-to-top after scrolling 400px
-  useEffect(() => {
-    const onScroll = () => setShowBackTop(window.scrollY > 400);
-    window.addEventListener("scroll", onScroll, { passive:true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const PAGE_SECTIONS = {
     home:    [["↑ Top","sec-hero"],["Features","sec-features"],["Blends","sec-blends"],["Story","sec-story"],["Tea","sec-tea"],["Bundles","sec-bundles"],["Brew Tools","sec-tools-home"],["Rings","sec-rings-home"],["Brewing","sec-brewing"],["FAQ","sec-faq-teaser"]],
@@ -3405,9 +3398,6 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     .sec-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.55);border:none;transition:all .3s;flex-shrink:0;box-shadow:0 0 0 2px rgba(255,255,255,.85),0 0 0 4px rgba(0,0,0,.2);}
     .sec-dot.active{background:var(--gold);transform:scale(1.5);box-shadow:0 0 0 2.5px rgba(255,255,255,1),0 0 0 5px rgba(196,137,58,.6),0 0 14px rgba(196,137,58,.6);}
     .sec-dot-wrap:hover .sec-dot:not(.active){transform:scale(1.2);}
-    .back-top{position:fixed;bottom:90px;right:28px;z-index:399;background:var(--bark);color:white;border:none;width:44px;height:44px;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 16px rgba(28,26,23,.25);transition:all .3s;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;}
-    .back-top.visible{opacity:1;pointer-events:all;}
-    .back-top:hover{background:var(--sage-d);transform:translateY(-3px);}
     .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bark);color:var(--parch);padding:10px 24px;font-size:.76rem;letter-spacing:.06em;z-index:1000;box-shadow:0 8px 28px rgba(28,26,23,.25);border-radius:50px;animation:toastIn .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
     @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(13px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
@@ -3699,7 +3689,6 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
 
       /* Floating buttons */
       .twoam-btn{top:108px;left:12px;padding:9px 14px;font-size:.64rem;}
-      .back-top{bottom:72px;right:16px;width:38px;height:38px;font-size:1rem;}
       .sec-nav{right:10px;}
 
       /* Hero cards hidden on mobile — replace with simpler layout */
@@ -8719,26 +8708,36 @@ Thank you!`);
         </button>
       )}
 
-      {/* FLOATING SIP & HEAL REPORT CTA */}
-      {!twoAM && !showWelcome && !profileOpen && welcomeSeen && (
-        <button
-          onClick={()=>setProfileOpen(true)}
-          style={{position:"fixed",bottom:136,left:28,zIndex:398,background:"linear-gradient(135deg,rgba(192,136,48,.9),rgba(180,120,30,.95))",color:"white",border:"1px solid rgba(255,255,255,.25)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(192,136,48,.4)",whiteSpace:"nowrap"}}
-          title="Get your free Sip &amp; Heal Report">
-          🌿 Free Sip &amp; Heal Report
-        </button>
+      {/* COMBINED SIP TOOLS — expandable button (Report + Seek) */}
+      {!twoAM && !showWelcome && !profileOpen && !intentionOpen && welcomeSeen && (
+        <div style={{position:"fixed",bottom:90,left:28,zIndex:398,display:"flex",flexDirection:"column",alignItems:"flex-start",gap:10}}>
+          {/* Expanded options — appear above the main button */}
+          {sipToolsOpen && (
+            <>
+              <button
+                onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);setSipToolsOpen(false);}}
+                style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"rgba(255,255,255,.9)",border:"1px solid rgba(196,137,58,.4)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(45,74,45,.35)",whiteSpace:"nowrap",animation:"sipToolPop .25s cubic-bezier(.34,1.56,.64,1)"}}
+                title="Open Sip & Seek">
+                🌿 Sip &amp; Seek
+              </button>
+              <button
+                onClick={()=>{setProfileOpen(true);setSipToolsOpen(false);}}
+                style={{background:"linear-gradient(135deg,rgba(192,136,48,.9),rgba(180,120,30,.95))",color:"white",border:"1px solid rgba(255,255,255,.25)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(192,136,48,.4)",whiteSpace:"nowrap",animation:"sipToolPop .3s cubic-bezier(.34,1.56,.64,1)"}}
+                title="Get your free Sip &amp; Heal Report">
+                🌿 Free Sip &amp; Heal Report
+              </button>
+            </>
+          )}
+          {/* Main toggle button */}
+          <button
+            onClick={()=>setSipToolsOpen(v=>!v)}
+            style={{background:sipToolsOpen?"rgba(255,255,255,.08)":"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"rgba(255,255,255,.9)",border:"1px solid rgba(196,137,58,.4)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(45,74,45,.35)",whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:8,transition:"all .2s"}}
+            title="Wellness tools">
+            🌿 Sip Tools <span style={{display:"inline-block",transition:"transform .25s",transform:sipToolsOpen?"rotate(180deg)":"rotate(0deg)",fontSize:".6rem"}}>▲</span>
+          </button>
+        </div>
       )}
-
-      {/* FLOATING SIP & SEEK   always accessible while browsing */}
-      {!twoAM && !showWelcome && !intentionOpen && welcomeSeen && (
-        <button
-          onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}
-          style={{position:"fixed",bottom:90,left:28,zIndex:398,background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"rgba(255,255,255,.85)",border:"1px solid rgba(196,137,58,.4)",padding:"9px 18px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".65rem",letterSpacing:".1em",cursor:"pointer",boxShadow:"0 4px 18px rgba(45,74,45,.35)",animation:"sipSeekPulse 4s ease-in-out infinite",whiteSpace:"nowrap"}}
-          title="Open Sip &amp; Seek">
-          🌿 Sip &amp; Seek
-        </button>
-      )}
-      <style>{`@keyframes sipSeekPulse{0%,100%{box-shadow:0 4px 18px rgba(45,74,45,.35)}50%{box-shadow:0 4px 28px rgba(196,137,58,.4)}}`}</style>
+      <style>{`@keyframes sipToolPop{from{opacity:0;transform:translateY(8px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}`}</style>
 
       {!twoAM && (PAGE_SECTIONS[page]||[]).length > 0 && (
         <div className="sec-nav">
@@ -8763,13 +8762,6 @@ Thank you!`);
           ))}
         </div>
       )}
-
-      {/* BACK TO TOP BUTTON */}
-      <button
-        className={`back-top ${showBackTop?"visible":""}`}
-        onClick={() => { topRef.current && topRef.current.scrollIntoView({behavior:"smooth"}); }}
-        title="Back to top"
-      >↑</button>
 
       {notif && <div className="toast">{notif}</div>}
 
