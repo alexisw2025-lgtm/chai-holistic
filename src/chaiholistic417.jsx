@@ -261,19 +261,6 @@ const LANGS = {
     prayer_eyebrow:"Daily Prayer",
     prayer_back:"← Back",
     prayer_ring_note:"Have a Vibe Shift Ring? Touch it to your phone anytime to hear today's prayer — no screen needed.",
-    // Frequency Rituals
-    sec_rituals_eye:"✦ Frequency Rituals", sec_rituals:"Complete the Ritual",
-    sec_rituals_sub:"Each frequency is paired with a blend and an intention — so the ring, the tea, and the moment all move together.",
-    ritual_paired_tea:"Paired Tea", ritual_intention:"Today's Intention",
-    freq_174_intent:"I am held. I am safe. I begin again from solid ground.",
-    freq_285_intent:"I restore what the day has taken. My body knows how to heal.",
-    freq_396_intent:"I release what I no longer need to carry.",
-    freq_417_intent:"I let go of the old. I make room for what's next.",
-    freq_528_intent:"My heart is open. I am worthy of repair and of love.",
-    freq_639_intent:"I am not alone. My heart knows who to trust.",
-    freq_741_intent:"I speak my truth. My mind is clear.",
-    freq_852_intent:"I return to my strength. I trust what I know.",
-    freq_963_intent:"I am connected to something greater than myself.",
     // Section headers
     sec_features:"Features you won't find anywhere else",
     sec_features_eye:"Why Chai Holistic",
@@ -471,19 +458,6 @@ const LANGS = {
     prayer_eyebrow:"Oración Diaria",
     prayer_back:"← Volver",
     prayer_ring_note:"¿Tienes un Vibe Shift Ring? Tócalo en tu teléfono para escuchar la oración de hoy — sin necesidad de pantalla.",
-    // Frequency Rituals
-    sec_rituals_eye:"✦ Rituales de Frecuencia", sec_rituals:"Completa el Ritual",
-    sec_rituals_sub:"Cada frecuencia está emparejada con una mezcla y una intención — para que el anillo, el té y el momento se muevan juntos.",
-    ritual_paired_tea:"Té Recomendado", ritual_intention:"Intención de Hoy",
-    freq_174_intent:"Estoy sostenido/a. Estoy a salvo. Comienzo de nuevo desde tierra firme.",
-    freq_285_intent:"Restauro lo que el día se llevó. Mi cuerpo sabe cómo sanar.",
-    freq_396_intent:"Suelto lo que ya no necesito cargar.",
-    freq_417_intent:"Dejo ir lo viejo. Hago espacio para lo que viene.",
-    freq_528_intent:"Mi corazón está abierto. Soy digno/a de sanar y de amar.",
-    freq_639_intent:"No estoy solo/a. Mi corazón sabe en quién confiar.",
-    freq_741_intent:"Hablo mi verdad. Mi mente está clara.",
-    freq_852_intent:"Regreso a mi fuerza. Confío en lo que sé.",
-    freq_963_intent:"Estoy conectado/a con algo más grande que yo.",
     sec_features:"Características que no encontrarás en ningún otro lugar",
     sec_features_eye:"Por Qué Chai Holistic",
     sec_blends:"Las Mezclas Sip & Heal",
@@ -655,19 +629,6 @@ const LANGS = {
     prayer_eyebrow:"Prière du Jour",
     prayer_back:"← Retour",
     prayer_ring_note:"Vous avez une Vibe Shift Ring? Touchez-la sur votre téléphone pour entendre la prière du jour — sans écran.",
-    // Frequency Rituals
-    sec_rituals_eye:"✦ Rituels de Fréquence", sec_rituals:"Complétez le Rituel",
-    sec_rituals_sub:"Chaque fréquence est associée à un mélange et à une intention — pour que l'anneau, le thé et le moment avancent ensemble.",
-    ritual_paired_tea:"Thé Associé", ritual_intention:"Intention du Jour",
-    freq_174_intent:"Je suis porté(e). Je suis en sécurité. Je recommence sur un sol stable.",
-    freq_285_intent:"Je restaure ce que la journée a pris. Mon corps sait comment guérir.",
-    freq_396_intent:"Je libère ce que je n'ai plus besoin de porter.",
-    freq_417_intent:"Je laisse partir l'ancien. Je fais place à ce qui vient.",
-    freq_528_intent:"Mon cœur est ouvert. Je mérite la guérison et l'amour.",
-    freq_639_intent:"Je ne suis pas seul(e). Mon cœur sait en qui faire confiance.",
-    freq_741_intent:"Je dis ma vérité. Mon esprit est clair.",
-    freq_852_intent:"Je retrouve ma force. Je fais confiance à ce que je sais.",
-    freq_963_intent:"Je suis relié(e) à quelque chose de plus grand que moi.",
     sec_features:"Des fonctionnalités introuvables ailleurs",
     sec_features_eye:"Pourquoi Chai Holistic",
     sec_blends:"Les Mélanges Sip & Heal",
@@ -839,19 +800,6 @@ const LANGS = {
     prayer_eyebrow:"Oração Diária",
     prayer_back:"← Voltar",
     prayer_ring_note:"Tem um Vibe Shift Ring? Toque-o no telefone para ouvir a oração de hoje — sem necessidade de tela.",
-    // Frequency Rituals
-    sec_rituals_eye:"✦ Rituais de Frequência", sec_rituals:"Complete o Ritual",
-    sec_rituals_sub:"Cada frequência é combinada com uma mistura e uma intenção — para que o anel, o chá e o momento se movam juntos.",
-    ritual_paired_tea:"Chá Combinado", ritual_intention:"Intenção de Hoje",
-    freq_174_intent:"Eu sou amparado(a). Estou seguro(a). Começo de novo em solo firme.",
-    freq_285_intent:"Eu restauro o que o dia levou. Meu corpo sabe curar.",
-    freq_396_intent:"Eu libero o que não preciso mais carregar.",
-    freq_417_intent:"Eu deixo o antigo ir. Abro espaço para o que vem.",
-    freq_528_intent:"Meu coração está aberto. Sou digno(a) de cura e de amor.",
-    freq_639_intent:"Não estou sozinho(a). Meu coração sabe em quem confiar.",
-    freq_741_intent:"Eu falo minha verdade. Minha mente está clara.",
-    freq_852_intent:"Eu retorno à minha força. Confio no que eu sei.",
-    freq_963_intent:"Estou conectado(a) a algo maior do que eu.",
     sec_features:"Recursos que você não encontrará em nenhum outro lugar",
     sec_features_eye:"Por Que Chai Holistic",
     sec_blends:"As Misturas Sip & Heal",
@@ -1023,19 +971,6 @@ const LANGS = {
     prayer_eyebrow:"Lapriyè Jodi a",
     prayer_back:"← Retounen",
     prayer_ring_note:"Ou gen yon Vibe Shift Ring? Touche l sou telefòn ou pou tande lapriyè jodi a — san ekran.",
-    // Frequency Rituals
-    sec_rituals_eye:"✦ Rityèl Frekans", sec_rituals:"Konplete Rityèl la",
-    sec_rituals_sub:"Chak frekans makonnen ak yon melanj te ak yon entansyon — pou bag la, te a, ak moman an mache ansanm.",
-    ritual_paired_tea:"Te ki Makonnen", ritual_intention:"Entansyon Jodi a",
-    freq_174_intent:"Mwen soutni. Mwen an sekirite. Mwen kòmanse ankò sou tè solid.",
-    freq_285_intent:"Mwen restore sa jounen an te pran. Kò mwen konnen kijan pou geri.",
-    freq_396_intent:"Mwen lage sa m pa bezwen pote ankò.",
-    freq_417_intent:"Mwen kite ansyen an ale. Mwen fè espas pou sa k ap vini.",
-    freq_528_intent:"Kè mwen ouvè. Mwen merite repare ak renmen.",
-    freq_639_intent:"Mwen pa pou kont mwen. Kè mwen konnen ki moun pou fè konfyans.",
-    freq_741_intent:"Mwen pale verite mwen. Lespri mwen klè.",
-    freq_852_intent:"Mwen retounen nan fòs mwen. Mwen fè konfyans nan sa m konnen.",
-    freq_963_intent:"Mwen konekte ak yon bagay ki pi gran pase m.",
     sec_features:"Karakteristik ou p ap jwenn okote",
     sec_features_eye:"Poukisa Chai Holistic",
     sec_blends:"Melanj Sip & Heal yo",
@@ -1208,19 +1143,6 @@ const LANGS = {
     prayer_eyebrow:"Daily Prayer",
     prayer_back:"← Back",
     prayer_ring_note:"Have a Vibe Shift Ring? Touch it to yuh phone fi hear today's prayer — no screen needed.",
-    // Frequency Rituals
-    sec_rituals_eye:"✦ Frequency Ritual", sec_rituals:"Complete di Ritual",
-    sec_rituals_sub:"Every frequency match wid a tea an a intention — so di ring, di tea, an di moment move as one.",
-    ritual_paired_tea:"Tea Fi Match", ritual_intention:"Today Intention",
-    freq_174_intent:"Mi feel held. Mi safe. Mi staat fresh pon solid groun.",
-    freq_285_intent:"Mi restore weh di day tek weh. Mi body know how fi heal.",
-    freq_396_intent:"Mi let go a weh mi nuh need fi carry nuh more.",
-    freq_417_intent:"Mi let go a di old. Mi mek space fi weh deh come.",
-    freq_528_intent:"Mi heart open. Mi worthy a love an healing.",
-    freq_639_intent:"Mi nuh deh pon mi own. Mi heart know who fi trust.",
-    freq_741_intent:"Mi speak mi truth. Mi mind clear.",
-    freq_852_intent:"Mi return to mi strength. Mi trust weh mi know.",
-    freq_963_intent:"Mi connect to something bigger dan mi.",
     sec_features:"Features yuh cyaan find nowhere else",
     sec_features_eye:"Why Chai Holistic",
     sec_blends:"Di Sip & Heal Blends",
@@ -2117,21 +2039,13 @@ const ALL_BLENDS_COMBINED = [...BLENDS, ...MEN_BLENDS];
 
 const parseAmaraMessage = (text) => {
   const blendTagRegex = /\[\[BLEND:([^\]]+)\]\]/g;
-  const ritualTagRegex = /\[\[RITUAL:(\d+)\]\]/g;
   const blendIds = [];
-  const ritualHzs = [];
   let match;
   while ((match = blendTagRegex.exec(text)) !== null) {
     blendIds.push(match[1].trim());
   }
-  while ((match = ritualTagRegex.exec(text)) !== null) {
-    ritualHzs.push(parseInt(match[1].trim(), 10));
-  }
-  const cleanText = text
-    .replace(/\[\[BLEND:[^\]]+\]\]/g, "")
-    .replace(/\[\[RITUAL:[^\]]+\]\]/g, "")
-    .trim();
-  return { cleanText, blendIds, ritualHzs };
+  const cleanText = text.replace(/\[\[BLEND:[^\]]+\]\]/g, "").trim();
+  return { cleanText, blendIds };
 };
 
 function AmaraBlendCard({ blendId, onViewBlend, onAddToCart }) {
@@ -2618,7 +2532,7 @@ Respond ONLY with this exact JSON structure:
     home:    [["↑ Top","sec-hero"],["Features","sec-features"],["Blends","sec-blends"],["Story","sec-story"],["Tea","sec-tea"],["Bundles","sec-bundles"],["Brew Tools","sec-tools-home"],["Rings","sec-rings-home"],["Brewing","sec-brewing"],["FAQ","sec-faq-teaser"]],
     shop:    [["↩ Home","home-page"],["↑ Top","sec-shop-top"],["Blends","sec-shop-blends"],["Cleansing","sec-shop-cleanse"],["Herbs","sec-shop-herbs"],["Bundles","sec-shop-bundles"],["Brew Tools","sec-shop-tools"]],
     recipes: [["↩ Home","home-page"],["↑ Top","sec-rec-top"],["Wellness","sec-rec-wellness"],["Cleansing","sec-rec-cleanse"]],
-    rings:   [["↩ Rings","home-page-rings"],["↑ Top","sec-rings-top"],["Collection","sec-rings-grid"],["How It Works","sec-rings-how"],["Frequency","sec-rings-meridian"],["Rituals","sec-rings-rituals"]],
+    rings:   [["↩ Rings","home-page-rings"],["↑ Top","sec-rings-top"],["Collection","sec-rings-grid"],["How It Works","sec-rings-how"],["Frequency","sec-rings-meridian"]],
     faq:         [["↩ Home","home-page"],["↑ Top","sec-faq-top"],["FAQ","sec-faq-content"]],
     men:         [["↩ Home","home-page"],["↑ Top","sec-men-top"],["Blends","sec-men-blends"],["🛡 Prostate","sec-men-prostate"]],
     supplements: [["↩ Home","home-page"],["↑ Top","sec-supp-top"],["All","sec-supp-grid"]],
@@ -2695,25 +2609,7 @@ When you recommend a specific blend from our catalog, tag it at the end of your 
 [[BLEND:blendId]]
 Example: If recommending Stress Less, end your message with:
 [[BLEND:w7]]
-You may recommend up to 2 blends per response. Only use blend IDs from the catalog above. Do not include the tag mid-sentence — place it on its own line after your full response.
-
-FREQUENCY RITUALS (Vibe Shift Ring + Tea + Intention -- offer this when someone needs a complete grounding ritual, not just a tea recommendation):
-174 Hz The Foundation (security, grounding, feeling held) -> 2AM Reset -- "I am held. I am safe. I begin again from solid ground."
-285 Hz Quantum Field (healing, restoration, depletion) -> Adaptogen Blend -- "I restore what the day has taken. My body knows how to heal."
-396 Hz Liberation (releasing fear or guilt) -> Stress Less -- "I release what I no longer need to carry."
-417 Hz Transformation (change, fresh starts) -> Spring Cleanse -- "I let go of the old. I make room for what's next."
-528 Hz The Love Frequency (heart, repair, self-worth) -> Rose & Hibiscus -- "My heart is open. I am worthy of repair and of love."
-639 Hz Connection (relationships, trust, grief) -> Heart's Ease -- "I am not alone. My heart knows who to trust."
-741 Hz The Awakener (truth, clarity, expression) -> Brain Boost -- "I speak my truth. My mind is clear."
-852 Hz Spiritual Return (inner strength, returning to self) -> Ashwagandha Morning -- "I return to my strength. I trust what I know."
-963 Hz Divine Consciousness (oneness, spiritual connection) -> Tulsi Awakening -- "I am connected to something greater than myself."
-
-RITUAL RECOMMENDATION FORMAT:
-If someone's situation calls for a full ritual (a Vibe Shift Ring frequency + its paired tea + an intention) rather than just a tea, tag it at the end of your message using this exact format:
-[[RITUAL:hz]]
-Example: If recommending the 396 Hz Liberation ritual, end your message with:
-[[RITUAL:396]]
-Only recommend ONE ritual per response, using one of the nine Hz values listed above. Do not combine a RITUAL tag with a BLEND tag for the same blend — the ritual card already shows the paired tea. Place the tag on its own line after your full response.`;
+You may recommend up to 2 blends per response. Only use blend IDs from the catalog above. Do not include the tag mid-sentence — place it on its own line after your full response.`;
 
   const openAmara = () => {
     setAmaraOpen(true);
@@ -7047,72 +6943,6 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
       detail:"The highest of the nine. The frequency of pure consciousness, divine connection, and fully awakened awareness. For those who know there is more." },
   ];
 
-  // Frequency Rituals -- pairs each Meridian frequency with a blend + an intention key (see LANGS)
-  const FREQUENCY_RITUALS = [
-    { hz:174, blendId:"m2", intentKey:"freq_174_intent" },
-    { hz:285, blendId:"s7", intentKey:"freq_285_intent" },
-    { hz:396, blendId:"w7", intentKey:"freq_396_intent" },
-    { hz:417, blendId:"s4", intentKey:"freq_417_intent" },
-    { hz:528, blendId:"e4", intentKey:"freq_528_intent" },
-    { hz:639, blendId:"w2", intentKey:"freq_639_intent" },
-    { hz:741, blendId:"w3", intentKey:"freq_741_intent" },
-    { hz:852, blendId:"m8", intentKey:"freq_852_intent" },
-    { hz:963, blendId:"m5", intentKey:"freq_963_intent" },
-  ];
-
-  // Amara chat card for a [[RITUAL:hz]] tag -- shows the frequency, intention, and paired tea
-  const AmaraRitualCard = ({ hz, onViewBlend, onAddToCart }) => {
-    const ritual = FREQUENCY_RITUALS.find(r => r.hz === hz);
-    const freq = ritual && FREQUENCIES.find(f => f.hz === hz);
-    const blend = ritual && ALL_BLENDS_COMBINED.find(b => b.id === ritual.blendId);
-    if (!ritual || !freq || !blend) return null;
-    return (
-      <div style={{
-        marginTop:10, borderRadius:14, padding:"12px 13px",
-        background:"linear-gradient(135deg,rgba(196,137,58,.13),rgba(45,74,45,.18))",
-        border:"1px solid rgba(196,137,58,.3)",
-        fontFamily:"Jost,sans-serif",
-      }}>
-        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-          <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.05rem",color:"var(--gold)",fontWeight:700}}>{freq.hz}</div>
-          <div style={{fontSize:".5rem",color:"rgba(196,137,58,.6)",letterSpacing:".08em",textTransform:"uppercase"}}>Hz</div>
-          <div style={{fontSize:".82rem",color:"#F7F2EA",fontWeight:600}}>{freq.name}</div>
-        </div>
-        <p style={{fontFamily:"'Playfair Display',serif",fontSize:".82rem",fontStyle:"italic",color:"rgba(240,235,224,.85)",lineHeight:1.6,margin:"0 0 8px 0"}}>
-          "{T[ritual.intentKey]}"
-        </p>
-        <div style={{height:1,background:"rgba(196,137,58,.15)",margin:"8px 0"}}/>
-        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
-          {blend.photo && (
-            <img src={blend.photo} alt={blend.name}
-              style={{width:36,height:36,borderRadius:8,objectFit:"cover",flexShrink:0,border:"1px solid rgba(196,137,58,.25)"}}
-              onError={e=>{e.target.style.display="none";}}
-            />
-          )}
-          <div style={{flex:1,minWidth:0}}>
-            <div style={{fontSize:".55rem",letterSpacing:".1em",textTransform:"uppercase",color:"rgba(196,137,58,.7)"}}>{T.ritual_paired_tea}</div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:".85rem",color:"#F7F2EA",fontWeight:700,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{blend.name}</div>
-          </div>
-          <div style={{fontSize:".78rem",color:"rgba(196,137,58,.9)",fontWeight:700,flexShrink:0}}>${blend.price?.toFixed(2)}</div>
-        </div>
-        <div style={{display:"flex",gap:6}}>
-          <button
-            onClick={()=>onViewBlend(blend)}
-            style={{flex:1,background:"rgba(196,137,58,.18)",border:"1px solid rgba(196,137,58,.35)",color:"rgba(196,137,58,.95)",borderRadius:8,padding:"7px 0",fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:600,transition:"all .18s"}}
-            onMouseEnter={e=>{e.currentTarget.style.background="rgba(196,137,58,.3)";}}
-            onMouseLeave={e=>{e.currentTarget.style.background="rgba(196,137,58,.18)";}}
-          >View Blend</button>
-          <button
-            onClick={()=>onAddToCart(blend)}
-            style={{flex:1,background:"linear-gradient(135deg,rgba(196,137,58,.85),rgba(160,104,40,.85))",border:"none",color:"#0A0F0B",borderRadius:8,padding:"7px 0",fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700,transition:"all .18s"}}
-            onMouseEnter={e=>{e.currentTarget.style.opacity=".85";}}
-            onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}
-          >+ Basket</button>
-        </div>
-      </div>
-    );
-  };
-
   const RING_SIZES = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
   const RingConfigurator = () => {
@@ -8618,47 +8448,6 @@ Thank you!`);
               </div>
             </div>
 
-            {/* FREQUENCY RITUALS */}
-            <div id="sec-rings-rituals" style={{background:"linear-gradient(160deg,#0A1A0A,#0E1A1A)",border:"1px solid rgba(196,137,58,.2)",borderRadius:24,padding:"36px",marginBottom:"2.5rem",position:"relative",overflow:"hidden"}}>
-              <div style={{position:"absolute",top:-20,right:-20,fontSize:"12rem",opacity:.03,pointerEvents:"none",lineHeight:1}}>✦</div>
-              <div style={{fontSize:".6rem",letterSpacing:".22em",textTransform:"uppercase",color:"rgba(196,137,58,.7)",marginBottom:10}}>{T.sec_rituals_eye}</div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(1.2rem,2.2vw,1.7rem)",color:"white",marginBottom:8,lineHeight:1.3}}>
-                {T.sec_rituals}
-              </div>
-              <p style={{fontSize:".88rem",color:"rgba(255,255,255,.6)",fontWeight:300,lineHeight:1.85,marginBottom:"1.8rem",maxWidth:600}}>
-                {T.sec_rituals_sub}
-              </p>
-
-              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:14}}>
-                {FREQUENCY_RITUALS.map(fr=>{
-                  const freq = FREQUENCIES.find(f=>f.hz===fr.hz);
-                  const blend = BLENDS.find(b=>b.id===fr.blendId);
-                  if(!freq||!blend) return null;
-                  return (
-                    <div key={fr.hz} style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:16,padding:"18px",display:"flex",flexDirection:"column",gap:10}}>
-                      <div style={{display:"flex",alignItems:"center",gap:8}}>
-                        <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"var(--gold)",fontWeight:600}}>{freq.hz}</div>
-                        <div style={{fontSize:".5rem",color:"rgba(196,137,58,.6)",letterSpacing:".08em",textTransform:"uppercase"}}>Hz</div>
-                        <div style={{fontSize:".85rem",color:"white",marginLeft:4}}>{freq.name}</div>
-                      </div>
-                      <p style={{fontFamily:"'Playfair Display',serif",fontSize:".88rem",fontStyle:"italic",color:"rgba(255,255,255,.75)",lineHeight:1.6,margin:0}}>
-                        "{T[fr.intentKey]}"
-                      </p>
-                      <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.55)"}}>{T.ritual_intention}</div>
-                      <div style={{height:1,background:"rgba(255,255,255,.08)",margin:"4px 0"}}/>
-                      <div onClick={()=>setSelectedBlend(blend)} style={{cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between",gap:8}}>
-                        <div>
-                          <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.4)",marginBottom:2}}>{T.ritual_paired_tea}</div>
-                          <div style={{fontFamily:"'Playfair Display',serif",fontSize:".92rem",color:"white"}}>{blend.name}</div>
-                        </div>
-                        <span style={{color:"var(--gold)",fontSize:".8rem"}}>→</span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
             {/* Colors */}
             <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:20,padding:"28px",marginBottom:"2rem"}}>
               <div style={{textAlign:"center",marginBottom:"1.2rem"}}>
@@ -9661,7 +9450,7 @@ Thank you!`);
               scrollbarWidth:"thin", scrollbarColor:"rgba(196,137,58,.2) transparent",
             }}>
               {amaraMessages.map((m, i) => {
-                const parsed = m.role === "assistant" ? parseAmaraMessage(m.text) : { cleanText: m.text, blendIds: [], ritualHzs: [] };
+                const parsed = m.role === "assistant" ? parseAmaraMessage(m.text) : { cleanText: m.text, blendIds: [] };
                 const isLastAssistant = m.role === "assistant" && i === amaraMessages.map(x=>x.role).lastIndexOf("assistant");
                 return (
                   <div key={i} ref={isLastAssistant ? amaraLastMsgRef : null} style={{
@@ -9690,9 +9479,6 @@ Thank you!`);
                       {parsed.cleanText}
                       {parsed.blendIds.map(id => (
                         <AmaraBlendCard key={id} blendId={id} onViewBlend={setSelectedBlend} onAddToCart={addToCart} />
-                      ))}
-                      {parsed.ritualHzs.map(hz => (
-                        <AmaraRitualCard key={"ritual-"+hz} hz={hz} onViewBlend={setSelectedBlend} onAddToCart={addToCart} />
                       ))}
                     </div>
                   </div>
