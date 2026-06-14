@@ -74,6 +74,81 @@ const CLEANSING = [
   { id:"c10", name:"Urinary Tract Clear", organ:"Urinary", tagline:"Heal, flush, protect", desc:"Uva ursi, corn silk and marshmallow root support and soothe the urinary tract naturally.", ingredients:["Uva Ursi","Corn Silk","Marshmallow Root","Juniper Berry"], price:19.99, benefit:"UTI · Urinary · Soothe", steepMin:8, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil -- boil then wait 60 sec", mood:"UTI symptoms", oz:2, cupsPerOz:11, servingSize:"1 tsp", protocol:"3 cups daily for 7 days. Not during pregnancy.", days:7 , warning:"Contains Uva Ursi -- NOT for use during pregnancy. Do not use for more than 7-10 days continuously. Not for use with kidney disease." },
 ];
 
+// ── RITUAL SETS ────────────────────────────────────────────────────────────
+// Each Ritual Set pairs a tea blend with a prayer from the 2AM Companion
+// (prayer.html PRAYERS array, matched by id) and a Meridian Infusion
+// Frequency (matches the Vibe Shift Ring frequency list). This is a
+// presentation/marketing layer only — adding a blend to the basket from a
+// Ritual Set uses the existing blend id and price; no new SKUs are created.
+const RITUAL_SETS = [
+  {
+    id: "ritual-2am",
+    name: "The 2AM Ritual",
+    tagline: "For the hours when the world is quiet and your mind is loud.",
+    blendId: "m2",
+    prayerId: "peace-2am",
+    prayerTitle: "A Prayer for Peace at 2AM",
+    frequencyHz: 174,
+    frequencyName: "The Foundation",
+    intention: "Brew the tea slowly. Let the warmth settle into your hands while the prayer settles your spirit. This is the ritual for nights that feel too long — a return to safety, to ground, to rest."
+  },
+  {
+    id: "ritual-release",
+    name: "The Release Ritual",
+    tagline: "Let the day go. Let the body rest. Let the mind be still.",
+    blendId: "e2",
+    prayerId: "before-sleep",
+    prayerTitle: "A Prayer Before Sleep",
+    frequencyHz: 396,
+    frequencyName: "Liberation",
+    intention: "As the tea steeps, name one thing from today you're ready to set down. Drink slowly. Read the prayer aloud or let it be read to you. Sleep is an act of trust — this ritual helps you arrive there."
+  },
+  {
+    id: "ritual-resilience",
+    name: "The Resilience Ritual",
+    tagline: "For mornings when you need strength from the inside out.",
+    blendId: "m8",
+    prayerId: "strength",
+    prayerTitle: "A Prayer for Strength",
+    frequencyHz: 285,
+    frequencyName: "Quantum Field",
+    intention: "Begin here. Before the day asks anything of you, give yourself this — a warm cup, a steadying breath, a prayer that reminds you where your strength actually comes from."
+  },
+  {
+    id: "ritual-tender-heart",
+    name: "The Tender Heart Ritual",
+    tagline: "For grief, heartache, and the days that ask too much.",
+    blendId: "w2",
+    prayerId: "grief",
+    prayerTitle: "A Prayer for Grief",
+    frequencyHz: 528,
+    frequencyName: "The Love Frequency",
+    intention: "There is no rushing this. Hold the cup with both hands. Let the prayer say what you may not have words for yet. This ritual doesn't fix grief — it simply sits with you inside it."
+  },
+  {
+    id: "ritual-renewal",
+    name: "The Renewal Ritual",
+    tagline: "For fresh starts, new chapters, and beginning again.",
+    blendId: "s4",
+    prayerId: "new-beginnings",
+    prayerTitle: "A Prayer for New Beginnings",
+    frequencyHz: 417,
+    frequencyName: "Transformation",
+    intention: "Whatever you're stepping into — a new season, a new choice, a clean page — let this be the marker. Drink the tea as a small act of clearing. Let the prayer meet you at the threshold."
+  },
+  {
+    id: "ritual-ancestral",
+    name: "The Ancestral Ritual",
+    tagline: "Honoring those who came before, in body and in spirit.",
+    blendId: "cerasee",
+    prayerId: "ancestral-gratitude",
+    prayerTitle: "A Prayer of Ancestral Gratitude",
+    frequencyHz: 963,
+    frequencyName: "Divine Consciousness",
+    intention: "This is the tea your grandmother knew. Brew it the way it's always been brewed — slowly, with intention. Let the prayer carry your gratitude back through every hand that came before yours."
+  },
+];
+
 const HERBS = [
   { id:"h1",  name:"Ceylon Cinnamon",    price:8.99,  photo:"/herbs/cinnamon.jpg",    fallback:"https://images.pexels.com/photos/15529707/pexels-photo-15529707.jpeg?auto=compress&cs=tinysrgb&w=400", benefit:"Blood sugar · Warmth · Anti-inflammatory", pairs:["Ginger Root","Cardamom Pods","Cloves"] },
   { id:"h2",  name:"Ginger Root",        price:7.99,  photo:"/herbs/ginger.jpg",      fallback:"https://images.pexels.com/photos/10112135/pexels-photo-10112135.jpeg?auto=compress&cs=tinysrgb&w=400", benefit:"Digestion · Nausea · Circulation", pairs:["Ceylon Cinnamon","Lemon Balm","Turmeric Root"] },
