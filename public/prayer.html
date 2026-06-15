@@ -1267,6 +1267,21 @@ applyUIStrings();
 buildMoodDropdown();
 buildPrayerDropdown();
 renderDailyPrayer();
+
+// ── RITUAL PAIRINGS DEEP LINK ───────────────────────────────────────────────
+// chaiholistic.com Ritual Pairings open this page with ?prayer=<id> (matching
+// the `id` field on a PRAYERS entry) to jump straight to that prayer's overlay.
+(function(){
+  try{
+    const params = new URLSearchParams(window.location.search);
+    const wantId = params.get('prayer');
+    if(!wantId) return;
+    const idx = PRAYERS.findIndex(p => p.id === wantId);
+    if(idx >= 0){
+      setTimeout(() => openOverlay(idx), 250);
+    }
+  }catch(e){ /* malformed param — silently ignore */ }
+})();
 </script>
 </body>
 </html>
