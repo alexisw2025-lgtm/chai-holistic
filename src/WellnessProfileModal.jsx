@@ -671,7 +671,7 @@ export default function WellnessProfileModal({ open, onClose, lang }) {
 
         // Send Sip & Heal Report email
         try {
-          const apiUrl = import.meta.env.VITE_API_URL || "https://chai-api-production.up.railway.app";
+          const apiUrl = import.meta.env.VITE_API_URL || "https://web-production-3fad2.up.railway.app";
           await fetch(`${apiUrl}/send-report`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
