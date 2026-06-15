@@ -2188,6 +2188,19 @@ function AmaraBlendCard({ blendId, onViewBlend, onAddToCart }) {
   );
 }
 
+// ── RING ICON — actual Vibe Shift Ring product photo, used as a small round
+// badge anywhere a ring is referenced in-app (replaces the generic 💍 emoji
+// so the site reads as one consistent brand, not a stock jewelry icon).
+function RingIcon({ size=18, style={} }) {
+  return (
+    <img
+      src="/vibe-shift-ring.jpg"
+      alt="Vibe Shift Ring"
+      style={{width:size,height:size,minWidth:size,borderRadius:"50%",objectFit:"cover",border:"1px solid rgba(196,137,58,.5)",verticalAlign:"middle",display:"inline-block",flexShrink:0,...style}}
+    />
+  );
+}
+
 // ── RITUAL PAIRINGS — Tea + Prayer + Frequency, presented as one ritual ────────
 // Reads from RITUAL_SETS (data layer, defined near top of file). Each pairing
 // resolves its tea blend from ALL_BLENDS_COMBINED by blendId, links its prayer
@@ -2258,7 +2271,7 @@ function RitualPairingsSection({ onAddToCart, onOpenPrayer }) {
                     <div style={{fontSize:".72rem",color:"#F7F2EA",lineHeight:1.3,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{r.prayerTitle}</div>
                   </div>
                   <div style={{flexShrink:0,textAlign:"right"}}>
-                    <div style={{fontSize:".64rem",color:"#C4893A",fontWeight:600,lineHeight:1.2}}>💍 {r.frequencyHz} Hz</div>
+                    <div style={{fontSize:".64rem",color:"#C4893A",fontWeight:600,lineHeight:1.2,display:"flex",alignItems:"center",justifyContent:"flex-end",gap:4}}><RingIcon size={13}/> {r.frequencyHz} Hz</div>
                     <div style={{fontSize:".54rem",color:"rgba(196,137,58,.55)",lineHeight:1.2,marginTop:1}}>{r.frequencyName}</div>
                   </div>
                 </button>
@@ -2474,7 +2487,7 @@ export default function ChaiHolistic() {
     if(matches("men")||matches("prostate")||matches("testosterone")||matches("male health"))
       add({id:"mens",name:"Men's Wellness",desc:"20 blends for prostate, testosterone, heart & recovery",emoji:"⚡",color:"#1A2A3A",type:"Men's",typeColor:"#2A4A6B",action:()=>nav("men")});
     if(matches("ring")||matches("vibe shift")||matches("nfc")||matches("meridian"))
-      add({id:"rings",name:"Vibe Shift Rings",desc:"NFC-enabled intention & affirmation rings",emoji:"💍",color:"#2A1A3A",type:"Rings",typeColor:"#5A3A6B",action:()=>nav("rings")});
+      add({id:"rings",name:"Vibe Shift Rings",desc:"NFC-enabled intention & affirmation rings",emoji:<RingIcon size={22}/>,color:"#2A1A3A",type:"Rings",typeColor:"#5A3A6B",action:()=>nav("rings")});
     if(matches("prayer")||matches("affirmation")||matches("intention")||matches("2am"))
       add({id:"prayer",name:"Daily Affirmation & Prayer",desc:"Touch the lotus to receive today's affirmation",emoji:"🙏",color:"#0A1A0A",type:"Spiritual",typeColor:"#3A6B3A",action:()=>{window.scrollTo({top:document.getElementById('sec-hero')?.offsetTop||0,behavior:'smooth'});}});
 
@@ -5150,7 +5163,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
           { icon:"🌿", label:"I want to heal",      sub:"Body, mind, or spirit — find blends and rituals built for restoration.",  action:()=>nav("shop"),          accent:"#5A8A6A", accentLight:"rgba(90,138,106,0.15)" },
           { icon:"🙏", label:"I need to pray",       sub:"It's late. Something is heavy. A prayer is waiting for you right now.",   action:()=>open2AM(),            accent:"#C4893A", accentLight:"rgba(196,137,58,0.15)" },
           { icon:"💪", label:"Men's wellness",       sub:"40 blends built for men — body, focus, and faith.",                       action:()=>nav("men"),           accent:"#7A6A9A", accentLight:"rgba(122,106,154,0.15)" },
-          { icon:"💍", label:"Vibe Shift Rings",     sub:"Wearable intention. Each ring carries a 417Hz transformation frequency.", action:()=>nav("rings"),         accent:"#A07840", accentLight:"rgba(160,120,64,0.15)" },
+          { icon:<RingIcon size={26}/>, label:"Vibe Shift Rings",     sub:"Wearable intention. Each ring carries a 417Hz transformation frequency.", action:()=>nav("rings"),         accent:"#A07840", accentLight:"rgba(160,120,64,0.15)" },
           { icon:"✦",  label:"Supplements",          sub:"Carefully chosen allies for your wellness stack, paired with tea rituals.", action:()=>nav("supplements"), accent:"#6A8A7A", accentLight:"rgba(106,138,122,0.15)" },
           { icon:"🫖", label:"Find my tea",          sub:"Not sure where to start? Answer 3 questions and we'll match you.",        action:()=>setFinderOpen(true),  accent:"#8A6A3A", accentLight:"rgba(138,106,58,0.15)" },
         ];
@@ -5191,7 +5204,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
         const TESTIMONIALS_DATA = [
           { id:1, quote:"I found Chai Holistic at 2am when I couldn't sleep and couldn't stop crying. I opened the prayer section and something shifted. I just felt less alone. I ordered the Sleep & Surrender blend the next morning.", name:"Monique T.", location:"Atlanta, GA", product:"Sleep & Surrender Blend", icon:"🌙", accent:"#C4893A" },
           { id:2, quote:"As a Jamaican man who grew up watching my grandmother brew bush medicine, this brand brought something back that I didn't know I missed. The ancestral teas section — I actually teared up reading it. This is our heritage being honored.", name:"Devon R.", location:"Brooklyn, NY", product:"Ancestral Teas", icon:"🌿", accent:"#5A8A6A" },
-          { id:3, quote:"I gave my husband a Vibe Shift Ring for his birthday and he hasn't taken it off. He told me quietly that he feels more centered when he wears it. That means everything.", name:"Priya K.", location:"Houston, TX", product:"Vibe Shift Ring", icon:"💍", accent:"#A07840" },
+          { id:3, quote:"I gave my husband a Vibe Shift Ring for his birthday and he hasn't taken it off. He told me quietly that he feels more centered when he wears it. That means everything.", name:"Priya K.", location:"Houston, TX", product:"Vibe Shift Ring", icon:<RingIcon size={22}/>, accent:"#A07840" },
           { id:4, quote:"The Men's Wellness section spoke to me in a way that no other health brand ever has. It wasn't about performance or aesthetics — it was about wholeness. The prostate blend has been part of my morning ritual for three months now.", name:"Marcus J.", location:"Chicago, IL", product:"Men's Wellness Blends", icon:"💪", accent:"#7A6A9A" },
           { id:5, quote:"What makes Chai Holistic different is the intention behind everything. You can feel it. The blends actually work, but it's more than that — the ritual of preparing them changed how I start my mornings.", name:"Sophia M.", location:"Miami, FL", product:"Foundational Healing Blends", icon:"✦", accent:"#6A8A7A" },
           { id:6, quote:"I bought the Sip & Rise book for my teenage son and read it myself first. I sat with it for an hour. Every chapter felt like a conversation I'd been trying to have with him for years, written better than I could have said it.", name:"Pastor Leon W.", location:"Charlotte, NC", product:"Sip & Rise", icon:"🙏", accent:"#C4893A" },
@@ -5238,7 +5251,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
               <div style={{textAlign:"center",marginTop:44,paddingTop:32,borderTop:"1px solid rgba(196,137,58,0.1)"}}>
                 <p style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(13px,3.2vw,15px)",fontStyle:"italic",color:"rgba(247,242,234,0.32)",marginBottom:14}}>Your ritual is waiting.</p>
                 <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-                  {[["🌿","Explore blends","shop"],["🙏","Daily prayer","__prayer__"],["💍","Vibe Shift Rings","rings"]].map(([icon,label,pg])=>(
+                  {[["🌿","Explore blends","shop"],["🙏","Daily prayer","__prayer__"],[<RingIcon size={13} style={{marginRight:1}}/>,"Vibe Shift Rings","rings"]].map(([icon,label,pg])=>(
                     <button key={pg} onClick={()=>pg==="__prayer__"?open2AM():nav(pg)} style={{padding:"8px 18px",borderRadius:20,border:"1px solid rgba(196,137,58,0.2)",background:"transparent",fontFamily:"Jost,sans-serif",fontSize:12,color:"rgba(247,242,234,0.4)",fontWeight:300,cursor:"pointer",transition:"all 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.5)";e.currentTarget.style.color="rgba(247,242,234,0.75)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.2)";e.currentTarget.style.color="rgba(247,242,234,0.4)";}}>
                       {icon}  {label}
                     </button>
@@ -6800,7 +6813,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                   {[
                     {icon:"🍵", title:"The Tea", color:"#4A7250",
                       desc:"Your daily ritual. What heals your body, warms your spirit, and grounds your morning. You already have your blend."},
-                    {icon:"💍", title:"The Ring", color:"#C4893A",
+                    {icon:<RingIcon size={28}/>, title:"The Ring", color:"#C4893A",
                       desc:"Your reminder. Spin it when the anxiety rises. A tactile anchor when your mind won't stop. Every ring ships ready to pray."},
                     {icon:"🙏", title:"The Prayer", color:"#3A4A7A",
                       desc:"Your companion. Touch your Vibe Shift Ring to your phone and a real voice from 2amcompanion.com prays with you — right now."},
@@ -6827,7 +6840,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                     <button
                       onClick={()=>{ setIntentionOpen(false); setIntentionStep(0); setIntentionData({}); setIntentionResult(null); nav("rings"); }}
                       style={{background:"rgba(255,255,255,.08)",border:"1px solid rgba(255,255,255,.2)",color:"rgba(255,255,255,.8)",padding:"10px 24px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",transition:"all .2s"}}>
-                      💍 See Vibe Shift Rings
+                      <RingIcon size={14} style={{marginRight:7}}/>See Vibe Shift Rings
                     </button>
                   </div>
                 </div>
@@ -7770,7 +7783,7 @@ Thank you!`);
 
                 {/* Best finger — founder's personal note */}
                 <div style={{background:"rgba(45,74,45,.25)",border:"1px solid rgba(74,114,80,.25)",borderRadius:12,padding:"12px 14px",marginBottom:10,display:"flex",gap:12,alignItems:"flex-start"}}>
-                  <div style={{fontSize:"1.2rem",flexShrink:0}}>💍</div>
+                  <div style={{flexShrink:0,display:"flex",alignItems:"center"}}><RingIcon size={22}/></div>
                   <div>
                     <div style={{fontSize:".68rem",color:"rgba(74,114,80,.9)",fontWeight:600,marginBottom:3}}>Best Finger — Alex's Recommendation</div>
                     <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.65}}>
@@ -8518,7 +8531,7 @@ Thank you!`);
               {/* How it works row */}
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:0}}>
                 {[
-                  {step:"1",icon:"💍",title:"Touch your ring",desc:"Hold your Vibe Shift Ring near the top of your NFC-enabled phone or tablet."},
+                  {step:"1",icon:<RingIcon size={28}/>,title:"Touch your ring",desc:"Hold your Vibe Shift Ring near the top of your NFC-enabled phone or tablet."},
                   {step:"2",icon:"📱",title:"Your phone opens",desc:"No app needed. The prayer companion opens instantly in your browser."},
                   {step:"3",icon:"🎙",title:"A real voice prays",desc:"A recorded prayer begins -- matched to your ring's intention and your moment."},
                   {step:"4",icon:"🙏",title:"You're not alone",desc:"Pray along, or simply listen. Someone is always there to pray with you."},
