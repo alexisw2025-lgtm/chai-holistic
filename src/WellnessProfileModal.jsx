@@ -661,7 +661,7 @@ export default function WellnessProfileModal({ open, onClose, lang }) {
           stress_level: answers.stress,
           sleep_quality: answers.sleep,
           focus:        answers.focus,
-          caffeine_pref: answers.caffeine || null,
+          caffeine_pref: null,
           time_of_day:  [answers.time],
           top_concerns: answers.concerns,
           rx_blends:    rx.rxBlends,
@@ -671,8 +671,8 @@ export default function WellnessProfileModal({ open, onClose, lang }) {
 
         // Send Sip & Heal Report email
         try {
-          const apiUrl = import.meta.env.VITE_API_URL || "https://chai-api.up.railway.app";
-          await fetch(`${apiUrl}/api/send-report`, {
+          const apiUrl = import.meta.env.VITE_API_URL || "https://chai-api-production.up.railway.app";
+          await fetch(`${apiUrl}/send-report`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
