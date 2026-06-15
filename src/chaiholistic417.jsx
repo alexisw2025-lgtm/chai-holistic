@@ -2188,6 +2188,99 @@ function AmaraBlendCard({ blendId, onViewBlend, onAddToCart }) {
   );
 }
 
+// ── RITUAL PAIRINGS — Tea + Prayer + Frequency, presented as one ritual ────────
+// Reads from RITUAL_SETS (data layer, defined near top of file). Each pairing
+// resolves its tea blend from ALL_BLENDS_COMBINED by blendId, links its prayer
+// by prayerId (opens the Prayer modal deep-linked via prayer.html?prayer=<id>),
+// and displays its Meridian Infusion Frequency. Presentation/marketing layer
+// only — "Add to Basket" uses the existing blend id & price, no new SKUs.
+function RitualPairingsSection({ onAddToCart, onOpenPrayer }) {
+  return (
+    <section style={{background:"#0A0F0B",padding:"60px 0 56px",borderTop:"1px solid rgba(255,255,255,.05)",borderBottom:"1px solid rgba(255,255,255,.05)",position:"relative",overflow:"hidden"}}>
+      {/* ambient glow */}
+      <div style={{position:"absolute",inset:0,pointerEvents:"none",background:"radial-gradient(ellipse 60% 70% at 88% 12%,rgba(196,137,58,.08) 0%,transparent 60%),radial-gradient(ellipse 55% 65% at 8% 88%,rgba(82,184,130,.06) 0%,transparent 60%)"}}/>
+      <div style={{maxWidth:1280,margin:"0 auto",padding:"0 24px",position:"relative",zIndex:1}}>
+
+        <div style={{textAlign:"center",marginBottom:36,maxWidth:600,marginLeft:"auto",marginRight:"auto"}}>
+          <div style={{fontFamily:"'Cinzel',serif",fontSize:9.5,fontWeight:500,letterSpacing:".36em",textTransform:"uppercase",color:"#C4893A",marginBottom:10}}>Chai Holistic · Ritual Pairings</div>
+          <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(26px,4vw,42px)",fontWeight:700,color:"#fff",lineHeight:1.18,margin:0}}>
+            Tea, prayer &amp; frequency<br/><em style={{color:"#C4893A",fontStyle:"italic"}}>— held as one ritual.</em>
+          </h2>
+          <p style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:16,color:"rgba(255,255,255,.42)",marginTop:12,lineHeight:1.7}}>
+            Each pairing brings together a blend from the collection, a prayer from the 2AM Companion, and a Meridian Infusion Frequency from your Vibe Shift Ring — three pieces of the same practice.
+          </p>
+        </div>
+
+        {/* horizontal scroll row */}
+        <div style={{display:"flex",gap:18,overflowX:"auto",paddingBottom:14,paddingRight:24,scrollbarWidth:"none",msOverflowStyle:"none",WebkitOverflowScrolling:"touch"}}>
+          {RITUAL_SETS.map((r,i)=>{
+            const blend = ALL_BLENDS_COMBINED.find(b=>b.id===r.blendId);
+            if(!blend) return null;
+            return (
+              <div key={r.id}
+                style={{flexShrink:0,width:"clamp(248px,80vw,300px)",background:"rgba(255,255,255,.04)",border:"1px solid rgba(196,137,58,.16)",borderRadius:20,padding:"20px 18px",display:"flex",flexDirection:"column",gap:12,transition:"transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease, background .15s, border-color .15s",backdropFilter:"blur(6px)"}}
+                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-6px)";e.currentTarget.style.boxShadow="0 12px 36px rgba(0,0,0,.45)";e.currentTarget.style.background="rgba(255,255,255,.065)";e.currentTarget.style.borderColor="rgba(196,137,58,.35)";}}
+                onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow="";e.currentTarget.style.background="rgba(255,255,255,.04)";e.currentTarget.style.borderColor="rgba(196,137,58,.16)";}}>
+
+                {/* ritual name + tagline */}
+                <div>
+                  <div style={{fontFamily:"'Cinzel',serif",fontSize:8.5,fontWeight:500,letterSpacing:".26em",textTransform:"uppercase",color:"rgba(196,137,58,.55)",marginBottom:6}}>Ritual {String(i+1).padStart(2,"0")}</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700,color:"#F7F2EA",lineHeight:1.25,marginBottom:4}}>{r.name}</div>
+                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:13,color:"rgba(255,255,255,.45)",lineHeight:1.5}}>{r.tagline}</div>
+                </div>
+
+                {/* tea blend */}
+                <div style={{display:"flex",alignItems:"center",gap:10,background:"rgba(196,137,58,.07)",border:"1px solid rgba(196,137,58,.16)",borderRadius:12,padding:"7px 9px 7px 7px"}}>
+                  {blend.photo && (
+                    <img src={blend.photo} alt={blend.name} style={{width:34,height:34,borderRadius:8,objectFit:"cover",flexShrink:0,border:"1px solid rgba(196,137,58,.2)"}} onError={e=>{e.target.style.display="none";}}/>
+                  )}
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".72rem",color:"#F7F2EA",fontWeight:500,lineHeight:1.25,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>🍵 {blend.name}</div>
+                    <div style={{fontSize:".6rem",color:"rgba(196,137,58,.75)",marginTop:1}}>${blend.price?.toFixed(2)}</div>
+                  </div>
+                  <button
+                    onClick={()=>onAddToCart(blend)}
+                    style={{flexShrink:0,background:"linear-gradient(135deg,rgba(196,137,58,.85),rgba(160,104,40,.85))",border:"none",color:"#0A0F0B",borderRadius:8,padding:"6px 10px",fontSize:".58rem",letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700,transition:"opacity .18s"}}
+                    onMouseEnter={e=>{e.currentTarget.style.opacity=".85";}}
+                    onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}
+                  >+ Basket</button>
+                </div>
+
+                {/* prayer + frequency, combined */}
+                <button
+                  onClick={()=>onOpenPrayer(r.prayerId)}
+                  style={{display:"flex",alignItems:"center",gap:10,background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.08)",borderRadius:12,padding:"9px 11px",cursor:"pointer",textAlign:"left",transition:"all .18s",fontFamily:"Jost,sans-serif",width:"100%"}}
+                  onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.06)";e.currentTarget.style.borderColor="rgba(196,137,58,.3)";}}
+                  onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.03)";e.currentTarget.style.borderColor="rgba(255,255,255,.08)";}}>
+                  <span style={{fontSize:"1.05rem",flexShrink:0}}>🙏</span>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.6)",marginBottom:2}}>2AM Companion</div>
+                    <div style={{fontSize:".72rem",color:"#F7F2EA",lineHeight:1.3,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{r.prayerTitle}</div>
+                  </div>
+                  <div style={{flexShrink:0,textAlign:"right"}}>
+                    <div style={{fontSize:".64rem",color:"#C4893A",fontWeight:600,lineHeight:1.2}}>💍 {r.frequencyHz} Hz</div>
+                    <div style={{fontSize:".54rem",color:"rgba(196,137,58,.55)",lineHeight:1.2,marginTop:1}}>{r.frequencyName}</div>
+                  </div>
+                </button>
+
+                {/* intention — clamped to keep cards a uniform height */}
+                <p style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:13,color:"rgba(255,255,255,.55)",lineHeight:1.7,margin:0,borderTop:"1px solid rgba(196,137,58,.12)",paddingTop:12,display:"-webkit-box",WebkitLineClamp:4,WebkitBoxOrient:"vertical",overflow:"hidden"}}>
+                  {r.intention}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* scroll hint */}
+        <div style={{marginTop:12,textAlign:"center",fontFamily:"'DM Sans',sans-serif",fontSize:10.5,color:"rgba(255,255,255,.22)",letterSpacing:".04em"}}>
+          ← scroll to explore all {RITUAL_SETS.length} ritual pairings →
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function ChaiHolistic() {
   const [page, setPage] = useState("home");
   const [cart, setCart] = useState([]);
@@ -2529,6 +2622,8 @@ Respond ONLY with this exact JSON structure:
   // 2AM mode
   const [twoAM, setTwoAM] = useState(false);
   const [prayerOpen, setPrayerOpen] = useState(false);
+  // Ritual Pairings — deep-links the Prayer modal straight to a specific prayer
+  const [prayerDeepLinkId, setPrayerDeepLinkId] = useState(null);
 
 
   // ── AMARA — Wellness Companion ─────────────────────────────────────────────
@@ -2913,12 +3008,14 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     setTimeout(() => window.scrollTo({ top: scrollPosRef.current, behavior: "instant" }), 30);
   };
 
-  const openPrayer = () => {
+  const openPrayer = (prayerId=null) => {
     scrollPosRef.current = window.scrollY || document.documentElement.scrollTop || 0;
+    setPrayerDeepLinkId(prayerId);
     setPrayerOpen(true);
   };
   const closePrayer = () => {
     setPrayerOpen(false);
+    setPrayerDeepLinkId(null);
     setTimeout(() => window.scrollTo({ top: scrollPosRef.current, behavior: "instant" }), 30);
   };
 
@@ -5176,6 +5273,9 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
         </div>
       </div>
       <PrayerSection onNavigate={(blend) => nav("tea-library", { blend })} T={T} lang={lang} />
+
+      {/* ── RITUAL PAIRINGS — tea + prayer + frequency, presented as one ritual ── */}
+      <RitualPairingsSection onAddToCart={addToCart} onOpenPrayer={openPrayer} />
 
       {/* ── VIBE SHIFT RING OFFER — shown near prayer section ───────────────── */}
       <div style={{
@@ -9066,7 +9166,7 @@ Thank you!`);
               <div style={{fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(196,137,58,0.6)",fontFamily:"Jost,sans-serif",fontWeight:300}}>2AM Companion · Daily Prayer</div>
               <button onClick={closePrayer} style={{background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",color:"rgba(255,255,255,0.6)",borderRadius:"50%",width:32,height:32,cursor:"pointer",fontSize:"1rem",display:"flex",alignItems:"center",justifyContent:"center",transition:"all .2s",marginBottom:8}} onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.12)";e.currentTarget.style.color="white";}} onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.06)";e.currentTarget.style.color="rgba(255,255,255,0.6)";}}>✕</button>
             </div>
-            <iframe src="/prayer.html" style={{flex:1,border:"none",width:"100%",background:"#0A0F0B"}} title="Daily Prayer"/>
+            <iframe src={prayerDeepLinkId ? `/prayer.html?prayer=${encodeURIComponent(prayerDeepLinkId)}` : "/prayer.html"} style={{flex:1,border:"none",width:"100%",background:"#0A0F0B"}} title="Daily Prayer"/>
           </div>
           <style>{`@keyframes fadeIn{from{opacity:0}to{opacity:1}} @keyframes slideUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}`}</style>
         </>
