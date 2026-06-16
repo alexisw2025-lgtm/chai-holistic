@@ -2188,112 +2188,6 @@ function AmaraBlendCard({ blendId, onViewBlend, onAddToCart }) {
   );
 }
 
-// ── RING ICON — actual Vibe Shift Ring product photo, used as a small round
-// badge anywhere a ring is referenced in-app (replaces the generic 💍 emoji
-// so the site reads as one consistent brand, not a stock jewelry icon).
-function RingIcon({ size=18, style={} }) {
-  return (
-    <img
-      src="/vibe-shift-ring.jpg"
-      alt="Vibe Shift Ring"
-      style={{width:size,height:size,minWidth:size,borderRadius:"50%",objectFit:"cover",border:"1px solid rgba(196,137,58,.5)",verticalAlign:"middle",display:"inline-block",flexShrink:0,...style}}
-    />
-  );
-}
-
-// ── RITUAL PAIRINGS — Tea + Prayer + Frequency, presented as one ritual ────────
-// Reads from RITUAL_SETS (data layer, defined near top of file). Each pairing
-// resolves its tea blend from ALL_BLENDS_COMBINED by blendId, links its prayer
-// by prayerId (opens the Prayer modal deep-linked via prayer.html?prayer=<id>),
-// and displays its Meridian Infusion Frequency. Presentation/marketing layer
-// only — "Add to Basket" uses the existing blend id & price, no new SKUs.
-function RitualPairingsSection({ onAddToCart, onOpenPrayer }) {
-  return (
-    <section style={{background:"#0A0F0B",padding:"60px 0 56px",borderTop:"1px solid rgba(255,255,255,.05)",borderBottom:"1px solid rgba(255,255,255,.05)",position:"relative",overflow:"hidden"}}>
-      {/* ambient glow */}
-      <div style={{position:"absolute",inset:0,pointerEvents:"none",background:"radial-gradient(ellipse 60% 70% at 88% 12%,rgba(196,137,58,.08) 0%,transparent 60%),radial-gradient(ellipse 55% 65% at 8% 88%,rgba(82,184,130,.06) 0%,transparent 60%)"}}/>
-      <div style={{maxWidth:1280,margin:"0 auto",padding:"0 24px",position:"relative",zIndex:1}}>
-
-        <div style={{textAlign:"center",marginBottom:36,maxWidth:600,marginLeft:"auto",marginRight:"auto"}}>
-          <div style={{fontFamily:"'Cinzel',serif",fontSize:9.5,fontWeight:500,letterSpacing:".36em",textTransform:"uppercase",color:"#C4893A",marginBottom:10}}>Chai Holistic · Ritual Pairings</div>
-          <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(26px,4vw,42px)",fontWeight:700,color:"#fff",lineHeight:1.18,margin:0}}>
-            Tea, prayer &amp; frequency<br/><em style={{color:"#C4893A",fontStyle:"italic"}}>— held as one ritual.</em>
-          </h2>
-          <p style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:16,color:"rgba(255,255,255,.42)",marginTop:12,lineHeight:1.7}}>
-            Each pairing brings together a blend from the collection, a prayer from the 2AM Companion, and a Meridian Infusion Frequency from your Vibe Shift Ring — three pieces of the same practice.
-          </p>
-        </div>
-
-        {/* horizontal scroll row */}
-        <div style={{display:"flex",gap:18,overflowX:"auto",paddingBottom:14,paddingRight:24,scrollbarWidth:"none",msOverflowStyle:"none",WebkitOverflowScrolling:"touch"}}>
-          {RITUAL_SETS.map((r,i)=>{
-            const blend = ALL_BLENDS_COMBINED.find(b=>b.id===r.blendId);
-            if(!blend) return null;
-            return (
-              <div key={r.id}
-                style={{flexShrink:0,width:"clamp(248px,80vw,300px)",background:"rgba(255,255,255,.04)",border:"1px solid rgba(196,137,58,.16)",borderRadius:20,padding:"20px 18px",display:"flex",flexDirection:"column",gap:12,transition:"transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .22s ease, background .15s, border-color .15s",backdropFilter:"blur(6px)"}}
-                onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-6px)";e.currentTarget.style.boxShadow="0 12px 36px rgba(0,0,0,.45)";e.currentTarget.style.background="rgba(255,255,255,.065)";e.currentTarget.style.borderColor="rgba(196,137,58,.35)";}}
-                onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.boxShadow="";e.currentTarget.style.background="rgba(255,255,255,.04)";e.currentTarget.style.borderColor="rgba(196,137,58,.16)";}}>
-
-                {/* ritual name + tagline */}
-                <div>
-                  <div style={{fontFamily:"'Cinzel',serif",fontSize:8.5,fontWeight:500,letterSpacing:".26em",textTransform:"uppercase",color:"rgba(196,137,58,.55)",marginBottom:6}}>Ritual {String(i+1).padStart(2,"0")}</div>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:18,fontWeight:700,color:"#F7F2EA",lineHeight:1.25,marginBottom:4}}>{r.name}</div>
-                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:13,color:"rgba(255,255,255,.45)",lineHeight:1.5}}>{r.tagline}</div>
-                </div>
-
-                {/* tea blend */}
-                <div style={{display:"flex",alignItems:"center",gap:10,background:"rgba(196,137,58,.07)",border:"1px solid rgba(196,137,58,.16)",borderRadius:12,padding:"7px 9px 7px 7px"}}>
-                  {blend.photo && (
-                    <img src={blend.photo} alt={blend.name} style={{width:34,height:34,borderRadius:8,objectFit:"cover",flexShrink:0,border:"1px solid rgba(196,137,58,.2)"}} onError={e=>{e.target.style.display="none";}}/>
-                  )}
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontFamily:"Jost,sans-serif",fontSize:".72rem",color:"#F7F2EA",fontWeight:500,lineHeight:1.25,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>🍵 {blend.name}</div>
-                    <div style={{fontSize:".6rem",color:"rgba(196,137,58,.75)",marginTop:1}}>${blend.price?.toFixed(2)}</div>
-                  </div>
-                  <button
-                    onClick={()=>onAddToCart(blend)}
-                    style={{flexShrink:0,background:"linear-gradient(135deg,rgba(196,137,58,.85),rgba(160,104,40,.85))",border:"none",color:"#0A0F0B",borderRadius:8,padding:"6px 10px",fontSize:".58rem",letterSpacing:".08em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700,transition:"opacity .18s"}}
-                    onMouseEnter={e=>{e.currentTarget.style.opacity=".85";}}
-                    onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}
-                  >+ Basket</button>
-                </div>
-
-                {/* prayer + frequency, combined */}
-                <button
-                  onClick={()=>onOpenPrayer(r.prayerId)}
-                  style={{display:"flex",alignItems:"center",gap:10,background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.08)",borderRadius:12,padding:"9px 11px",cursor:"pointer",textAlign:"left",transition:"all .18s",fontFamily:"Jost,sans-serif",width:"100%"}}
-                  onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.06)";e.currentTarget.style.borderColor="rgba(196,137,58,.3)";}}
-                  onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.03)";e.currentTarget.style.borderColor="rgba(255,255,255,.08)";}}>
-                  <span style={{fontSize:"1.05rem",flexShrink:0}}>🙏</span>
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontSize:".58rem",letterSpacing:".14em",textTransform:"uppercase",color:"rgba(196,137,58,.6)",marginBottom:2}}>2AM Companion</div>
-                    <div style={{fontSize:".72rem",color:"#F7F2EA",lineHeight:1.3,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{r.prayerTitle}</div>
-                  </div>
-                  <div style={{flexShrink:0,textAlign:"right"}}>
-                    <div style={{fontSize:".64rem",color:"#C4893A",fontWeight:600,lineHeight:1.2,display:"flex",alignItems:"center",justifyContent:"flex-end",gap:4}}><RingIcon size={13}/> {r.frequencyHz} Hz</div>
-                    <div style={{fontSize:".54rem",color:"rgba(196,137,58,.55)",lineHeight:1.2,marginTop:1}}>{r.frequencyName}</div>
-                  </div>
-                </button>
-
-                {/* intention — clamped to keep cards a uniform height */}
-                <p style={{fontFamily:"'Cormorant Garamond',serif",fontStyle:"italic",fontSize:13,color:"rgba(255,255,255,.55)",lineHeight:1.7,margin:0,borderTop:"1px solid rgba(196,137,58,.12)",paddingTop:12,display:"-webkit-box",WebkitLineClamp:4,WebkitBoxOrient:"vertical",overflow:"hidden"}}>
-                  {r.intention}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* scroll hint */}
-        <div style={{marginTop:12,textAlign:"center",fontFamily:"'DM Sans',sans-serif",fontSize:10.5,color:"rgba(255,255,255,.22)",letterSpacing:".04em"}}>
-          ← scroll to explore all {RITUAL_SETS.length} ritual pairings →
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export default function ChaiHolistic() {
   const [page, setPage] = useState("home");
   const [cart, setCart] = useState([]);
@@ -2487,7 +2381,7 @@ export default function ChaiHolistic() {
     if(matches("men")||matches("prostate")||matches("testosterone")||matches("male health"))
       add({id:"mens",name:"Men's Wellness",desc:"20 blends for prostate, testosterone, heart & recovery",emoji:"⚡",color:"#1A2A3A",type:"Men's",typeColor:"#2A4A6B",action:()=>nav("men")});
     if(matches("ring")||matches("vibe shift")||matches("nfc")||matches("meridian"))
-      add({id:"rings",name:"Vibe Shift Rings",desc:"NFC-enabled intention & affirmation rings",emoji:<RingIcon size={22}/>,color:"#2A1A3A",type:"Rings",typeColor:"#5A3A6B",action:()=>nav("rings")});
+      add({id:"rings",name:"Vibe Shift Rings",desc:"NFC-enabled intention & affirmation rings",emoji:"💍",color:"#2A1A3A",type:"Rings",typeColor:"#5A3A6B",action:()=>nav("rings")});
     if(matches("prayer")||matches("affirmation")||matches("intention")||matches("2am"))
       add({id:"prayer",name:"Daily Affirmation & Prayer",desc:"Touch the lotus to receive today's affirmation",emoji:"🙏",color:"#0A1A0A",type:"Spiritual",typeColor:"#3A6B3A",action:()=>{window.scrollTo({top:document.getElementById('sec-hero')?.offsetTop||0,behavior:'smooth'});}});
 
@@ -2635,8 +2529,6 @@ Respond ONLY with this exact JSON structure:
   // 2AM mode
   const [twoAM, setTwoAM] = useState(false);
   const [prayerOpen, setPrayerOpen] = useState(false);
-  // Ritual Pairings — deep-links the Prayer modal straight to a specific prayer
-  const [prayerDeepLinkId, setPrayerDeepLinkId] = useState(null);
 
 
   // ── AMARA — Wellness Companion ─────────────────────────────────────────────
@@ -3021,14 +2913,12 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     setTimeout(() => window.scrollTo({ top: scrollPosRef.current, behavior: "instant" }), 30);
   };
 
-  const openPrayer = (prayerId=null) => {
+  const openPrayer = () => {
     scrollPosRef.current = window.scrollY || document.documentElement.scrollTop || 0;
-    setPrayerDeepLinkId(prayerId);
     setPrayerOpen(true);
   };
   const closePrayer = () => {
     setPrayerOpen(false);
-    setPrayerDeepLinkId(null);
     setTimeout(() => window.scrollTo({ top: scrollPosRef.current, behavior: "instant" }), 30);
   };
 
@@ -4951,15 +4841,14 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
         `<tr><td style="padding:8px 12px;font-size:14px;color:#5A5040;">${i.emoji||"🍵"} ${i.name}</td><td style="padding:8px 12px;font-size:14px;color:#9A8A7A;text-align:center;">×${i.qty}</td><td style="padding:8px 12px;font-size:14px;color:#C8893A;text-align:right;font-weight:600;">$${(i.price*i.qty).toFixed(2)}</td></tr>`
       ).join("");
 
-      // Ask Claude for a personalized ritual note
+      // Ask Claude for a personalized ritual note via Railway
       let ritualNote = "";
       try {
-        const aiRes = await fetch("https://api.anthropic.com/v1/messages", {
+        const aiRes = await fetch("https://web-production-3fad2.up.railway.app/amara-chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            model: "claude-sonnet-4-20250514",
-            max_tokens: 180,
+            lang: "en",
             messages: [{
               role: "user",
               content: `You are the voice of Chai Holistic, a faith-rooted wellness brand whose message is "You are good enough the way you are." Write a warm, personal 2-sentence note about this person's saved ritual basket. Make it feel like it was written just for them, referencing the specific blends/products they chose. Keep it under 60 words, poetic but grounded, no generic wellness clichés. Cart items: ${cart.map(i=>`${i.name} (x${i.qty})`).join(", ")}. Respond with ONLY the note — no quotes, no preamble.`
@@ -4967,7 +4856,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
           })
         });
         const aiData = await aiRes.json();
-        ritualNote = aiData?.content?.[0]?.text?.trim() || "";
+        ritualNote = aiData?.reply?.trim() || "";
       } catch(e) { ritualNote = ""; }
 
       // Send via Railway + Resend
@@ -5163,7 +5052,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
           { icon:"🌿", label:"I want to heal",      sub:"Body, mind, or spirit — find blends and rituals built for restoration.",  action:()=>nav("shop"),          accent:"#5A8A6A", accentLight:"rgba(90,138,106,0.15)" },
           { icon:"🙏", label:"I need to pray",       sub:"It's late. Something is heavy. A prayer is waiting for you right now.",   action:()=>open2AM(),            accent:"#C4893A", accentLight:"rgba(196,137,58,0.15)" },
           { icon:"💪", label:"Men's wellness",       sub:"40 blends built for men — body, focus, and faith.",                       action:()=>nav("men"),           accent:"#7A6A9A", accentLight:"rgba(122,106,154,0.15)" },
-          { icon:<RingIcon size={26}/>, label:"Vibe Shift Rings",     sub:"Wearable intention. Each ring carries a 417Hz transformation frequency.", action:()=>nav("rings"),         accent:"#A07840", accentLight:"rgba(160,120,64,0.15)" },
+          { icon:"💍", label:"Vibe Shift Rings",     sub:"Wearable intention. Each ring carries a 417Hz transformation frequency.", action:()=>nav("rings"),         accent:"#A07840", accentLight:"rgba(160,120,64,0.15)" },
           { icon:"✦",  label:"Supplements",          sub:"Carefully chosen allies for your wellness stack, paired with tea rituals.", action:()=>nav("supplements"), accent:"#6A8A7A", accentLight:"rgba(106,138,122,0.15)" },
           { icon:"🫖", label:"Find my tea",          sub:"Not sure where to start? Answer 3 questions and we'll match you.",        action:()=>setFinderOpen(true),  accent:"#8A6A3A", accentLight:"rgba(138,106,58,0.15)" },
         ];
@@ -5204,7 +5093,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
         const TESTIMONIALS_DATA = [
           { id:1, quote:"I found Chai Holistic at 2am when I couldn't sleep and couldn't stop crying. I opened the prayer section and something shifted. I just felt less alone. I ordered the Sleep & Surrender blend the next morning.", name:"Monique T.", location:"Atlanta, GA", product:"Sleep & Surrender Blend", icon:"🌙", accent:"#C4893A" },
           { id:2, quote:"As a Jamaican man who grew up watching my grandmother brew bush medicine, this brand brought something back that I didn't know I missed. The ancestral teas section — I actually teared up reading it. This is our heritage being honored.", name:"Devon R.", location:"Brooklyn, NY", product:"Ancestral Teas", icon:"🌿", accent:"#5A8A6A" },
-          { id:3, quote:"I gave my husband a Vibe Shift Ring for his birthday and he hasn't taken it off. He told me quietly that he feels more centered when he wears it. That means everything.", name:"Priya K.", location:"Houston, TX", product:"Vibe Shift Ring", icon:<RingIcon size={22}/>, accent:"#A07840" },
+          { id:3, quote:"I gave my husband a Vibe Shift Ring for his birthday and he hasn't taken it off. He told me quietly that he feels more centered when he wears it. That means everything.", name:"Priya K.", location:"Houston, TX", product:"Vibe Shift Ring", icon:"💍", accent:"#A07840" },
           { id:4, quote:"The Men's Wellness section spoke to me in a way that no other health brand ever has. It wasn't about performance or aesthetics — it was about wholeness. The prostate blend has been part of my morning ritual for three months now.", name:"Marcus J.", location:"Chicago, IL", product:"Men's Wellness Blends", icon:"💪", accent:"#7A6A9A" },
           { id:5, quote:"What makes Chai Holistic different is the intention behind everything. You can feel it. The blends actually work, but it's more than that — the ritual of preparing them changed how I start my mornings.", name:"Sophia M.", location:"Miami, FL", product:"Foundational Healing Blends", icon:"✦", accent:"#6A8A7A" },
           { id:6, quote:"I bought the Sip & Rise book for my teenage son and read it myself first. I sat with it for an hour. Every chapter felt like a conversation I'd been trying to have with him for years, written better than I could have said it.", name:"Pastor Leon W.", location:"Charlotte, NC", product:"Sip & Rise", icon:"🙏", accent:"#C4893A" },
@@ -5251,7 +5140,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
               <div style={{textAlign:"center",marginTop:44,paddingTop:32,borderTop:"1px solid rgba(196,137,58,0.1)"}}>
                 <p style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(13px,3.2vw,15px)",fontStyle:"italic",color:"rgba(247,242,234,0.32)",marginBottom:14}}>Your ritual is waiting.</p>
                 <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-                  {[["🌿","Explore blends","shop"],["🙏","Daily prayer","__prayer__"],[<RingIcon size={13} style={{marginRight:1}}/>,"Vibe Shift Rings","rings"]].map(([icon,label,pg])=>(
+                  {[["🌿","Explore blends","shop"],["🙏","Daily prayer","__prayer__"],["💍","Vibe Shift Rings","rings"]].map(([icon,label,pg])=>(
                     <button key={pg} onClick={()=>pg==="__prayer__"?open2AM():nav(pg)} style={{padding:"8px 18px",borderRadius:20,border:"1px solid rgba(196,137,58,0.2)",background:"transparent",fontFamily:"Jost,sans-serif",fontSize:12,color:"rgba(247,242,234,0.4)",fontWeight:300,cursor:"pointer",transition:"all 0.2s"}} onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.5)";e.currentTarget.style.color="rgba(247,242,234,0.75)";}} onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,0.2)";e.currentTarget.style.color="rgba(247,242,234,0.4)";}}>
                       {icon}  {label}
                     </button>
@@ -5286,9 +5175,6 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
         </div>
       </div>
       <PrayerSection onNavigate={(blend) => nav("tea-library", { blend })} T={T} lang={lang} />
-
-      {/* ── RITUAL PAIRINGS — tea + prayer + frequency, presented as one ritual ── */}
-      <RitualPairingsSection onAddToCart={addToCart} onOpenPrayer={openPrayer} />
 
       {/* ── VIBE SHIFT RING OFFER — shown near prayer section ───────────────── */}
       <div style={{
@@ -6813,7 +6699,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                   {[
                     {icon:"🍵", title:"The Tea", color:"#4A7250",
                       desc:"Your daily ritual. What heals your body, warms your spirit, and grounds your morning. You already have your blend."},
-                    {icon:<RingIcon size={28}/>, title:"The Ring", color:"#C4893A",
+                    {icon:"💍", title:"The Ring", color:"#C4893A",
                       desc:"Your reminder. Spin it when the anxiety rises. A tactile anchor when your mind won't stop. Every ring ships ready to pray."},
                     {icon:"🙏", title:"The Prayer", color:"#3A4A7A",
                       desc:"Your companion. Touch your Vibe Shift Ring to your phone and a real voice from 2amcompanion.com prays with you — right now."},
@@ -6840,7 +6726,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                     <button
                       onClick={()=>{ setIntentionOpen(false); setIntentionStep(0); setIntentionData({}); setIntentionResult(null); nav("rings"); }}
                       style={{background:"rgba(255,255,255,.08)",border:"1px solid rgba(255,255,255,.2)",color:"rgba(255,255,255,.8)",padding:"10px 24px",borderRadius:50,fontFamily:"Jost,sans-serif",fontSize:".72rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",transition:"all .2s"}}>
-                      <RingIcon size={14} style={{marginRight:7}}/>See Vibe Shift Rings
+                      💍 See Vibe Shift Rings
                     </button>
                   </div>
                 </div>
@@ -7783,7 +7669,7 @@ Thank you!`);
 
                 {/* Best finger — founder's personal note */}
                 <div style={{background:"rgba(45,74,45,.25)",border:"1px solid rgba(74,114,80,.25)",borderRadius:12,padding:"12px 14px",marginBottom:10,display:"flex",gap:12,alignItems:"flex-start"}}>
-                  <div style={{flexShrink:0,display:"flex",alignItems:"center"}}><RingIcon size={22}/></div>
+                  <div style={{fontSize:"1.2rem",flexShrink:0}}>💍</div>
                   <div>
                     <div style={{fontSize:".68rem",color:"rgba(74,114,80,.9)",fontWeight:600,marginBottom:3}}>Best Finger — Alex's Recommendation</div>
                     <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",lineHeight:1.65}}>
@@ -8531,7 +8417,7 @@ Thank you!`);
               {/* How it works row */}
               <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:0}}>
                 {[
-                  {step:"1",icon:<RingIcon size={28}/>,title:"Touch your ring",desc:"Hold your Vibe Shift Ring near the top of your NFC-enabled phone or tablet."},
+                  {step:"1",icon:"💍",title:"Touch your ring",desc:"Hold your Vibe Shift Ring near the top of your NFC-enabled phone or tablet."},
                   {step:"2",icon:"📱",title:"Your phone opens",desc:"No app needed. The prayer companion opens instantly in your browser."},
                   {step:"3",icon:"🎙",title:"A real voice prays",desc:"A recorded prayer begins -- matched to your ring's intention and your moment."},
                   {step:"4",icon:"🙏",title:"You're not alone",desc:"Pray along, or simply listen. Someone is always there to pray with you."},
@@ -9179,7 +9065,7 @@ Thank you!`);
               <div style={{fontSize:".6rem",letterSpacing:".2em",textTransform:"uppercase",color:"rgba(196,137,58,0.6)",fontFamily:"Jost,sans-serif",fontWeight:300}}>2AM Companion · Daily Prayer</div>
               <button onClick={closePrayer} style={{background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",color:"rgba(255,255,255,0.6)",borderRadius:"50%",width:32,height:32,cursor:"pointer",fontSize:"1rem",display:"flex",alignItems:"center",justifyContent:"center",transition:"all .2s",marginBottom:8}} onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,0.12)";e.currentTarget.style.color="white";}} onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.06)";e.currentTarget.style.color="rgba(255,255,255,0.6)";}}>✕</button>
             </div>
-            <iframe src={prayerDeepLinkId ? `/prayer.html?prayer=${encodeURIComponent(prayerDeepLinkId)}` : "/prayer.html"} style={{flex:1,border:"none",width:"100%",background:"#0A0F0B"}} title="Daily Prayer"/>
+            <iframe src="/prayer.html" style={{flex:1,border:"none",width:"100%",background:"#0A0F0B"}} title="Daily Prayer"/>
           </div>
           <style>{`@keyframes fadeIn{from{opacity:0}to{opacity:1}} @keyframes slideUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}`}</style>
         </>
@@ -9191,9 +9077,9 @@ Thank you!`);
           const fetchInfo = async () => {
             setIngredientModal(prev=>({...prev,loading:true}));
             try{
-              const res = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,messages:[{role:"user",content:`You are a warm, knowledgeable herbalist and wellness guide for Chai Holistic, a faith-rooted tea brand. Provide a concise, engaging deep-dive on the supplement/herb: "${ingredientModal.name}".\n\nInclude:\n1. What it is (2 sentences)\n2. Key health benefits (3-4 bullet points, each 1 sentence)\n3. How it pairs with herbal tea rituals (1-2 sentences)\n4. One practical tip or dosage note\n\nKeep the tone warm and educational. Use plain text with line breaks. No markdown headers. Max 200 words.`}]})});
+              const res = await fetch("https://web-production-3fad2.up.railway.app/amara-chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({lang:"en",messages:[{role:"user",content:`You are a warm, knowledgeable herbalist and wellness guide for Chai Holistic, a faith-rooted tea brand. Provide a concise, engaging deep-dive on the supplement/herb: "${ingredientModal.name}".\n\nInclude:\n1. What it is (2 sentences)\n2. Key health benefits (3-4 bullet points, each 1 sentence)\n3. How it pairs with herbal tea rituals (1-2 sentences)\n4. One practical tip or dosage note\n\nKeep the tone warm and educational. Use plain text with line breaks. No markdown headers. Max 200 words.`}]})});
               const data = await res.json();
-              const info = data.content.map(c=>c.type==="text"?c.text:"").join("");
+              const info = data.reply || "Please visit our Supplements page for detailed information on this ingredient.";
               setIngredientModal(prev=>({...prev,info,loading:false}));
             }catch(e){
               setIngredientModal(prev=>({...prev,info:"Information temporarily unavailable. Please visit our Supplements page for details.",loading:false}));
