@@ -94,6 +94,13 @@ export const PRODUCT_MAP = {
   "Ancestral Fire":                     "gid://shopify/ProductVariant/FILL_IN",
   "Ancestral Grounding Blend":          "gid://shopify/ProductVariant/FILL_IN",
   "Stardust Pineal Activation":         "gid://shopify/ProductVariant/FILL_IN",
+  // ── Ritual Moments ───────────────────────────────────────
+  "Threshold Tea":                      "gid://shopify/ProductVariant/FILL_IN",
+  "Open Hands Tea":                     "gid://shopify/ProductVariant/FILL_IN",
+  "Quiet Gratitude Tea":                "gid://shopify/ProductVariant/FILL_IN",
+  "Steady Hands Tea":                   "gid://shopify/ProductVariant/FILL_IN",
+  "Held in Grief Tea":                  "gid://shopify/ProductVariant/FILL_IN",
+  "Inner Knowing Tea":                  "gid://shopify/ProductVariant/FILL_IN",
   // ── Men's Teas ────────────────────────────────────────
   "Iron Will Morning":                  "gid://shopify/ProductVariant/FILL_IN",
   "Deep Recharge Sleep":                "gid://shopify/ProductVariant/FILL_IN",

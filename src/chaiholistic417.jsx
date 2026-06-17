@@ -59,6 +59,18 @@ const BLENDS = [
   { id:"w5", photo:"https://images.pexels.com/photos/906150/pexels-photo-906150.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Bone & Joint", occasion:"Wellness", tagline:"Move with ease", desc:"Nettle, oat straw and horsetail nourish bones and connective tissue from the inside.", ingredients:["Nettle Leaf","Oat Straw","Horsetail","Alfalfa"], price:17.99, benefit:"Bones · Joints · Minerals", color:"#4A6A2A", steepMin:10, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil -- boil then wait 60 sec", mood:"Stiff · Achy · Joint pain", oz:2, cupsPerOz:11, servingSize:"1 tsp", energy:"medium", time:"morning", feeling:"achy", caffeine:false },
   { id:"w6", photo:"https://images.pexels.com/photos/56866/garden-rose-red-pink-56866.jpeg?auto=compress&cs=tinysrgb&w=600", name:"Skin Glow", occasion:"Wellness", tagline:"Beauty brewed from within", desc:"Burdock root, red clover and rose work from the inside to clear and illuminate skin.", ingredients:["Burdock Root","Red Clover","Rose Petals","Calendula"], price:19.99, benefit:"Skin · Acne · Glow", color:"#C48A3A", steepMin:8, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil -- boil then wait 60 sec", mood:"Dull skin · Breakouts", oz:2, cupsPerOz:11, servingSize:"1 tsp", energy:"medium", time:"morning", feeling:"tired", caffeine:false },
   { id:"w7", photo:"/herbs/stress-less.jpg", name:"Stress Less", occasion:"Wellness", tagline:"Breathe. Release. Continue.", desc:"Ashwagandha, holy basil and passionflower form a powerful stress-busting adaptogenic trio.", ingredients:["Ashwagandha Root","Tulsi","Passionflower","Lemon Balm"], price:20.99, benefit:"Stress · Cortisol · Calm", color:"#3A5A3A", steepMin:9, oz:2, cupsPerOz:10, servingSize:"1 tsp", steepTemp:"Just Off the Boil -- boil then wait 60 sec", mood:"Overwhelmed · Cortisol high", oz:2, cupsPerOz:10, servingSize:"1 tsp", energy:"low", time:"anytime", feeling:"stressed", caffeine:false },
+  // ── RITUAL MOMENTS ──────────────────────────────────────────────────────
+  // These 6 teas are intentionally missing steepMin/oz/cupsPerOz/servingSize/
+  // steepTemp -- they are not sold as standalone brew-at-home blends. Each is
+  // gated by `ritualMoment:true` so card/modal renders hide brewing-guide UI
+  // and link to the Tea Library (TeaLibrary.jsx) instead, where the full
+  // ritual experience (prayer pairing + frequency + intention) lives.
+  { id:"rm1", photo:"/herbs/ritual-rm1.jpg", name:"Threshold Tea", occasion:"Ritual Moments", tagline:"For the moment just before you begin again.", desc:"Bay leaf, cardamom and orange peel mark a clean threshold between what was and what's next -- brewed for the breath you take before stepping through.", ingredients:["Bay Leaf","Cardamom","Orange Peel","Cinnamon"], price:19.99, benefit:"Renewal · Clarity · New Beginnings", color:"#C4893A", ritualMoment:true, mood:"Standing at a threshold · Ready to begin", energy:"medium", time:"morning", feeling:"hopeful", caffeine:false },
+  { id:"rm2", photo:"/herbs/ritual-rm2.jpg", name:"Open Hands Tea", occasion:"Ritual Moments", tagline:"For releasing what your grip can't hold anymore.", desc:"Chamomile, hawthorn and skullcap soften a clenched body and a clenched heart -- for the practice of opening your hands, palms up, and letting go.", ingredients:["Chamomile","Hawthorn Berry","Skullcap","Lavender"], price:18.99, benefit:"Release · Surrender · Heart Ease", color:"#7A6E3A", ritualMoment:true, mood:"Gripping tightly · Need to let go", energy:"low", time:"evening", feeling:"tense", caffeine:false, warning:"Contains Hawthorn Berry. Consult your doctor if on heart medications or blood thinners." },
+  { id:"rm3", photo:"/herbs/ritual-rm3.jpg", name:"Quiet Gratitude Tea", occasion:"Ritual Moments", tagline:"For counting what's good, even on a hard day.", desc:"Rooibos, rose hip and a whisper of vanilla bring a soft sweetness to the practice of naming three things you're grateful for, however small.", ingredients:["Rooibos","Rose Hip","Vanilla Bean","Orange Peel"], price:16.99, benefit:"Gratitude · Perspective · Warmth", color:"#8B5A2A", ritualMoment:true, mood:"Overwhelmed · Need perspective", energy:"medium", time:"anytime", feeling:"heavy", caffeine:false },
+  { id:"rm4", photo:"/herbs/ritual-rm4.jpg", name:"Steady Hands Tea", occasion:"Ritual Moments", tagline:"For anxious mornings that need a place to land.", desc:"Lemon balm, oat straw and passionflower quiet a racing nervous system without sedating you -- steady enough to function, calm enough to think clearly.", ingredients:["Lemon Balm","Oat Straw","Passionflower","Chamomile"], price:18.99, benefit:"Anxiety · Steadiness · Clarity", color:"#4A6A3A", ritualMoment:true, mood:"Anxious · Racing thoughts", energy:"medium", time:"morning", feeling:"anxious", caffeine:false },
+  { id:"rm5", photo:"/herbs/ritual-rm5.jpg", name:"Held in Grief Tea", occasion:"Ritual Moments", tagline:"For the days grief doesn't ask permission to visit.", desc:"Rose, motherwort and linden flower don't try to fix grief -- they simply sit beside it, the way a good friend would, with nothing that needs to be said.", ingredients:["Rose Petals","Motherwort","Linden Flower","Lemon Balm"], price:18.99, benefit:"Grief · Tenderness · Companionship", color:"#5A3A4A", ritualMoment:true, mood:"Grieving · Tender · Heavy-hearted", energy:"low", time:"anytime", feeling:"sad", caffeine:false, warning:"Contains Motherwort. NOT for use during pregnancy. Consult your doctor if on heart medications or blood thinners." },
+  { id:"rm6", photo:"/herbs/ritual-rm6.jpg", name:"Inner Knowing Tea", occasion:"Ritual Moments", tagline:"For when you already know the answer and need quiet to hear it.", desc:"Mugwort, gotu kola and a touch of star anise sharpen intuition and quiet the mental noise that drowns out what you already sense to be true.", ingredients:["Mugwort","Gotu Kola","Star Anise","Lavender"], price:20.99, benefit:"Intuition · Clarity · Inner Knowing", color:"#3A2A5A", ritualMoment:true, mood:"Confused · Seeking direction", energy:"low", time:"evening", feeling:"uncertain", caffeine:false, warning:"Contains Mugwort. NOT for use during pregnancy." },
 ];
 
 const CLEANSING = [
@@ -146,6 +158,74 @@ const RITUAL_SETS = [
     frequencyHz: 963,
     frequencyName: "Divine Consciousness",
     intention: "This is the tea your grandmother knew. Brew it the way it's always been brewed — slowly, with intention. Let the prayer carry your gratitude back through every hand that came before yours."
+  },
+  // ── RITUAL MOMENTS (6 dedicated teas, added together with the BLENDS
+  // entries above) ───────────────────────────────────────────────────────
+  {
+    id: "ritual-rm1",
+    name: "The Threshold Ritual",
+    tagline: "For the moment just before you begin again.",
+    blendId: "rm1",
+    prayerId: "purpose",
+    prayerTitle: "A Prayer for Purpose",
+    frequencyHz: 741,
+    frequencyName: "The Awakener",
+    intention: "Hold the cup before you drink it. Name what you are walking away from, and what you are walking toward. This tea doesn't rush the crossing -- it simply marks that you made it."
+  },
+  {
+    id: "ritual-rm2",
+    name: "The Open Hands Ritual",
+    tagline: "For releasing what your grip can't hold anymore.",
+    blendId: "rm2",
+    prayerId: "surrender",
+    prayerTitle: "A Prayer of Complete Surrender",
+    frequencyHz: 396,
+    frequencyName: "Liberation",
+    intention: "Hold the cup with both hands, then slowly turn your palms upward beneath it. Whatever you're holding too tightly tonight, this is your practice of setting it down."
+  },
+  {
+    id: "ritual-rm3",
+    name: "The Quiet Gratitude Ritual",
+    tagline: "For counting what's good, even on a hard day.",
+    blendId: "rm3",
+    prayerId: "gratitude",
+    prayerTitle: "A Prayer of Gratitude",
+    frequencyHz: 528,
+    frequencyName: "The Love Frequency",
+    intention: "Before the first sip, name three things -- out loud or silently. Not the big wins. The small, easily missed ones. Let the prayer carry the rest."
+  },
+  {
+    id: "ritual-rm4",
+    name: "The Steady Hands Ritual",
+    tagline: "For anxious mornings that need a place to land.",
+    blendId: "rm4",
+    prayerId: "anxiety",
+    prayerTitle: "A Prayer for Anxiety",
+    frequencyHz: 174,
+    frequencyName: "The Foundation",
+    intention: "Hold the cup and feel its weight in your palms before you drink. Let that physical steadiness remind your body it is safe to slow down, even before your mind agrees."
+  },
+  {
+    id: "ritual-rm5",
+    name: "The Held in Grief Ritual",
+    tagline: "For the days grief doesn't ask permission to visit.",
+    blendId: "rm5",
+    prayerId: "intercession",
+    prayerTitle: "A Prayer for Those We Love",
+    frequencyHz: 639,
+    frequencyName: "Connection",
+    intention: "There's nothing to perform here. Sit with the cup. Let it cool a little before you drink, the way grief asks you to slow down. The prayer is for the person you're missing."
+  },
+  {
+    id: "ritual-rm6",
+    name: "The Inner Knowing Ritual",
+    tagline: "For when you already know the answer and need quiet to hear it.",
+    blendId: "rm6",
+    prayerId: "direction",
+    prayerTitle: "A Prayer for Direction",
+    frequencyHz: 852,
+    frequencyName: "Spiritual Return",
+    intention: "Ask your question once, then stop asking. Drink slowly and listen for what rises in the quiet -- not the loudest thought, but the steadiest one."
   },
 ];
 
@@ -283,6 +363,7 @@ const BLEND_EMOJIS = {
   e1:"✿",  e2:"🌙", e3:"💛", e4:"🌹", e5:"🌙", e6:"💜", e7:"🌿", e8:"🌀",
   s1:"✨",  s2:"🫐", s3:"🍂", s4:"🌸", s5:"❄️", s6:"🌺", s7:"🍄",
   w1:"🌱",  w2:"❤️", w3:"🧠", w4:"🌸", w5:"🌿", w6:"🌻", w7:"🕊️",
+  rm1:"🕊️", rm2:"🤲", rm3:"🙏", rm4:"🫶", rm5:"🌷", rm6:"🔮",
 };
 
 const RINGS = [
@@ -388,6 +469,7 @@ const LANGS = {
     occ_evening:"Evening",
     occ_seasonal:"Seasonal",
     occ_wellness:"Wellness",
+    occ_ritual_moments:"Ritual Moments",
     filter_all:"All",
     shop_apothecary:"Di Apothecary",
     shop_all_blends:"All di",
@@ -404,6 +486,7 @@ const LANGS = {
     occ_evening:"Evening",
     occ_seasonal:"Seasonal",
     occ_wellness:"Wellness",
+    occ_ritual_moments:"Ritual Moments",
     filter_all:"All",
     shop_apothecary:"The Apothecary",
     shop_all_blends:"All Tea",
@@ -581,6 +664,7 @@ const LANGS = {
     occ_evening:"Noche",
     occ_seasonal:"Estacional",
     occ_wellness:"Bienestar",
+    occ_ritual_moments:"Momentos de Ritual",
     filter_all:"Todos",
     shop_apothecary:"La Botica",
     shop_all_blends:"Todas las",
@@ -752,6 +836,7 @@ const LANGS = {
     occ_evening:"Soir",
     occ_seasonal:"Saisonnier",
     occ_wellness:"Bien-être",
+    occ_ritual_moments:"Moments de Rituel",
     filter_all:"Tous",
     shop_apothecary:"L'Apothicaire",
     shop_all_blends:"Tous les",
@@ -923,6 +1008,7 @@ const LANGS = {
     occ_evening:"Noite",
     occ_seasonal:"Sazonal",
     occ_wellness:"Bem-estar",
+    occ_ritual_moments:"Momentos de Ritual",
     filter_all:"Todos",
     shop_apothecary:"A Botica",
     shop_all_blends:"Todas as",
@@ -1094,6 +1180,7 @@ const LANGS = {
     occ_evening:"Aswè",
     occ_seasonal:"Sezonye",
     occ_wellness:"Byenèt",
+    occ_ritual_moments:"Moman Rityèl",
     filter_all:"Tout",
     shop_apothecary:"Apotekè a",
     shop_all_blends:"Tout",
@@ -4054,25 +4141,32 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                     <div className="finder-result-benefit">{r.benefit}</div>
                     <div className="finder-result-desc">{r.desc}</div>
                     {r && r.warning ? <div className="warn-block" style={{marginTop:8}}><strong>⚠ {lang==="es"?"Nota de Seguridad":lang==="fr"?"Note de Sécurité":lang==="pt"?"Nota de Segurança":lang==="ht"?"Nòt Sekirite":"Safety Note"}</strong>{r.warning}</div> : null}
-                    <div style={{display:"flex",gap:"8px",marginTop:"10px",flexWrap:"wrap"}}>
-                      <button className="btn-add" disabled={isOutOfStock(r.name)} onClick={() => { if(!isOutOfStock(r.name)){addToCart({...r,emoji:"🍵",price:getPrice(r.name,r.price)}); setFinderOpen(false); resetFinder();}}} style={isOutOfStock(r.name)?{opacity:.4,cursor:"not-allowed"}:{}}>{isOutOfStock(r.name)?(T.out_of_stock||"Out of Stock"):`${T.btn_add_basket} — $${getPrice(r.name,r.price).toFixed(2)}`}</button>
-                      <button className="btn-ghost" style={{fontSize:".65rem",padding:"7px 14px"}} onClick={() => {
-                        const blendIdx = BLENDS.findIndex(b => b.id === r.id);
-                        const cleanseIdx = CLEANSING.findIndex(c => c.id === r.id);
-                        const recipeKey = blendIdx >= 0 ? `w${blendIdx}` : cleanseIdx >= 0 ? `c${cleanseIdx}` : null;
-                        setBlendFilter("All");
-                        if (recipeKey) setActiveRecipe(recipeKey);
-                        setFinderOpen(false);
-                        resetFinder();
-                        nav("recipes");
-                        if (recipeKey) {
-                          setTimeout(() => {
-                            const el = document.querySelector(`[data-recipe="${recipeKey}"]`);
-                            if (el) el.scrollIntoView({ behavior:"smooth", block:"center" });
-                          }, 380);
-                        }
-                      }}>See Recipe</button>
-                    </div>
+                    {!r.ritualMoment && (
+                      <div style={{display:"flex",gap:"8px",marginTop:"10px",flexWrap:"wrap"}}>
+                        <button className="btn-add" disabled={isOutOfStock(r.name)} onClick={() => { if(!isOutOfStock(r.name)){addToCart({...r,emoji:"🍵",price:getPrice(r.name,r.price)}); setFinderOpen(false); resetFinder();}}} style={isOutOfStock(r.name)?{opacity:.4,cursor:"not-allowed"}:{}}>{isOutOfStock(r.name)?(T.out_of_stock||"Out of Stock"):`${T.btn_add_basket} — $${getPrice(r.name,r.price).toFixed(2)}`}</button>
+                        <button className="btn-ghost" style={{fontSize:".65rem",padding:"7px 14px"}} onClick={() => {
+                          const blendIdx = BLENDS.findIndex(b => b.id === r.id);
+                          const cleanseIdx = CLEANSING.findIndex(c => c.id === r.id);
+                          const recipeKey = blendIdx >= 0 ? `w${blendIdx}` : cleanseIdx >= 0 ? `c${cleanseIdx}` : null;
+                          setBlendFilter("All");
+                          if (recipeKey) setActiveRecipe(recipeKey);
+                          setFinderOpen(false);
+                          resetFinder();
+                          nav("recipes");
+                          if (recipeKey) {
+                            setTimeout(() => {
+                              const el = document.querySelector(`[data-recipe="${recipeKey}"]`);
+                              if (el) el.scrollIntoView({ behavior:"smooth", block:"center" });
+                            }, 380);
+                          }
+                        }}>See Recipe</button>
+                      </div>
+                    )}
+                    {r.ritualMoment && (
+                      <div style={{fontSize:".68rem",color:"#9A7A8A",marginTop:"10px",fontStyle:"italic"}}>
+                        ✦ A guided ritual experience — full pairing in the Tea Library below
+                      </div>
+                    )}
                     <button
                       style={{marginTop:"10px",width:"100%",background:"rgba(13,26,17,.85)",border:"1px solid rgba(82,184,130,.35)",borderRadius:10,padding:"9px 14px",color:"#52b882",fontFamily:"'Cinzel',serif",fontSize:".62rem",fontWeight:500,letterSpacing:".16em",textTransform:"uppercase",cursor:"pointer",transition:"all .18s"}}
                       onMouseEnter={e=>{e.currentTarget.style.background="rgba(82,184,130,.12)";e.currentTarget.style.borderColor="rgba(82,184,130,.7)";e.currentTarget.style.color="#7dd9a8";}}
@@ -5980,24 +6074,42 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
             </div>
 
             {/* BREW GUIDE */}
-            <div className="bm-section-lbl">{lang==="es"?"Guía de Preparación":lang==="fr"?"Guide de Préparation":lang==="pt"?"Guia de Preparo":lang==="ht"?"Gid Prepare":"Brewing Guide"}</div>
-            <div className="bm-brew">
-              <div className="bm-brew-tile">
-                <div className="bm-brew-lbl">{lang==="es"?"Tiempo de Infusión":lang==="fr"?"Temps d'Infusion":lang==="pt"?"Tempo de Infusão":lang==="ht"?"Tan Enfizyon":"Steep Time"}</div>
-                <div className="bm-brew-val">⏱ {blend.steepMin} minutes</div>
-              </div>
-              <div className="bm-brew-tile">
-                <div className="bm-brew-lbl">{lang==="es"?"Porción":lang==="fr"?"Portion":lang==="pt"?"Porção":lang==="ht"?"Pòsyon":"Serving Size"}</div>
-                <div className="bm-brew-val">{blend.servingSize || "1 tsp"}</div>
-              </div>
-              <div className="bm-brew-tile" style={{gridColumn:"span 2"}}>
-                <div className="bm-brew-lbl">{lang==="es"?"Temperatura del Agua":lang==="fr"?"Température de l'Eau":lang==="pt"?"Temperatura da Água":lang==="ht"?"Tanperati Dlo":"Water Temperature"}</div>
-                <div className="bm-brew-val">
-                  <span style={{color:tempInfo.color,marginRight:6}}>{tempInfo.icon}</span>
-                  {blend.steepTemp}
+            {!blend.ritualMoment && (
+              <>
+                <div className="bm-section-lbl">{lang==="es"?"Guía de Preparación":lang==="fr"?"Guide de Préparation":lang==="pt"?"Guia de Preparo":lang==="ht"?"Gid Prepare":"Brewing Guide"}</div>
+                <div className="bm-brew">
+                  <div className="bm-brew-tile">
+                    <div className="bm-brew-lbl">{lang==="es"?"Tiempo de Infusión":lang==="fr"?"Temps d'Infusion":lang==="pt"?"Tempo de Infusão":lang==="ht"?"Tan Enfizyon":"Steep Time"}</div>
+                    <div className="bm-brew-val">⏱ {blend.steepMin} minutes</div>
+                  </div>
+                  <div className="bm-brew-tile">
+                    <div className="bm-brew-lbl">{lang==="es"?"Porción":lang==="fr"?"Portion":lang==="pt"?"Porção":lang==="ht"?"Pòsyon":"Serving Size"}</div>
+                    <div className="bm-brew-val">{blend.servingSize || "1 tsp"}</div>
+                  </div>
+                  <div className="bm-brew-tile" style={{gridColumn:"span 2"}}>
+                    <div className="bm-brew-lbl">{lang==="es"?"Temperatura del Agua":lang==="fr"?"Température de l'Eau":lang==="pt"?"Temperatura da Água":lang==="ht"?"Tanperati Dlo":"Water Temperature"}</div>
+                    <div className="bm-brew-val">
+                      <span style={{color:tempInfo.color,marginRight:6}}>{tempInfo.icon}</span>
+                      {blend.steepTemp}
+                    </div>
+                  </div>
                 </div>
+              </>
+            )}
+
+            {/* RITUAL MOMENTS — replaces brew guide for gated teas */}
+            {blend.ritualMoment && (
+              <div style={{background:"linear-gradient(135deg,#F5F0E4,#FAF7F0)",border:"1px solid rgba(196,137,58,.25)",borderRadius:14,padding:"16px 18px",marginBottom:16}}>
+                <div style={{fontSize:".56rem",letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:8,fontWeight:600}}>✦ A Ritual Moments Tea</div>
+                <p style={{fontSize:".78rem",color:"#6A5A48",lineHeight:1.75,margin:"0 0 12px",fontWeight:300}}>
+                  This tea is part of a complete ritual — paired with a prayer and a Meridian Infusion Frequency for a full mind-body-spirit experience. Brewing guide, prayer pairing, and frequency live together in the Tea Library.
+                </p>
+                <button className="btn-main" style={{fontSize:".68rem",padding:"10px 20px"}}
+                  onClick={()=>{onClose();nav("tea-library",{blend:blend.name});}}>
+                  Visit the Tea Library →
+                </button>
               </div>
-            </div>
+            )}
 
             {/* BEST FOR */}
             {blend.mood && (
@@ -6082,26 +6194,36 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                   ${getPrice(blend.name,blend.price).toFixed(2)}
                   {formatPrice(blend.name,blend.price).onSale&&<span style={{background:"rgba(200,80,40,.15)",color:"#e06040",fontSize:".6rem",padding:"2px 8px",borderRadius:50,marginLeft:8,fontFamily:"sans-serif",letterSpacing:".08em",textTransform:"uppercase"}}>Sale</span>}
                 </div>
-                <div className="bm-cup-note">{blend.oz || 2}oz bag · approx {cupsTotal} cups</div>
+                {!blend.ritualMoment && <div className="bm-cup-note">{blend.oz || 2}oz bag · approx {cupsTotal} cups</div>}
+                {blend.ritualMoment && <div className="bm-cup-note">Ritual Moments · Tea Library exclusive</div>}
               </div>
               <div style={{display:"flex",gap:8,marginLeft:"auto",flexWrap:"wrap",justifyContent:"flex-end"}}>
-                <button className="btn-ghost" style={{fontSize:".65rem",padding:"9px 16px"}}
-                  onClick={()=>{
-                    onClose();
-                    nav("recipes");
-                  }}>
-                  See Recipe
-                </button>
-                <button className="btn-add" style={{fontSize:".72rem",padding:"10px 22px",...(isOutOfStock(blend.name)?{opacity:.4,cursor:"not-allowed"}:{})}}
-                  disabled={isOutOfStock(blend.name)}
-                  onClick={()=>{
-                    if(!isOutOfStock(blend.name)){
-                      addToCart({...blend, emoji:"🍵", price:getPrice(blend.name,blend.price)});
-                      onClose();
-                    }
-                  }}>
-                  {isOutOfStock(blend.name)?(T.out_of_stock||"Out of Stock"):"Add to Basket"}
-                </button>
+                {blend.ritualMoment ? (
+                  <button className="btn-add" style={{fontSize:".72rem",padding:"10px 22px"}}
+                    onClick={()=>{onClose();nav("tea-library",{blend:blend.name});}}>
+                    Visit Tea Library →
+                  </button>
+                ) : (
+                  <>
+                    <button className="btn-ghost" style={{fontSize:".65rem",padding:"9px 16px"}}
+                      onClick={()=>{
+                        onClose();
+                        nav("recipes");
+                      }}>
+                      See Recipe
+                    </button>
+                    <button className="btn-add" style={{fontSize:".72rem",padding:"10px 22px",...(isOutOfStock(blend.name)?{opacity:.4,cursor:"not-allowed"}:{})}}
+                      disabled={isOutOfStock(blend.name)}
+                      onClick={()=>{
+                        if(!isOutOfStock(blend.name)){
+                          addToCart({...blend, emoji:"🍵", price:getPrice(blend.name,blend.price)});
+                          onClose();
+                        }
+                      }}>
+                      {isOutOfStock(blend.name)?(T.out_of_stock||"Out of Stock"):"Add to Basket"}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -6124,7 +6246,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
           </div>
           <div id="sec-shop-blends" className="sh c"><div className="sh-eye">{T.shop_apothecary||"The Apothecary"}</div><h2 className="sh-h">{T.shop_all_blends||"All Tea"} <em>{T.shop_blends_em||"Blends"}</em> <span className="cbadge">{BLENDS.length}</span></h2><p className="sh-p">{T.shop_blends_sub||"Every wellness blend from the Sip & Heal book."}</p></div>
           <div className="pills">
-            {[["All",T.filter_all||"All"],["Morning",T.occ_morning||"Morning"],["Evening",T.occ_evening||"Evening"],["Seasonal",T.occ_seasonal||"Seasonal"],["Wellness",T.occ_wellness||"Wellness"]].map(([v,l])=><button key={v} className={`pill ${blendFilter===v?"on":""}`} onClick={()=>setBlendFilter(v)}>{l}</button>)}
+            {[["All",T.filter_all||"All"],["Morning",T.occ_morning||"Morning"],["Evening",T.occ_evening||"Evening"],["Seasonal",T.occ_seasonal||"Seasonal"],["Wellness",T.occ_wellness||"Wellness"],["Ritual Moments",T.occ_ritual_moments||"Ritual Moments"]].map(([v,l])=><button key={v} className={`pill ${blendFilter===v?"on":""}`} onClick={()=>setBlendFilter(v)}>{l}</button>)}
           </div>
           <div className="pgrid">
             {filteredBlends.map(b=>(
@@ -6145,21 +6267,34 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                   <div className="pcard-benefit">{bmt?.benefit||b.benefit}</div>
                   </>);})()}
                   {b.warning && <div className="warn-block"><strong>⚠ {lang==="es"?"Nota de Seguridad":lang==="fr"?"Note de Sécurité":lang==="pt"?"Nota de Segurança":lang==="ht"?"Nòt Sekirite":"Safety Note"}</strong>{b.warning}</div>}
-                  <div style={{fontSize:".66rem",color:"#8A7A6A",marginBottom:"12px",display:"flex",alignItems:"center",gap:6}}>
-                    <span>⏱ {b.steepMin} min</span>
-                    <span style={{color:"rgba(0,0,0,.2)"}}>·</span>
-                    <span style={{color:tempIcon(b.steepTemp).color,fontWeight:500}}>{tempIcon(b.steepTemp).icon} {tempIcon(b.steepTemp).label}</span>
-                  </div>
+                  {!b.ritualMoment && (
+                    <div style={{fontSize:".66rem",color:"#8A7A6A",marginBottom:"12px",display:"flex",alignItems:"center",gap:6}}>
+                      <span>⏱ {b.steepMin} min</span>
+                      <span style={{color:"rgba(0,0,0,.2)"}}>·</span>
+                      <span style={{color:tempIcon(b.steepTemp).color,fontWeight:500}}>{tempIcon(b.steepTemp).icon} {tempIcon(b.steepTemp).label}</span>
+                    </div>
+                  )}
+                  {b.ritualMoment && (
+                    <div style={{fontSize:".66rem",color:"#9A7A8A",marginBottom:"12px",fontStyle:"italic"}}>
+                      ✦ A guided ritual experience — prayer, frequency &amp; intention in the Tea Library
+                    </div>
+                  )}
                   <div className="pcard-foot">
                     <span className="pcard-price">
                       {formatPrice(b.name,b.price).compare&&<span style={{textDecoration:"line-through",opacity:.45,fontSize:".8rem",marginRight:4}}>${formatPrice(b.name,b.price).compare}</span>}
                       ${getPrice(b.name,b.price).toFixed(2)}
                     </span>
-                    <button className="btn-add" disabled={isOutOfStock(b.name)}
-                      onClick={e=>{e.stopPropagation();if(!isOutOfStock(b.name))addToCart({...b,emoji:"🍵",price:getPrice(b.name,b.price)});}}
-                      style={isOutOfStock(b.name)?{opacity:.4,cursor:"not-allowed"}:{}}>
-                      {isOutOfStock(b.name)?(T.out_of_stock||"Out of Stock"):"Add to Basket"}
-                    </button>
+                    {b.ritualMoment ? (
+                      <button className="btn-add" onClick={e=>{e.stopPropagation();nav("tea-library",{blend:b.name});}}>
+                        Visit Tea Library →
+                      </button>
+                    ) : (
+                      <button className="btn-add" disabled={isOutOfStock(b.name)}
+                        onClick={e=>{e.stopPropagation();if(!isOutOfStock(b.name))addToCart({...b,emoji:"🍵",price:getPrice(b.name,b.price)});}}
+                        style={isOutOfStock(b.name)?{opacity:.4,cursor:"not-allowed"}:{}}>
+                        {isOutOfStock(b.name)?(T.out_of_stock||"Out of Stock"):"Add to Basket"}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
