@@ -327,23 +327,23 @@ export const BLENDS = [
     "part": "I",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Valerian root"
       ],
       [
-        "1.5 tsp",
+        "",
         "Passionflower"
       ],
       [
-        "2 tsp",
+        "",
         "Chamomile flowers"
       ],
       [
-        "1.5 tsp",
+        "",
         "Lemon balm"
       ],
       [
-        "1 tsp",
+        "",
         "Lavender buds"
       ]
     ],
@@ -359,23 +359,23 @@ export const BLENDS = [
     "part": "I",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Hawthorn berry (dried)"
       ],
       [
-        "2 tsp",
+        "",
         "Hibiscus flowers"
       ],
       [
-        "1.5 tsp",
+        "",
         "Rose hips"
       ],
       [
-        "1 tsp",
+        "",
         "Ginger root (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Cinnamon chips"
       ]
     ],
@@ -391,23 +391,23 @@ export const BLENDS = [
     "part": "I",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Ginkgo biloba leaf"
       ],
       [
-        "1.5 tsp",
+        "",
         "Gotu kola"
       ],
       [
-        "2 tsp",
+        "",
         "Peppermint leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Rosemary leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Lion's mane powder"
       ]
     ],
@@ -423,27 +423,27 @@ export const BLENDS = [
     "part": "I",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Elderberries (dried)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Echinacea root"
       ],
       [
-        "1.5 tsp",
+        "",
         "Astragalus root"
       ],
       [
-        "1 tsp",
+        "",
         "Turmeric powder"
       ],
       [
-        "0.25 tsp",
+        "",
         "Black pepper"
       ],
       [
-        "0.5 tsp",
+        "",
         "Licorice root"
       ]
     ],
@@ -459,27 +459,27 @@ export const BLENDS = [
     "part": "I",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Dandelion root (roasted)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Fennel seed"
       ],
       [
-        "1.5 tsp",
+        "",
         "Ginger root (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Peppermint leaf"
       ],
       [
-        "0.5 tsp",
+        "",
         "Cardamom (crushed)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Licorice root"
       ]
     ],
@@ -495,27 +495,27 @@ export const BLENDS = [
     "part": "I",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Turmeric root (dried)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Ginger root (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Boswellia resin powder"
       ],
       [
-        "1 tsp",
+        "",
         "Devil's claw root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Cinnamon"
       ],
       [
-        "0.25 tsp",
+        "",
         "Black pepper"
       ]
     ],
@@ -531,23 +531,23 @@ export const BLENDS = [
     "part": "I",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Raspberry leaf"
       ],
       [
-        "1.5 tsp",
+        "",
         "Dong quai root"
       ],
       [
-        "1.5 tsp",
+        "",
         "Chasteberry (Vitex)"
       ],
       [
-        "1 tsp",
+        "",
         "Spearmint leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Ashwagandha root powder"
       ]
     ],
@@ -563,27 +563,27 @@ export const BLENDS = [
     "part": "I",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Mullein leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Thyme leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Elecampane root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Licorice root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Eucalyptus leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Peppermint leaf"
       ]
     ],
@@ -599,23 +599,23 @@ export const BLENDS = [
     "part": "I",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Ashwagandha root"
       ],
       [
-        "1.5 tsp",
+        "",
         "Rhodiola root"
       ],
       [
-        "1.5 tsp",
+        "",
         "Eleuthero root"
       ],
       [
-        "1 tsp",
+        "",
         "Schisandra berry"
       ],
       [
-        "1 tsp",
+        "",
         "Holy basil (Tulsi)"
       ]
     ],
@@ -631,27 +631,27 @@ export const BLENDS = [
     "part": "I",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Slippery elm bark (powder)"
       ],
       [
-        "2 tsp",
+        "",
         "Marshmallow root"
       ],
       [
-        "1.5 tsp",
+        "",
         "Chamomile flowers"
       ],
       [
-        "0.5 tsp",
+        "",
         "Licorice root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Aloe vera powder"
       ],
       [
-        "1 tsp",
+        "",
         "Calendula petals"
       ]
     ],
@@ -667,27 +667,27 @@ export const BLENDS = [
     "part": "II",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Bladderwrack seaweed (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Spirulina powder"
       ],
       [
-        "1.5 tsp",
+        "",
         "Nettle leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Cilantro leaf (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Lemon verbena"
       ],
       [
-        "1 tsp",
+        "",
         "Dandelion leaf"
       ]
     ],
@@ -703,27 +703,27 @@ export const BLENDS = [
     "part": "II",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Mugwort leaf"
       ],
       [
-        "1.5 tsp",
+        "",
         "Blue lotus flower"
       ],
       [
-        "1 tsp",
+        "",
         "Gotu kola leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Bacopa monnieri"
       ],
       [
-        "0.5 tsp",
+        "",
         "Star anise"
       ],
       [
-        "1 tsp",
+        "",
         "Lavender buds"
       ]
     ],
@@ -739,27 +739,27 @@ export const BLENDS = [
     "part": "II",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "St. John's Wort"
       ],
       [
-        "0.25 tsp",
+        "",
         "Saffron threads"
       ],
       [
-        "1.5 tsp",
+        "",
         "Lemon balm"
       ],
       [
-        "1 tsp",
+        "",
         "Mimosa bark (He huan pi)"
       ],
       [
-        "1 tsp",
+        "",
         "Rose petals"
       ],
       [
-        "0.5 tsp",
+        "",
         "Orange peel (dried)"
       ]
     ],
@@ -775,31 +775,31 @@ export const BLENDS = [
     "part": "II",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "He shou wu (Fo-ti) root"
       ],
       [
-        "1.5 tsp",
+        "",
         "Reishi mushroom (sliced)"
       ],
       [
-        "1 tsp",
+        "",
         "Astragalus root"
       ],
       [
-        "1 tsp",
+        "",
         "Goji berries (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Schisandra berry"
       ],
       [
-        "0.5 tsp",
+        "",
         "Cinnamon chips"
       ],
       [
-        "0.25 tsp",
+        "",
         "Clove (whole)"
       ]
     ],
@@ -815,35 +815,35 @@ export const BLENDS = [
     "part": "II",
     "ingredients": [
       [
-        "0.5 tsp",
+        "",
         "Pearl powder"
       ],
       [
-        "1.5 tsp",
+        "",
         "Rose hip (dried)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Hibiscus flowers"
       ],
       [
-        "1 tsp",
+        "",
         "Red clover blossoms"
       ],
       [
-        "1 tsp",
+        "",
         "Horsetail herb"
       ],
       [
-        "1 tsp",
+        "",
         "Nettle leaf"
       ],
       [
-        "0.25 tsp",
+        "",
         "Aloe vera powder"
       ],
       [
-        "0.5 tsp",
+        "",
         "Jasmine flowers"
       ]
     ],
@@ -859,31 +859,31 @@ export const BLENDS = [
     "part": "II",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Astragalus root"
       ],
       [
-        "1 tsp",
+        "",
         "Cat's claw bark"
       ],
       [
-        "1 tsp",
+        "",
         "Green tea (decaf)"
       ],
       [
-        "1 tsp",
+        "",
         "Amla berry powder"
       ],
       [
-        "0.75 tsp",
+        "",
         "Turmeric powder"
       ],
       [
-        "0.25 tsp",
+        "",
         "Black seed (Nigella sativa)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Moringa leaf powder"
       ]
     ],
@@ -899,31 +899,31 @@ export const BLENDS = [
     "part": "II",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Kava kava root"
       ],
       [
-        "1.5 tsp",
+        "",
         "Skullcap leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Blue vervain"
       ],
       [
-        "1 tsp",
+        "",
         "Passionflower"
       ],
       [
-        "1 tsp",
+        "",
         "California poppy (aerial parts)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Valerian root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Ashwagandha root"
       ]
     ],
@@ -939,31 +939,31 @@ export const BLENDS = [
     "part": "II",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Cordyceps mushroom powder"
       ],
       [
-        "1.5 tsp",
+        "",
         "Rhodiola root"
       ],
       [
-        "1 tsp",
+        "",
         "Eleuthero root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Pine pollen powder"
       ],
       [
-        "1 tsp",
+        "",
         "Nettle seed"
       ],
       [
-        "1 tsp",
+        "",
         "Maca root powder"
       ],
       [
-        "0.5 tsp",
+        "",
         "Licorice root"
       ]
     ],
@@ -979,31 +979,31 @@ export const BLENDS = [
     "part": "II",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Rooibos (red bush tea)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Moringa leaf powder"
       ],
       [
-        "0.5 tsp",
+        "",
         "Baobab fruit powder"
       ],
       [
-        "1 tsp",
+        "",
         "African ginger root (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Hibiscus flowers"
       ],
       [
-        "0.5 tsp",
+        "",
         "Cinnamon chips"
       ],
       [
-        "0.5 tsp",
+        "",
         "Cardamom (crushed)"
       ]
     ],
@@ -1019,31 +1019,31 @@ export const BLENDS = [
     "part": "II",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Blue lotus flower"
       ],
       [
-        "1 tsp",
+        "",
         "Lion's mane mushroom powder"
       ],
       [
-        "1 tsp",
+        "",
         "Turkey tail mushroom powder"
       ],
       [
-        "1 tsp",
+        "",
         "Ginkgo biloba leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Raw cacao powder"
       ],
       [
-        "0.5 tsp",
+        "",
         "Mucuna pruriens powder"
       ],
       [
-        "0.25 tsp",
+        "",
         "Vanilla bean powder"
       ]
     ],
@@ -1059,31 +1059,31 @@ export const BLENDS = [
     "part": "III",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Calendula petals"
       ],
       [
-        "1 tsp",
+        "",
         "Sunflower petals (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Turmeric root (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Ginger root (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Lemon peel (dried)"
       ],
       [
-        "0.25 tsp",
+        "",
         "Black pepper"
       ],
       [
-        "1 tsp",
+        "",
         "Dandelion root (roasted)"
       ]
     ],
@@ -1099,31 +1099,31 @@ export const BLENDS = [
     "part": "III",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Irish moss (dried, flaked)"
       ],
       [
-        "1 tsp",
+        "",
         "Bladderwrack seaweed"
       ],
       [
-        "1.5 tsp",
+        "",
         "Burdock root"
       ],
       [
-        "1 tsp",
+        "",
         "Nettle leaf"
       ],
       [
-        "0.5 tsp",
+        "",
         "Spearmint leaf"
       ],
       [
-        "0.5 tsp",
+        "",
         "Lemongrass"
       ],
       [
-        "0.25 tsp",
+        "",
         "Sea buckthorn berry powder"
       ]
     ],
@@ -1139,31 +1139,31 @@ export const BLENDS = [
     "part": "III",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Holy basil (Tulsi) leaf"
       ],
       [
-        "1.5 tsp",
+        "",
         "Rose petals"
       ],
       [
-        "1 tsp",
+        "",
         "Hawthorn berry"
       ],
       [
-        "1 tsp",
+        "",
         "Motherwort herb"
       ],
       [
-        "1 tsp",
+        "",
         "Linden flower"
       ],
       [
-        "1 tsp",
+        "",
         "Chamomile flowers"
       ],
       [
-        "0.25 tsp",
+        "",
         "Frankincense resin (ground)"
       ]
     ],
@@ -1179,35 +1179,35 @@ export const BLENDS = [
     "part": "III",
     "ingredients": [
       [
-        "1 tsp",
+        "",
         "Tremella mushroom powder"
       ],
       [
-        "1.5 tsp",
+        "",
         "Rose hip (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Hibiscus flowers"
       ],
       [
-        "0.5 tsp",
+        "",
         "Amla berry powder"
       ],
       [
-        "1 tsp",
+        "",
         "Calendula petals"
       ],
       [
-        "0.25 tsp",
+        "",
         "Pearl powder"
       ],
       [
-        "0.25 tsp",
+        "",
         "Vanilla bean powder"
       ],
       [
-        "0.5 tsp",
+        "",
         "Cinnamon chips"
       ]
     ],
@@ -1223,31 +1223,31 @@ export const BLENDS = [
     "part": "III",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Bilberry (dried)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Eyebright herb"
       ],
       [
-        "1 tsp",
+        "",
         "Goji berries (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Marigold petals (lutein-rich)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Green tea (decaf)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Grape seed (crushed)"
       ],
       [
-        "0.25 tsp",
+        "",
         "Carrot seed"
       ]
     ],
@@ -1263,35 +1263,35 @@ export const BLENDS = [
     "part": "III",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Tongkat ali root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Pine pollen powder"
       ],
       [
-        "1 tsp",
+        "",
         "Tribulus terrestris"
       ],
       [
-        "1 tsp",
+        "",
         "Ashwagandha root"
       ],
       [
-        "1 tsp",
+        "",
         "Saw palmetto berry"
       ],
       [
-        "1 tsp",
+        "",
         "Nettle root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Cinnamon chips"
       ],
       [
-        "0.25 tsp",
+        "",
         "Clove (whole)"
       ]
     ],
@@ -1307,35 +1307,35 @@ export const BLENDS = [
     "part": "III",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Pine needle (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Spruce tips (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Cedar leaf (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Eucalyptus leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Thyme leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Mullein leaf"
       ],
       [
-        "0.25 tsp",
+        "",
         "Lobelia herb"
       ],
       [
-        "0.75 tsp",
+        "",
         "Peppermint leaf"
       ]
     ],
@@ -1351,35 +1351,35 @@ export const BLENDS = [
     "part": "III",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Chanca piedra herb"
       ],
       [
-        "1 tsp",
+        "",
         "Uva ursi leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Corn silk (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Juniper berry (crushed)"
       ],
       [
-        "1 tsp",
+        "",
         "Parsley root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Horsetail herb"
       ],
       [
-        "1 tsp",
+        "",
         "Marshmallow root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Cranberry powder"
       ]
     ],
@@ -1395,35 +1395,35 @@ export const BLENDS = [
     "part": "III",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Chamomile flowers"
       ],
       [
-        "1.5 tsp",
+        "",
         "Lemon balm leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Elderberry (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Echinacea (aerial parts)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Rose hip"
       ],
       [
-        "0.5 tsp",
+        "",
         "Spearmint leaf"
       ],
       [
-        "0.25 tsp",
+        "",
         "Licorice root"
       ],
       [
-        "0.25 tsp",
+        "",
         "Cinnamon chips"
       ]
     ],
@@ -1439,35 +1439,35 @@ export const BLENDS = [
     "part": "III",
     "ingredients": [
       [
-        "0.5 tsp",
+        "",
         "Frankincense resin (ground)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Myrrh resin (ground)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Holy basil (Tulsi) leaf"
       ],
       [
-        "1.5 tsp",
+        "",
         "Blue lotus flower"
       ],
       [
-        "0.5 tsp",
+        "",
         "Spikenard root"
       ],
       [
-        "0.5 tsp",
+        "",
         "White sandalwood powder"
       ],
       [
-        "1 tsp",
+        "",
         "Calendula petals"
       ],
       [
-        "0.5 tsp",
+        "",
         "Ginger root (dried)"
       ]
     ],
@@ -1483,31 +1483,31 @@ export const BLENDS = [
     "part": "IV",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Dandelion root (roasted)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Milk thistle seed (crushed)"
       ],
       [
-        "1 tsp",
+        "",
         "Burdock root"
       ],
       [
-        "1 tsp",
+        "",
         "Yellow dock root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Ginger root (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Lemon peel (dried)"
       ],
       [
-        "0.25 tsp",
+        "",
         "Black pepper"
       ]
     ],
@@ -1523,27 +1523,27 @@ export const BLENDS = [
     "part": "IV",
     "ingredients": [
       [
-        "3 tsp",
+        "",
         "Milk thistle seed (freshly crushed)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Artichoke leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Turmeric root (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Licorice root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Peppermint leaf"
       ],
       [
-        "0.25 tsp",
+        "",
         "Black pepper"
       ]
     ],
@@ -1559,35 +1559,35 @@ export const BLENDS = [
     "part": "IV",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Turmeric root (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Dandelion root"
       ],
       [
-        "1 tsp",
+        "",
         "Chicory root (roasted)"
       ],
       [
-        "1 tsp",
+        "",
         "Calendula petals"
       ],
       [
-        "0.5 tsp",
+        "",
         "Ginger root (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Orange peel (dried)"
       ],
       [
-        "0.25 tsp",
+        "",
         "Cayenne pepper"
       ],
       [
-        "0.25 tsp",
+        "",
         "Black pepper"
       ]
     ],
@@ -1603,31 +1603,31 @@ export const BLENDS = [
     "part": "IV",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Dandelion leaf (not root)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Artichoke leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Lemon balm"
       ],
       [
-        "1 tsp",
+        "",
         "Lemon peel (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Grapefruit peel (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Fennel seed"
       ],
       [
-        "0.5 tsp",
+        "",
         "Peppermint leaf"
       ]
     ],
@@ -1643,27 +1643,27 @@ export const BLENDS = [
     "part": "IV",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Schisandra berry (crushed)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Milk thistle seed (crushed)"
       ],
       [
-        "1 tsp",
+        "",
         "Reishi mushroom powder"
       ],
       [
-        "1 tsp",
+        "",
         "Astragalus root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Licorice root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Ginger root (dried)"
       ]
     ],
@@ -1679,31 +1679,31 @@ export const BLENDS = [
     "part": "IV",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Chanca piedra herb (whole)"
       ],
       [
-        "1.5 tsp",
+        "",
         "Marshmallow root"
       ],
       [
-        "1 tsp",
+        "",
         "Corn silk (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Hydrangea root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Gravel root (Joe Pye weed)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Uva ursi leaf"
       ],
       [
-        "0.25 tsp",
+        "",
         "Lemon peel (dried)"
       ]
     ],
@@ -1719,31 +1719,31 @@ export const BLENDS = [
     "part": "IV",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Nettle leaf"
       ],
       [
-        "1.5 tsp",
+        "",
         "Dandelion leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Horsetail herb"
       ],
       [
-        "1 tsp",
+        "",
         "Parsley root (dried)"
       ],
       [
-        "1 tsp",
+        "",
         "Corn silk (dried)"
       ],
       [
-        "0.5 tsp",
+        "",
         "Goldenrod herb"
       ],
       [
-        "0.25 tsp",
+        "",
         "Juniper berry (crushed)"
       ]
     ],
@@ -1759,31 +1759,31 @@ export const BLENDS = [
     "part": "IV",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Burdock root"
       ],
       [
-        "1.5 tsp",
+        "",
         "Nettle leaf"
       ],
       [
-        "1 tsp",
+        "",
         "Moringa leaf powder"
       ],
       [
-        "1 tsp",
+        "",
         "Cucumber extract powder"
       ],
       [
-        "0.5 tsp",
+        "",
         "Watermelon seed powder"
       ],
       [
-        "0.5 tsp",
+        "",
         "Spearmint leaf"
       ],
       [
-        "0.5 tsp",
+        "",
         "Lemon peel (dried)"
       ]
     ],
@@ -1799,31 +1799,31 @@ export const BLENDS = [
     "part": "IV",
     "ingredients": [
       [
-        "2 tsp",
+        "",
         "Red clover blossoms"
       ],
       [
-        "1.5 tsp",
+        "",
         "Burdock root"
       ],
       [
-        "1 tsp",
+        "",
         "Yellow dock root"
       ],
       [
-        "1 tsp",
+        "",
         "Cleavers herb"
       ],
       [
-        "0.5 tsp",
+        "",
         "Nettle leaf"
       ],
       [
-        "0.5 tsp",
+        "",
         "Calendula petals"
       ],
       [
-        "0.25 tsp",
+        "",
         "Ginger root (dried)"
       ]
     ],
@@ -1839,39 +1839,39 @@ export const BLENDS = [
     "part": "IV",
     "ingredients": [
       [
-        "1.5 tsp",
+        "",
         "Dandelion root (roasted)"
       ],
       [
-        "1 tsp",
+        "",
         "Milk thistle seed (crushed)"
       ],
       [
-        "1 tsp",
+        "",
         "Chanca piedra herb"
       ],
       [
-        "1 tsp",
+        "",
         "Nettle leaf"
       ],
       [
-        "0.5 tsp",
+        "",
         "Burdock root"
       ],
       [
-        "0.5 tsp",
+        "",
         "Turmeric powder"
       ],
       [
-        "0.5 tsp",
+        "",
         "Marshmallow root"
       ],
       [
-        "0.25 tsp",
+        "",
         "Ginger root (dried)"
       ],
       [
-        "0.25 tsp",
+        "",
         "Black pepper"
       ]
     ],
@@ -1889,19 +1889,19 @@ export const BLENDS = [
   "ritualMoment": true,
   "ingredients": [
     [
-      "✦",
+      "",
       "Bay Leaf"
     ],
     [
-      "✦",
+      "",
       "Cardamom"
     ],
     [
-      "✦",
+      "",
       "Orange Peel"
     ],
     [
-      "✦",
+      "",
       "Cinnamon"
     ]
   ],
@@ -1922,19 +1922,19 @@ export const BLENDS = [
   "ritualMoment": true,
   "ingredients": [
     [
-      "✦",
+      "",
       "Chamomile"
     ],
     [
-      "✦",
+      "",
       "Hawthorn Berry"
     ],
     [
-      "✦",
+      "",
       "Skullcap"
     ],
     [
-      "✦",
+      "",
       "Lavender"
     ]
   ],
@@ -1955,19 +1955,19 @@ export const BLENDS = [
   "ritualMoment": true,
   "ingredients": [
     [
-      "✦",
+      "",
       "Rooibos"
     ],
     [
-      "✦",
+      "",
       "Rose Hip"
     ],
     [
-      "✦",
+      "",
       "Vanilla Bean"
     ],
     [
-      "✦",
+      "",
       "Orange Peel"
     ]
   ],
@@ -1988,19 +1988,19 @@ export const BLENDS = [
   "ritualMoment": true,
   "ingredients": [
     [
-      "✦",
+      "",
       "Lemon Balm"
     ],
     [
-      "✦",
+      "",
       "Oat Straw"
     ],
     [
-      "✦",
+      "",
       "Passionflower"
     ],
     [
-      "✦",
+      "",
       "Chamomile"
     ]
   ],
@@ -2021,19 +2021,19 @@ export const BLENDS = [
   "ritualMoment": true,
   "ingredients": [
     [
-      "✦",
+      "",
       "Rose Petals"
     ],
     [
-      "✦",
+      "",
       "Motherwort"
     ],
     [
-      "✦",
+      "",
       "Linden Flower"
     ],
     [
-      "✦",
+      "",
       "Lemon Balm"
     ]
   ],
@@ -2054,19 +2054,19 @@ export const BLENDS = [
   "ritualMoment": true,
   "ingredients": [
     [
-      "✦",
+      "",
       "Mugwort"
     ],
     [
-      "✦",
+      "",
       "Gotu Kola"
     ],
     [
-      "✦",
+      "",
       "Star Anise"
     ],
     [
-      "✦",
+      "",
       "Lavender"
     ]
   ],
