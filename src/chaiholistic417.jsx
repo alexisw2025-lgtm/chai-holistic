@@ -3114,14 +3114,13 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
       --ink:#1C1A17;--bark:#3D2B1F;--parch:#F7F2EA;--linen:#EDE7DC;
       --sage:#7A9E7E;--sage-d:#4A7250;--sage-p:#EBF2EC;
       --gold:#C4893A;--gold-p:#F5E6CE;--dust:#D4C9B8;
-      --banner-h:36px;
     }
     html{scroll-behavior:smooth;font-size:17px;}
     body{font-family:'Jost',sans-serif;background:var(--parch);color:var(--ink);overflow-x:hidden;}
     ::selection{background:var(--sage-p);}
     body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:.38;}
 
-    nav{position:sticky;top:var(--banner-h);left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:74px;background:rgba(247,242,234,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--dust);border-radius:22px 22px 0 0;}
+    nav{position:sticky;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:74px;background:rgba(247,242,234,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--dust);border-radius:22px 22px 0 0;}
     .nav-logo{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--bark);cursor:pointer;display:flex;align-items:center;gap:8px;letter-spacing:.02em;}
     .nav-logo-img{width:46px;height:46px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.12);flex-shrink:0;}
     .nav-logo-text{display:flex;flex-direction:column;line-height:1.1;}
@@ -3791,7 +3790,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     .ham-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:600;}
     .lang-sel{display:flex!important;}
     .ham-btn span{display:block;width:22px;height:2px;background:var(--bark);border-radius:2px;transition:all .3s;}
-    .mob-menu{display:none;position:fixed;inset:0;top:calc(74px + var(--banner-h));background:rgba(247,242,234,.98);backdrop-filter:blur(20px);z-index:490;padding:24px 2rem;overflow-y:auto;flex-direction:column;gap:0;}
+    .mob-menu{display:none;position:fixed;inset:0;top:74px;background:rgba(247,242,234,.98);backdrop-filter:blur(20px);z-index:490;padding:24px 2rem;overflow-y:auto;flex-direction:column;gap:0;}
     .mob-menu.open{display:flex;}
     .mob-lnk{font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bark);padding:16px 0;border-bottom:1px solid var(--dust);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:'Jost',sans-serif;}
     .mob-lnk:hover{color:var(--gold);}
@@ -4407,7 +4406,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
             <button className="modal-close" onClick={() => { setTrackerOpen(false); setActiveTracker(null); }}>✕</button>
           </div>
           {tracker && (
-            <div style={{position:"sticky",top:"calc(74px + var(--banner-h))",zIndex:3,background:"white",borderBottom:"1px solid var(--dust)",padding:"9px 28px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{position:"sticky",top:74,zIndex:3,background:"white",borderBottom:"1px solid var(--dust)",padding:"9px 28px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
               <button style={{background:"none",border:"none",color:"var(--sage-d)",cursor:"pointer",fontSize:".72rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"Jost,sans-serif",padding:0}} onClick={() => setActiveTracker(null)}>
                 ← All Cleanses
               </button>
@@ -8772,7 +8771,7 @@ Thank you!`);
     <LangProvider lang={lang} T={T}>
     <>
       <style>{CSS}</style>
-      <div className="ministry-banner" style={{background:"#1a1a1a",color:"#fff",textAlign:"center",padding:"8px 16px",fontSize:"13px",position:"sticky",top:0,zIndex:600,lineHeight:1.5}}>
+      <div className="ministry-banner" style={{background:"#1a1a1a",color:"#fff",textAlign:"center",padding:"8px 16px",fontSize:"13px",lineHeight:1.5}}>
         {T.ministry_banner_text||"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister."}{" "}
         <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer" style={{color:"#FFD700",textDecoration:"underline"}}>{T.ministry_get_prayer||"Get prayer now →"}</a>{" "}
         | {T.ministry_portion_note||"A portion of every purchase supports 2AM Companion Ministry."}

@@ -606,7 +606,7 @@ function RolodexPage({ blends, onOpenBlend }) {
 
   return (
     <div>
-      <div style={{ position: "sticky", top: "calc(136px + var(--banner-h, 0px))", zIndex: 200, maxWidth: 1440, margin: "0 auto", padding: "24px 36px 0", background: C.forest }}>
+      <div style={{ position: "sticky", top: 136, zIndex: 200, maxWidth: 1440, margin: "0 auto", padding: "24px 36px 0", background: C.forest }}>
         <div style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "18px 22px", display: "flex", flexDirection: "column", gap: 14, backdropFilter: "blur(20px)" }}>
           <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
             <div style={{ position: "relative", flex: 1, minWidth: 220, maxWidth: 400 }}>
@@ -1264,7 +1264,7 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
 
       <header
         style={{
-          position: "sticky", top: "calc(74px + var(--banner-h, 0px))", zIndex: 400, display: "flex", alignItems: "center",
+          position: "sticky", top: 74, zIndex: 400, display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 36px", height: 62,
           background: "rgba(13,26,17,.96)", backdropFilter: "blur(24px) saturate(180%)",
           borderBottom: "1px solid rgba(82,184,130,.1)",
