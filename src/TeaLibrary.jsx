@@ -1240,6 +1240,7 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
       style={{
         background: C.forest,
         minHeight: "100vh",
+        overflowX: "hidden",
         fontFamily: "'DM Sans', sans-serif",
         color: C.ink,
         position: "relative",
@@ -1265,31 +1266,31 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
       <header
         style={{
           position: "sticky", top: 74, zIndex: 400, display: "flex", alignItems: "center",
-          justifyContent: "space-between", padding: "0 36px", height: 62,
+          justifyContent: "space-between", padding: "0 16px", height: 62, gap: 8,
           background: "rgba(13,26,17,.96)", backdropFilter: "blur(24px) saturate(180%)",
-          borderBottom: "1px solid rgba(82,184,130,.1)",
+          borderBottom: "1px solid rgba(82,184,130,.1)", overflow: "hidden",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-          <div style={{ width: 34, height: 34, background: `linear-gradient(135deg, ${C.fern}, ${C.sage})`, borderRadius: 9, border: "1px solid rgba(82,184,130,.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, minWidth: 0 }}>
+          <div style={{ width: 30, height: 30, flexShrink: 0, background: `linear-gradient(135deg, ${C.fern}, ${C.sage})`, borderRadius: 9, border: "1px solid rgba(82,184,130,.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>
             🌿
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <span style={{ ...fontEyebrow, fontSize: 13, fontWeight: 600, letterSpacing: ".14em", color: C.goldLt, lineHeight: 1 }}>CHAI HOLISTIC</span>
-            <span style={{ ...fontBody, fontSize: 10.5, fontWeight: 300, fontStyle: "italic", letterSpacing: ".06em", color: "rgba(255,255,255,.28)", lineHeight: 1 }}>Tea Library</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0, overflow: "hidden" }}>
+            <span style={{ ...fontEyebrow, fontSize: 11, fontWeight: 600, letterSpacing: ".1em", color: C.goldLt, lineHeight: 1, whiteSpace: "nowrap" }}>CHAI HOLISTIC</span>
+            <span style={{ ...fontBody, fontSize: 9.5, fontWeight: 300, fontStyle: "italic", letterSpacing: ".04em", color: "rgba(255,255,255,.28)", lineHeight: 1, whiteSpace: "nowrap" }}>Tea Library</span>
           </div>
         </div>
-        <nav style={{ display: "flex", gap: 3 }}>
+        <nav style={{ display: "flex", gap: 3, overflowX: "auto", WebkitOverflowScrolling: "touch", scrollbarWidth: "none", minWidth: 0 }}>
           {NAV_ITEMS.map((item) => (
             <button
               key={item.key}
               onClick={() => setPage(item.key)}
               style={{
-                ...fontUtility, fontSize: 11, fontWeight: 400, letterSpacing: ".04em",
+                ...fontUtility, fontSize: 10.5, fontWeight: 400, letterSpacing: ".02em",
                 color: page === item.key ? C.goldLt : "rgba(255,255,255,.42)",
                 background: page === item.key ? C.goldGlow : "transparent",
                 border: `1px solid ${page === item.key ? "rgba(192,136,48,.3)" : "transparent"}`,
-                borderRadius: 8, padding: "6px 13px", cursor: "pointer", whiteSpace: "nowrap",
+                borderRadius: 8, padding: "6px 10px", cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0,
               }}
             >
               {item.label}
