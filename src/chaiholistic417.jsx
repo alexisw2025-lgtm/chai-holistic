@@ -472,7 +472,7 @@ const LANGS = {
     occ_ritual_moments:"Ritual Moments",
     ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
     ministry_get_prayer:"Get prayer now →",
-    ministry_portion_note:"A portion of every purchase supports 2AM Companion Ministry.",
+    ministry_portion_note:"25% funds crisis support.",
     ministry_section_title:"Every Cup Funds 2AM Hope",
     ministry_section_body:"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM.",
     ministry_section_signature:"Prayer support led by",
@@ -497,7 +497,7 @@ const LANGS = {
     occ_ritual_moments:"Ritual Moments",
     ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
     ministry_get_prayer:"Get prayer now →",
-    ministry_portion_note:"A portion of every purchase supports 2AM Companion Ministry.",
+    ministry_portion_note:"25% funds crisis support.",
     ministry_section_title:"Every Cup Funds 2AM Hope",
     ministry_section_body:"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM.",
     ministry_section_signature:"Prayer support led by",
@@ -683,7 +683,7 @@ const LANGS = {
     occ_ritual_moments:"Momentos de Ritual",
     ministry_banner_text:"2AM Companion: Apoyo de oración gratuito guiado por la Rev. Alexis Williams, Ministra Ordenada.",
     ministry_get_prayer:"Recibe oración ahora →",
-    ministry_portion_note:"Una parte de cada compra apoya al Ministerio 2AM Companion.",
+    ministry_portion_note:"El 25% financia el apoyo en crisis.",
     ministry_section_title:"Cada Taza Financia la Esperanza 2AM",
     ministry_section_body:"Una parte de cada compra apoya al Ministerio 2AM Companion. La usamos para ofrecer oración hablada gratuita, tarjetas bíblicas inteligentes para padres en UCIN y hospitales, y apoyo en crisis para familias en sus noches más difíciles. Tu compra se convierte en el salvavidas de alguien a las 2AM.",
     ministry_section_signature:"Apoyo de oración guiado por",
@@ -863,7 +863,7 @@ const LANGS = {
     occ_ritual_moments:"Moments de Rituel",
     ministry_banner_text:"2AM Companion : Soutien de prière gratuit dirigé par la Rév. Alexis Williams, Ministre Ordonnée.",
     ministry_get_prayer:"Recevez une prière maintenant →",
-    ministry_portion_note:"Une partie de chaque achat soutient le Ministère 2AM Companion.",
+    ministry_portion_note:"25% finance le soutien de crise.",
     ministry_section_title:"Chaque Tasse Finance l'Espoir 2AM",
     ministry_section_body:"Une partie de chaque achat soutient le Ministère 2AM Companion. Nous l'utilisons pour offrir une prière parlée gratuite, des cartes bibliques intelligentes pour les parents en néonatalogie et à l'hôpital, et un soutien de crise pour les familles dans leurs nuits les plus difficiles. Votre achat devient la bouée de sauvetage de quelqu'un à 2h du matin.",
     ministry_section_signature:"Soutien de prière dirigé par",
@@ -1043,7 +1043,7 @@ const LANGS = {
     occ_ritual_moments:"Momentos de Ritual",
     ministry_banner_text:"2AM Companion: Apoio de oração gratuito conduzido pela Rev. Alexis Williams, Ministra Ordenada.",
     ministry_get_prayer:"Receba oração agora →",
-    ministry_portion_note:"Uma parte de cada compra apoia o Ministério 2AM Companion.",
+    ministry_portion_note:"25% financia o apoio em crise.",
     ministry_section_title:"Cada Xícara Financia a Esperança 2AM",
     ministry_section_body:"Uma parte de cada compra apoia o Ministério 2AM Companion. Usamos para oferecer oração falada gratuita, cartões bíblicos inteligentes para pais na UTI neonatal e no hospital, e apoio em crise para famílias em suas noites mais difíceis. Sua compra se torna a tábua de salvação de alguém às 2 da manhã.",
     ministry_section_signature:"Apoio de oração conduzido por",
@@ -1223,7 +1223,7 @@ const LANGS = {
     occ_ritual_moments:"Moman Rityèl",
     ministry_banner_text:"2AM Companion: Sipò lapriyè gratis ki dirije pa Rev. Alexis Williams, Minis Òdonye.",
     ministry_get_prayer:"Resevwa lapriyè kounye a →",
-    ministry_portion_note:"Yon pòsyon nan chak acha soutni Ministè 2AM Companion.",
+    ministry_portion_note:"25% finanse sipò kriz.",
     ministry_section_title:"Chak Tas Finanse Espwa 2AM",
     ministry_section_body:"Yon pòsyon nan chak acha soutni Ministè 2AM Companion. Nou itilize li pou bay lapriyè pale gratis, kat Bib entelijan pou paran nan NICU ak lopital, ak sipò kriz pou fanmi nan nwit yo ki pi difisil. Acha ou tounen yon bwe sovtaj pou yon moun a 2 nan maten.",
     ministry_section_signature:"Sipò lapriyè ki dirije pa",
@@ -2679,6 +2679,8 @@ Respond ONLY with this exact JSON structure:
 
   const timerRef = useRef(null);
   const topRef = useRef(null);
+  const stickyHeaderRef = useRef(null);
+  const [stickyHeaderH, setStickyHeaderH] = useState(150);
   const [sipToolsOpen, setSipToolsOpen] = useState(false);
   const [activeSecIdx, setActiveSecIdx] = useState(0);
   const [bookPreview, setBookPreview] = useState(false);
@@ -2773,6 +2775,29 @@ Respond ONLY with this exact JSON structure:
     document.body.style.overflow = anyOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [finderOpen, ritualOpen, trackerOpen, cartOpen, bookPreview, intentionOpen, profileOpen]);
+
+  // Measure the real combined height of the sticky banner+nav+search header,
+  // since its height varies by banner text length (wraps on narrow screens),
+  // language (translated strings differ in length), and viewport width.
+  // Hardcoding a pixel guess here was the root cause of two earlier overlap
+  // bugs, so anything that needs to sit "below the sticky header" should read
+  // stickyHeaderH (passed down as a prop / used directly) instead of a constant.
+  useEffect(() => {
+    const measure = () => {
+      if (stickyHeaderRef.current) {
+        const h = stickyHeaderRef.current.getBoundingClientRect().height;
+        if (h > 0) {
+          setStickyHeaderH(h);
+          document.documentElement.style.setProperty("--sticky-h", `${h}px`);
+        }
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    const t1 = setTimeout(measure, 100);
+    const t2 = setTimeout(measure, 500);
+    return () => { window.removeEventListener("resize", measure); clearTimeout(t1); clearTimeout(t2); };
+  }, [lang, page]);
 
   const now = new Date();
   const currentMonth = now.getMonth();
@@ -3790,7 +3815,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     .ham-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:600;}
     .lang-sel{display:flex!important;}
     .ham-btn span{display:block;width:22px;height:2px;background:var(--bark);border-radius:2px;transition:all .3s;}
-    .mob-menu{display:none;position:fixed;inset:0;top:74px;background:rgba(247,242,234,.98);backdrop-filter:blur(20px);z-index:490;padding:24px 2rem;overflow-y:auto;flex-direction:column;gap:0;}
+    .mob-menu{display:none;position:fixed;inset:0;top:var(--sticky-h,74px);background:rgba(247,242,234,.98);backdrop-filter:blur(20px);z-index:490;padding:24px 2rem;overflow-y:auto;flex-direction:column;gap:0;}
     .mob-menu.open{display:flex;}
     .mob-lnk{font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bark);padding:16px 0;border-bottom:1px solid var(--dust);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:'Jost',sans-serif;}
     .mob-lnk:hover{color:var(--gold);}
@@ -4406,7 +4431,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
             <button className="modal-close" onClick={() => { setTrackerOpen(false); setActiveTracker(null); }}>✕</button>
           </div>
           {tracker && (
-            <div style={{position:"sticky",top:74,zIndex:3,background:"white",borderBottom:"1px solid var(--dust)",padding:"9px 28px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{position:"sticky",top:stickyHeaderH,zIndex:3,background:"white",borderBottom:"1px solid var(--dust)",padding:"9px 28px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
               <button style={{background:"none",border:"none",color:"var(--sage-d)",cursor:"pointer",fontSize:".72rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"Jost,sans-serif",padding:0}} onClick={() => setActiveTracker(null)}>
                 ← All Cleanses
               </button>
@@ -8771,14 +8796,13 @@ Thank you!`);
     <LangProvider lang={lang} T={T}>
     <>
       <style>{CSS}</style>
-      <div className="ministry-banner" style={{background:"#1a1a1a",color:"#fff",textAlign:"center",padding:"8px 16px",fontSize:"13px",lineHeight:1.5}}>
-        {T.ministry_banner_text||"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister."}{" "}
-        <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer" style={{color:"#FFD700",textDecoration:"underline"}}>{T.ministry_get_prayer||"Get prayer now →"}</a>{" "}
-        | {T.ministry_portion_note||"A portion of every purchase supports 2AM Companion Ministry."}
-      </div>
-      <div ref={topRef} style={{position:"absolute",top:0,left:0}}/>
+      <div ref={stickyHeaderRef} style={{position:"sticky",top:0,zIndex:520}}>
+        <div className="ministry-banner" style={{background:"#1a1a1a",color:"#fff",textAlign:"center",padding:"8px 10px",fontSize:"13px",width:"100%"}}>
+          <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer" style={{color:"#FFD700",textDecoration:"underline"}}>{T.ministry_get_prayer||"Get prayer now →"}</a> | {T.ministry_portion_note||"25% funds crisis support."}
+        </div>
+        <div ref={topRef} style={{position:"absolute",top:0,left:0}}/>
 
-      <nav>
+        <nav style={{position:"static"}}>
         <div className="nav-logo" onClick={()=>{ nav("home"); window.scrollTo({top:0,behavior:"smooth"}); setMobMenuOpen(false); }} title="Home">
           <img src="/chai_holistic.jpg" alt="Chai Holistic" className="nav-logo-img"/>
           <div className="nav-logo-text">
@@ -8824,7 +8848,7 @@ Thank you!`);
       </nav>
 
       {/* ── GLOBAL SEARCH BAR — right below nav, always visible ─────────── */}
-      <div style={{background:"var(--linen)",borderBottom:"1px solid rgba(61,43,31,.1)",padding:"10px 16px",position:"sticky",top:0,zIndex:300,backdropFilter:"blur(8px)"}}>
+      <div style={{background:"var(--linen)",borderBottom:"1px solid rgba(61,43,31,.1)",padding:"10px 16px",backdropFilter:"blur(8px)"}}>
         <div style={{maxWidth:700,margin:"0 auto",display:"flex",alignItems:"center",gap:16,position:"relative"}}>
           <div id="searchWrap" style={{display:"flex",borderRadius:50,overflow:"hidden",border:"1.5px solid rgba(61,43,31,.2)",background:"white",boxShadow:"0 1px 8px rgba(0,0,0,.07)",transition:"border-color .2s, box-shadow .2s"}}>
             <input
@@ -8891,6 +8915,7 @@ Thank you!`);
           </div>
         </div>
       </div>
+      </div>
 
       {/* ── Mobile slide-down menu ── */}
       <div className={`mob-menu${mobMenuOpen?" open":""}`}>
@@ -8944,7 +8969,7 @@ Thank you!`);
         {page==="supplements"&&<SupplementsPage onNav={nav}/>}
         {page==="ancestral"&&<AncestralTeas onNav={nav}/>}
         {page==="herbs"&&<HerbApothecary/>}
-        {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart}/>}
+        {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart} stickyHeaderH={stickyHeaderH}/>}
       </div>
 
       {/* 2AM OVERLAY   floats on top; page underneath stays mounted */}

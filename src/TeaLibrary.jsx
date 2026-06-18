@@ -578,7 +578,7 @@ function navBtnStyle(disabled) {
 /* ════════════════════════════════════════
    ROLODEX PAGE (search, filter, grid)
 ════════════════════════════════════════ */
-function RolodexPage({ blends, onOpenBlend }) {
+function RolodexPage({ blends, onOpenBlend, headerOffset }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [view, setView] = useState("grid");
@@ -606,7 +606,7 @@ function RolodexPage({ blends, onOpenBlend }) {
 
   return (
     <div>
-      <div style={{ position: "sticky", top: 136, zIndex: 200, maxWidth: 1440, margin: "0 auto", padding: "24px 36px 0", background: C.forest }}>
+      <div style={{ position: "sticky", top: headerOffset + 62, zIndex: 200, maxWidth: 1440, margin: "0 auto", padding: "24px 36px 0", background: C.forest }}>
         <div style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "18px 22px", display: "flex", flexDirection: "column", gap: 14, backdropFilter: "blur(20px)" }}>
           <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
             <div style={{ position: "relative", flex: 1, minWidth: 220, maxWidth: 400 }}>
@@ -1181,14 +1181,15 @@ function emojiBtnStyle(on) {
    MAIN COMPONENT
 ════════════════════════════════════════ */
 const NAV_ITEMS = [
-  { key: "rolodex", label: "Rolodex" },
-  { key: "need", label: "What Do I Need?" },
-  { key: "builder", label: "Blend Builder" },
-  { key: "ritual", label: "Seasonal Ritual" },
-  { key: "journal", label: "Tea Journal" },
+  { key: "rolodex", label: "Rolodex", icon: "📖" },
+  { key: "need", label: "What Do I Need?", icon: "🧭" },
+  { key: "builder", label: "Blend Builder", icon: "🧪" },
+  { key: "ritual", label: "Seasonal Ritual", icon: "🌙" },
+  { key: "journal", label: "Tea Journal", icon: "📝" },
 ];
 
-export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart }) {
+export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart, stickyHeaderH }) {
+  const headerOffset = stickyHeaderH || 150;
   const [page, setPage] = useState("rolodex");
   const [modalList, setModalList] = useState(null); // array of blends currently being browsed in modal
   const [modalIdx, setModalIdx] = useState(0);
@@ -1265,7 +1266,7 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
 
       <header
         style={{
-          position: "sticky", top: 74, zIndex: 400, display: "flex", alignItems: "center",
+          position: "sticky", top: headerOffset, zIndex: 400, display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 16px", height: 62, gap: 8,
           background: "rgba(13,26,17,.96)", backdropFilter: "blur(24px) saturate(180%)",
           borderBottom: "1px solid rgba(82,184,130,.1)", overflow: "hidden",
@@ -1280,27 +1281,30 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
             <span style={{ ...fontBody, fontSize: 9.5, fontWeight: 300, fontStyle: "italic", letterSpacing: ".04em", color: "rgba(255,255,255,.28)", lineHeight: 1, whiteSpace: "nowrap" }}>Tea Library</span>
           </div>
         </div>
-        <nav style={{ display: "flex", gap: 3, overflowX: "auto", WebkitOverflowScrolling: "touch", scrollbarWidth: "none", minWidth: 0 }}>
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item.key}
-              onClick={() => setPage(item.key)}
-              style={{
-                ...fontUtility, fontSize: 10.5, fontWeight: 400, letterSpacing: ".02em",
-                color: page === item.key ? C.goldLt : "rgba(255,255,255,.42)",
-                background: page === item.key ? C.goldGlow : "transparent",
-                border: `1px solid ${page === item.key ? "rgba(192,136,48,.3)" : "transparent"}`,
-                borderRadius: 8, padding: "6px 10px", cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0,
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
+        <div style={{ position: "relative", flexShrink: 0 }}>
+          <select
+            value={page}
+            onChange={(e) => setPage(e.target.value)}
+            style={{
+              ...fontUtility, fontSize: 12.5, fontWeight: 500, letterSpacing: ".01em",
+              color: "#fff", background: "rgba(255,255,255,.08)",
+              border: "1.5px solid rgba(192,136,48,.45)", borderRadius: 10,
+              padding: "8px 30px 8px 12px", cursor: "pointer", appearance: "none",
+              WebkitAppearance: "none", MozAppearance: "none",
+            }}
+          >
+            {NAV_ITEMS.map((item) => (
+              <option key={item.key} value={item.key} style={{ background: "#173322", color: "#fff" }}>
+                {item.icon} {item.label}
+              </option>
+            ))}
+          </select>
+          <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", color: C.goldLt, fontSize: 11, pointerEvents: "none" }}>▾</span>
+        </div>
       </header>
 
       <div style={{ position: "relative", zIndex: 1 }}>
-        {page === "rolodex" && <RolodexPage blends={BLENDS} onOpenBlend={openBlend} />}
+        {page === "rolodex" && <RolodexPage blends={BLENDS} onOpenBlend={openBlend} headerOffset={headerOffset} />}
         {page === "need" && <NeedPage onOpenBlend={openBlend} />}
         {page === "builder" && <BuilderPage />}
         {page === "ritual" && <RitualPage onOpenBlend={openBlend} />}
