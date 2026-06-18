@@ -470,6 +470,14 @@ const LANGS = {
     occ_seasonal:"Seasonal",
     occ_wellness:"Wellness",
     occ_ritual_moments:"Ritual Moments",
+    ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
+    ministry_get_prayer:"Get prayer now →",
+    ministry_portion_note:"A portion of every purchase supports 2AM Companion Ministry.",
+    ministry_section_title:"Every Cup Funds 2AM Hope",
+    ministry_section_body:"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM.",
+    ministry_section_signature:"Prayer support led by",
+    ministry_cta:"Receive Free Prayer",
+    ministry_badge:"A portion of this purchase supports 2AM Companion Ministry",
     filter_all:"All",
     shop_apothecary:"Di Apothecary",
     shop_all_blends:"All di",
@@ -487,6 +495,14 @@ const LANGS = {
     occ_seasonal:"Seasonal",
     occ_wellness:"Wellness",
     occ_ritual_moments:"Ritual Moments",
+    ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
+    ministry_get_prayer:"Get prayer now →",
+    ministry_portion_note:"A portion of every purchase supports 2AM Companion Ministry.",
+    ministry_section_title:"Every Cup Funds 2AM Hope",
+    ministry_section_body:"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM.",
+    ministry_section_signature:"Prayer support led by",
+    ministry_cta:"Receive Free Prayer",
+    ministry_badge:"A portion of this purchase supports 2AM Companion Ministry",
     filter_all:"All",
     shop_apothecary:"The Apothecary",
     shop_all_blends:"All Tea",
@@ -665,6 +681,14 @@ const LANGS = {
     occ_seasonal:"Estacional",
     occ_wellness:"Bienestar",
     occ_ritual_moments:"Momentos de Ritual",
+    ministry_banner_text:"2AM Companion: Apoyo de oración gratuito guiado por la Rev. Alexis Williams, Ministra Ordenada.",
+    ministry_get_prayer:"Recibe oración ahora →",
+    ministry_portion_note:"Una parte de cada compra apoya al Ministerio 2AM Companion.",
+    ministry_section_title:"Cada Taza Financia la Esperanza 2AM",
+    ministry_section_body:"Una parte de cada compra apoya al Ministerio 2AM Companion. La usamos para ofrecer oración hablada gratuita, tarjetas bíblicas inteligentes para padres en UCIN y hospitales, y apoyo en crisis para familias en sus noches más difíciles. Tu compra se convierte en el salvavidas de alguien a las 2AM.",
+    ministry_section_signature:"Apoyo de oración guiado por",
+    ministry_cta:"Recibir Oración Gratuita",
+    ministry_badge:"Una parte de esta compra apoya al Ministerio 2AM Companion",
     filter_all:"Todos",
     shop_apothecary:"La Botica",
     shop_all_blends:"Todas las",
@@ -837,6 +861,14 @@ const LANGS = {
     occ_seasonal:"Saisonnier",
     occ_wellness:"Bien-être",
     occ_ritual_moments:"Moments de Rituel",
+    ministry_banner_text:"2AM Companion : Soutien de prière gratuit dirigé par la Rév. Alexis Williams, Ministre Ordonnée.",
+    ministry_get_prayer:"Recevez une prière maintenant →",
+    ministry_portion_note:"Une partie de chaque achat soutient le Ministère 2AM Companion.",
+    ministry_section_title:"Chaque Tasse Finance l'Espoir 2AM",
+    ministry_section_body:"Une partie de chaque achat soutient le Ministère 2AM Companion. Nous l'utilisons pour offrir une prière parlée gratuite, des cartes bibliques intelligentes pour les parents en néonatalogie et à l'hôpital, et un soutien de crise pour les familles dans leurs nuits les plus difficiles. Votre achat devient la bouée de sauvetage de quelqu'un à 2h du matin.",
+    ministry_section_signature:"Soutien de prière dirigé par",
+    ministry_cta:"Recevoir une Prière Gratuite",
+    ministry_badge:"Une partie de cet achat soutient le Ministère 2AM Companion",
     filter_all:"Tous",
     shop_apothecary:"L'Apothicaire",
     shop_all_blends:"Tous les",
@@ -1009,6 +1041,14 @@ const LANGS = {
     occ_seasonal:"Sazonal",
     occ_wellness:"Bem-estar",
     occ_ritual_moments:"Momentos de Ritual",
+    ministry_banner_text:"2AM Companion: Apoio de oração gratuito conduzido pela Rev. Alexis Williams, Ministra Ordenada.",
+    ministry_get_prayer:"Receba oração agora →",
+    ministry_portion_note:"Uma parte de cada compra apoia o Ministério 2AM Companion.",
+    ministry_section_title:"Cada Xícara Financia a Esperança 2AM",
+    ministry_section_body:"Uma parte de cada compra apoia o Ministério 2AM Companion. Usamos para oferecer oração falada gratuita, cartões bíblicos inteligentes para pais na UTI neonatal e no hospital, e apoio em crise para famílias em suas noites mais difíceis. Sua compra se torna a tábua de salvação de alguém às 2 da manhã.",
+    ministry_section_signature:"Apoio de oração conduzido por",
+    ministry_cta:"Receber Oração Gratuita",
+    ministry_badge:"Uma parte desta compra apoia o Ministério 2AM Companion",
     filter_all:"Todos",
     shop_apothecary:"A Botica",
     shop_all_blends:"Todas as",
@@ -1181,6 +1221,14 @@ const LANGS = {
     occ_seasonal:"Sezonye",
     occ_wellness:"Byenèt",
     occ_ritual_moments:"Moman Rityèl",
+    ministry_banner_text:"2AM Companion: Sipò lapriyè gratis ki dirije pa Rev. Alexis Williams, Minis Òdonye.",
+    ministry_get_prayer:"Resevwa lapriyè kounye a →",
+    ministry_portion_note:"Yon pòsyon nan chak acha soutni Ministè 2AM Companion.",
+    ministry_section_title:"Chak Tas Finanse Espwa 2AM",
+    ministry_section_body:"Yon pòsyon nan chak acha soutni Ministè 2AM Companion. Nou itilize li pou bay lapriyè pale gratis, kat Bib entelijan pou paran nan NICU ak lopital, ak sipò kriz pou fanmi nan nwit yo ki pi difisil. Acha ou tounen yon bwe sovtaj pou yon moun a 2 nan maten.",
+    ministry_section_signature:"Sipò lapriyè ki dirije pa",
+    ministry_cta:"Resevwa Lapriyè Gratis",
+    ministry_badge:"Yon pòsyon nan acha sa a soutni Ministè 2AM Companion",
     filter_all:"Tout",
     shop_apothecary:"Apotekè a",
     shop_all_blends:"Tout",
@@ -1500,7 +1548,7 @@ const CupValue = ({ item, dark }) => {
   return (
     <div style={{background:dark?"rgba(255,255,255,0.07)":"#F0F7F0",borderRadius:10,padding:"8px 12px",marginBottom:12,fontSize:".72rem"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,flexWrap:"wrap"}}>
-        <span style={{color:dark?"rgba(255,255,255,.7)":"#4A7250"}}>📦 {item.oz}oz · ~{cups} cups · {item.servingSize}/cup</span>
+        <span style={{color:dark?"rgba(255,255,255,.7)":"#4A7250"}}>📦 Hand-blended batch</span>
         <span style={{background:dark?"rgba(196,137,58,.25)":"#FFF3E0",color:"#C4893A",padding:"2px 10px",borderRadius:50,fontWeight:500}}>${cpp}/cup</span>
       </div>
       <div style={{color:dark?"rgba(255,255,255,.4)":"#8A9E8A",marginTop:3,fontSize:".66rem"}}>vs. $5-$7 coffee · That's {Math.round(500/cpp)}% better value</div>
@@ -1975,7 +2023,7 @@ function MensWellness({ onNav, onAddToCart }) {
               {selected.oz && (
                 <div style={{background:"rgba(82,184,130,.06)",border:"1px solid rgba(82,184,130,.18)",borderRadius:10,padding:"12px 14px",marginBottom:16,fontFamily:"Jost,sans-serif",fontSize:".75rem"}}>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
-                    <span style={{color:"rgba(255,255,255,.6)"}}>📦 {selected.oz}oz · ~{selected.oz*selected.cupsPerOz} cups · {selected.servingSize}/cup</span>
+                    <span style={{color:"rgba(255,255,255,.6)"}}>📦 Hand-blended batch</span>
                     <span style={{background:"rgba(196,137,58,.2)",color:"rgba(196,137,58,.9)",padding:"2px 10px",borderRadius:50,fontWeight:500}}>${(selected.price/(selected.oz*selected.cupsPerOz)).toFixed(2)}/cup</span>
                   </div>
                   <div style={{color:"rgba(255,255,255,.3)",marginTop:4,fontSize:".66rem"}}>vs. $5–$7 energy drink · Real support without synthetic stimulants</div>
@@ -2033,7 +2081,7 @@ function MensWellness({ onNav, onAddToCart }) {
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",paddingTop:4}}>
                 <div>
                   <div style={{fontFamily:"Playfair Display,serif",fontSize:"1.4rem",color:"rgba(196,137,58,.9)",fontWeight:700}}>${selected.price.toFixed(2)}</div>
-                  {selected.oz&&<div style={{fontSize:".65rem",color:"rgba(255,255,255,.4)",marginTop:2}}>~{selected.oz*selected.cupsPerOz} cups · {selected.servingSize}/cup</div>}
+                  <div style={{fontSize:".65rem",color:"rgba(255,255,255,.4)",marginTop:2}}>Hand-blended in small batches</div>
                 </div>
                 <button onClick={()=>{onAddToCart({...selected,emoji:"🍵"});setSelected(null);}}
                   style={{background:"linear-gradient(135deg,rgba(196,137,58,.9),rgba(160,110,40,.9))",border:"none",color:"#0D0D1A",borderRadius:40,padding:"10px 28px",fontSize:".72rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontFamily:"Jost,sans-serif",fontWeight:700}}>
@@ -3066,13 +3114,14 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
       --ink:#1C1A17;--bark:#3D2B1F;--parch:#F7F2EA;--linen:#EDE7DC;
       --sage:#7A9E7E;--sage-d:#4A7250;--sage-p:#EBF2EC;
       --gold:#C4893A;--gold-p:#F5E6CE;--dust:#D4C9B8;
+      --banner-h:36px;
     }
     html{scroll-behavior:smooth;font-size:17px;}
     body{font-family:'Jost',sans-serif;background:var(--parch);color:var(--ink);overflow-x:hidden;}
     ::selection{background:var(--sage-p);}
     body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:.38;}
 
-    nav{position:sticky;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:74px;background:rgba(247,242,234,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--dust);border-radius:22px 22px 0 0;}
+    nav{position:sticky;top:var(--banner-h);left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:74px;background:rgba(247,242,234,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--dust);border-radius:22px 22px 0 0;}
     .nav-logo{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--bark);cursor:pointer;display:flex;align-items:center;gap:8px;letter-spacing:.02em;}
     .nav-logo-img{width:46px;height:46px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.12);flex-shrink:0;}
     .nav-logo-text{display:flex;flex-direction:column;line-height:1.1;}
@@ -3742,7 +3791,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     .ham-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:600;}
     .lang-sel{display:flex!important;}
     .ham-btn span{display:block;width:22px;height:2px;background:var(--bark);border-radius:2px;transition:all .3s;}
-    .mob-menu{display:none;position:fixed;inset:0;top:74px;background:rgba(247,242,234,.98);backdrop-filter:blur(20px);z-index:490;padding:24px 2rem;overflow-y:auto;flex-direction:column;gap:0;}
+    .mob-menu{display:none;position:fixed;inset:0;top:calc(74px + var(--banner-h));background:rgba(247,242,234,.98);backdrop-filter:blur(20px);z-index:490;padding:24px 2rem;overflow-y:auto;flex-direction:column;gap:0;}
     .mob-menu.open{display:flex;}
     .mob-lnk{font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--bark);padding:16px 0;border-bottom:1px solid var(--dust);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:'Jost',sans-serif;}
     .mob-lnk:hover{color:var(--gold);}
@@ -4358,7 +4407,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
             <button className="modal-close" onClick={() => { setTrackerOpen(false); setActiveTracker(null); }}>✕</button>
           </div>
           {tracker && (
-            <div style={{position:"sticky",top:74,zIndex:3,background:"white",borderBottom:"1px solid var(--dust)",padding:"9px 28px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{position:"sticky",top:"calc(74px + var(--banner-h))",zIndex:3,background:"white",borderBottom:"1px solid var(--dust)",padding:"9px 28px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
               <button style={{background:"none",border:"none",color:"var(--sage-d)",cursor:"pointer",fontSize:".72rem",letterSpacing:".08em",textTransform:"uppercase",fontFamily:"Jost,sans-serif",padding:0}} onClick={() => setActiveTracker(null)}>
                 ← All Cleanses
               </button>
@@ -4510,7 +4559,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                     </div>
                   </div>
                   <div style={{fontSize:".7rem",color:"#6A5F50",lineHeight:1.6,fontWeight:300}}>
-                    Use {sample.servingSize} per 8oz cup. {sample.steepMin >= 10 ? "Simmer low -- don't rush this one." : "Don't over-steep -- pour promptly."} Add honey to taste.
+                    {sample.steepMin >= 10 ? "Simmer low -- don't rush this one." : "Don't over-steep -- pour promptly."} Add honey to taste.
                   </div>
                 </div>
                 <CupValue item={sample}/>
@@ -5598,7 +5647,6 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                       <div className="b-recipe-row">
                         <span className="b-recipe-meta">⏱ {b.steepMin} min</span>
                         <span className="b-recipe-meta">{b.steepTemp.split("--")[0].trim()}</span>
-                        <span className="b-recipe-meta">{b.servingSize} per cup</span>
                       </div>
                       {b.warning && <div className="b-recipe-warn">{b.warning}</div>}
                     </div>
@@ -5624,6 +5672,20 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
             </div>
           </div>
         </div>
+      </section>
+
+      <section style={{textAlign:"center",padding:"48px 24px",background:"#f9f9f9"}}>
+        <h2 style={{margin:"0 0 12px",fontFamily:"'Playfair Display',serif",fontSize:"1.8rem",color:"#1a1a1a"}}>{T.ministry_section_title||"Every Cup Funds 2AM Hope"}</h2>
+        <p style={{maxWidth:600,margin:"0 auto 16px",fontSize:"1rem",color:"#444",lineHeight:1.65}}>
+          {T.ministry_section_body||"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM."}
+        </p>
+        <p style={{marginBottom:22,fontSize:".95rem",color:"#666"}}>
+          {T.ministry_section_signature||"Prayer support led by"} <strong style={{color:"#1a1a1a"}}>Rev. Alexis Williams, Ordained Minister</strong>
+        </p>
+        <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer"
+          style={{display:"inline-block",background:"#1a1a1a",color:"#fff",padding:"12px 28px",textDecoration:"none",borderRadius:8,fontSize:".9rem",letterSpacing:".02em"}}>
+          {T.ministry_cta||"Receive Free Prayer"}
+        </a>
       </section>
 
       {/* FEATURES STRIP */}
@@ -6083,10 +6145,6 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                     <div className="bm-brew-val">⏱ {blend.steepMin} minutes</div>
                   </div>
                   <div className="bm-brew-tile">
-                    <div className="bm-brew-lbl">{lang==="es"?"Porción":lang==="fr"?"Portion":lang==="pt"?"Porção":lang==="ht"?"Pòsyon":"Serving Size"}</div>
-                    <div className="bm-brew-val">{blend.servingSize || "1 tsp"}</div>
-                  </div>
-                  <div className="bm-brew-tile" style={{gridColumn:"span 2"}}>
                     <div className="bm-brew-lbl">{lang==="es"?"Temperatura del Agua":lang==="fr"?"Température de l'Eau":lang==="pt"?"Temperatura da Água":lang==="ht"?"Tanperati Dlo":"Water Temperature"}</div>
                     <div className="bm-brew-val">
                       <span style={{color:tempInfo.color,marginRight:6}}>{tempInfo.icon}</span>
@@ -6194,7 +6252,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                   ${getPrice(blend.name,blend.price).toFixed(2)}
                   {formatPrice(blend.name,blend.price).onSale&&<span style={{background:"rgba(200,80,40,.15)",color:"#e06040",fontSize:".6rem",padding:"2px 8px",borderRadius:50,marginLeft:8,fontFamily:"sans-serif",letterSpacing:".08em",textTransform:"uppercase"}}>Sale</span>}
                 </div>
-                {!blend.ritualMoment && <div className="bm-cup-note">{blend.oz || 2}oz bag · approx {cupsTotal} cups</div>}
+                {!blend.ritualMoment && <div className="bm-cup-note">Hand-blended in small batches</div>}
                 {blend.ritualMoment && <div className="bm-cup-note">Ritual Moments · Tea Library exclusive</div>}
               </div>
               <div style={{display:"flex",gap:8,marginLeft:"auto",flexWrap:"wrap",justifyContent:"flex-end"}}>
@@ -6225,6 +6283,9 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                   </>
                 )}
               </div>
+            </div>
+            <div style={{textAlign:"center",marginTop:10,fontSize:".8rem",color:"#555"}}>
+              🤍 {T.ministry_badge||"A portion of this purchase supports 2AM Companion Ministry"}
             </div>
           </div>
         </div>
@@ -6597,8 +6658,8 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:"1.1rem",color:"var(--bark)"}}>{r.steepMin} min</div>
               </div>
               <div style={{background:"var(--linen)",borderRadius:12,padding:"12px 14px"}}>
-                <div style={{fontSize:".58rem",letterSpacing:".12em",textTransform:"uppercase",color:"#8A7A6A",marginBottom:4}}>Serving</div>
-                <div style={{fontSize:".82rem",color:"var(--bark)"}}>{r.servingSize||"1 tsp"} per cup</div>
+                <div style={{fontSize:".58rem",letterSpacing:".12em",textTransform:"uppercase",color:"#8A7A6A",marginBottom:4}}>Water Temp</div>
+                <div style={{fontSize:".82rem",color:"var(--bark)"}}>{tempIcon(r.steepTemp).label}</div>
               </div>
             </div>
             {r.benefit&&<div style={{background:`linear-gradient(135deg,${accentBg},white)`,borderLeft:`4px solid ${accent}`,borderRadius:"0 12px 12px 0",padding:"10px 14px",marginBottom:16,fontSize:".78rem",color:accent,fontWeight:500}}>{r.benefit}</div>}
@@ -8130,7 +8191,7 @@ Thank you!`);
         { q:"How long before I notice a difference?",
           a:"It depends entirely on the blend and your body. Some blends work within the same cup -- peppermint for digestion, chamomile for calm, ginger for nausea. Others, like ashwagandha, vitex, and the cleansing protocols, are designed for consistent use over 2-4 weeks before full effects build. We always recommend giving therapeutic blends at least 2-3 weeks of daily use. Herbal support is cumulative -- the longer and more consistently you use it, the more your body responds. Think of it like exercise, not aspirin." },
         { q:"Isn't this just expensive tea I could buy at the grocery store?",
-          a:"The difference is in what's actually in the bag. Most grocery store herb teas use tea dust -- the lowest grade of the plant, often barely potent after sitting on a shelf for 18 months. Our blends use whole, cut herbs at therapeutic quantities. A grocery store chamomile bag might contain 1g of processed chamomile dust. Our Chamomile & Calm blend contains ~10g of whole chamomile flowers per 2oz bag, alongside lavender, passionflower, and lemon balm -- a complete evening formula, not a single weak herb. You get what you pay for." },
+          a:"The difference is in what's actually in the bag. Most grocery store herb teas use tea dust -- the lowest grade of the plant, often barely potent after sitting on a shelf for 18 months. Our blends use whole, cut herbs at therapeutic quantities, blended in proportions we keep proprietary -- it's how each Chai Holistic recipe stays one of a kind. You get what you pay for." },
         { q:"Are your products FDA approved?",
           a:"Herbal teas and supplements are regulated by the FDA as food products under DSHEA (Dietary Supplement Health and Education Act), not as drugs. This means we are not required to seek drug approval, but we are required to be truthful about our products, use safe ingredients, and follow food safety standards. We do not make drug claims -- we share what herbs have traditionally been used for and what the research suggests. We are honest about what these blends are: powerful plant medicine with a long history of use, not pharmaceutical drugs." },
         { q:"What makes Chai Holistic different from other herbal brands?",
@@ -8711,6 +8772,11 @@ Thank you!`);
     <LangProvider lang={lang} T={T}>
     <>
       <style>{CSS}</style>
+      <div className="ministry-banner" style={{background:"#1a1a1a",color:"#fff",textAlign:"center",padding:"8px 16px",fontSize:"13px",position:"sticky",top:0,zIndex:600,lineHeight:1.5}}>
+        {T.ministry_banner_text||"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister."}{" "}
+        <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer" style={{color:"#FFD700",textDecoration:"underline"}}>{T.ministry_get_prayer||"Get prayer now →"}</a>{" "}
+        | {T.ministry_portion_note||"A portion of every purchase supports 2AM Companion Ministry."}
+      </div>
       <div ref={topRef} style={{position:"absolute",top:0,left:0}}/>
 
       <nav>

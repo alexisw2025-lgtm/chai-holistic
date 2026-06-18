@@ -432,22 +432,11 @@ function BlendModal({ blend, idx, total, onClose, onNav, onNotify, onAddToCart }
           <div style={{ ...fontEyebrow, fontSize: 9.5, fontWeight: 600, letterSpacing: ".22em", color: C.sage, textTransform: "uppercase", marginBottom: 10 }}>
             Ingredients
           </div>
-          <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 6 }}>
-            <thead>
-              <tr>
-                <th style={{ ...fontUtility, fontSize: 9.5, color: "#999", textAlign: "left", paddingBottom: 6, borderBottom: "1px solid rgba(0,0,0,.08)" }}>Amount</th>
-                <th style={{ ...fontUtility, fontSize: 9.5, color: "#999", textAlign: "left", paddingBottom: 6, borderBottom: "1px solid rgba(0,0,0,.08)" }}>Ingredient</th>
-              </tr>
-            </thead>
-            <tbody>
-              {blend.ingredients.map(([amt, herb], i) => (
-                <tr key={i}>
-                  <td style={{ ...fontEyebrow, fontSize: 10, fontWeight: 600, color: C.sage, padding: "7px 0", borderBottom: "1px solid rgba(0,0,0,.06)" }}>{amt}</td>
-                  <td style={{ ...fontBody, fontSize: 14, fontStyle: "italic", color: "#333", padding: "7px 0", borderBottom: "1px solid rgba(0,0,0,.06)" }}>{herb}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div style={{ marginBottom: 6 }}>
+            {blend.ingredients.map(([, herb], i) => (
+              <div key={i} style={{ ...fontBody, fontSize: 14, fontStyle: "italic", color: "#333", padding: "7px 0", borderBottom: "1px solid rgba(0,0,0,.06)" }}>{herb}</div>
+            ))}
+          </div>
           {blend.yield && <div style={{ ...fontBody, fontSize: 12.5, fontStyle: "italic", color: "#999", marginBottom: 22 }}>{blend.yield}</div>}
 
           <div style={{ ...fontEyebrow, fontSize: 9.5, fontWeight: 600, letterSpacing: ".22em", color: C.sage, textTransform: "uppercase", marginBottom: 10, marginTop: blend.yield ? 0 : 18 }}>
@@ -617,8 +606,8 @@ function RolodexPage({ blends, onOpenBlend }) {
 
   return (
     <div>
-      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "24px 36px 0" }}>
-        <div style={{ background: "rgba(255,255,255,.03)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "18px 22px", display: "flex", flexDirection: "column", gap: 14 }}>
+      <div style={{ position: "sticky", top: "calc(136px + var(--banner-h, 0px))", zIndex: 200, maxWidth: 1440, margin: "0 auto", padding: "24px 36px 0", background: C.forest }}>
+        <div style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "18px 22px", display: "flex", flexDirection: "column", gap: 14, backdropFilter: "blur(20px)" }}>
           <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
             <div style={{ position: "relative", flex: 1, minWidth: 220, maxWidth: 400 }}>
               <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,.28)", fontSize: 14 }}>⌕</span>
@@ -1275,7 +1264,7 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
 
       <header
         style={{
-          position: "sticky", top: 0, zIndex: 400, display: "flex", alignItems: "center",
+          position: "sticky", top: "calc(74px + var(--banner-h, 0px))", zIndex: 400, display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 36px", height: 62,
           background: "rgba(13,26,17,.96)", backdropFilter: "blur(24px) saturate(180%)",
           borderBottom: "1px solid rgba(82,184,130,.1)",
