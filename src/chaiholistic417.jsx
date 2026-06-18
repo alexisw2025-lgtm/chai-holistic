@@ -472,7 +472,7 @@ const LANGS = {
     occ_ritual_moments:"Ritual Moments",
     ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
     ministry_get_prayer:"Get prayer now →",
-    ministry_portion_note:"25% funds crisis support.",
+    ministry_banner_text:"2AM Companion: Free prayer support by Rev. Alexis, Ordained Minister.",
     ministry_section_title:"Every Cup Funds 2AM Hope",
     ministry_section_body:"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM.",
     ministry_section_signature:"Prayer support led by",
@@ -497,7 +497,7 @@ const LANGS = {
     occ_ritual_moments:"Ritual Moments",
     ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
     ministry_get_prayer:"Get prayer now →",
-    ministry_portion_note:"25% funds crisis support.",
+    ministry_banner_text:"2AM Companion: Free prayer support by Rev. Alexis, Ordained Minister.",
     ministry_section_title:"Every Cup Funds 2AM Hope",
     ministry_section_body:"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM.",
     ministry_section_signature:"Prayer support led by",
@@ -683,7 +683,7 @@ const LANGS = {
     occ_ritual_moments:"Momentos de Ritual",
     ministry_banner_text:"2AM Companion: Apoyo de oración gratuito guiado por la Rev. Alexis Williams, Ministra Ordenada.",
     ministry_get_prayer:"Recibe oración ahora →",
-    ministry_portion_note:"El 25% financia el apoyo en crisis.",
+    ministry_banner_text:"2AM Companion: Apoyo de oración gratuito por la Rev. Alexis, Ministra Ordenada.",
     ministry_section_title:"Cada Taza Financia la Esperanza 2AM",
     ministry_section_body:"Una parte de cada compra apoya al Ministerio 2AM Companion. La usamos para ofrecer oración hablada gratuita, tarjetas bíblicas inteligentes para padres en UCIN y hospitales, y apoyo en crisis para familias en sus noches más difíciles. Tu compra se convierte en el salvavidas de alguien a las 2AM.",
     ministry_section_signature:"Apoyo de oración guiado por",
@@ -863,7 +863,7 @@ const LANGS = {
     occ_ritual_moments:"Moments de Rituel",
     ministry_banner_text:"2AM Companion : Soutien de prière gratuit dirigé par la Rév. Alexis Williams, Ministre Ordonnée.",
     ministry_get_prayer:"Recevez une prière maintenant →",
-    ministry_portion_note:"25% finance le soutien de crise.",
+    ministry_banner_text:"2AM Companion : Soutien de prière gratuit par la Rév. Alexis, Ministre Ordonnée.",
     ministry_section_title:"Chaque Tasse Finance l'Espoir 2AM",
     ministry_section_body:"Une partie de chaque achat soutient le Ministère 2AM Companion. Nous l'utilisons pour offrir une prière parlée gratuite, des cartes bibliques intelligentes pour les parents en néonatalogie et à l'hôpital, et un soutien de crise pour les familles dans leurs nuits les plus difficiles. Votre achat devient la bouée de sauvetage de quelqu'un à 2h du matin.",
     ministry_section_signature:"Soutien de prière dirigé par",
@@ -1043,7 +1043,7 @@ const LANGS = {
     occ_ritual_moments:"Momentos de Ritual",
     ministry_banner_text:"2AM Companion: Apoio de oração gratuito conduzido pela Rev. Alexis Williams, Ministra Ordenada.",
     ministry_get_prayer:"Receba oração agora →",
-    ministry_portion_note:"25% financia o apoio em crise.",
+    ministry_banner_text:"2AM Companion: Apoio de oração gratuito pela Rev. Alexis, Ministra Ordenada.",
     ministry_section_title:"Cada Xícara Financia a Esperança 2AM",
     ministry_section_body:"Uma parte de cada compra apoia o Ministério 2AM Companion. Usamos para oferecer oração falada gratuita, cartões bíblicos inteligentes para pais na UTI neonatal e no hospital, e apoio em crise para famílias em suas noites mais difíceis. Sua compra se torna a tábua de salvação de alguém às 2 da manhã.",
     ministry_section_signature:"Apoio de oração conduzido por",
@@ -1223,7 +1223,7 @@ const LANGS = {
     occ_ritual_moments:"Moman Rityèl",
     ministry_banner_text:"2AM Companion: Sipò lapriyè gratis ki dirije pa Rev. Alexis Williams, Minis Òdonye.",
     ministry_get_prayer:"Resevwa lapriyè kounye a →",
-    ministry_portion_note:"25% finanse sipò kriz.",
+    ministry_banner_text:"2AM Companion: Sipò lapriyè gratis pa Rev. Alexis, Minis Òdonye.",
     ministry_section_title:"Chak Tas Finanse Espwa 2AM",
     ministry_section_body:"Yon pòsyon nan chak acha soutni Ministè 2AM Companion. Nou itilize li pou bay lapriyè pale gratis, kat Bib entelijan pou paran nan NICU ak lopital, ak sipò kriz pou fanmi nan nwit yo ki pi difisil. Acha ou tounen yon bwe sovtaj pou yon moun a 2 nan maten.",
     ministry_section_signature:"Sipò lapriyè ki dirije pa",
@@ -8798,7 +8798,7 @@ Thank you!`);
       <style>{CSS}</style>
       <div ref={stickyHeaderRef} style={{position:"sticky",top:0,zIndex:520}}>
         <div className="ministry-banner" style={{background:"#1a1a1a",color:"#fff",textAlign:"center",padding:"8px 10px",fontSize:"13px",width:"100%"}}>
-          <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer" style={{color:"#FFD700",textDecoration:"underline"}}>{T.ministry_get_prayer||"Get prayer now →"}</a> | {T.ministry_portion_note||"25% funds crisis support."}
+          {T.ministry_banner_text||"2AM Companion: Free prayer support by Rev. Alexis, Ordained Minister."} <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer" style={{color:"#FFD700",textDecoration:"underline"}}>{T.ministry_get_prayer||"Get prayer now →"}</a>
         </div>
         <div ref={topRef} style={{position:"absolute",top:0,left:0}}/>
 
