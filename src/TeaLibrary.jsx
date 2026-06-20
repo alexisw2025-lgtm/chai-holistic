@@ -1181,7 +1181,7 @@ function emojiBtnStyle(on) {
    MAIN COMPONENT
 ════════════════════════════════════════ */
 const NAV_ITEMS = [
-  { key: "rolodex", label: "Rolodex", icon: "📖" },
+  { key: "rolodex", label: "Tea Cards", icon: "📖" },
   { key: "need", label: "What Do I Need?", icon: "🧭" },
   { key: "builder", label: "Blend Builder", icon: "🧪" },
   { key: "ritual", label: "Seasonal Ritual", icon: "🌙" },
@@ -1193,6 +1193,8 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
   const [page, setPage] = useState("rolodex");
   const [modalList, setModalList] = useState(null); // array of blends currently being browsed in modal
   const [modalIdx, setModalIdx] = useState(0);
+  const [rolodexFiltered, setRolodexFiltered] = useState(BLENDS);
+  const [rolodexView, setRolodexView] = useState("grid");
 
   const openBlend = (list, idx) => {
     setModalList(list);
@@ -1241,7 +1243,6 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
       style={{
         background: C.forest,
         minHeight: "100vh",
-        overflowX: "hidden",
         fontFamily: "'DM Sans', sans-serif",
         color: C.ink,
         position: "relative",
@@ -1264,9 +1265,10 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
         }}
       />
 
+      <div style={{ position: "sticky", top: headerOffset, zIndex: 400 }}>
       <header
         style={{
-          position: "sticky", top: headerOffset, zIndex: 400, display: "flex", alignItems: "center",
+          display: "flex", alignItems: "center",
           justifyContent: "space-between", padding: "0 16px", height: 62, gap: 8,
           background: "rgba(13,26,17,.96)", backdropFilter: "blur(24px) saturate(180%)",
           borderBottom: "1px solid rgba(82,184,130,.1)", overflow: "hidden",
@@ -1302,9 +1304,11 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
           <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", color: C.goldLt, fontSize: 11, pointerEvents: "none" }}>▾</span>
         </div>
       </header>
+      {page === "rolodex" && <RolodexFilterBar blends={BLENDS} onFilterChange={setRolodexFiltered} view={rolodexView} setView={setRolodexView} />}
+      </div>
 
       <div style={{ position: "relative", zIndex: 1 }}>
-        {page === "rolodex" && <RolodexPage blends={BLENDS} onOpenBlend={openBlend} headerOffset={headerOffset} />}
+        {page === "rolodex" && <RolodexGrid filtered={rolodexFiltered} view={rolodexView} onOpenBlend={openBlend} />}
         {page === "need" && <NeedPage onOpenBlend={openBlend} />}
         {page === "builder" && <BuilderPage />}
         {page === "ritual" && <RitualPage onOpenBlend={openBlend} />}

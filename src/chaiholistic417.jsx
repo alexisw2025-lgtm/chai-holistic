@@ -2687,6 +2687,7 @@ Respond ONLY with this exact JSON structure:
   const [profileOpen, setProfileOpen] = useState(false);
   const [jellyOpen, setJellyOpen] = useState(false);
   const [mobMenuOpen, setMobMenuOpen] = useState(false);
+  const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const [timerDone, setTimerDone] = useState(false);
   const [timerBlendName, setTimerBlendName] = useState("");
   const [selectedBlend, setSelectedBlend] = useState(null);
@@ -2779,25 +2780,30 @@ Respond ONLY with this exact JSON structure:
   // Measure the real combined height of the sticky banner+nav+search header,
   // since its height varies by banner text length (wraps on narrow screens),
   // language (translated strings differ in length), and viewport width.
-  // Hardcoding a pixel guess here was the root cause of two earlier overlap
-  // bugs, so anything that needs to sit "below the sticky header" should read
+  // Hardcoding a pixel guess here was the root cause of earlier overlap bugs,
+  // so anything that needs to sit "below the sticky header" should read
   // stickyHeaderH (passed down as a prop / used directly) instead of a constant.
+  // A ResizeObserver (rather than one-off timeouts) keeps this correct even
+  // if something further down the page reflows the header later (lazy images,
+  // font swap, language change), which was the cause of the header appearing
+  // to "disappear" partway down the page on a stale offset.
   useEffect(() => {
-    const measure = () => {
-      if (stickyHeaderRef.current) {
-        const h = stickyHeaderRef.current.getBoundingClientRect().height;
-        if (h > 0) {
-          setStickyHeaderH(h);
-          document.documentElement.style.setProperty("--sticky-h", `${h}px`);
-        }
+    const el = stickyHeaderRef.current;
+    if (!el) return;
+    const apply = (h) => {
+      if (h > 0) {
+        setStickyHeaderH(h);
+        document.documentElement.style.setProperty("--sticky-h", `${h}px`);
       }
     };
-    measure();
-    window.addEventListener("resize", measure);
-    const t1 = setTimeout(measure, 100);
-    const t2 = setTimeout(measure, 500);
-    return () => { window.removeEventListener("resize", measure); clearTimeout(t1); clearTimeout(t2); };
-  }, [lang, page]);
+    apply(el.getBoundingClientRect().height);
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) apply(entry.contentRect.height || entry.target.getBoundingClientRect().height);
+    });
+    ro.observe(el);
+    window.addEventListener("resize", () => apply(el.getBoundingClientRect().height));
+    return () => { ro.disconnect(); };
+  }, []);
 
   const now = new Date();
   const currentMonth = now.getMonth();
@@ -8811,29 +8817,60 @@ Thank you!`);
           </div>
         </div>
         <div className="nav-links">
-          {(()=>{const navItems=[["home","🏠 "+T.nav_home],["shop",T.nav_shop],["recipes","🍵 "+T.nav_recipes],["men","⚡ "+T.nav_men],["supplements","💊 "+T.nav_supplements],["ancestral","🌿 "+T.nav_ancestral],["herbs","🌿 "+T.nav_herbs],["mocktails","🍹 "+T.nav_mocktails],["jelly","🌊 "+T.nav_jelly],["seamoss","🌿 "+T.nav_seamoss],["rings","__RING_IMG__"],["faq",T.nav_faq],["tea-library","📚 "+T.nav_library]];return navItems})().map(([p,l])=>(
-            <span key={p} className={`nav-lnk ${page===p?"on":""}`} onClick={()=>nav(p)}>
-              {l==="__RING_IMG__" ? (
-                <span style={{display:"inline-flex",alignItems:"center",gap:5}}>
-                  <img src="/vibe-shift-ring.jpg" alt="Vibe Shift Ring" style={{width:22,height:22,borderRadius:"50%",objectFit:"cover",border:"1.5px solid rgba(196,137,58,.5)",verticalAlign:"middle",flexShrink:0}}/>
-                  <span>Rings</span>
-                </span>
-              ) : l}
-              {p==="men" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"var(--gold)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
-              {p==="supplements" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"var(--sage-d)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
-              {p==="ancestral" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"#6A4A2A",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
-              {p==="herbs" && <span style={{marginLeft:5,fontSize:".48rem",letterSpacing:".1em",background:"rgba(74,114,80,.8)",color:"white",padding:"2px 6px",borderRadius:50,fontWeight:600,verticalAlign:"middle",textTransform:"uppercase"}}>NEW</span>}
-            </span>
-          ))}
-          <span className="nav-lnk" onClick={()=>setProfileOpen(true)}
-            style={{background:"linear-gradient(135deg,rgba(192,136,48,.18),rgba(192,136,48,.08))",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500}}>
-            📋 Sip &amp; Heal Report
+          <span className={`nav-lnk ${page==="home"?"on":""}`} onClick={()=>nav("home")}>🏠 {T.nav_home}</span>
+
+          <span
+            className={`nav-lnk ${["shop","men","supplements","ancestral","herbs","mocktails","jelly","seamoss","rings","faq","tea-library"].includes(page)?"on":""}`}
+            style={{position:"relative",cursor:"pointer"}}
+            onMouseEnter={()=>setShopDropdownOpen(true)}
+            onMouseLeave={()=>setShopDropdownOpen(false)}
+            onClick={()=>setShopDropdownOpen(o=>!o)}
+          >
+            {T.nav_shop} ▾
+            {shopDropdownOpen && (
+              <div style={{position:"absolute",top:"100%",left:0,marginTop:6,background:"white",border:"1px solid var(--dust)",borderRadius:12,boxShadow:"0 8px 28px rgba(0,0,0,.14)",padding:"8px 0",minWidth:220,zIndex:600,textAlign:"left"}}>
+                {[
+                  ["shop","🍵 "+T.nav_shop],
+                  ["recipes","🍵 "+T.nav_recipes],
+                  ["men","⚡ "+T.nav_men],
+                  ["supplements","💊 "+T.nav_supplements],
+                  ["ancestral","🌿 "+T.nav_ancestral],
+                  ["herbs","🌿 "+T.nav_herbs],
+                  ["mocktails","🍹 "+T.nav_mocktails],
+                  ["jelly","🌊 "+T.nav_jelly],
+                  ["seamoss","🌿 "+T.nav_seamoss],
+                  ["rings","💍 Rings"],
+                  ["faq",T.nav_faq],
+                  ["tea-library","📚 "+T.nav_library],
+                ].map(([p,l])=>(
+                  <div key={p} onClick={(e)=>{e.stopPropagation();nav(p);setShopDropdownOpen(false);}}
+                    style={{padding:"8px 18px",fontSize:".74rem",color:"var(--bark)",whiteSpace:"nowrap",cursor:"pointer"}}
+                    onMouseEnter={(e)=>e.currentTarget.style.background="var(--linen)"}
+                    onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
+                  >{l}</div>
+                ))}
+                <div style={{borderTop:"1px solid var(--dust)",margin:"6px 0"}}/>
+                <div onClick={(e)=>{e.stopPropagation();setProfileOpen(true);setShopDropdownOpen(false);}}
+                  style={{padding:"8px 18px",fontSize:".74rem",color:"var(--gold)",whiteSpace:"nowrap",cursor:"pointer",fontWeight:500}}
+                  onMouseEnter={(e)=>e.currentTarget.style.background="var(--linen)"}
+                  onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
+                >📋 Sip &amp; Heal Report</div>
+              </div>
+            )}
           </span>
+
+          <span className="nav-lnk" style={{cursor:"pointer"}} onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
+
           <span className="nav-lnk"
             onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}
-            style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500}}>
-            🌿 Sip &amp; Seek
+            style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500,cursor:"pointer"}}>
+            🌿 Build My Ritual
           </span>
+
+          <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer"
+            style={{background:"#FFD700",color:"#1a1a1a",padding:"6px 14px",borderRadius:4,fontWeight:600,marginLeft:8,fontSize:".62rem",letterSpacing:".06em",textTransform:"uppercase",textDecoration:"none",whiteSpace:"nowrap"}}>
+            Get Prayer
+          </a>
         </div>
         <div className="nav-right">
           <button className="cart-btn" onClick={()=>{ if(cart.length>0){setPreBasket(true);}else{setCartOpen(true);} }}>
