@@ -473,6 +473,7 @@ const LANGS = {
     occ_ritual_moments:"Ritual Moments",
     ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
     ministry_get_prayer:"Get prayer now →",
+    nav_get_prayer:"Get Prayer",
     ministry_banner_text:"2AM Companion: Free prayer support by Rev. Alexis, Ordained Minister.",
     ministry_section_title:"Every Cup Funds 2AM Hope",
     ministry_section_body:"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM.",
@@ -498,6 +499,7 @@ const LANGS = {
     occ_ritual_moments:"Ritual Moments",
     ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
     ministry_get_prayer:"Get prayer now →",
+    nav_get_prayer:"Get Prayer",
     ministry_banner_text:"2AM Companion: Free prayer support by Rev. Alexis, Ordained Minister.",
     ministry_section_title:"Every Cup Funds 2AM Hope",
     ministry_section_body:"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM.",
@@ -605,7 +607,7 @@ const LANGS = {
     nav_home:"Inicio",
     nav_men:"Hombres",
     nav_herbs:"Archivo de Hierbas",
-    nav_seamoss:"Musgo Marino",
+    nav_seamoss:"Musgo Marino", nav_rings:"Anillos",
     pray_btn_night:"🙏 Orar conmigo",
     amara_placeholder:"Pregúntale a Amara…",
     tagline:"Eres suficiente tal como eres.",
@@ -684,6 +686,7 @@ const LANGS = {
     occ_ritual_moments:"Momentos de Ritual",
     ministry_banner_text:"2AM Companion: Apoyo de oración gratuito guiado por la Rev. Alexis Williams, Ministra Ordenada.",
     ministry_get_prayer:"Recibe oración ahora →",
+    nav_get_prayer:"Recibir Oración",
     ministry_banner_text:"2AM Companion: Apoyo de oración gratuito por la Rev. Alexis, Ministra Ordenada.",
     ministry_section_title:"Cada Taza Financia la Esperanza 2AM",
     ministry_section_body:"Una parte de cada compra apoya al Ministerio 2AM Companion. La usamos para ofrecer oración hablada gratuita, tarjetas bíblicas inteligentes para padres en UCIN y hospitales, y apoyo en crisis para familias en sus noches más difíciles. Tu compra se convierte en el salvavidas de alguien a las 2AM.",
@@ -785,7 +788,7 @@ const LANGS = {
     nav_home:"Accueil",
     nav_men:"Hommes",
     nav_herbs:"Archives des Herbes",
-    nav_seamoss:"Mousse Marine",
+    nav_seamoss:"Mousse Marine", nav_rings:"Anneaux",
     pray_btn_night:"🙏 Prier avec moi",
     amara_placeholder:"Demandez à Amara…",
     tagline:"Vous êtes assez bien tel que vous êtes.",
@@ -864,6 +867,7 @@ const LANGS = {
     occ_ritual_moments:"Moments de Rituel",
     ministry_banner_text:"2AM Companion : Soutien de prière gratuit dirigé par la Rév. Alexis Williams, Ministre Ordonnée.",
     ministry_get_prayer:"Recevez une prière maintenant →",
+    nav_get_prayer:"Recevoir une Prière",
     ministry_banner_text:"2AM Companion : Soutien de prière gratuit par la Rév. Alexis, Ministre Ordonnée.",
     ministry_section_title:"Chaque Tasse Finance l'Espoir 2AM",
     ministry_section_body:"Une partie de chaque achat soutient le Ministère 2AM Companion. Nous l'utilisons pour offrir une prière parlée gratuite, des cartes bibliques intelligentes pour les parents en néonatalogie et à l'hôpital, et un soutien de crise pour les familles dans leurs nuits les plus difficiles. Votre achat devient la bouée de sauvetage de quelqu'un à 2h du matin.",
@@ -965,7 +969,7 @@ const LANGS = {
     nav_home:"Início",
     nav_men:"Homens",
     nav_herbs:"Arquivo de Ervas",
-    nav_seamoss:"Musgo do Mar",
+    nav_seamoss:"Musgo do Mar", nav_rings:"Anéis",
     pray_btn_night:"🙏 Rezar comigo",
     amara_placeholder:"Pergunte à Amara…",
     tagline:"Você é bom o suficiente do jeito que é.",
@@ -1044,6 +1048,7 @@ const LANGS = {
     occ_ritual_moments:"Momentos de Ritual",
     ministry_banner_text:"2AM Companion: Apoio de oração gratuito conduzido pela Rev. Alexis Williams, Ministra Ordenada.",
     ministry_get_prayer:"Receba oração agora →",
+    nav_get_prayer:"Receber Oração",
     ministry_banner_text:"2AM Companion: Apoio de oração gratuito pela Rev. Alexis, Ministra Ordenada.",
     ministry_section_title:"Cada Xícara Financia a Esperança 2AM",
     ministry_section_body:"Uma parte de cada compra apoia o Ministério 2AM Companion. Usamos para oferecer oração falada gratuita, cartões bíblicos inteligentes para pais na UTI neonatal e no hospital, e apoio em crise para famílias em suas noites mais difíceis. Sua compra se torna a tábua de salvação de alguém às 2 da manhã.",
@@ -1145,7 +1150,7 @@ const LANGS = {
     nav_home:"Akèy",
     nav_men:"Gason",
     nav_herbs:"Achiv Zèb",
-    nav_seamoss:"Mous Lanmè",
+    nav_seamoss:"Mous Lanmè", nav_rings:"Bag",
     pray_btn_night:"🙏 Priye avèk mwen",
     amara_placeholder:"Mande Amara nenpòt bagay…",
     tagline:"Ou bon ase jan ou ye a.",
@@ -1224,6 +1229,7 @@ const LANGS = {
     occ_ritual_moments:"Moman Rityèl",
     ministry_banner_text:"2AM Companion: Sipò lapriyè gratis ki dirije pa Rev. Alexis Williams, Minis Òdonye.",
     ministry_get_prayer:"Resevwa lapriyè kounye a →",
+    nav_get_prayer:"Resevwa Lapriyè",
     ministry_banner_text:"2AM Companion: Sipò lapriyè gratis pa Rev. Alexis, Minis Òdonye.",
     ministry_section_title:"Chak Tas Finanse Espwa 2AM",
     ministry_section_body:"Yon pòsyon nan chak acha soutni Ministè 2AM Companion. Nou itilize li pou bay lapriyè pale gratis, kat Bib entelijan pou paran nan NICU ak lopital, ak sipò kriz pou fanmi nan nwit yo ki pi difisil. Acha ou tounen yon bwe sovtaj pou yon moun a 2 nan maten.",
@@ -1325,7 +1331,7 @@ const LANGS = {
     nav_home:"Home",
     nav_men:"Man Dem",
     nav_herbs:"Herb Archive",
-    nav_seamoss:"Sea Moss",
+    nav_seamoss:"Sea Moss", nav_rings:"Rings",
     pray_btn_night:"🙏 Pray wid mi",
     amara_placeholder:"Ask Amara anyting…",
     mq_items:["Morning Rituals","Evening Calm","Liver Cleanse","Kidney Flush","Men Wellness","Vibe Shift Rings","Tea Finder","Ritual Builder","Cleanse Tracker","Herb Pairing Guide","Sip & Heal · 40 Recipe"],
@@ -2690,6 +2696,7 @@ Respond ONLY with this exact JSON structure:
   const [mobMenuOpen, setMobMenuOpen] = useState(false);
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const shopTriggerRef = useRef(null);
+  const shopCloseTimerRef = useRef(null);
   const [shopDropdownPos, setShopDropdownPos] = useState({ top: 0, left: 0 });
   const [timerDone, setTimerDone] = useState(false);
   const [timerBlendName, setTimerBlendName] = useState("");
@@ -3154,11 +3161,11 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     ::selection{background:var(--sage-p);}
     body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:.38;}
 
-    nav{position:sticky;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:74px;background:rgba(247,242,234,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--dust);border-radius:22px 22px 0 0;}
+    nav{position:sticky;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:86px;background:rgba(247,242,234,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--dust);border-radius:22px 22px 0 0;}
     .nav-logo{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--bark);cursor:pointer;display:flex;align-items:center;gap:8px;letter-spacing:.02em;}
-    .nav-logo-img{width:46px;height:46px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.12);flex-shrink:0;}
+    .nav-logo-img{width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.12);flex-shrink:0;}
     .nav-logo-text{display:flex;flex-direction:column;line-height:1.1;}
-    .nav-logo-text span:first-child{font-size:1.35rem;}
+    .nav-logo-text span:first-child{font-size:1.5rem;}
     .nav-logo-text span:last-child{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-family:'Jost',sans-serif;font-weight:400;}
     @keyframes spin{to{transform:rotate(360deg);}}
 
@@ -3166,11 +3173,11 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     .site-search-bar{padding:14px 16px 0;background:var(--linen);}
     .mob-search-bar{display:none !important;}
 
-    .nav-links{display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;}
-    .nav-lnk{font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--bark);opacity:.6;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;white-space:nowrap;}
+    .nav-links{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;}
+    .nav-lnk{font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;color:var(--bark);opacity:.72;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;white-space:nowrap;font-weight:500;}
     .nav-lnk:hover,.nav-lnk.on{opacity:1;border-bottom-color:var(--gold);}
     .nav-right{display:flex;align-items:center;gap:10px;}
-    .cart-btn{background:var(--bark);color:var(--parch);border:none;padding:8px 18px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;display:flex;align-items:center;gap:7px;}
+    .cart-btn{background:var(--bark);color:var(--parch);border:none;padding:10px 22px;font-family:'Jost',sans-serif;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;display:flex;align-items:center;gap:7px;}
     .cart-btn:hover{background:var(--sage-d);}
     .cart-badge{background:var(--gold);color:white;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.56rem;font-weight:500;}
 
@@ -3861,7 +3868,6 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
       .nav-logo-text span:first-child{font-size:1.1rem;}
       .nav-logo-text span:last-child{display:none;}
       .cart-btn{padding:7px 12px;font-size:.6rem;}
-      .mob-menu{top:64px;}
 
       /* Hero */
       .hero{min-height:auto;}
@@ -8827,17 +8833,21 @@ Thank you!`);
             className={`nav-lnk ${["shop","men","supplements","ancestral","herbs","mocktails","jelly","seamoss","rings","faq","tea-library"].includes(page)?"on":""}`}
             style={{position:"relative",cursor:"pointer"}}
             onMouseEnter={()=>{
+              clearTimeout(shopCloseTimerRef.current);
               if(shopTriggerRef.current){
                 const r=shopTriggerRef.current.getBoundingClientRect();
-                setShopDropdownPos({top:r.bottom+6,left:r.left});
+                setShopDropdownPos({top:r.bottom+2,left:r.left-12});
               }
               setShopDropdownOpen(true);
             }}
-            onMouseLeave={()=>setShopDropdownOpen(false)}
+            onMouseLeave={()=>{
+              shopCloseTimerRef.current=setTimeout(()=>setShopDropdownOpen(false),350);
+            }}
             onClick={()=>{
+              clearTimeout(shopCloseTimerRef.current);
               if(shopTriggerRef.current){
                 const r=shopTriggerRef.current.getBoundingClientRect();
-                setShopDropdownPos({top:r.bottom+6,left:r.left});
+                setShopDropdownPos({top:r.bottom+2,left:r.left-12});
               }
               setShopDropdownOpen(o=>!o);
             }}
@@ -8846,9 +8856,12 @@ Thank you!`);
           </span>
           {shopDropdownOpen && createPortal(
             <div
-              onMouseEnter={()=>setShopDropdownOpen(true)}
-              onMouseLeave={()=>setShopDropdownOpen(false)}
-              style={{position:"fixed",top:shopDropdownPos.top,left:shopDropdownPos.left,background:"white",border:"1px solid var(--dust)",borderRadius:12,boxShadow:"0 8px 28px rgba(0,0,0,.14)",padding:"8px 0",minWidth:220,zIndex:99999,textAlign:"left"}}>
+              onMouseEnter={()=>clearTimeout(shopCloseTimerRef.current)}
+              onMouseLeave={()=>{
+                shopCloseTimerRef.current=setTimeout(()=>setShopDropdownOpen(false),350);
+              }}
+              style={{position:"fixed",top:shopDropdownPos.top,left:shopDropdownPos.left,paddingTop:10,background:"transparent",zIndex:99999}}>
+              <div style={{background:"white",border:"1px solid var(--dust)",borderRadius:12,boxShadow:"0 8px 28px rgba(0,0,0,.14)",padding:"10px 0",minWidth:280,textAlign:"left"}}>
               {[
                 ["tea-library","📚 "+T.nav_library],
                 ["shop","🍵 "+T.nav_shop],
@@ -8860,36 +8873,37 @@ Thank you!`);
                 ["mocktails","🍹 "+T.nav_mocktails],
                 ["jelly","🌊 "+T.nav_jelly],
                 ["seamoss","🌿 "+T.nav_seamoss],
-                ["rings","💍 Rings"],
+                ["rings","💍 "+(T.nav_rings||"Rings")],
                 ["faq",T.nav_faq],
               ].map(([p,l])=>(
                 <div key={p} onClick={(e)=>{e.stopPropagation();nav(p);setShopDropdownOpen(false);}}
-                  style={{padding:"8px 18px",fontSize:".74rem",color:"var(--bark)",whiteSpace:"nowrap",cursor:"pointer"}}
+                  style={{padding:"10px 22px",fontSize:".8rem",color:"var(--bark)",whiteSpace:"nowrap",cursor:"pointer"}}
                   onMouseEnter={(e)=>e.currentTarget.style.background="var(--linen)"}
                   onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
                 >{l}</div>
               ))}
               <div style={{borderTop:"1px solid var(--dust)",margin:"6px 0"}}/>
               <div onClick={(e)=>{e.stopPropagation();setProfileOpen(true);setShopDropdownOpen(false);}}
-                style={{padding:"8px 18px",fontSize:".74rem",color:"var(--gold)",whiteSpace:"nowrap",cursor:"pointer",fontWeight:500}}
+                style={{padding:"10px 22px",fontSize:".8rem",color:"var(--gold)",whiteSpace:"nowrap",cursor:"pointer",fontWeight:500}}
                 onMouseEnter={(e)=>e.currentTarget.style.background="var(--linen)"}
                 onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
               >📋 Sip &amp; Heal Report</div>
+              </div>
             </div>,
             document.body
           )}
 
-          <span className="nav-lnk" style={{cursor:"pointer"}} onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
+          <span className="nav-lnk" style={{cursor:"pointer"}} onClick={()=>setFinderOpen(true)}>{T.btn_find||"✦ Find My Tea"}</span>
 
           <span className="nav-lnk"
             onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}
-            style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"var(--gold)",padding:"4px 14px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500,cursor:"pointer"}}>
-            🌿 Build My Ritual
+            style={{background:"linear-gradient(135deg,#2D4A2D,#1B3A1B)",color:"var(--gold)",padding:"7px 18px",borderRadius:50,border:"1px solid rgba(196,137,58,.4)",opacity:1,borderBottom:"none",fontWeight:500,cursor:"pointer"}}>
+            🌿 {T.btn_ritual||"Build My Ritual"}
           </span>
 
           <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer"
-            style={{background:"#FFD700",color:"#1a1a1a",padding:"7px 16px",borderRadius:4,fontWeight:600,marginLeft:8,fontSize:".72rem",letterSpacing:".05em",textTransform:"uppercase",textDecoration:"none",whiteSpace:"nowrap"}}>
-            Get Prayer
+            style={{background:"#FFD700",color:"#1a1a1a",padding:"9px 20px",borderRadius:4,fontWeight:600,marginLeft:8,fontSize:".84rem",letterSpacing:".03em",textTransform:"uppercase",textDecoration:"none",whiteSpace:"nowrap"}}>
+            {T.nav_get_prayer||"Get Prayer"}
           </a>
         </div>
         <div className="nav-right">
