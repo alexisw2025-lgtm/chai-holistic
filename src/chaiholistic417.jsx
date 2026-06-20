@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import TeaLibrary from "./TeaLibrary";
 import PrayerSection from "./PrayerSection";
 import WellnessProfileModal from "./WellnessProfileModal";
@@ -8843,7 +8844,7 @@ Thank you!`);
           >
             {T.nav_shop} ▾
           </span>
-          {shopDropdownOpen && (
+          {shopDropdownOpen && createPortal(
             <div
               onMouseEnter={()=>setShopDropdownOpen(true)}
               onMouseLeave={()=>setShopDropdownOpen(false)}
@@ -8874,7 +8875,8 @@ Thank you!`);
                 onMouseEnter={(e)=>e.currentTarget.style.background="var(--linen)"}
                 onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
               >📋 Sip &amp; Heal Report</div>
-            </div>
+            </div>,
+            document.body
           )}
 
           <span className="nav-lnk" style={{cursor:"pointer"}} onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
