@@ -3167,7 +3167,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     .mob-search-bar{display:none !important;}
 
     .nav-links{display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;}
-    .nav-lnk{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);opacity:.55;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;white-space:nowrap;}
+    .nav-lnk{font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--bark);opacity:.6;cursor:pointer;transition:all .2s;padding-bottom:2px;border-bottom:1px solid transparent;white-space:nowrap;}
     .nav-lnk:hover,.nav-lnk.on{opacity:1;border-bottom-color:var(--gold);}
     .nav-right{display:flex;align-items:center;gap:10px;}
     .cart-btn{background:var(--bark);color:var(--parch);border:none;padding:8px 18px;font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .25s;border-radius:50px;display:flex;align-items:center;gap:7px;}
@@ -8850,6 +8850,7 @@ Thank you!`);
               onMouseLeave={()=>setShopDropdownOpen(false)}
               style={{position:"fixed",top:shopDropdownPos.top,left:shopDropdownPos.left,background:"white",border:"1px solid var(--dust)",borderRadius:12,boxShadow:"0 8px 28px rgba(0,0,0,.14)",padding:"8px 0",minWidth:220,zIndex:99999,textAlign:"left"}}>
               {[
+                ["tea-library","📚 "+T.nav_library],
                 ["shop","🍵 "+T.nav_shop],
                 ["recipes","🍵 "+T.nav_recipes],
                 ["men","⚡ "+T.nav_men],
@@ -8861,7 +8862,6 @@ Thank you!`);
                 ["seamoss","🌿 "+T.nav_seamoss],
                 ["rings","💍 Rings"],
                 ["faq",T.nav_faq],
-                ["tea-library","📚 "+T.nav_library],
               ].map(([p,l])=>(
                 <div key={p} onClick={(e)=>{e.stopPropagation();nav(p);setShopDropdownOpen(false);}}
                   style={{padding:"8px 18px",fontSize:".74rem",color:"var(--bark)",whiteSpace:"nowrap",cursor:"pointer"}}
@@ -8888,7 +8888,7 @@ Thank you!`);
           </span>
 
           <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer"
-            style={{background:"#FFD700",color:"#1a1a1a",padding:"6px 14px",borderRadius:4,fontWeight:600,marginLeft:8,fontSize:".62rem",letterSpacing:".06em",textTransform:"uppercase",textDecoration:"none",whiteSpace:"nowrap"}}>
+            style={{background:"#FFD700",color:"#1a1a1a",padding:"7px 16px",borderRadius:4,fontWeight:600,marginLeft:8,fontSize:".72rem",letterSpacing:".05em",textTransform:"uppercase",textDecoration:"none",whiteSpace:"nowrap"}}>
             Get Prayer
           </a>
         </div>
