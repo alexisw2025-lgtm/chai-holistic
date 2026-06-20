@@ -1193,8 +1193,6 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
   const [page, setPage] = useState("rolodex");
   const [modalList, setModalList] = useState(null); // array of blends currently being browsed in modal
   const [modalIdx, setModalIdx] = useState(0);
-  const [rolodexFiltered, setRolodexFiltered] = useState(BLENDS);
-  const [rolodexView, setRolodexView] = useState("grid");
 
   const openBlend = (list, idx) => {
     setModalList(list);
@@ -1304,11 +1302,10 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
           <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", color: C.goldLt, fontSize: 11, pointerEvents: "none" }}>▾</span>
         </div>
       </header>
-      {page === "rolodex" && <RolodexFilterBar blends={BLENDS} onFilterChange={setRolodexFiltered} view={rolodexView} setView={setRolodexView} />}
       </div>
 
       <div style={{ position: "relative", zIndex: 1 }}>
-        {page === "rolodex" && <RolodexGrid filtered={rolodexFiltered} view={rolodexView} onOpenBlend={openBlend} />}
+        {page === "rolodex" && <RolodexPage blends={BLENDS} onOpenBlend={openBlend} headerOffset={headerOffset} />}
         {page === "need" && <NeedPage onOpenBlend={openBlend} />}
         {page === "builder" && <BuilderPage />}
         {page === "ritual" && <RitualPage onOpenBlend={openBlend} />}

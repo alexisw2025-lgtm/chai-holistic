@@ -2424,7 +2424,7 @@ export default function ChaiHolistic() {
     ).slice(0,4).forEach(b=>add({
       id:"blend-"+b.id, name:b.name, desc:b.tagline||b.benefit,
       emoji:b.emoji||"🍵", color:b.color, price:b.price,
-      type:"Tea Blend", typeColor:"#3A6B2A", action:()=>nav("shop")
+      type:"Tea Blend", typeColor:"#3A6B2A", action:()=>{nav("shop");setTimeout(()=>setSelectedBlend(b),60);}
     }));
 
     // ── CLEANSING BLENDS ───────────────────────────────────────────────────────
@@ -2436,7 +2436,7 @@ export default function ChaiHolistic() {
     ).slice(0,3).forEach(b=>add({
       id:"cleanse-"+b.id, name:b.name, desc:b.tagline||b.benefit,
       emoji:"🫙", color:"#2A4A2A", price:b.price,
-      type:"Cleanse Blend", typeColor:"#3A6B2A", action:()=>nav("shop")
+      type:"Cleanse Blend", typeColor:"#3A6B2A", action:()=>{setActiveTracker(b.id);setTrackerOpen(true);}
     }));
 
     // ── MEN'S WELLNESS ─────────────────────────────────────────────────────────
@@ -4388,12 +4388,14 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
             <div style={{height:hasSelection?8:0}}/>
           </div>
 
-          {/* STICKY SUMMARY FOOTER — always visible once anything is selected */}
-          {hasSelection && (
-            <div style={{flexShrink:0,borderTop:"2px solid var(--sage-p)",background:"var(--linen)",padding:"14px 28px 20px"}}>
+          {/* STICKY SUMMARY FOOTER — always visible, even before any selection */}
+          <div style={{flexShrink:0,borderTop:"2px solid var(--sage-p)",background:"var(--linen)",padding:"14px 28px 20px"}}>
               {/* Mini selection list */}
               <div style={{marginBottom:10}}>
                 <div style={{fontSize:".6rem",letterSpacing:".14em",textTransform:"uppercase",color:"#8A7A6A",marginBottom:6,fontWeight:500}}>Your Ritual So Far</div>
+                {!hasSelection && (
+                  <div style={{fontSize:".78rem",color:"#8A7A6A",fontStyle:"italic",padding:"4px 0"}}>Pick a morning or evening blend below to begin.</div>
+                )}
                 {ritual.morning && (
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 0",borderBottom:"1px solid var(--dust)"}}>
                     <span style={{fontSize:".8rem",color:"var(--bark)"}}>🌅 {ritual.morning.name}</span>
@@ -4425,7 +4427,6 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                 Add My Ritual to Cart — ${ritualTotal.toFixed(2)}
               </button>
             </div>
-          )}
         </div>
       </div>
     );
@@ -8815,7 +8816,6 @@ Thank you!`);
         <div className="ministry-banner" style={{background:"#1a1a1a",color:"#fff",textAlign:"center",padding:"8px 10px",fontSize:"13px",width:"100%"}}>
           {T.ministry_banner_text||"2AM Companion: Free prayer support by Rev. Alexis, Ordained Minister."} <a href="https://2amcompanion.com" target="_blank" rel="noopener noreferrer" style={{color:"#FFD700",textDecoration:"underline"}}>{T.ministry_get_prayer||"Get prayer now →"}</a>
         </div>
-        <div ref={topRef} style={{position:"absolute",top:0,left:0}}/>
 
         <nav style={{position:"static"}}>
         <div className="nav-logo" onClick={()=>{ nav("home"); window.scrollTo({top:0,behavior:"smooth"}); setMobMenuOpen(false); }} title="Home">
@@ -8987,6 +8987,7 @@ Thank you!`);
         </div>
       </div>
       </div>
+      <div ref={topRef} style={{height:0,overflow:"hidden"}}/>
 
       {/* ── Mobile slide-down menu ── */}
       <div className={`mob-menu${mobMenuOpen?" open":""}`}>
@@ -9039,7 +9040,7 @@ Thank you!`);
         {page==="men"&&<MensWellness onNav={nav} onAddToCart={addToCart}/>}
         {page==="supplements"&&<SupplementsPage onNav={nav}/>}
         {page==="ancestral"&&<AncestralTeas onNav={nav}/>}
-        {page==="herbs"&&<HerbApothecary/>}
+        {page==="herbs"&&<HerbApothecary onNavigate={(blendName)=>{const b=BLENDS.find(x=>x.name===blendName);nav("shop");if(b)setTimeout(()=>setSelectedBlend(b),60);}}/>}
         {page==="tea-library"&&<TeaLibrary deepBlend={teaLibraryBlend} onDeepBlendConsumed={()=>setTeaLibraryBlend(null)} onAddToCart={addToCart} stickyHeaderH={stickyHeaderH}/>}
       </div>
 

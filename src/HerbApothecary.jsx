@@ -1185,8 +1185,9 @@ function HerbModal({ herb, onClose }) {
                         background:"rgba(255,255,255,.03)",
                         border:"1px solid rgba(196,137,58,.1)",
                         borderRadius:14,padding:"12px 14px",
-                        transition:"border-color .2s, background .2s",cursor:"default",
+                        transition:"border-color .2s, background .2s",cursor:onNavigate?"pointer":"default",
                       }}
+                      onClick={()=>onNavigate&&onNavigate(name)}
                       onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,.28)";e.currentTarget.style.background="rgba(196,137,58,.05)";}}
                       onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,.1)";e.currentTarget.style.background="rgba(255,255,255,.03)";}}>
                         {/* Color swatch */}
@@ -1230,7 +1231,7 @@ function HerbModal({ herb, onClose }) {
   );
 }
 
-export default function HerbApothecary() {
+export default function HerbApothecary({ onNavigate }) {
   const { T, lang } = useLang();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
