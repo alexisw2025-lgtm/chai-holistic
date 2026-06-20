@@ -2688,6 +2688,8 @@ Respond ONLY with this exact JSON structure:
   const [jellyOpen, setJellyOpen] = useState(false);
   const [mobMenuOpen, setMobMenuOpen] = useState(false);
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
+  const shopTriggerRef = useRef(null);
+  const [shopDropdownPos, setShopDropdownPos] = useState({ top: 0, left: 0 });
   const [timerDone, setTimerDone] = useState(false);
   const [timerBlendName, setTimerBlendName] = useState("");
   const [selectedBlend, setSelectedBlend] = useState(null);
@@ -8820,44 +8822,60 @@ Thank you!`);
           <span className={`nav-lnk ${page==="home"?"on":""}`} onClick={()=>nav("home")}>🏠 {T.nav_home}</span>
 
           <span
+            ref={shopTriggerRef}
             className={`nav-lnk ${["shop","men","supplements","ancestral","herbs","mocktails","jelly","seamoss","rings","faq","tea-library"].includes(page)?"on":""}`}
             style={{position:"relative",cursor:"pointer"}}
-            onMouseEnter={()=>setShopDropdownOpen(true)}
+            onMouseEnter={()=>{
+              if(shopTriggerRef.current){
+                const r=shopTriggerRef.current.getBoundingClientRect();
+                setShopDropdownPos({top:r.bottom+6,left:r.left});
+              }
+              setShopDropdownOpen(true);
+            }}
             onMouseLeave={()=>setShopDropdownOpen(false)}
-            onClick={()=>setShopDropdownOpen(o=>!o)}
+            onClick={()=>{
+              if(shopTriggerRef.current){
+                const r=shopTriggerRef.current.getBoundingClientRect();
+                setShopDropdownPos({top:r.bottom+6,left:r.left});
+              }
+              setShopDropdownOpen(o=>!o);
+            }}
           >
             {T.nav_shop} ▾
-            {shopDropdownOpen && (
-              <div style={{position:"absolute",top:"100%",left:0,marginTop:6,background:"white",border:"1px solid var(--dust)",borderRadius:12,boxShadow:"0 8px 28px rgba(0,0,0,.14)",padding:"8px 0",minWidth:220,zIndex:9999,textAlign:"left"}}>
-                {[
-                  ["shop","🍵 "+T.nav_shop],
-                  ["recipes","🍵 "+T.nav_recipes],
-                  ["men","⚡ "+T.nav_men],
-                  ["supplements","💊 "+T.nav_supplements],
-                  ["ancestral","🌿 "+T.nav_ancestral],
-                  ["herbs","🌿 "+T.nav_herbs],
-                  ["mocktails","🍹 "+T.nav_mocktails],
-                  ["jelly","🌊 "+T.nav_jelly],
-                  ["seamoss","🌿 "+T.nav_seamoss],
-                  ["rings","💍 Rings"],
-                  ["faq",T.nav_faq],
-                  ["tea-library","📚 "+T.nav_library],
-                ].map(([p,l])=>(
-                  <div key={p} onClick={(e)=>{e.stopPropagation();nav(p);setShopDropdownOpen(false);}}
-                    style={{padding:"8px 18px",fontSize:".74rem",color:"var(--bark)",whiteSpace:"nowrap",cursor:"pointer"}}
-                    onMouseEnter={(e)=>e.currentTarget.style.background="var(--linen)"}
-                    onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
-                  >{l}</div>
-                ))}
-                <div style={{borderTop:"1px solid var(--dust)",margin:"6px 0"}}/>
-                <div onClick={(e)=>{e.stopPropagation();setProfileOpen(true);setShopDropdownOpen(false);}}
-                  style={{padding:"8px 18px",fontSize:".74rem",color:"var(--gold)",whiteSpace:"nowrap",cursor:"pointer",fontWeight:500}}
+          </span>
+          {shopDropdownOpen && (
+            <div
+              onMouseEnter={()=>setShopDropdownOpen(true)}
+              onMouseLeave={()=>setShopDropdownOpen(false)}
+              style={{position:"fixed",top:shopDropdownPos.top,left:shopDropdownPos.left,background:"white",border:"1px solid var(--dust)",borderRadius:12,boxShadow:"0 8px 28px rgba(0,0,0,.14)",padding:"8px 0",minWidth:220,zIndex:99999,textAlign:"left"}}>
+              {[
+                ["shop","🍵 "+T.nav_shop],
+                ["recipes","🍵 "+T.nav_recipes],
+                ["men","⚡ "+T.nav_men],
+                ["supplements","💊 "+T.nav_supplements],
+                ["ancestral","🌿 "+T.nav_ancestral],
+                ["herbs","🌿 "+T.nav_herbs],
+                ["mocktails","🍹 "+T.nav_mocktails],
+                ["jelly","🌊 "+T.nav_jelly],
+                ["seamoss","🌿 "+T.nav_seamoss],
+                ["rings","💍 Rings"],
+                ["faq",T.nav_faq],
+                ["tea-library","📚 "+T.nav_library],
+              ].map(([p,l])=>(
+                <div key={p} onClick={(e)=>{e.stopPropagation();nav(p);setShopDropdownOpen(false);}}
+                  style={{padding:"8px 18px",fontSize:".74rem",color:"var(--bark)",whiteSpace:"nowrap",cursor:"pointer"}}
                   onMouseEnter={(e)=>e.currentTarget.style.background="var(--linen)"}
                   onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
-                >📋 Sip &amp; Heal Report</div>
-              </div>
-            )}
-          </span>
+                >{l}</div>
+              ))}
+              <div style={{borderTop:"1px solid var(--dust)",margin:"6px 0"}}/>
+              <div onClick={(e)=>{e.stopPropagation();setProfileOpen(true);setShopDropdownOpen(false);}}
+                style={{padding:"8px 18px",fontSize:".74rem",color:"var(--gold)",whiteSpace:"nowrap",cursor:"pointer",fontWeight:500}}
+                onMouseEnter={(e)=>e.currentTarget.style.background="var(--linen)"}
+                onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
+              >📋 Sip &amp; Heal Report</div>
+            </div>
+          )}
 
           <span className="nav-lnk" style={{cursor:"pointer"}} onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
 
