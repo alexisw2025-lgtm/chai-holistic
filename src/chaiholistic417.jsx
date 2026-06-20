@@ -8828,7 +8828,7 @@ Thank you!`);
           >
             {T.nav_shop} ▾
             {shopDropdownOpen && (
-              <div style={{position:"absolute",top:"100%",left:0,marginTop:6,background:"white",border:"1px solid var(--dust)",borderRadius:12,boxShadow:"0 8px 28px rgba(0,0,0,.14)",padding:"8px 0",minWidth:220,zIndex:600,textAlign:"left"}}>
+              <div style={{position:"absolute",top:"100%",left:0,marginTop:6,background:"white",border:"1px solid var(--dust)",borderRadius:12,boxShadow:"0 8px 28px rgba(0,0,0,.14)",padding:"8px 0",minWidth:220,zIndex:9999,textAlign:"left"}}>
                 {[
                   ["shop","🍵 "+T.nav_shop],
                   ["recipes","🍵 "+T.nav_recipes],
