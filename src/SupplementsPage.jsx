@@ -23,13 +23,11 @@ const SUPPLEMENTS = [
     teaPairing: ["Sleepy Spice", "Stress Less", "Father's Calm Evening", "Deep Recharge Sleep"],
     teaNote: "Magnesium activates the same calm pathways your valerian and passionflower blends target. Together they work from two directions — the herb calms the nervous system signal, magnesium provides the cellular fuel to sustain it.",
     whyThisBrand: "Thorne uses bisglycinate chelate — magnesium bonded to two glycine molecules, not oxide dust. Independent testing in 2025 found that many brands selling 'magnesium glycinate' actually contained magnesium oxide mixed with loose glycine powder. Thorne's manufacturing is NSF Certified for Sport, one of the highest third-party standards in the industry.",
-    whyThisNutrient: "Magnesium is involved in over 300 enzymatic reactions in the body. Most adults are deficient and don't know it — because standard blood tests measure serum magnesium, which stays normal until you're severely depleted. The real deficit is intracellular. Low magnesium directly impairs sleep quality, increases cortisol, causes muscle tension, and worsens anxiety.",
+    whyThisNutrient: "Magnesium is involved in over 300 enzymatic reactions in the body. Standard blood tests measure serum magnesium, which can look normal even when intracellular levels are low — one reason it's an easy nutrient to overlook in a typical diet.",
     whyNotCheap: "Magnesium oxide — the form in most drugstore bottles — has roughly 4% bioavailability. You're paying for something your body can't use. The glycinate form costs more and is worth every cent.",
     form: "Bisglycinate chelate (Albion TRAACS process)",
-    dose: "200–400mg elemental before bed",
     thirdParty: "NSF Certified for Sport",
-    caution: "May cause loose stools at high doses. Start at 200mg.",
-    personalNote: "This is the first thing I recommend to anyone who tells me they can't sleep or feel constantly wired. Most people notice a difference within a week.",
+    personalNote: "This is the one I personally reach for during stressful stretches. I noticed a difference within about a week of consistent use.",
   },
   {
     id: "d3k2",
@@ -44,12 +42,10 @@ const SUPPLEMENTS = [
     teaPairing: ["Bone & Joint Fortress", "Heart of a King", "Blood Pressure Balance", "Post-50 Men's Foundation"],
     teaNote: "Your hawthorn and hibiscus blends support cardiovascular elasticity. D3+K2 works upstream — directing calcium into bone instead of artery walls, which is the structural foundation those herbs need to work with.",
     whyThisBrand: "Pure Encapsulations is a hypoallergenic practitioner-grade brand. Their D3+K2 pairs 5,000 IU of D3 with 180mcg of MK-7 — the long-chain K2 form with the most clinical evidence for cardiovascular and bone benefit. No artificial fillers, no common allergens, non-GMO verified.",
-    whyThisNutrient: "An estimated 42% of Americans are vitamin D deficient. D3 is essential for calcium absorption, immune regulation, testosterone production, and mood. But here's what most people miss: taking D3 alone without K2 can lead to calcium being deposited in soft tissue and arteries instead of bones. K2 (MK-7 form) activates the proteins that direct calcium correctly. They are meant to be taken together.",
+    whyThisNutrient: "D3 plays a role in calcium absorption and immune regulation. Less widely known: taking D3 alone without K2 means calcium has no clear instruction on where to go. K2 (MK-7 form) is one of the proteins involved in directing calcium toward bone. The two nutrients are commonly paired for that reason.",
     whyNotCheap: "Most cheap D3 supplements use D2 (ergocalciferol), which raises blood levels less effectively and for shorter duration than D3 (cholecalciferol). And K1 — found in many combo products — does not perform the same cardiovascular function as K2 MK-7. The form of each nutrient is everything.",
     form: "Cholecalciferol (D3) + Menaquinone-7 (MK-7 form of K2)",
-    dose: "5,000 IU D3 + 180mcg K2 daily with a fat-containing meal",
     thirdParty: "GMP certified, hypoallergenic verified",
-    caution: "K2 may interact with blood thinners (warfarin/Coumadin). Consult your doctor.",
     personalNote: "I take this every single morning with breakfast. Most people in Florida still test deficient — sun exposure alone isn't enough if you're indoors during peak hours.",
   },
   {
@@ -65,12 +61,10 @@ const SUPPLEMENTS = [
     teaPairing: ["Alpha Brain Focus", "Brain Boost", "Heart of a King", "Muscle and Recovery", "Vision & Eye Protection"],
     teaNote: "DHA in fish oil is the primary structural fat in the brain. Your lion's mane and ginkgo blends support neural growth factors and circulation — omega-3 gives them the raw material to work with. Brain health from two directions.",
     whyThisBrand: "Nordic Naturals is the #1 fish oil brand in the US for a reason. They use re-esterified triglyceride (rTG) form — the same molecular structure found in fish flesh — which absorbs 70% better than the ethyl ester form found in most supplements. Every batch is third-party tested with certificates of analysis publicly available. Friend of the Sea certified for sustainability.",
-    whyThisNutrient: "Omega-3s (EPA and DHA) reduce systemic inflammation, support heart rhythm, lower triglycerides, protect the brain, support eye health, and improve mood. Most Western diets are severely omega-6 dominant — which promotes inflammation. Fish oil rebalances that ratio. The American Heart Association recommends 500mg of combined EPA+DHA daily for healthy adults.",
+    whyThisNutrient: "Omega-3s (EPA and DHA) are studied for their role in cardiovascular and brain health. Most Western diets lean heavily toward omega-6 fats relative to omega-3s; fish oil is one of the more common ways people adjust that ratio.",
     whyNotCheap: "Most cheap fish oil is in ethyl ester form — a semi-synthetic structure your body doesn't recognize as efficiently. It also oxidizes faster, which means rancid fish oil that smells bad and may cause more harm than good. If your fish oil burps taste fishy, the oil is oxidized. Nordic Naturals has a lemon taste even after digestion.",
     form: "Re-esterified triglyceride (rTG) — 1,280mg EPA+DHA per serving",
-    dose: "2 soft gels daily with a meal",
     thirdParty: "Third-party tested, USP verified, Friend of the Sea certified",
-    caution: "May thin blood at high doses. Consult doctor if on blood thinners.",
     personalNote: "I've tried a lot of fish oils. This is the only one where I never had that fishy aftertaste. That alone tells you the oil is fresh and properly processed.",
   },
   {
@@ -78,7 +72,7 @@ const SUPPLEMENTS = [
     emoji: "⚡",
     name: "Ashwagandha KSM-66",
     brand: "Transparent Labs",
-    subtitle: "600mg root extract. 5% withanolides. The clinical standard.",
+    subtitle: "Standardized root extract. The clinical standard.",
     color: "#2A1A0A",
     category: "herb",
     price: "~$25–$35",
@@ -86,12 +80,10 @@ const SUPPLEMENTS = [
     teaPairing: ["Stress Armour", "Testosterone Harmony", "Iron Will Morning", "Post-50 Men's Foundation", "Adaptogen Blend"],
     teaNote: "When you drink your Stress Armour blend, the rhodiola and holy basil are working on the HPA axis from the outside. KSM-66 ashwagandha taken as a supplement works on the same cortisol-testosterone axis from the inside. This pairing is one of the most studied adaptogenic stacks in functional medicine.",
     whyThisBrand: "Transparent Labs uses KSM-66 — the gold standard ashwagandha extract, made exclusively from the root (never the leaf), standardized to 5%+ withanolides. Generic ashwagandha powder typically contains 0.5–2% withanolides. The difference in clinical effect is significant. Transparent Labs is third-party tested and publishes full certificates of analysis.",
-    whyThisNutrient: "Ashwagandha is one of the most clinically researched adaptogens on earth. Over 30 human clinical trials show it reduces cortisol levels, improves stress resilience, supports testosterone in men under chronic stress, improves sleep quality, and enhances VO2 max. The keyword is 'KSM-66' — that's the branded extract used in those trials, not generic root powder.",
+    whyThisNutrient: "Ashwagandha is one of the more clinically researched adaptogens, with a meaningful body of human trials behind it. The keyword to look for is 'KSM-66' — that's the standardized branded extract used in most of that research, not generic root powder.",
     whyNotCheap: "Generic ashwagandha root powder is inexpensive and largely ineffective at standard doses because the withanolide concentration is too low. You'd need 4–8x the dose to approximate KSM-66's effect — and at that point you're spending more anyway. The extract pays for itself.",
     form: "KSM-66 root extract, standardized to 5%+ withanolides",
-    dose: "600mg daily — morning or split AM/PM",
     thirdParty: "Informed Sport certified, third-party tested",
-    caution: "May interact with thyroid medications and sedatives. Not for use during pregnancy.",
     personalNote: "This is the supplement I credit most with helping me stay even during high-stress periods. Takes about 3–4 weeks of consistent use to feel the full effect — don't give up after one week.",
   },
   {
@@ -107,12 +99,10 @@ const SUPPLEMENTS = [
     teaPairing: ["Bone & Joint Fortress", "Muscle and Recovery", "Turmeric Tonic", "Liver & Love"],
     teaNote: "Collagen synthesis requires vitamin C as a cofactor — your Turmeric Tonic blend contains natural anti-inflammatory compounds that reduce the chronic inflammation that breaks down collagen. Take your collagen with vitamin C and drink your Turmeric Tonic. That combination is the full joint support protocol.",
     whyThisBrand: "Vital Proteins uses grass-fed, pasture-raised bovine hide — the source matters because grain-fed collagen has a different amino acid profile. Their peptides are hydrolyzed to under 5,000 daltons, small enough to be absorbed through the gut wall and reach target tissues. NSF Certified. Unflavored version dissolves completely in hot or cold liquid.",
-    whyThisNutrient: "Collagen is the most abundant protein in the body — it's the structural matrix of skin, tendons, ligaments, cartilage, and bone. After 25, your body produces roughly 1% less collagen per year. By 40, you've lost 15–20% of your baseline. This isn't cosmetic. It's structural. Weak tendons, achy joints, slow recovery — these are collagen problems before they're anything else.",
+    whyThisNutrient: "Collagen is the most abundant protein in the body — it's the structural matrix of skin, tendons, ligaments, cartilage, and bone. Natural production gradually slows with age, which is the basic premise behind collagen supplementation.",
     whyNotCheap: "Gelatin is not the same as hydrolyzed collagen peptides. Gelatin has large protein chains that don't absorb efficiently. Hydrolyzed peptides are broken down to specific amino acid sequences (notably hydroxyproline) that trigger fibroblast activity. The word 'hydrolyzed' on the label matters.",
     form: "Hydrolyzed Type I & III bovine collagen peptides",
-    dose: "10–20g daily — mix into any warm liquid including your teas",
     thirdParty: "NSF Certified",
-    caution: "Not suitable for vegans. Those with beef allergies should avoid.",
     personalNote: "I add a scoop to my morning tea every day. You can't taste it, it dissolves completely, and my joints feel the difference when I go a week without it.",
   },
   {
@@ -129,12 +119,10 @@ const SUPPLEMENTS = [
     teaPairing: ["Gut Reset", "Gut & Digestion Restore", "Liver & Love", "Slippery Elm blend"],
     teaNote: "Your gut-healing tea blends soothe and repair the gut lining — slippery elm and marshmallow root coat inflamed tissue. Seed DS-01 repopulates the microbiome with clinically studied strains. One prepares the terrain, the other plants the seeds. They are meant to work together.",
     whyThisBrand: "Most probiotics are dead before they reach your gut. Stomach acid, heat, and shelf time destroy fragile bacterial strains — a University of California study found that only 15% of probiotic supplements contained viable organisms at levels claimed on the label. Seed uses a ViaCap nested capsule: an outer prebiotic capsule that protects the inner probiotic capsule through stomach acid. 24 strains, all with published human clinical evidence. Refrigeration not required.",
-    whyThisNutrient: "The gut microbiome is increasingly understood as the foundation of nearly everything — immune function, mood (90% of serotonin is made in the gut), inflammation, metabolic health, and even hormonal balance. Antibiotics, stress, processed food, alcohol, and age all deplete it. Restoring it isn't a wellness trend. It's maintenance.",
+    whyThisNutrient: "The gut microbiome is an active area of research connected to immune function, digestion, and overall wellness. Diet, antibiotics, and stress are commonly cited factors that can affect its balance over time.",
     whyNotCheap: "Cheap probiotics are mostly marketing. A 10-billion CFU count means nothing if the strains are dead, unstudied, or unable to survive stomach acid. Seed's strains are selected based on published human clinical trials, not in vitro lab data. It's a meaningful difference.",
     form: "24-strain synbiotic (probiotic + prebiotic) — 53.6 billion AFU",
-    dose: "2 capsules daily with food",
     thirdParty: "Third-party tested, non-GMO, vegan",
-    caution: "May cause temporary bloating in the first week as the microbiome adjusts.",
     personalNote: "I was skeptical about the price. Then I stopped for a month and noticed the difference immediately. Digestion, energy, even mood. Now it's non-negotiable.",
   },
   {
@@ -150,12 +138,10 @@ const SUPPLEMENTS = [
     teaPairing: ["Heart of a King", "Blood Pressure Balance", "Post-50 Men's Foundation", "Volcanic Vitality"],
     teaNote: "Hawthorn berry in your heart blends supports myocardial efficiency and vascular tone. CoQ10 provides the cellular energy currency (ATP) the heart muscle runs on. The heart beats 100,000 times per day — it has the highest mitochondrial density of any organ in the body. These two belong together.",
     whyThisBrand: "Qunol uses ubiquinol — the pre-converted, active form of CoQ10 — suspended in a water and fat soluble format for dramatically better absorption. Standard CoQ10 (ubiquinone) must be converted by the body before it can be used, and that conversion becomes less efficient with age. Independent testing confirms Qunol meets label claims consistently.",
-    whyThisNutrient: "CoQ10 is produced naturally in every cell and is essential for mitochondrial energy production. After 30, production declines. After 40, the decline accelerates. Statins — one of the most prescribed drugs in America — block the same pathway that produces CoQ10, which is why statin users commonly experience muscle pain and fatigue. Anyone on a statin should be taking ubiquinol. Anyone over 40 should consider it.",
-    whyNotCheap: "Ubiquinone (cheap CoQ10) has poor bioavailability, particularly in older adults. Studies show ubiquinol produces plasma levels 3–4x higher than ubiquinone at the same dose. At the doses needed for cardiovascular benefit (200–400mg ubiquinone), ubiquinol at 100–200mg is more effective and comparable in cost per effective dose.",
+    whyThisNutrient: "CoQ10 is produced naturally in every cell and supports mitochondrial energy production. Natural production tends to decline with age. It's also worth knowing that statin medications affect the same pathway the body uses to produce CoQ10 — something to discuss with a doctor if that applies to you.",
+    whyNotCheap: "Ubiquinone (cheap CoQ10) has poor bioavailability, particularly in older adults. Studies show ubiquinol produces meaningfully higher plasma levels than ubiquinone at an equivalent intake, making it more effective per dollar spent despite the higher sticker price.",
     form: "Ubiquinol (active, reduced form of CoQ10)",
-    dose: "100–200mg daily with a fat-containing meal",
     thirdParty: "Third-party tested",
-    caution: "May enhance effects of blood pressure medications. Monitor if on antihypertensives.",
     personalNote: "I started taking this when I was researching the men's heart blend. Three weeks in I noticed I was recovering from workouts noticeably faster. The research makes sense — more cellular energy is more cellular energy.",
   },
   {
@@ -171,12 +157,10 @@ const SUPPLEMENTS = [
     teaPairing: ["Prostate Shield", "Volcanic Vitality", "Testosterone Harmony", "Zinc & Saw Palmetto Tonic"],
     teaNote: "The prostate concentrates zinc at higher levels than any other organ. Your Prostate Shield and Zinc & Saw Palmetto Tonic blends provide herbal support for that pathway — but herbal zinc sources alone can't replace the mineral itself. They work in concert.",
     whyThisBrand: "Thorne's zinc uses bisglycinate chelation — zinc bonded to two glycine molecules for superior absorption and gentler digestion. Zinc picolinate is another well-absorbed form. Zinc oxide and zinc sulfate (common in cheap supplements) have poor bioavailability and frequently cause nausea. Thorne manufactures under NSF Sport certification.",
-    whyThisNutrient: "Zinc is essential for immune function, testosterone production, prostate health, wound healing, DNA repair, and taste/smell. Deficiency is more common than most people realize — vegetarians, heavy exercisers, men over 50, and anyone who sweats heavily are particularly vulnerable. Low zinc directly suppresses testosterone and impairs immune response.",
-    whyNotCheap: "Zinc oxide — by far the most common form in supplements — absorbs at roughly 10%. Zinc bisglycinate and picolinate absorb at 30–40%. You'd need 3–4x the dose of zinc oxide to match the effective delivery of bisglycinate — and at those doses, zinc oxide causes significant GI distress. The chelated form wins on every metric.",
+    whyThisNutrient: "Zinc plays a role in immune function, wound healing, and a number of other everyday processes. Vegetarians and heavy exercisers are among the groups sometimes mentioned in research as having higher zinc needs.",
+    whyNotCheap: "Zinc oxide — by far the most common form in supplements — absorbs poorly compared to zinc bisglycinate and picolinate. Matching the effective delivery of a chelated form with zinc oxide means a much larger amount, which tends to come with more GI discomfort. The chelated form wins on every metric.",
     form: "Zinc bisglycinate (chelated)",
-    dose: "15–30mg daily with food",
     thirdParty: "NSF Certified for Sport",
-    caution: "Do not exceed 40mg/day long-term. High-dose zinc competes with copper absorption.",
     personalNote: "Zinc was the supplement I was most skeptical about until I read the prostate research. The fact that the prostate actively concentrates zinc tells you everything about how important it is.",
   },
   {
@@ -192,12 +176,10 @@ const SUPPLEMENTS = [
     teaPairing: ["Iron Will Morning", "Pre-Game Performance", "Alpha Brain Focus", "Brain Boost"],
     teaNote: "Your energy and focus blends work on neural pathways, adaptogens, and circulation. B12 is the raw material for myelin — the insulation around every nerve fiber. Without adequate B12, none of those pathways transmit signals efficiently. This is the foundation under the formula.",
     whyThisBrand: "Thorne's B12 uses methylcobalamin — the neurologically active form your body uses immediately. Cyanocobalamin (found in most B12 supplements) must be converted by the body through a two-step process, and people with MTHFR gene variants (roughly 40% of the population) do this conversion poorly. Methylcobalamin bypasses that entirely.",
-    whyThisNutrient: "B12 deficiency is one of the most underdiagnosed conditions in adults. It causes fatigue, brain fog, nerve damage, and depression — all of which are often attributed to other causes. Vegans, vegetarians, people over 50 (stomach acid declines, affecting B12 absorption), metformin users, and anyone on long-term antacids are at high risk. B12 is stored in the liver for years, so deficiency develops slowly and symptoms are subtle until they're not.",
+    whyThisNutrient: "B12 supports nerve function and energy metabolism. Vegans, vegetarians, and older adults are commonly noted as groups with higher B12 needs, since absorption and dietary sources can both play a role.",
     whyNotCheap: "Cyanocobalamin is synthetic and cheap. Methylcobalamin is the form naturally found in food and used by the nervous system. For neurological health specifically, the methylcobalamin form has significantly more supporting evidence.",
     form: "Methylcobalamin (active, neurologically ready form)",
-    dose: "1,000mcg daily — dissolve under tongue for best absorption",
     thirdParty: "NSF Certified for Sport",
-    caution: "Generally extremely safe. No known toxicity at standard doses.",
     personalNote: "I switched from cyanocobalamin to methylcobalamin two years ago. The difference in mental clarity was noticeable within two weeks. I didn't expect that.",
   },
   {
@@ -213,13 +195,11 @@ const SUPPLEMENTS = [
     teaPairing: ["Liver & Love", "Deep Liver Cleanse", "Blood Purifier", "Immune blends", "Muscle and Recovery"],
     teaNote: "Vitamin C is essential for collagen synthesis and is a cofactor in your liver's Phase I detoxification pathway. Your liver cleanse teas are mobilizing toxins for excretion — vitamin C helps neutralize free radicals generated in that process and supports the collagen repair that follows. Take your liver blend with liposomal C for the full protocol.",
     whyThisBrand: "LivOn Labs pioneered liposomal vitamin C delivery. The phospholipid bubble surrounding each C molecule bypasses gut absorption limits — standard vitamin C above 200mg is mostly excreted because the intestinal transport mechanism saturates. Liposomal C achieves plasma levels comparable to intravenous vitamin C at a fraction of the cost. Used by integrative physicians for immune support and post-illness recovery.",
-    whyThisNutrient: "Vitamin C is a master antioxidant, immune modulator, collagen cofactor, and adrenal support nutrient. Humans are one of the only mammals that can't synthesize their own C — we depend entirely on dietary intake. Chronic stress, smoking, illness, and intense exercise dramatically increase demand. Most people are getting enough to prevent scurvy — not enough to optimize.",
+    whyThisNutrient: "Vitamin C is an antioxidant and a cofactor in collagen production. Humans don't synthesize their own vitamin C, so it comes entirely from diet or supplementation.",
     whyNotCheap: "Standard ascorbic acid tablets above 500mg produce mostly expensive urine. The dose your tissues actually receive is limited by gut transport capacity. Liposomal delivery circumvents this completely. The price per effective dose is actually competitive when you account for what's actually absorbed.",
     form: "Liposomal ascorbic acid (phospholipid encapsulated)",
-    dose: "1 packet (1,000mg) daily — can increase to 2–3 during illness",
     thirdParty: "Third-party tested",
-    caution: "High doses may cause loose stools. Start with 1 packet.",
-    personalNote: "This is what I reach for the moment I feel anything coming on. I've been taking it for three years and can count on one hand how many times I've been sick.",
+    personalNote: "This is what I reach for at the first sign of feeling run down. I've taken it consistently for three years and it's part of my regular routine.",
   },
 ];
 
@@ -263,7 +243,7 @@ function AmazonSpinBtn({ onClick }) {
           fill:"rgba(196,137,58,.85)",
         }}>
           <textPath href="#suppSpinPath" startOffset="0%">
-            AMAZON · SHOP NOW · AMAZON · SHOP NOW ·
+            AMAZON · VIEW ON AMAZON · AMAZON · VIEW ON AMAZON ·
           </textPath>
         </text>
       </svg>
@@ -473,8 +453,8 @@ export default function SupplementsPage({ onNav }) {
           <p style={{fontSize:".88rem",color:"rgba(247,242,234,.7)",lineHeight:1.85,margin:"12px 0 0",fontWeight:300}}>
             Every supplement on this page is something I actually take or have researched deeply. I chose each one for a specific reason — the form, the testing standard, the ingredient source. There are cheaper versions of all of these. I don't recommend them. Your body deserves what actually works.
           </p>
-          <div style={{marginTop:14,fontSize:".72rem",color:"rgba(74,114,80,.8)",fontStyle:"italic"}}>
-            — These are affiliate links. If you purchase through them, we earn a small commission at no cost to you. We only recommend what we believe in.
+          <div style={{marginTop:16,padding:"12px 14px",background:"rgba(196,137,58,.08)",border:"1px solid rgba(196,137,58,.25)",borderRadius:12,fontSize:".74rem",color:"rgba(247,242,234,.75)",lineHeight:1.6}}>
+            <strong style={{color:"rgba(196,137,58,.9)"}}>Affiliate Disclosure:</strong> Chai Holistic is a participant in the Amazon Services LLC Associates Program. We may earn a commission if you purchase through this link, at no extra cost to you.
           </div>
         </div>
 
@@ -786,7 +766,6 @@ function DetailModal({ supp, onClose, onBuy }) {
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:16}}>
             {[
               ["Form",supp.form],
-              ["Dose",supp.dose],
               ["Third-Party",supp.thirdParty],
               ["Price",supp.price],
             ].map(([l,v])=>(
@@ -799,19 +778,6 @@ function DetailModal({ supp, onClose, onBuy }) {
                 <div style={{fontSize:".76rem",color:"rgba(247,242,234,.8)",lineHeight:1.4}}>{v}</div>
               </div>
             ))}
-          </div>
-
-          {/* Safety */}
-          <div style={{
-            background:"rgba(255,180,0,.06)",border:"1px solid rgba(255,180,0,.18)",
-            borderRadius:10,padding:"12px 14px",marginBottom:16,
-          }}>
-            <div style={{fontSize:".56rem",letterSpacing:".16em",textTransform:"uppercase",color:"rgba(255,180,0,.7)",marginBottom:5,fontWeight:600}}>
-              ⚠ Safety Note
-            </div>
-            <p style={{fontSize:".75rem",color:"rgba(255,240,180,.7)",lineHeight:1.65,margin:0,fontWeight:300}}>
-              {supp.caution}
-            </p>
           </div>
 
           {/* Alex's personal note */}

@@ -474,6 +474,7 @@ const LANGS = {
     ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
     ministry_get_prayer:"Get prayer now →",
     nav_get_prayer:"Get Prayer",
+    nav_trusted_tools:"🧰 Trusted Tools",
     ft_shop_h:"Shop",
     ft_explore_h:"Explore",
     ft_features_h:"Features",
@@ -509,6 +510,7 @@ const LANGS = {
     ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
     ministry_get_prayer:"Get prayer now →",
     nav_get_prayer:"Get Prayer",
+    nav_trusted_tools:"🧰 Trusted Tools",
     ft_shop_h:"Shop",
     ft_explore_h:"Explore",
     ft_features_h:"Features",
@@ -705,6 +707,7 @@ const LANGS = {
     ministry_banner_text:"2AM Companion: Apoyo de oración gratuito guiado por la Rev. Alexis Williams, Ministra Ordenada.",
     ministry_get_prayer:"Recibe oración ahora →",
     nav_get_prayer:"Recibir Oración",
+    nav_trusted_tools:"🧰 Herramientas de Confianza",
     ft_shop_h:"Tienda",
     ft_explore_h:"Explorar",
     ft_features_h:"Funciones",
@@ -895,6 +898,7 @@ const LANGS = {
     ministry_banner_text:"2AM Companion : Soutien de prière gratuit dirigé par la Rév. Alexis Williams, Ministre Ordonnée.",
     ministry_get_prayer:"Recevez une prière maintenant →",
     nav_get_prayer:"Recevoir une Prière",
+    nav_trusted_tools:"🧰 Outils de Confiance",
     ft_shop_h:"Boutique",
     ft_explore_h:"Explorer",
     ft_features_h:"Fonctionnalités",
@@ -1085,6 +1089,7 @@ const LANGS = {
     ministry_banner_text:"2AM Companion: Apoio de oração gratuito conduzido pela Rev. Alexis Williams, Ministra Ordenada.",
     ministry_get_prayer:"Receba oração agora →",
     nav_get_prayer:"Receber Oração",
+    nav_trusted_tools:"🧰 Ferramentas de Confiança",
     ft_shop_h:"Loja",
     ft_explore_h:"Explorar",
     ft_features_h:"Recursos",
@@ -1275,6 +1280,7 @@ const LANGS = {
     ministry_banner_text:"2AM Companion: Sipò lapriyè gratis ki dirije pa Rev. Alexis Williams, Minis Òdonye.",
     ministry_get_prayer:"Resevwa lapriyè kounye a →",
     nav_get_prayer:"Resevwa Lapriyè",
+    nav_trusted_tools:"🧰 Zouti Konfyans",
     ft_shop_h:"Magazen",
     ft_explore_h:"Eksplore",
     ft_features_h:"Karakteristik",
@@ -8923,7 +8929,6 @@ Thank you!`);
                 ["shop","🍵 "+T.nav_shop],
                 ["recipes","🍵 "+T.nav_recipes],
                 ["men","⚡ "+T.nav_men],
-                ["supplements","💊 "+T.nav_supplements],
               ].map(([p,l])=>(
                 <div key={p} onClick={(e)=>{e.stopPropagation();nav(p);setShopDropdownOpen(false);}}
                   style={{padding:"10px 22px",fontSize:".8rem",color:"var(--bark)",whiteSpace:"nowrap",cursor:"pointer"}}
@@ -8937,6 +8942,8 @@ Thank you!`);
           )}
 
           <span className="nav-lnk" style={{cursor:"pointer"}} onClick={()=>setFinderOpen(true)}>{T.btn_find||"✦ Find My Tea"}</span>
+
+          <span className={`nav-lnk ${page==="supplements"?"on":""}`} style={{cursor:"pointer"}} onClick={()=>nav("supplements")}>{T.nav_trusted_tools||"🧰 Trusted Tools"}</span>
 
           <span className="nav-lnk"
             onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}
@@ -9050,9 +9057,13 @@ Thank you!`);
           <span>🙏 {T.nav_get_prayer||"Get Prayer"}</span>
           <span style={{color:"var(--dust)"}}>›</span>
         </div>
+        <div key="trusted-tools" className="mob-lnk" onClick={()=>{nav("supplements");setMobMenuOpen(false);}}>
+          <span>{T.nav_trusted_tools||"🧰 Trusted Tools"}</span>
+          <span style={{color:"var(--dust)"}}>›</span>
+        </div>
 
         <div style={{fontSize:".62rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--gold)",fontWeight:600,padding:"18px 0 8px",borderTop:"1px solid var(--dust)",marginTop:6}}>{T.nav_shop||"Shop"}</div>
-        {[["tea-library","📚 "+(T.nav_library||"Tea Library")],["shop","🍵 "+(T.nav_shop||"Shop All Teas")],["recipes","🍵 "+(T.nav_recipes||"Brew Rituals")],["men","⚡ "+(T.nav_men||"Men's Wellness")],["supplements","💊 "+(T.nav_supplements||"Supplements")]].map(([p,l])=>(
+        {[["tea-library","📚 "+(T.nav_library||"Tea Library")],["shop","🍵 "+(T.nav_shop||"Shop All Teas")],["recipes","🍵 "+(T.nav_recipes||"Brew Rituals")],["men","⚡ "+(T.nav_men||"Men's Wellness")]].map(([p,l])=>(
           <div key={p} className="mob-lnk" onClick={()=>{nav(p);setMobMenuOpen(false);}}>
             <span>{l}{p==="men"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--gold)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="supplements"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--sage-d)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}</span>
             <span style={{color:"var(--dust)"}}>›</span>
