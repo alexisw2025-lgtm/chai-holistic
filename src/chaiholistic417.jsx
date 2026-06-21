@@ -7264,8 +7264,10 @@ body{background:#EDE7DA;font-family:'Jost',sans-serif;padding:40px 20px 60px;col
     );
   };
 
-  // Show welcome after 1.8 seconds on first visit
+  // Show welcome after 1.8 seconds, but only on a person's first-ever visit —
+  // once dismissed, chai_welcome_seen is set and this never fires again.
   useEffect(() => {
+    if (welcomeSeen) return;
     const t = setTimeout(() => setShowWelcome(true), 1800);
     return () => clearTimeout(t);
   }, []);
@@ -9785,7 +9787,7 @@ Thank you!`);
       {/* ── AMARA FLOATING BUTTON ────────────────────────────────────────── */}
       <div style={{
         position:"fixed",
-        bottom: cart.length>0 && !cartOpen && !preBasket ? 68 : 18,
+        bottom: cart.length>0 && !cartOpen && !preBasket ? 92 : 34,
         right:14, zIndex:1200,
         width:86, height:86,
         display:"flex", alignItems:"center", justifyContent:"center",
