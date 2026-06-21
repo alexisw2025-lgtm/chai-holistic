@@ -474,6 +474,15 @@ const LANGS = {
     ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
     ministry_get_prayer:"Get prayer now →",
     nav_get_prayer:"Get Prayer",
+    ft_shop_h:"Shop",
+    ft_explore_h:"Explore",
+    ft_features_h:"Features",
+    ft_book:"Sip & Heal Book",
+    ft_sip_heal_report:"Sip & Heal Report",
+    ft_sip_seek:"Sip & Seek",
+    ft_cleanse_tracker:"Cleanse Tracker",
+    ft_brewing_guide:"Brewing Guide",
+    ft_2am_mode:"2AM Mode",
     ministry_banner_text:"2AM Companion: Free prayer support by Rev. Alexis, Ordained Minister.",
     ministry_section_title:"Every Cup Funds 2AM Hope",
     ministry_section_body:"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM.",
@@ -500,6 +509,15 @@ const LANGS = {
     ministry_banner_text:"2AM Companion: Free prayer support led by Rev. Alexis Williams, Ordained Minister.",
     ministry_get_prayer:"Get prayer now →",
     nav_get_prayer:"Get Prayer",
+    ft_shop_h:"Shop",
+    ft_explore_h:"Explore",
+    ft_features_h:"Features",
+    ft_book:"Sip & Heal Book",
+    ft_sip_heal_report:"Sip & Heal Report",
+    ft_sip_seek:"Sip & Seek",
+    ft_cleanse_tracker:"Cleanse Tracker",
+    ft_brewing_guide:"Brewing Guide",
+    ft_2am_mode:"2AM Mode",
     ministry_banner_text:"2AM Companion: Free prayer support by Rev. Alexis, Ordained Minister.",
     ministry_section_title:"Every Cup Funds 2AM Hope",
     ministry_section_body:"A portion of every purchase supports 2AM Companion Ministry. We use it to provide free spoken prayer, Smart Bible cards for NICU and hospital parents, and crisis support for families in their hardest nights. Your purchase becomes someone's lifeline at 2AM.",
@@ -687,6 +705,15 @@ const LANGS = {
     ministry_banner_text:"2AM Companion: Apoyo de oración gratuito guiado por la Rev. Alexis Williams, Ministra Ordenada.",
     ministry_get_prayer:"Recibe oración ahora →",
     nav_get_prayer:"Recibir Oración",
+    ft_shop_h:"Tienda",
+    ft_explore_h:"Explorar",
+    ft_features_h:"Funciones",
+    ft_book:"Libro Sip & Heal",
+    ft_sip_heal_report:"Informe Sip & Heal",
+    ft_sip_seek:"Sip & Seek",
+    ft_cleanse_tracker:"Rastreador de Limpieza",
+    ft_brewing_guide:"Guía de Preparación",
+    ft_2am_mode:"Modo 2AM",
     ministry_banner_text:"2AM Companion: Apoyo de oración gratuito por la Rev. Alexis, Ministra Ordenada.",
     ministry_section_title:"Cada Taza Financia la Esperanza 2AM",
     ministry_section_body:"Una parte de cada compra apoya al Ministerio 2AM Companion. La usamos para ofrecer oración hablada gratuita, tarjetas bíblicas inteligentes para padres en UCIN y hospitales, y apoyo en crisis para familias en sus noches más difíciles. Tu compra se convierte en el salvavidas de alguien a las 2AM.",
@@ -868,6 +895,15 @@ const LANGS = {
     ministry_banner_text:"2AM Companion : Soutien de prière gratuit dirigé par la Rév. Alexis Williams, Ministre Ordonnée.",
     ministry_get_prayer:"Recevez une prière maintenant →",
     nav_get_prayer:"Recevoir une Prière",
+    ft_shop_h:"Boutique",
+    ft_explore_h:"Explorer",
+    ft_features_h:"Fonctionnalités",
+    ft_book:"Livre Sip & Heal",
+    ft_sip_heal_report:"Rapport Sip & Heal",
+    ft_sip_seek:"Sip & Seek",
+    ft_cleanse_tracker:"Suivi de Nettoyage",
+    ft_brewing_guide:"Guide de Préparation",
+    ft_2am_mode:"Mode 2AM",
     ministry_banner_text:"2AM Companion : Soutien de prière gratuit par la Rév. Alexis, Ministre Ordonnée.",
     ministry_section_title:"Chaque Tasse Finance l'Espoir 2AM",
     ministry_section_body:"Une partie de chaque achat soutient le Ministère 2AM Companion. Nous l'utilisons pour offrir une prière parlée gratuite, des cartes bibliques intelligentes pour les parents en néonatalogie et à l'hôpital, et un soutien de crise pour les familles dans leurs nuits les plus difficiles. Votre achat devient la bouée de sauvetage de quelqu'un à 2h du matin.",
@@ -1049,6 +1085,15 @@ const LANGS = {
     ministry_banner_text:"2AM Companion: Apoio de oração gratuito conduzido pela Rev. Alexis Williams, Ministra Ordenada.",
     ministry_get_prayer:"Receba oração agora →",
     nav_get_prayer:"Receber Oração",
+    ft_shop_h:"Loja",
+    ft_explore_h:"Explorar",
+    ft_features_h:"Recursos",
+    ft_book:"Livro Sip & Heal",
+    ft_sip_heal_report:"Relatório Sip & Heal",
+    ft_sip_seek:"Sip & Seek",
+    ft_cleanse_tracker:"Rastreador de Limpeza",
+    ft_brewing_guide:"Guia de Preparo",
+    ft_2am_mode:"Modo 2AM",
     ministry_banner_text:"2AM Companion: Apoio de oração gratuito pela Rev. Alexis, Ministra Ordenada.",
     ministry_section_title:"Cada Xícara Financia a Esperança 2AM",
     ministry_section_body:"Uma parte de cada compra apoia o Ministério 2AM Companion. Usamos para oferecer oração falada gratuita, cartões bíblicos inteligentes para pais na UTI neonatal e no hospital, e apoio em crise para famílias em suas noites mais difíceis. Sua compra se torna a tábua de salvação de alguém às 2 da manhã.",
@@ -1230,6 +1275,15 @@ const LANGS = {
     ministry_banner_text:"2AM Companion: Sipò lapriyè gratis ki dirije pa Rev. Alexis Williams, Minis Òdonye.",
     ministry_get_prayer:"Resevwa lapriyè kounye a →",
     nav_get_prayer:"Resevwa Lapriyè",
+    ft_shop_h:"Magazen",
+    ft_explore_h:"Eksplore",
+    ft_features_h:"Karakteristik",
+    ft_book:"Liv Sip & Heal",
+    ft_sip_heal_report:"Rapò Sip & Heal",
+    ft_sip_seek:"Sip & Seek",
+    ft_cleanse_tracker:"Swiv Netwayaj",
+    ft_brewing_guide:"Gid Prepare",
+    ft_2am_mode:"Mòd 2AM",
     ministry_banner_text:"2AM Companion: Sipò lapriyè gratis pa Rev. Alexis, Minis Òdonye.",
     ministry_section_title:"Chak Tas Finanse Espwa 2AM",
     ministry_section_body:"Yon pòsyon nan chak acha soutni Ministè 2AM Companion. Nou itilize li pou bay lapriyè pale gratis, kat Bib entelijan pou paran nan NICU ak lopital, ak sipò kriz pou fanmi nan nwit yo ki pi difisil. Acha ou tounen yon bwe sovtaj pou yon moun a 2 nan maten.",
@@ -8868,13 +8922,6 @@ Thank you!`);
                 ["recipes","🍵 "+T.nav_recipes],
                 ["men","⚡ "+T.nav_men],
                 ["supplements","💊 "+T.nav_supplements],
-                ["ancestral","🌿 "+T.nav_ancestral],
-                ["herbs","🌿 "+T.nav_herbs],
-                ["mocktails","🍹 "+T.nav_mocktails],
-                ["jelly","🌊 "+T.nav_jelly],
-                ["seamoss","🌿 "+T.nav_seamoss],
-                ["rings","💍 "+(T.nav_rings||"Rings")],
-                ["faq",T.nav_faq],
               ].map(([p,l])=>(
                 <div key={p} onClick={(e)=>{e.stopPropagation();nav(p);setShopDropdownOpen(false);}}
                   style={{padding:"10px 22px",fontSize:".8rem",color:"var(--bark)",whiteSpace:"nowrap",cursor:"pointer"}}
@@ -8882,12 +8929,6 @@ Thank you!`);
                   onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
                 >{l}</div>
               ))}
-              <div style={{borderTop:"1px solid var(--dust)",margin:"6px 0"}}/>
-              <div onClick={(e)=>{e.stopPropagation();setProfileOpen(true);setShopDropdownOpen(false);}}
-                style={{padding:"10px 22px",fontSize:".8rem",color:"var(--gold)",whiteSpace:"nowrap",cursor:"pointer",fontWeight:500}}
-                onMouseEnter={(e)=>e.currentTarget.style.background="var(--linen)"}
-                onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}
-              >📋 Sip &amp; Heal Report</div>
               </div>
             </div>,
             document.body
@@ -9157,24 +9198,29 @@ Thank you!`);
               <div className="ft-sub">Rooted in healing. Crafted with intention. Every cup, a conversation with what your body already knows. © 2026 Chai Holistic LLC</div>
             </div>
             <div>
-              <div className="ft-col-h">Shop</div>
-              <span className="ft-lnk" style={{color:"var(--gold)",fontWeight:500}} onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}>📖 Sip &amp; Heal Book -- $24.99</span>
-              {[["Tea Blends","shop"],["Cleansing Blends","shop"],["Individual Herbs","shop"],["Bundle & Save","shop"],["⚡ Men's Wellness","men"],["💊 Supplements","supplements"],["🌿 Ancestral Teas","ancestral"],["📖 Herb Archive","herbs"],["Vibe Shift Rings","rings"]].map(([l,p])=><span key={l} className="ft-lnk" onClick={()=>nav(p)}>{l}</span>)}
+              <div className="ft-col-h">{T.ft_shop_h||"Shop"}</div>
+              <span className="ft-lnk" style={{color:"var(--gold)",fontWeight:500}} onClick={()=>addToCart({id:"book1",name:"Sip & Heal: The Chai Holistic Collection",price:24.99,emoji:"📖"})}>📖 {T.ft_book||"Sip & Heal Book"} -- $24.99</span>
+              {[["Tea Blends","shop"],["Cleansing Blends","shop"],["Individual Herbs","shop"],["Bundle & Save","shop"],["⚡ "+(T.nav_men||"Men's Wellness"),"men"],["💊 "+(T.nav_supplements||"Supplements"),"supplements"]].map(([l,p])=><span key={l} className="ft-lnk" onClick={()=>nav(p)}>{l}</span>)}
             </div>
             <div>
-              <div className="ft-col-h">Features</div>
-              <span className="ft-lnk" onClick={()=>setProfileOpen(true)}>🌿 Sip &amp; Heal Report</span>
-              <span className="ft-lnk" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}>🌿 Sip &amp; Seek</span>
-              <span className="ft-lnk" onClick={()=>nav("mocktails")}>🍹 Mocktail Recipes</span>
-              <span className="ft-lnk" onClick={()=>nav("jelly")}>🌊 Jelly Kits</span>
-              <span className="ft-lnk" onClick={()=>nav("seamoss")}>🌿 Sea Moss Gel</span>
-              <span className="ft-lnk" style={{opacity:.55,cursor:"default"}}>💊 Supplements <em style={{fontSize:".6rem",color:"var(--gold)"}}>· Coming Soon</em></span>
-              <span className="ft-lnk" onClick={()=>setFinderOpen(true)}>✦ Find My Tea</span>
-              <span className="ft-lnk" onClick={()=>setRitualOpen(true)}>☀ Build My Ritual</span>
-              <span className="ft-lnk" onClick={()=>setTrackerOpen(true)}>🌿 Cleanse Tracker</span>
-              <span className="ft-lnk" onClick={()=>nav("faq")}>FAQ &amp; Safety Guide</span>
-              <span className="ft-lnk" onClick={()=>nav("faq")}>🌡 Brewing Guide</span>
-              <span className="ft-lnk" onClick={open2AM}>🌙 2AM Mode</span>
+              <div className="ft-col-h">{T.ft_explore_h||"Explore"}</div>
+              <span className="ft-lnk" onClick={()=>nav("ancestral")}>🌿 {T.nav_ancestral||"Ancestral Teas"}</span>
+              <span className="ft-lnk" onClick={()=>nav("herbs")}>📖 {T.nav_herbs||"Herb Archive"}</span>
+              <span className="ft-lnk" onClick={()=>nav("mocktails")}>🍹 {T.nav_mocktails||"Mocktails"}</span>
+              <span className="ft-lnk" onClick={()=>nav("jelly")}>🌊 {T.nav_jelly||"Jelly"}</span>
+              <span className="ft-lnk" onClick={()=>nav("seamoss")}>🌿 {T.nav_seamoss||"Sea Moss"}</span>
+              <span className="ft-lnk" onClick={()=>nav("rings")}>💍 {T.nav_rings||"Rings"}</span>
+              <span className="ft-lnk" onClick={()=>nav("faq")}>❓ {T.nav_faq||"FAQ"}</span>
+              <span className="ft-lnk" onClick={()=>setProfileOpen(true)}>📋 {T.ft_sip_heal_report||"Sip & Heal Report"}</span>
+            </div>
+            <div>
+              <div className="ft-col-h">{T.ft_features_h||"Features"}</div>
+              <span className="ft-lnk" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);}}>🌿 {T.ft_sip_seek||"Sip & Seek"}</span>
+              <span className="ft-lnk" onClick={()=>setFinderOpen(true)}>✦ {T.btn_find||"Find My Tea"}</span>
+              <span className="ft-lnk" onClick={()=>setRitualOpen(true)}>☀ {T.btn_ritual||"Build My Ritual"}</span>
+              <span className="ft-lnk" onClick={()=>setTrackerOpen(true)}>🌿 {T.ft_cleanse_tracker||"Cleanse Tracker"}</span>
+              <span className="ft-lnk" onClick={()=>nav("faq")}>{T.ft_brewing_guide||"Brewing Guide"}</span>
+              <span className="ft-lnk" onClick={open2AM}>🌙 {T.ft_2am_mode||"2AM Mode"}</span>
             </div>
             <div>
               <div className="ft-col-h">Our Universe</div>
