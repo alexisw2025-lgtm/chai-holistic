@@ -445,6 +445,29 @@ function BlendModal({ blend, idx, total, onClose, onNav, onNotify, onAddToCart }
           <p style={{ ...fontBody, fontSize: 16, fontStyle: "italic", color: "#444", lineHeight: 1.75, marginBottom: 22 }}>{blend.benefits}</p>
 
           {!blend.ritualMoment && (
+            <div style={{ background: "linear-gradient(135deg,#1a1a1a,#2a2418)", borderRadius: 14, padding: 18, marginBottom: 22 }}>
+              <div style={{ ...fontEyebrow, fontSize: 9.5, fontWeight: 600, letterSpacing: ".22em", color: "#FFD700", textTransform: "uppercase", marginBottom: 10 }}>
+                🙏 Paired Prayer
+              </div>
+              <p style={{ ...fontBody, fontSize: 18, fontStyle: "italic", color: "#fff", lineHeight: 1.7, marginBottom: 12 }}>
+                "Lord, meet me in this moment. Let this cup be a reminder that You hold the night watch. Amen."
+              </p>
+              <button
+                onClick={() => {
+                  if (typeof window !== "undefined" && window.speechSynthesis) {
+                    const u = new SpeechSynthesisUtterance("Lord, meet me in this moment. Let this cup be a reminder that You hold the night watch. Amen.");
+                    window.speechSynthesis.cancel();
+                    window.speechSynthesis.speak(u);
+                  }
+                }}
+                style={{ ...fontUtility, fontSize: 14, fontWeight: 600, color: "#1a1a1a", background: "#FFD700", border: "none", borderRadius: 8, padding: "10px 18px", cursor: "pointer" }}
+              >
+                ▶️ Play Audio
+              </button>
+            </div>
+          )}
+
+          {!blend.ritualMoment && (
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 22 }}>
               <div style={{ background: C.mist, borderLeft: `3px solid ${C.mint}`, borderRadius: 10, padding: 14 }}>
                 <div style={{ ...fontEyebrow, fontSize: 8.5, letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 5, color: C.sage }}>☕ Brewing</div>
