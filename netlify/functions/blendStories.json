@@ -1,0 +1,74 @@
+{
+  "blends": {
+    "sleepy-spice": {
+      "name": "Sleepy Spice",
+      "emoji": "🌙",
+      "color": "#2A3A5A",
+      "origin": "Caribbean bush medicine — passed down through Jamaican households as the tea you give someone who 'can't settle.' Valerian root joined later, bridging into Western herbalism, but the instinct to calm with a warm cup before bed is older than any of us.",
+      "whyICreatedThis": "I built this blend during a season when sleep felt impossible — mind running long after the body wanted rest. I wanted something that didn't just sedate, but actually quieted the signal underneath the restlessness.",
+      "ritualNote": "Steep this in the last hour before bed, somewhere quiet, phone face-down. The ritual of making it — not just drinking it — is half the medicine.",
+      "pairedPrayer": {
+        "available": true,
+        "title": "A Prayer for Rest",
+        "audioId": "sleepy-spice-prayer"
+      },
+      "scriptureOrReflection": "Psalm 4:8 — 'In peace I will lie down and sleep, for you alone, Lord, make me dwell in safety.'"
+    },
+    "stress-armour": {
+      "name": "Stress Armour",
+      "emoji": "⚡",
+      "color": "#2A1A0A",
+      "origin": "Rhodiola comes from cold-climate folk medicine — Siberian and Scandinavian traditions where survival itself depended on resilience to stress. Holy basil (tulsi) comes from Ayurvedic tradition, where it's treated as sacred, not just medicinal. Two very different worlds, same instinct: protect the nervous system before it breaks.",
+      "whyICreatedThis": "I kept noticing the same pattern in myself and in people close to me — not crisis-level stress, just the slow grind that wears you down without ever feeling like an emergency. I wanted a blend for that exact in-between place.",
+      "ritualNote": "Best in the morning, before the day's first demand hits. Treat the few minutes of steeping as the only moment in your day with no task attached to it.",
+      "pairedPrayer": {
+        "available": true,
+        "title": "A Prayer for Steadiness",
+        "audioId": "stress-armour-prayer"
+      },
+      "scriptureOrReflection": "Philippians 4:6-7 — on the peace that 'transcends all understanding.'"
+    },
+    "cinnamon-cloves": {
+      "name": "Cinnamon & Cloves",
+      "emoji": "🔥",
+      "color": "#3A1A0A",
+      "origin": "Cinnamon and cloves both have deep roots in Caribbean home remedies — the kind of tea that lived in grandmothers' kitchens long before anyone called it 'wellness.' It was simply what you reached for the moment a cold tried to start.",
+      "whyICreatedThis": "My grandma used to make this for me as a kid the second I felt a cold or flu coming on. It worked so well, so consistently, that I never stopped drinking it — what started as her remedy became my daily ritual, and now it's one I get to pass on.",
+      "ritualNote": "Drink at the first hint of feeling off — that early, foggy moment before you're sure you're getting sick. That's the window grandma always caught it in.",
+      "pairedPrayer": {
+        "available": false,
+        "title": "A Prayer for Protection",
+        "audioId": "cinnamon-cloves-prayer"
+      },
+      "scriptureOrReflection": "A reflection on inherited wisdom — the remedies our elders hand down often carry more truth than we realize until we're grown."
+    },
+    "heart-circulation-tonic": {
+      "name": "Heart & Circulation Tonic",
+      "emoji": "❤️",
+      "color": "#3A0A0A",
+      "origin": "Hibiscus has been a staple in Caribbean households for generations — often served cold, deep red, impossible to stop drinking once you start. Long before anyone discussed antioxidants or blood pressure, it was just the drink that showed up at every family gathering.",
+      "whyICreatedThis": "This came from a drink my family made regularly with hibiscus leaves — I genuinely couldn't get enough of it as a kid. I drank it cold, just because I loved it. It wasn't until I got older that I learned how much it was actually doing for me — all those vitamins and minerals hiding inside something I just thought tasted good.",
+      "ritualNote": "Best served cold, the way it was always meant to be — over ice, slow afternoon, no rush.",
+      "pairedPrayer": {
+        "available": false,
+        "title": "A Prayer for the Heart",
+        "audioId": "heart-circulation-tonic-prayer"
+      },
+      "scriptureOrReflection": "Proverbs 4:23 — 'Above all else, guard your heart, for everything you do flows from it.'"
+    },
+    "anti-inflammation-joint-relief": {
+      "name": "Anti-Inflammation & Joint Relief",
+      "emoji": "🌿",
+      "color": "#1A3A1A",
+      "origin": "Turmeric has been central to Caribbean and Indian kitchens alike — curry wasn't just a flavor in my family, it was nearly every meal. The same root that colored our plates turned out to be doing quiet work in our bodies the whole time.",
+      "whyICreatedThis": "Curry was a constant in our house growing up — it's just how we ate. It wasn't until later that I learned how genuinely healthy turmeric is, and once I knew, I couldn't unknow it. I started finding ways to bring it into teas and drinks, not just dinner.",
+      "ritualNote": "A good one to build into the rhythm of your week, not just reach for during a flare-up — the benefits compound with consistency, the same way curry did at our table.",
+      "pairedPrayer": {
+        "available": false,
+        "title": "A Prayer for the Body's Healing",
+        "audioId": "anti-inflammation-joint-relief-prayer"
+      },
+      "scriptureOrReflection": "A reflection on stewardship — caring for the body we've been given, the way our ancestors did without ever naming it that."
+    }
+  }
+}
