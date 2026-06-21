@@ -609,8 +609,8 @@ function RolodexFilterBar({ search, setSearch, filter, setFilter, view, setView 
     low: "🟢 Low Risk", moderate: "🟡 Moderate", high: "🔴 High Caution",
   };
   return (
-    <div style={{ maxWidth: 1440, margin: "0 auto", padding: "16px 36px" }}>
-      <div style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "18px 22px", display: "flex", flexDirection: "column", gap: 14, backdropFilter: "blur(20px)" }}>
+    <div style={{ maxWidth: 1440, margin: "0 auto", padding: "16px 36px", background: C.forest }}>
+      <div style={{ background: "#1c2e22", border: "1px solid rgba(255,255,255,.1)", borderRadius: 22, padding: "18px 22px", display: "flex", flexDirection: "column", gap: 14 }}>
         <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
           <div style={{ position: "relative", flex: 1, minWidth: 220, maxWidth: 400 }}>
             <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,.28)", fontSize: 14 }}>⌕</span>
@@ -1286,7 +1286,7 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
         }}
       />
 
-      <div style={{ position: "sticky", top: headerOffset, zIndex: 400 }}>
+      <div style={{ position: "sticky", top: headerOffset, zIndex: 400, background: C.forest }}>
       <header
         style={{
           display: "flex", alignItems: "center", flexWrap: "wrap",
