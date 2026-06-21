@@ -9032,21 +9032,43 @@ Thank you!`);
 
       {/* ── Mobile slide-down menu ── */}
       <div className={`mob-menu${mobMenuOpen?" open":""}`}>
-        {[["home","🏠 Home"],["shop","🛍 Shop"],["recipes","🍵 Brew Rituals"],["men","⚡ Men's Wellness"],["supplements","💊 Supplements"],["ancestral","🌿 Ancestral Teas"],["herbs","📖 Herb Archive"],["mocktails","🍹 Mocktails"],["jelly","🌊 Jelly Kits"],["seamoss","🌿 Sea Moss Gel"],["rings","💫 Vibe Shift Rings"],["faq","❓ FAQ"],["tea-library","📚 Tea Library"]].map(([p,l])=>(
+        <div key="home" className="mob-lnk" onClick={()=>{nav("home");setMobMenuOpen(false);}}>
+          <span>🏠 {T.nav_home||"Home"}</span>
+          <span style={{color:"var(--dust)"}}>›</span>
+        </div>
+        <div key="finder" className="mob-lnk" onClick={()=>{setFinderOpen(true);setMobMenuOpen(false);}}>
+          <span>✦ {T.btn_find||"Find My Tea"}</span>
+          <span style={{color:"var(--dust)"}}>›</span>
+        </div>
+        <div key="ritual" className="mob-lnk" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);setMobMenuOpen(false);}}>
+          <span>🌿 {T.btn_ritual||"Build My Ritual"}</span>
+          <span style={{color:"var(--dust)"}}>›</span>
+        </div>
+        <div key="prayer" className="mob-lnk" onClick={()=>{setMobMenuOpen(false);window.open("https://2amcompanion.com","_blank","noopener,noreferrer");}}>
+          <span>🙏 {T.nav_get_prayer||"Get Prayer"}</span>
+          <span style={{color:"var(--dust)"}}>›</span>
+        </div>
+
+        <div style={{fontSize:".62rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--gold)",fontWeight:600,padding:"18px 0 8px",borderTop:"1px solid var(--dust)",marginTop:6}}>{T.nav_shop||"Shop"}</div>
+        {[["tea-library","📚 "+(T.nav_library||"Tea Library")],["shop","🍵 "+(T.nav_shop||"Shop All Teas")],["recipes","🍵 "+(T.nav_recipes||"Brew Rituals")],["men","⚡ "+(T.nav_men||"Men's Wellness")],["supplements","💊 "+(T.nav_supplements||"Supplements")]].map(([p,l])=>(
           <div key={p} className="mob-lnk" onClick={()=>{nav(p);setMobMenuOpen(false);}}>
-            <span>{l}{p==="men"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--gold)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="supplements"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--sage-d)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="ancestral"&&<span style={{marginLeft:8,fontSize:".48rem",background:"#6A4A2A",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}</span>
+            <span>{l}{p==="men"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--gold)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}{p==="supplements"&&<span style={{marginLeft:8,fontSize:".48rem",background:"var(--sage-d)",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}</span>
             <span style={{color:"var(--dust)"}}>›</span>
           </div>
         ))}
-        <div className="mob-lnk mob-lnk-special" onClick={()=>{openPrayer();setMobMenuOpen(false);}}>
-          🙏 Daily Prayer <span style={{color:"var(--gold)"}}>›</span>
+
+        <div style={{fontSize:".62rem",letterSpacing:".14em",textTransform:"uppercase",color:"var(--gold)",fontWeight:600,padding:"18px 0 8px",borderTop:"1px solid var(--dust)",marginTop:6}}>{T.ft_explore_h||"Explore"}</div>
+        {[["ancestral","🌿 "+(T.nav_ancestral||"Ancestral Teas")],["herbs","📖 "+(T.nav_herbs||"Herb Archive")],["mocktails","🍹 "+(T.nav_mocktails||"Mocktails")],["jelly","🌊 "+(T.nav_jelly||"Jelly")],["seamoss","🌿 "+(T.nav_seamoss||"Sea Moss")],["rings","💫 "+(T.nav_rings||"Rings")],["faq","❓ "+(T.nav_faq||"FAQ")]].map(([p,l])=>(
+          <div key={p} className="mob-lnk" onClick={()=>{nav(p);setMobMenuOpen(false);}}>
+            <span>{l}{p==="ancestral"&&<span style={{marginLeft:8,fontSize:".48rem",background:"#6A4A2A",color:"white",padding:"2px 7px",borderRadius:50,fontWeight:600,letterSpacing:".08em",textTransform:"uppercase",verticalAlign:"middle"}}>NEW</span>}</span>
+            <span style={{color:"var(--dust)"}}>›</span>
+          </div>
+        ))}
+        <div className="mob-lnk" onClick={()=>{setProfileOpen(true);setMobMenuOpen(false);}}>
+          <span>📋 {T.ft_sip_heal_report||"Sip & Heal Report"}</span>
+          <span style={{color:"var(--dust)"}}>›</span>
         </div>
-        <div className="mob-lnk mob-lnk-special" onClick={()=>{setProfileOpen(true);setMobMenuOpen(false);}}>
-          📋 Get My Sip &amp; Heal Report <span style={{color:"var(--gold)"}}>›</span>
-        </div>
-        <div className="mob-lnk mob-lnk-special" onClick={()=>{setIntentionOpen(true);setIntentionStep(0);setIntentionData({});setIntentionResult(null);setMobMenuOpen(false);}}>
-          🌿 Sip &amp; Seek <span style={{color:"var(--gold)"}}>›</span>
-        </div>
+
         <div className="mob-lnk" onClick={()=>{setMobMenuOpen(false); if(cart.length>0){setPreBasket(true);}else{setCartOpen(true);}}}>
           🛒 Cart {cartCount>0&&`(${cartCount})`} <span style={{color:"var(--dust)"}}>›</span>
         </div>

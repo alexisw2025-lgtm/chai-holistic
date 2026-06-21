@@ -222,7 +222,7 @@ function TeaCard({ blend, index, listView, onOpen, locked }) {
             <div
               style={{
                 ...fontBody,
-                fontSize: 13.5,
+                fontSize: 15,
                 fontStyle: "italic",
                 color: "#656056",
                 lineHeight: 1.65,
@@ -471,11 +471,11 @@ function BlendModal({ blend, idx, total, onClose, onNav, onNotify, onAddToCart }
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 22 }}>
               <div style={{ background: C.mist, borderLeft: `3px solid ${C.mint}`, borderRadius: 10, padding: 14 }}>
                 <div style={{ ...fontEyebrow, fontSize: 8.5, letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 5, color: C.sage }}>☕ Brewing</div>
-                <p style={{ ...fontBody, fontSize: 13.5, fontStyle: "italic", color: "#555", lineHeight: 1.65 }}>{blend.brew}</p>
+                <p style={{ ...fontBody, fontSize: 15, fontStyle: "italic", color: "#555", lineHeight: 1.65 }}>{blend.brew}</p>
               </div>
               <div style={{ background: C.goldPale, borderLeft: `3px solid ${C.gold}`, borderRadius: 10, padding: 14 }}>
                 <div style={{ ...fontEyebrow, fontSize: 8.5, letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 5, color: C.gold }}>✦ Pro Tip</div>
-                <p style={{ ...fontBody, fontSize: 13.5, fontStyle: "italic", color: "#555", lineHeight: 1.65 }}>{blend.tip}</p>
+                <p style={{ ...fontBody, fontSize: 15, fontStyle: "italic", color: "#555", lineHeight: 1.65 }}>{blend.tip}</p>
               </div>
             </div>
           )}
@@ -504,7 +504,7 @@ function BlendModal({ blend, idx, total, onClose, onNav, onNotify, onAddToCart }
               </div>
               <div style={{ background: "rgba(0,0,0,.03)", padding: "14px 16px" }}>
                 {fda.warnings.map((w, i) => (
-                  <p key={i} style={{ ...fontBody, fontSize: 13.5, fontStyle: "italic", color: "#665", lineHeight: 1.6, marginBottom: 6 }}>
+                  <p key={i} style={{ ...fontBody, fontSize: 15, fontStyle: "italic", color: "#665", lineHeight: 1.6, marginBottom: 6 }}>
                     ⚠ {w}
                   </p>
                 ))}
@@ -522,7 +522,7 @@ function BlendModal({ blend, idx, total, onClose, onNav, onNotify, onAddToCart }
               </div>
               <div style={{ background: "rgba(0,0,0,.03)", padding: "14px 16px" }}>
                 {fda.warnings.map((w, i) => (
-                  <p key={i} style={{ ...fontBody, fontSize: 13.5, fontStyle: "italic", color: "#665", lineHeight: 1.6, marginBottom: 6 }}>
+                  <p key={i} style={{ ...fontBody, fontSize: 15, fontStyle: "italic", color: "#665", lineHeight: 1.6, marginBottom: 6 }}>
                     ⚠ {w}
                   </p>
                 ))}
@@ -942,13 +942,13 @@ Use 4-6 herbs. Be creative and poetic.`;
           </div>
           <div style={{ background: C.mist, borderLeft: `3px solid ${C.mint}`, borderRadius: 10, padding: 14, marginBottom: 14 }}>
             <div style={{ ...fontEyebrow, fontSize: 8.5, letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 5, color: C.sage }}>☕ Brewing</div>
-            <p style={{ ...fontBody, fontSize: 13.5, fontStyle: "italic", color: "#555", lineHeight: 1.65 }}>{result.brew}</p>
+            <p style={{ ...fontBody, fontSize: 15, fontStyle: "italic", color: "#555", lineHeight: 1.65 }}>{result.brew}</p>
           </div>
           <div style={{ background: C.goldPale, borderLeft: `3px solid ${C.gold}`, borderRadius: 10, padding: 14, marginBottom: 14 }}>
             <div style={{ ...fontEyebrow, fontSize: 8.5, letterSpacing: ".2em", textTransform: "uppercase", marginBottom: 5, color: C.gold }}>✦ Intention</div>
-            <p style={{ ...fontBody, fontSize: 13.5, fontStyle: "italic", color: "#555", lineHeight: 1.65 }}>{result.intention}</p>
+            <p style={{ ...fontBody, fontSize: 15, fontStyle: "italic", color: "#555", lineHeight: 1.65 }}>{result.intention}</p>
           </div>
-          {result.notes && <p style={{ ...fontBody, fontSize: 13.5, fontStyle: "italic", color: "#888", lineHeight: 1.65 }}>{result.notes}</p>}
+          {result.notes && <p style={{ ...fontBody, fontSize: 15, fontStyle: "italic", color: "#888", lineHeight: 1.65 }}>{result.notes}</p>}
         </div>
       )}
       {error && (
