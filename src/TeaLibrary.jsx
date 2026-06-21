@@ -610,32 +610,34 @@ function RolodexFilterBar({ search, setSearch, filter, setFilter, view, setView 
   };
   return (
     <div style={{ maxWidth: 1440, margin: "0 auto", padding: "16px 36px", background: C.forest }}>
-      <div style={{ background: "#1c2e22", border: "1px solid rgba(255,255,255,.1)", borderRadius: 22, padding: "18px 22px", display: "flex", flexDirection: "column", gap: 14, maxHeight: 180, overflowY: "auto" }}>
-        <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-          <div style={{ position: "relative", flex: 1, minWidth: 220, maxWidth: 400 }}>
-            <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,.28)", fontSize: 14 }}>⌕</span>
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search blends, herbs, benefits…"
-              style={{
-                width: "100%", background: "rgba(255,255,255,.06)", border: "1px solid rgba(82,184,130,.18)",
-                borderRadius: 30, padding: "9px 16px 9px 38px", ...fontBody, fontSize: 15, color: "#fff", outline: "none",
-              }}
-            />
-          </div>
-          <div style={{ display: "flex", gap: 2, background: "rgba(0,0,0,.2)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 9, padding: 3 }}>
-            <button onClick={() => setView("grid")} title="Grid" style={viewBtnStyle(view === "grid")}>⊞</button>
-            <button onClick={() => setView("list")} title="List" style={viewBtnStyle(view === "list")}>≡</button>
-          </div>
+      <div style={{ background: "#1c2e22", border: "1px solid rgba(255,255,255,.1)", borderRadius: 22, padding: "18px 22px", display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+        <div style={{ position: "relative", flex: 1, minWidth: 220, maxWidth: 400 }}>
+          <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,.28)", fontSize: 14 }}>⌕</span>
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search blends, herbs, benefits…"
+            style={{
+              width: "100%", background: "rgba(255,255,255,.06)", border: "1px solid rgba(82,184,130,.18)",
+              borderRadius: 30, padding: "9px 16px 9px 38px", ...fontBody, fontSize: 15, color: "#fff", outline: "none",
+            }}
+          />
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
-          <span style={{ ...fontUtility, fontSize: 10, letterSpacing: ".08em", color: "rgba(255,255,255,.25)", marginRight: 2 }}>Filter</span>
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          style={{
+            ...fontUtility, fontSize: 13, color: "#fff", background: "rgba(255,255,255,.06)",
+            border: "1px solid rgba(82,184,130,.18)", borderRadius: 30, padding: "9px 16px", outline: "none", cursor: "pointer",
+          }}
+        >
           {chips.map((c) => (
-            <button key={c} onClick={() => setFilter(c)} style={chipStyle(filter === c, c === "IV")}>
-              {chipLabel[c]}
-            </button>
+            <option key={c} value={c} style={{ background: "#1c2e22", color: "#fff" }}>{chipLabel[c]}</option>
           ))}
+        </select>
+        <div style={{ display: "flex", gap: 2, background: "rgba(0,0,0,.2)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 9, padding: 3 }}>
+          <button onClick={() => setView("grid")} title="Grid" style={viewBtnStyle(view === "grid")}>⊞</button>
+          <button onClick={() => setView("list")} title="List" style={viewBtnStyle(view === "list")}>≡</button>
         </div>
       </div>
     </div>
