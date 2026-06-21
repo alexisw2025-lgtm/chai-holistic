@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import TeaLibrary from "./TeaLibrary";
+import StoryPage from "./StoryPage";
 import PrayerSection from "./PrayerSection";
 import WellnessProfileModal from "./WellnessProfileModal";
 import MocktailsPage from "./MocktailsPage";
@@ -382,6 +383,17 @@ const RINGS = [
 const LANGS = {
   en: {
     code:"en", name:"English", flag:"🇺🇸",
+    // Blend Story (QR code pages)
+    story_eyebrow:"The Story Behind",
+    story_origin_label:"Where It Comes From",
+    story_alex_label:"Alex's Story",
+    story_ritual_label:"How to Hold This Ritual",
+    story_prayer_eyebrow:"✦ Paired Prayer",
+    story_reflection_label:"A Moment of Reflection",
+    story_listen:"▶ Listen", story_pause:"⏸ Pause",
+    story_explore_library:"Explore the full Tea Library →",
+    story_not_found:"This story hasn't been written yet.",
+    story_back_home:"Back to Chai Holistic",
     // Hero
     hero_eyebrow:"Chai Holistic · Est. 2024",
     hero_h1:"Sip what heals you.",
@@ -613,6 +625,16 @@ const LANGS = {
   },
   es: {
     code:"es", name:"Español", flag:"🇪🇸",
+    story_eyebrow:"La Historia Detrás de",
+    story_origin_label:"De Dónde Viene",
+    story_alex_label:"La Historia de Alex",
+    story_ritual_label:"Cómo Vivir Este Ritual",
+    story_prayer_eyebrow:"✦ Oración Asociada",
+    story_reflection_label:"Un Momento de Reflexión",
+    story_listen:"▶ Escuchar", story_pause:"⏸ Pausar",
+    story_explore_library:"Explora la Biblioteca de Tés completa →",
+    story_not_found:"Esta historia aún no se ha escrito.",
+    story_back_home:"Volver a Chai Holistic",
     hero_eyebrow:"Chai Holistic · Est. 2024",
     hero_h1:"Bebe lo que te sana.",
     hero_h2:"Florece donde estás.",
@@ -804,6 +826,16 @@ const LANGS = {
   },
   fr: {
     code:"fr", name:"Français", flag:"🇫🇷",
+    story_eyebrow:"L'Histoire Derrière",
+    story_origin_label:"D'où Cela Vient",
+    story_alex_label:"L'Histoire d'Alex",
+    story_ritual_label:"Comment Vivre Ce Rituel",
+    story_prayer_eyebrow:"✦ Prière Associée",
+    story_reflection_label:"Un Moment de Réflexion",
+    story_listen:"▶ Écouter", story_pause:"⏸ Pause",
+    story_explore_library:"Découvrir toute la Bibliothèque de Thés →",
+    story_not_found:"Cette histoire n'a pas encore été écrite.",
+    story_back_home:"Retour à Chai Holistic",
     hero_eyebrow:"Chai Holistic · Est. 2024",
     hero_h1:"Sirotez ce qui vous guérit.",
     hero_h2:"Épanouissez-vous là où vous êtes.",
@@ -995,6 +1027,16 @@ const LANGS = {
   },
   pt: {
     code:"pt", name:"Português", flag:"🇧🇷",
+    story_eyebrow:"A História Por Trás de",
+    story_origin_label:"De Onde Vem",
+    story_alex_label:"A História de Alex",
+    story_ritual_label:"Como Viver Este Ritual",
+    story_prayer_eyebrow:"✦ Oração Combinada",
+    story_reflection_label:"Um Momento de Reflexão",
+    story_listen:"▶ Ouvir", story_pause:"⏸ Pausar",
+    story_explore_library:"Explore toda a Biblioteca de Chás →",
+    story_not_found:"Esta história ainda não foi escrita.",
+    story_back_home:"Voltar para Chai Holistic",
     hero_eyebrow:"Chai Holistic · Est. 2024",
     hero_h1:"Beba o que te cura.",
     hero_h2:"Floresça onde você está.",
@@ -1186,6 +1228,16 @@ const LANGS = {
   },
   ht: {
     code:"ht", name:"Kreyòl Ayisyen", flag:"🇭🇹",
+    story_eyebrow:"Istwa Dèyè",
+    story_origin_label:"Kote Li Soti",
+    story_alex_label:"Istwa Alex",
+    story_ritual_label:"Kijan Pou Viv Rityèl Sa A",
+    story_prayer_eyebrow:"✦ Lapriyè Ki Mache Avè L",
+    story_reflection_label:"Yon Moman Refleksyon",
+    story_listen:"▶ Koute", story_pause:"⏸ Mete Sou Poz",
+    story_explore_library:"Eksplore tout Bibliyotèk Te a →",
+    story_not_found:"Istwa sa a poko ekri.",
+    story_back_home:"Retounen nan Chai Holistic",
     hero_eyebrow:"Chai Holistic · Est. 2024",
     hero_h1:"Bwè sa ki geri ou.",
     hero_h2:"Fleri kote ou ye a.",
@@ -1377,6 +1429,16 @@ const LANGS = {
   },
   jm: {
     code:"jm", name:"Patwa", flag:"🇯🇲",
+    story_eyebrow:"Di Story Behind",
+    story_origin_label:"Weh It Come From",
+    story_alex_label:"Alex Story",
+    story_ritual_label:"How Fi Hold Dis Ritual",
+    story_prayer_eyebrow:"✦ Prayer Weh Go Wid It",
+    story_reflection_label:"A Moment Fi Reflect",
+    story_listen:"▶ Listen", story_pause:"⏸ Pause",
+    story_explore_library:"Tek a Look Pon di Full Tea Library →",
+    story_not_found:"Dis story no write yet.",
+    story_back_home:"Go Back a Chai Holistic",
     hero_eyebrow:"Chai Holistic · Est. 2024",
     hero_h1:"Drink wah heal yuh.",
     hero_h2:"Bloom whea yuh deh.",
@@ -2392,6 +2454,7 @@ function AmaraBlendCard({ blendId, onViewBlend, onAddToCart }) {
 
 export default function ChaiHolistic() {
   const [page, setPage] = useState("home");
+  const [storyBlendId, setStoryBlendId] = useState(null);
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [preBasket, setPreBasket] = useState(false); // soft suggestion screen
@@ -3061,6 +3124,15 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
   }, [timerOn]);
 
   const toast = msg => { setNotif(msg); setTimeout(() => setNotif(null), 3200); };
+
+  // --- STORY PAGE FROM URL (QR code deep links) ------------------------------
+  useEffect(() => {
+    const parts = window.location.pathname.split("/").filter(Boolean);
+    if (parts[0] === "story" && parts[1]) {
+      setStoryBlendId(parts[1]);
+      setPage("story");
+    }
+  }, []);
 
   // --- RITUAL RESTORE FROM URL ----------------------------------------------
   useEffect(() => {
@@ -9092,6 +9164,7 @@ Thank you!`);
       {/* PAGES   always stay mounted so scroll position is never lost */}
       <div style={{display: twoAM ? "none" : "block"}}>
         {page==="home"&&<Home/>}
+        {page==="story"&&<StoryPage blendId={storyBlendId} T={T}/>}
         {page==="shop"&&<Shop/>}
         {page==="recipes"&&<Recipes/>}
         {page==="mocktails"&&<MocktailsPage/>}
