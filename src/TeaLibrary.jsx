@@ -601,66 +601,50 @@ function navBtnStyle(disabled) {
 /* ════════════════════════════════════════
    ROLODEX PAGE (search, filter, grid)
 ════════════════════════════════════════ */
-function RolodexPage({ blends, onOpenBlend, headerOffset }) {
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("all");
-  const [view, setView] = useState("grid");
-
-  const filtered = useMemo(() => {
-    return blends.filter((b) => {
-      const fda = FDA[b.n] || { level: "low" };
-      const matchPart = filter === "all" || b.part === filter || fda.level === filter;
-      const q = search.toLowerCase();
-      const matchQuery =
-        !q ||
-        b.name.toLowerCase().includes(q) ||
-        b.benefits.toLowerCase().includes(q) ||
-        b.ingredients.some(([, h]) => h.toLowerCase().includes(q));
-      return matchPart && matchQuery;
-    });
-  }, [blends, search, filter]);
-
+function RolodexFilterBar({ search, setSearch, filter, setFilter, view, setView }) {
   const chips = ["all", "I", "II", "III", "IV", "Ritual", "low", "moderate", "high"];
   const chipLabel = {
     all: "All 46", I: "Part I · Foundational", II: "Part II · Advanced",
     III: "Part III · Sacred", IV: "Part IV · Cleanse", Ritual: "✦ Ritual Moments",
     low: "🟢 Low Risk", moderate: "🟡 Moderate", high: "🔴 High Caution",
   };
-
   return (
-    <div>
-      <div style={{ position: "sticky", top: headerOffset + 62, zIndex: 200, maxWidth: 1440, margin: "0 auto", padding: "24px 36px 0", background: C.forest }}>
-        <div style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "18px 22px", display: "flex", flexDirection: "column", gap: 14, backdropFilter: "blur(20px)" }}>
-          <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-            <div style={{ position: "relative", flex: 1, minWidth: 220, maxWidth: 400 }}>
-              <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,.28)", fontSize: 14 }}>⌕</span>
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search blends, herbs, benefits…"
-                style={{
-                  width: "100%", background: "rgba(255,255,255,.06)", border: "1px solid rgba(82,184,130,.18)",
-                  borderRadius: 30, padding: "9px 16px 9px 38px", ...fontBody, fontSize: 15, color: "#fff", outline: "none",
-                }}
-              />
-            </div>
-            <div style={{ display: "flex", gap: 2, background: "rgba(0,0,0,.2)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 9, padding: 3 }}>
-              <button onClick={() => setView("grid")} title="Grid" style={viewBtnStyle(view === "grid")}>⊞</button>
-              <button onClick={() => setView("list")} title="List" style={viewBtnStyle(view === "list")}>≡</button>
-            </div>
+    <div style={{ maxWidth: 1440, margin: "0 auto", padding: "16px 36px" }}>
+      <div style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.07)", borderRadius: 22, padding: "18px 22px", display: "flex", flexDirection: "column", gap: 14, backdropFilter: "blur(20px)" }}>
+        <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ position: "relative", flex: 1, minWidth: 220, maxWidth: 400 }}>
+            <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,.28)", fontSize: 14 }}>⌕</span>
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search blends, herbs, benefits…"
+              style={{
+                width: "100%", background: "rgba(255,255,255,.06)", border: "1px solid rgba(82,184,130,.18)",
+                borderRadius: 30, padding: "9px 16px 9px 38px", ...fontBody, fontSize: 15, color: "#fff", outline: "none",
+              }}
+            />
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
-            <span style={{ ...fontUtility, fontSize: 10, letterSpacing: ".08em", color: "rgba(255,255,255,.25)", marginRight: 2 }}>Filter</span>
-            {chips.map((c) => (
-              <button key={c} onClick={() => setFilter(c)} style={chipStyle(filter === c, c === "IV")}>
-                {chipLabel[c]}
-              </button>
-            ))}
+          <div style={{ display: "flex", gap: 2, background: "rgba(0,0,0,.2)", border: "1px solid rgba(255,255,255,.08)", borderRadius: 9, padding: 3 }}>
+            <button onClick={() => setView("grid")} title="Grid" style={viewBtnStyle(view === "grid")}>⊞</button>
+            <button onClick={() => setView("list")} title="List" style={viewBtnStyle(view === "list")}>≡</button>
           </div>
         </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+          <span style={{ ...fontUtility, fontSize: 10, letterSpacing: ".08em", color: "rgba(255,255,255,.25)", marginRight: 2 }}>Filter</span>
+          {chips.map((c) => (
+            <button key={c} onClick={() => setFilter(c)} style={chipStyle(filter === c, c === "IV")}>
+              {chipLabel[c]}
+            </button>
+          ))}
+        </div>
       </div>
-
-      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "10px 36px 6px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+    </div>
+  );
+}
+function RolodexGrid({ filtered, view, onOpenBlend }) {
+  return (
+    <>
+    <div style={{ maxWidth: 1440, margin: "0 auto", padding: "10px 36px 6px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ ...fontUtility, fontSize: 11, color: "rgba(255,255,255,.26)", letterSpacing: ".05em" }}>
           <strong style={{ color: "rgba(255,255,255,.55)" }}>{filtered.length}</strong> blends shown
         </div>
@@ -687,7 +671,7 @@ function RolodexPage({ blends, onOpenBlend, headerOffset }) {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
 function viewBtnStyle(active) {
@@ -1214,6 +1198,22 @@ const NAV_ITEMS = [
 export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart, stickyHeaderH }) {
   const headerOffset = stickyHeaderH || 150;
   const [page, setPage] = useState("rolodex");
+  const [rxSearch, setRxSearch] = useState("");
+  const [rxFilter, setRxFilter] = useState("all");
+  const [rxView, setRxView] = useState("grid");
+  const rxFiltered = useMemo(() => {
+    return BLENDS.filter((b) => {
+      const fda = FDA[b.n] || { level: "low" };
+      const matchPart = rxFilter === "all" || b.part === rxFilter || fda.level === rxFilter;
+      const q = rxSearch.toLowerCase();
+      const matchQuery =
+        !q ||
+        b.name.toLowerCase().includes(q) ||
+        b.benefits.toLowerCase().includes(q) ||
+        b.ingredients.some(([, h]) => h.toLowerCase().includes(q));
+      return matchPart && matchQuery;
+    });
+  }, [rxSearch, rxFilter]);
   const [modalList, setModalList] = useState(null); // array of blends currently being browsed in modal
   const [modalIdx, setModalIdx] = useState(0);
 
@@ -1289,10 +1289,10 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
       <div style={{ position: "sticky", top: headerOffset, zIndex: 400 }}>
       <header
         style={{
-          display: "flex", alignItems: "center",
-          justifyContent: "space-between", padding: "0 16px", height: 62, gap: 8,
+          display: "flex", alignItems: "center", flexWrap: "wrap",
+          justifyContent: "space-between", padding: "10px 16px", gap: 8,
           background: "rgba(13,26,17,.96)", backdropFilter: "blur(24px) saturate(180%)",
-          borderBottom: "1px solid rgba(82,184,130,.1)", overflow: "hidden",
+          borderBottom: "1px solid rgba(82,184,130,.1)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, minWidth: 0 }}>
@@ -1325,10 +1325,11 @@ export default function TeaLibrary({ deepBlend, onDeepBlendConsumed, onAddToCart
           <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", color: C.goldLt, fontSize: 11, pointerEvents: "none" }}>▾</span>
         </div>
       </header>
+      {page === "rolodex" && <RolodexFilterBar search={rxSearch} setSearch={setRxSearch} filter={rxFilter} setFilter={setRxFilter} view={rxView} setView={setRxView} />}
       </div>
 
       <div style={{ position: "relative", zIndex: 1 }}>
-        {page === "rolodex" && <RolodexPage blends={BLENDS} onOpenBlend={openBlend} headerOffset={headerOffset} />}
+        {page === "rolodex" && <RolodexGrid filtered={rxFiltered} view={rxView} onOpenBlend={openBlend} />}
         {page === "need" && <NeedPage onOpenBlend={openBlend} />}
         {page === "builder" && <BuilderPage />}
         {page === "ritual" && <RitualPage onOpenBlend={openBlend} />}
