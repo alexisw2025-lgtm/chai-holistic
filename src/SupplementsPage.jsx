@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useLang } from "./LangContext";
 
 // Merge English base supplement data with its own inline translations block.
