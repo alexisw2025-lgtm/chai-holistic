@@ -5341,7 +5341,7 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                   </defs>
                   <text style={{fontSize:"9.5px",fontFamily:"Jost,sans-serif",fontWeight:500,letterSpacing:"3.2px",fill:"var(--bark)"}}>
                     <textPath href="#chaiSpinPath" startOffset="0%">
-                      CHAI HOLISTIC · SHOP NOW · CHAI HOLISTIC · SHOP NOW ·
+                      CHAI HOLISTIC · ✦ · CHAI HOLISTIC · ✦ ·
                     </textPath>
                   </text>
                 </svg>
@@ -9029,21 +9029,8 @@ Thank you!`);
           </a>
         </div>
         <div className="nav-right">
-          <button className="cart-btn" onClick={()=>{ if(cart.length>0){setPreBasket(true);}else{setCartOpen(true);} }}>
-            Basket {cartCount>0&&<span className="cart-badge">{cartCount}</span>}
-          </button>
-          <button className="ham-btn" onClick={()=>setMobMenuOpen(o=>!o)} aria-label="Menu">
-            <span style={{transform:mobMenuOpen?"rotate(45deg) translate(5px,5px)":"none"}}/>
-            <span style={{opacity:mobMenuOpen?0:1}}/>
-            <span style={{transform:mobMenuOpen?"rotate(-45deg) translate(5px,-5px)":"none"}}/>
-          </button>
-        </div>
-      </nav>
-
-      {/* ── GLOBAL SEARCH BAR — right below nav, always visible ─────────── */}
-      <div style={{background:"var(--linen)",borderBottom:"1px solid rgba(61,43,31,.1)",padding:"10px 16px",backdropFilter:"blur(8px)"}}>
-        <div style={{maxWidth:700,margin:"0 auto",display:"flex",alignItems:"center",gap:16,position:"relative"}}>
-          <div id="searchWrap" style={{display:"flex",borderRadius:50,overflow:"hidden",border:"1.5px solid rgba(61,43,31,.2)",background:"white",boxShadow:"0 1px 8px rgba(0,0,0,.07)",transition:"border-color .2s, box-shadow .2s"}}>
+          {/* ── Compact search — now in nav ── */}
+          <div id="searchWrap" style={{display:"flex",borderRadius:50,overflow:"hidden",border:"1.5px solid rgba(61,43,31,.2)",background:"white",boxShadow:"0 1px 6px rgba(0,0,0,.07)",transition:"border-color .2s, box-shadow .2s",height:38}}>
             <input
               ref={searchInputRef}
               id="mainSearch"
@@ -9054,32 +9041,32 @@ Thank you!`);
               autoCorrect="off"
               autoCapitalize="off"
               spellCheck="false"
-              placeholder={T.search_placeholder}
+              placeholder={T.search_placeholder||"Search teas…"}
               onFocus={()=>{const w=document.getElementById('searchWrap');if(w){w.style.borderColor='rgba(196,137,58,.6)';w.style.boxShadow='0 0 0 3px rgba(196,137,58,.12)';}}}
-              onBlur={()=>{const w=document.getElementById('searchWrap');if(w){w.style.borderColor='rgba(61,43,31,.2)';w.style.boxShadow='0 1px 8px rgba(0,0,0,.07)';}}}
+              onBlur={()=>{const w=document.getElementById('searchWrap');if(w){w.style.borderColor='rgba(61,43,31,.2)';w.style.boxShadow='0 1px 6px rgba(0,0,0,.07)';}}}
               onKeyDown={e=>{if(e.key==="Enter"){e.preventDefault();const q=(searchInputRef.current?.value||"").toLowerCase().trim();if(!q)return;runGlobalSearch(q);searchInputRef.current?.blur();}}}
-              style={{flex:1,background:"none",border:"none",outline:"none",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:"16px",fontWeight:300,padding:"11px 16px",minWidth:0,WebkitAppearance:"none"}}
+              style={{width:180,background:"none",border:"none",outline:"none",color:"var(--bark)",fontFamily:"Jost,sans-serif",fontSize:".78rem",fontWeight:300,padding:"0 12px",minWidth:0,WebkitAppearance:"none"}}
             />
-            {homeSearchQuery&&<button onClick={()=>{setHomeSearchQuery("");setHomeSearchResults([]);if(searchInputRef.current)searchInputRef.current.value="";}} style={{background:"none",border:"none",color:"rgba(61,43,31,.3)",cursor:"pointer",padding:"0 10px",fontSize:".9rem",flexShrink:0}}>✕</button>}
+            {homeSearchQuery&&<button onClick={()=>{setHomeSearchQuery("");setHomeSearchResults([]);if(searchInputRef.current)searchInputRef.current.value="";}} style={{background:"none",border:"none",color:"rgba(61,43,31,.3)",cursor:"pointer",padding:"0 8px",fontSize:".85rem",flexShrink:0}}>✕</button>}
             <button
               onMouseDown={e=>{e.preventDefault();const q=(searchInputRef.current?.value||"").toLowerCase().trim();if(!q)return;runGlobalSearch(q);searchInputRef.current?.blur();}}
-              style={{background:"var(--bark)",border:"none",color:"white",padding:"11px 20px",fontFamily:"Jost,sans-serif",fontSize:".68rem",letterSpacing:".12em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap",transition:"background .2s"}}
+              style={{background:"var(--bark)",border:"none",color:"white",padding:"0 14px",fontFamily:"Jost,sans-serif",fontSize:".62rem",letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",fontWeight:600,flexShrink:0,whiteSpace:"nowrap",transition:"background .2s",height:"100%"}}
               onMouseEnter={e=>e.currentTarget.style.background="var(--sage-d)"}
               onMouseLeave={e=>e.currentTarget.style.background="var(--bark)"}>
-              {T.btn_search}
+              {T.btn_search||"Search"}
             </button>
           </div>
-          {/* Language selector — next to search bar */}
+
+          {/* ── Language selector — now in nav ── */}
           <div style={{position:"relative",flexShrink:0}}>
-            <div style={{fontSize:".52rem",color:"rgba(61,43,31,.45)",fontFamily:"Jost,sans-serif",letterSpacing:".1em",textTransform:"uppercase",textAlign:"center",marginBottom:3}}>Language</div>
             <button
               onClick={()=>setLangOpen(o=>!o)}
-              style={{background:"white",border:"1.5px solid rgba(61,43,31,.2)",borderRadius:50,padding:"8px 14px",cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"Jost,sans-serif",fontSize:".72rem",color:"var(--bark)",letterSpacing:".06em",transition:"all .2s",boxShadow:"0 1px 8px rgba(0,0,0,.07)",whiteSpace:"nowrap",height:44}}
+              style={{background:"white",border:"1.5px solid rgba(61,43,31,.2)",borderRadius:50,padding:"0 12px",cursor:"pointer",display:"flex",alignItems:"center",gap:5,fontFamily:"Jost,sans-serif",fontSize:".72rem",color:"var(--bark)",letterSpacing:".06em",transition:"all .2s",boxShadow:"0 1px 6px rgba(0,0,0,.07)",whiteSpace:"nowrap",height:38}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(196,137,58,.6)";e.currentTarget.style.boxShadow="0 0 0 3px rgba(196,137,58,.12)";}}
-              onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(61,43,31,.2)";e.currentTarget.style.boxShadow="0 1px 8px rgba(0,0,0,.07)";}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(61,43,31,.2)";e.currentTarget.style.boxShadow="0 1px 6px rgba(0,0,0,.07)";}}
               title="Change language">
               {LANG_FLAGS[lang]?.img
-                ? <img src={LANG_FLAGS[lang].img} alt={lang} style={{width:24,height:18,borderRadius:2,objectFit:"cover",display:"block",flexShrink:0}}/>
+                ? <img src={LANG_FLAGS[lang].img} alt={lang} style={{width:22,height:16,borderRadius:2,objectFit:"cover",display:"block",flexShrink:0}}/>
                 : <span>🌐</span>}
               <span style={{fontWeight:600}}>{LANG_FLAGS[lang]?.short||"EN"}</span>
             </button>
@@ -9106,9 +9093,18 @@ Thank you!`);
               </>
             )}
           </div>
+
+          <button className="cart-btn" onClick={()=>{ if(cart.length>0){setPreBasket(true);}else{setCartOpen(true);} }}>
+            Basket {cartCount>0&&<span className="cart-badge">{cartCount}</span>}
+          </button>
+          <button className="ham-btn" onClick={()=>setMobMenuOpen(o=>!o)} aria-label="Menu">
+            <span style={{transform:mobMenuOpen?"rotate(45deg) translate(5px,5px)":"none"}}/>
+            <span style={{opacity:mobMenuOpen?0:1}}/>
+            <span style={{transform:mobMenuOpen?"rotate(-45deg) translate(5px,-5px)":"none"}}/>
+          </button>
         </div>
-      </div>
-      </div>
+      </nav>
+
       <div ref={topRef} style={{height:0,overflow:"hidden"}}/>
 
       {/* ── Mobile slide-down menu ── */}

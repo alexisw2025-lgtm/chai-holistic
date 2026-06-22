@@ -1109,14 +1109,8 @@ export default function SupplementsPage({ onNav }) {
       return;
     }
     const url = amz(supp.asin);
-    // Open in new tab
     const newTab = window.open(url, "_blank");
-    // After a short delay, check if the tab opened — if link failed offer notification
-    setTimeout(() => {
-      const confirm = window.confirm(Ts.confirmFallback(supp.name));
-      if (confirm) setNotifySupp(supp);
-    }, 3500);
-    // If tab was blocked entirely, show notify modal immediately
+    // If tab was blocked by browser popup blocker, show notify modal
     if (!newTab || newTab.closed || typeof newTab.closed === "undefined") {
       setNotifySupp(supp);
     }
