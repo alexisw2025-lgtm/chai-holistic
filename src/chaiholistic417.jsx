@@ -9104,6 +9104,7 @@ Thank you!`);
           </button>
         </div>
       </nav>
+      </div>{/* ── closes stickyHeaderRef wrapper ── */}
 
       <div ref={topRef} style={{height:0,overflow:"hidden"}}/>
 
