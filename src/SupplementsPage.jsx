@@ -986,8 +986,7 @@ function AmazonSpinBtn({ onClick }) {
       }}
       onMouseEnter={e=>{e.currentTarget.style.transform="translate(-50%,-50%) scale(1.1)";e.currentTarget.style.boxShadow="0 10px 32px rgba(196,137,58,.7)";}}
       onMouseLeave={e=>{e.currentTarget.style.transform="translate(-50%,-50%)";e.currentTarget.style.boxShadow="0 6px 24px rgba(196,137,58,.5)";}}>
-        <span style={{fontSize:"1.2rem",color:"white",lineHeight:1,transform:"rotate(-30deg)",display:"inline-block"}}>↗</span>
-        <span style={{fontSize:".42rem",letterSpacing:".12em",textTransform:"uppercase",color:"rgba(255,255,255,.9)",fontFamily:"Jost,sans-serif",marginTop:3}}>Shop</span>
+        <span style={{fontSize:"1.4rem",color:"white",lineHeight:1,transform:"rotate(-30deg)",display:"inline-block"}}>↗</span>
       </div>
 
       <style>{`@keyframes suppSpinCCW{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}`}</style>
@@ -1110,11 +1109,26 @@ export default function SupplementsPage({ onNav }) {
     }
     const url = amz(supp.asin);
     const newTab = window.open(url, "_blank");
-    // If tab was blocked by browser popup blocker, show notify modal
     if (!newTab || newTab.closed || typeof newTab.closed === "undefined") {
       setNotifySupp(supp);
     }
   };
+
+  // Re-paint page when returning from Amazon/external tab — prevents blank page
+  React.useEffect(() => {
+    const repaint = () => {
+      if (!document.hidden) {
+        // Tiny no-op state tick forces React to re-render if page went blank
+        setFilter(f => f);
+      }
+    };
+    document.addEventListener("visibilitychange", repaint);
+    window.addEventListener("focus", repaint);
+    return () => {
+      document.removeEventListener("visibilitychange", repaint);
+      window.removeEventListener("focus", repaint);
+    };
+  }, []);
 
   return (
     <div style={{
