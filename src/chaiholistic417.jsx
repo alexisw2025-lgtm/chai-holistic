@@ -3170,6 +3170,18 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
     }
   };
   useEffect(() => { if (typeof window !== "undefined") { window._chaiNav = (p) => nav(p); } });
+
+  // Prevent blank page when returning from external tab (Amazon, 2AM, etc.)
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        // Force a state tick so React re-paints if the page went blank
+        setPage(p => p);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
   const removeItem = id => setCart(p => p.filter(i => i.id !== id));
   const changeQty = (id,d) => setCart(p => p.map(i => i.id===id?{...i,qty:Math.max(1,i.qty+d)}:i));
   const cartTotal = cart.reduce((s,i) => s+i.price*i.qty, 0);
@@ -5347,7 +5359,6 @@ You may recommend up to 2 blends per response. Only use blend IDs from the catal
                 </svg>
                 <div className="chai-spin-center">
                   <span className="chai-spin-arrow">↗</span>
-                  <span className="chai-spin-lbl">Shop<br/>Now</span>
                 </div>
               </div>
 
